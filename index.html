@@ -1,65 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DORNNY - Luxury Streetwear Ghana</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
-<style>*{font-family:'Space Grotesk',sans-serif}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DORNNY - Ghana's Marketplace</title>
+<style>
+body{font-family:sans-serif;background:#faf9f6;margin:0}
+.topbar{background:#0a0a0a;color:white;padding:12px 20px;display:flex;justify-content:space-between;position:sticky;top:0}
+.logo{font-weight:800;letter-spacing:6px}
+.nav{display:flex;gap:15px;font-size:12px;font-weight:700}
+.nav a{color:white;text-decoration:none;cursor:pointer}
+.hero{background:#0a0a0a;color:white;padding:50px 20px;text-align:center}
+.hero h1{font-size:42px;line-height:0.9}
+.hero h1 span{color:#FFD60A}
+.btn{padding:14px 28px;border-radius:30px;border:none;font-weight:800;cursor:pointer}
+.btn-yellow{background:#FFD60A;color:black}
+.btn-black{background:black;color:white}
+.grid{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:white;border-radius:20px;overflow:hidden;border:1px solid #eee}
+.card img{width:100%;height:160px;object-fit:cover}
+.card-body{padding:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;place-items:center;z-index:200;padding:20px}
+.modal.active{display:grid}
+.modal-box{background:white;border-radius:24px;padding:28px;max-width:420px;width:100%}
+.input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin:8px 0}
+.ref-box{background:#111;color:#FFD60A;padding:12px;border-radius:12px;word-break:break-all;margin:10px 0}
+</style>
 </head>
-<body class="bg-[#F5F5F0] text-black">
-<header class="fixed top-0 w-full z-50 bg-black text-white flex items-center justify-between px-6 py-4">
-<div class="text-2xl font-black tracking-[0.3em]">DORNNY</div>
-<div class="flex gap-4 items-center">
-<button onclick="showTab('shop')" class="font-bold text-sm">SHOP</button>
-<button onclick="showTab('amb')" class="font-bold text-sm">AMBASSADOR</button>
-<button onclick="toggleCart()" class="relative">🛒 <span id="cartCount" class="absolute -top-2 -right-2 bg-white text-black text-xs w-5 h-5 rounded-full flex items-center justify-center font-black">0</span></button>
-</div>
-</header>
-<main class="pt-20">
-<div id="shopTab">
-<div class="bg-black text-white text-center py-2 text-xs tracking-widest">FREE DELIVERY ACCRA • NEW DROP LIVE</div>
-<div class="px-6 py-10 text-center">
-<h1 class="text-6xl font-black">LUXURY<br>STREET</h1>
-<p class="mt-4 opacity-70">Ghana's finest streetwear</p>
-</div>
-<div class="grid grid-cols-2 gap-4 px-4 pb-20" id="products"></div>
-</div>
-<div id="ambTab" class="hidden px-6 py-10 max-w-xl mx-auto">
-<h2 class="text-4xl font-black">AMBASSADOR</h2>
-<div class="mt-6 bg-white p-6 rounded-2xl border-2 border-black">
-<p class="font-bold">YOUR CODE</p>
-<input id="ambCode" value="DORNNY-X7" class="w-full bg-black text-white px-4 py-3 font-black rounded-xl text-center mt-2">
-<div class="grid grid-cols-3 gap-4 mt-6 text-center">
-<div class="bg-black text-white p-4 rounded-xl"><div class="text-xl font-black">GHS 2340</div><div class="text-xs">EARNINGS</div></div>
-<div class="bg-white border-2 border-black p-4 rounded-xl"><div class="text-xl font-black">12</div><div class="text-xs">SALES</div></div>
-<div class="bg-white border-2 border-black p-4 rounded-xl"><div class="text-xl font-black">15%</div><div class="text-xs">RATE</div></div>
-</div>
-</div>
-</div>
-</main>
-<div id="cart" class="fixed inset-0 bg-black/50 hidden z-[60]">
-<div class="absolute right-0 top-0 w-full max-w-md h-full bg-[#F5F5F0] p-6 overflow-auto">
-<div class="flex justify-between items-center"><h3 class="text-2xl font-black">CART</h3><button onclick="toggleCart()" class="text-2xl">✕</button></div>
-<div id="cartItems" class="mt-6"></div>
-<div class="mt-6 border-t-2 border-black pt-4">
-<div class="flex justify-between text-xl font-black"><span>Total</span><span id="total">GHS 0</span></div>
-<button onclick="checkout()" class="w-full bg-black text-white py-4 rounded-full mt-6 font-black">CHECKOUT WHATSAPP</button>
-</div>
-</div>
-</div>
+<body>
+<div class="topbar"><div class="logo">DORNNY</div><div class="nav"><a onclick="location.reload()">MARKET</a><a onclick="document.getElementById('sellerModal').classList.add('active')">SELL</a><a onclick="document.getElementById('ambModal').classList.add('active')">AMBASSADOR</a></div></div>
+<div class="hero"><h1>BUY & SELL<br><span>ON DORNNY</span></h1><p>Ghana's streetwear marketplace - 50 GHS to open shop</p><br><button class="btn btn-yellow" onclick="document.getElementById('sellerModal').classList.add('active')">OPEN SHOP - 50 GHS</button><button class="btn btn-black" style="border:1px solid #333;margin-left:8px" onclick="document.getElementById('ambModal').classList.add('active')">BECOME AMBASSADOR</button><p style="margin-top:15px;font-size:11px">AMBASSADORS EARN 15 GHS PER SELLER</p></div>
+<div style="background:#FFD60A;padding:10px;text-align:center;font-weight:800;font-size:12px">FREE DELIVERY ACCRA - PAY ON DELIVERY - MoMo PAYMENTS</div>
+<div class="grid" id="grid"></div>
+
+<div class="modal" id="sellerModal"><div class="modal-box">
+<h2>OPEN YOUR SHOP - 50 GHS</h2><p id="refNotice" style="display:none;background:#FFF8CC;padding:10px;border-radius:10px;font-size:12px;font-weight:700"></p>
+<input class="input" id="shopName" placeholder="Shop Name"><input class="input" id="sellerPhone" placeholder="MoMo Number"><input class="input" id="sellerName" placeholder="Your Name">
+<button class="btn btn-black" style="width:100%" onclick="payShop()">PAY 50 GHS WITH MOMO</button>
+<p style="text-align:center;margin-top:12px"><a onclick="document.getElementById('sellerModal').classList.remove('active')" style="text-decoration:underline">Close</a></p>
+</div></div>
+
+<div class="modal" id="ambModal"><div class="modal-box">
+<h2>AMBASSADOR - EARN 15 GHS</h2><input class="input" id="ambName" placeholder="Your Name"><input class="input" id="ambPhone" placeholder="MoMo Number">
+<button class="btn btn-yellow" style="width:100%" onclick="makeAmb()">GET MY REFERRAL LINK</button>
+<div id="ambResult" style="display:none"><p style="font-weight:800;font-size:12px;margin-top:10px">YOUR LINK:</p><div class="ref-box" id="refLink"></div><p style="font-size:12px">Share this link! When sellers open shop, you get 15 GHS via MoMo!</p></div>
+<p style="text-align:center;margin-top:12px"><a onclick="document.getElementById('ambModal').classList.remove('active')" style="text-decoration:underline">Close</a></p>
+</div></div>
+
 <script>
-const products=[{id:1,name:"DORNNY Hoodie",price:350,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500"},{id:2,name:"Cargo Pants",price:420,img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500"},{id:3,name:"Icon Tee",price:180,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"},{id:4,name:"Tracksuit",price:580,img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500"},{id:5,name:"DORNNY Cap",price:120,img:"https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500"},{id:6,name:"Jacket",price:650,img:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500"}];
-let cart=[];
-function renderProducts(){document.getElementById('products').innerHTML=products.map(p=>`<div class="bg-white rounded-[20px] overflow-hidden border"><img src="${p.img}" class="w-full h-48 object-cover"><div class="p-4"><h3 class="font-bold text-sm">${p.name}</h3><p class="font-black mt-1">GHS ${p.price}</p><button onclick="addToCart(${p.id})" class="w-full bg-black text-white py-2 rounded-full mt-3 text-sm font-bold">ADD</button></div></div>`).join('');}
-function addToCart(id){let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({...p,qty:1});updateCart();toggleCart(true);}
-function updateCart(){document.getElementById('cartCount').innerText=cart.reduce((a,b)=>a+b.qty,0);let sub=cart.reduce((a,b)=>a+b.price*b.qty,0);document.getElementById('cartItems').innerHTML=cart.map(i=>`<div class="flex gap-4 bg-white p-3 rounded-xl"><img src="${i.img}" class="w-16 h-16 rounded"><div class="flex-1"><div class="font-bold text-sm">${i.name}</div><div>GHS ${i.price} x ${i.qty}</div></div><button onclick="remove(${i.id})">✕</button></div>`).join('')||'<p>Cart empty</p>';document.getElementById('total').innerText='GHS '+sub;}
-function remove(id){cart=cart.filter(x=>x.id!==id);updateCart();}
-function toggleCart(f){let el=document.getElementById('cart');if(f===true)el.classList.remove('hidden');else el.classList.toggle('hidden');}
-function showTab(t){document.getElementById('shopTab').classList.toggle('hidden',t!=='shop');document.getElementById('ambTab').classList.toggle('hidden',t!=='amb');}
-function checkout(){if(!cart.length)return alert('Cart empty');let msg='Hello DORNNY! Order:%0A'+cart.map(c=>`- ${c.name} x${c.qty}`).join('%0A')+'%0A'+document.getElementById('total').innerText;window.open('https://wa.me/233000000000?text='+msg,'_blank');}
-renderProducts();
+const prods=[{shop:"DORNNY Official",name:"DORNNY Hoodie",price:350,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"},{shop:"Accra Street",name:"Cargo Pants",price:420,img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"},{shop:"Tema Fits",name:"Oversized Tee",price:180,img:"https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400"},{shop:"Kumasi Kicks",name:"Street Jacket",price:550,img:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400"}];
+document.getElementById('grid').innerHTML=prods.map(p=>`<div class="card"><img src="${p.img}"><div class="card-body"><div style="font-size:10px;opacity:0.5">${p.shop}</div><div style="font-weight:700">${p.name}</div><div style="font-weight:800">GHS ${p.price}</div><button class="btn btn-black" style="width:100%;margin-top:8px;padding:10px">ADD</button></div></div>`).join('');
+function payShop(){
+ const ref=new URLSearchParams(location.search).get('ref');
+ const name=document.getElementById('shopName').value;
+ const phone=document.getElementById('sellerPhone').value;
+ if(!name||!phone){alert('Enter shop name and MoMo');return}
+ alert('MoMo Prompt to '+phone+' - Approve 50 GHS to DORNNY (Demo - real site uses Paystack)');
+ let shops=JSON.parse(localStorage.getItem('dornny_shops')||'[]');
+ shops.push({name,phone,ref});localStorage.setItem('dornny_shops',JSON.stringify(shops));
+ if(ref){let a=JSON.parse(localStorage.getItem('dornny_ambs')||'{}');if(a[ref]){a[ref].earnings=(a[ref].earnings||0)+15;a[ref].count=(a[ref].count||0)+1;localStorage.setItem('dornny_ambs',JSON.stringify(a));alert('Shop opened! Ambassador '+ref+' earned 15 GHS! You keep 35 GHS');}else alert('Shop opened! You keep 50 GHS');}else alert('Shop opened! You keep 50 GHS');
+ document.getElementById('sellerModal').classList.remove('active');
+}
+function makeAmb(){
+ const n=document.getElementById('ambName').value;const p=document.getElementById('ambPhone').value;
+ if(!n||!p){alert('Enter details');return}
+ const code=n.replace(/\s/g,'').toUpperCase().slice(0,4)+Math.floor(100+Math.random()*900);
+ let a=JSON.parse(localStorage.getItem('dornny_ambs')||'{}');a[code]={name:n,phone:p,earnings:0,count:0};localStorage.setItem('dornny_ambs',JSON.stringify(a));
+ const link=location.origin+location.pathname+'?ref='+code;
+ document.getElementById('refLink').innerText=link;document.getElementById('ambResult').style.display='block';
+}
+window.onload=()=>{const r=new URLSearchParams(location.search).get('ref');if(r){document.getElementById('refNotice').style.display='block';document.getElementById('refNotice').innerText='Referred by Ambassador: '+r+' (They get 15 GHS)';document.getElementById('sellerModal').classList.add('active')}}
 </script>
 </body>
 </html>
