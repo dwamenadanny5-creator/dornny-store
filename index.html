@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DORNNY - Luxury Streetwear Ghana</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
+<style>*{font-family:'Space Grotesk',sans-serif}</style>
+</head>
+<body class="bg-[#F5F5F0] text-black">
+<header class="fixed top-0 w-full z-50 bg-black text-white flex items-center justify-between px-6 py-4">
+<div class="text-2xl font-black tracking-[0.3em]">DORNNY</div>
+<div class="flex gap-4 items-center">
+<button onclick="showTab('shop')" class="font-bold text-sm">SHOP</button>
+<button onclick="showTab('amb')" class="font-bold text-sm">AMBASSADOR</button>
+<button onclick="toggleCart()" class="relative">🛒 <span id="cartCount" class="absolute -top-2 -right-2 bg-white text-black text-xs w-5 h-5 rounded-full flex items-center justify-center font-black">0</span></button>
+</div>
+</header>
+<main class="pt-20">
+<div id="shopTab">
+<div class="bg-black text-white text-center py-2 text-xs tracking-widest">FREE DELIVERY ACCRA • NEW DROP LIVE</div>
+<div class="px-6 py-10 text-center">
+<h1 class="text-6xl font-black">LUXURY<br>STREET</h1>
+<p class="mt-4 opacity-70">Ghana's finest streetwear</p>
+</div>
+<div class="grid grid-cols-2 gap-4 px-4 pb-20" id="products"></div>
+</div>
+<div id="ambTab" class="hidden px-6 py-10 max-w-xl mx-auto">
+<h2 class="text-4xl font-black">AMBASSADOR</h2>
+<div class="mt-6 bg-white p-6 rounded-2xl border-2 border-black">
+<p class="font-bold">YOUR CODE</p>
+<input id="ambCode" value="DORNNY-X7" class="w-full bg-black text-white px-4 py-3 font-black rounded-xl text-center mt-2">
+<div class="grid grid-cols-3 gap-4 mt-6 text-center">
+<div class="bg-black text-white p-4 rounded-xl"><div class="text-xl font-black">GHS 2340</div><div class="text-xs">EARNINGS</div></div>
+<div class="bg-white border-2 border-black p-4 rounded-xl"><div class="text-xl font-black">12</div><div class="text-xs">SALES</div></div>
+<div class="bg-white border-2 border-black p-4 rounded-xl"><div class="text-xl font-black">15%</div><div class="text-xs">RATE</div></div>
+</div>
+</div>
+</div>
+</main>
+<div id="cart" class="fixed inset-0 bg-black/50 hidden z-[60]">
+<div class="absolute right-0 top-0 w-full max-w-md h-full bg-[#F5F5F0] p-6 overflow-auto">
+<div class="flex justify-between items-center"><h3 class="text-2xl font-black">CART</h3><button onclick="toggleCart()" class="text-2xl">✕</button></div>
+<div id="cartItems" class="mt-6"></div>
+<div class="mt-6 border-t-2 border-black pt-4">
+<div class="flex justify-between text-xl font-black"><span>Total</span><span id="total">GHS 0</span></div>
+<button onclick="checkout()" class="w-full bg-black text-white py-4 rounded-full mt-6 font-black">CHECKOUT WHATSAPP</button>
+</div>
+</div>
+</div>
+<script>
+const products=[{id:1,name:"DORNNY Hoodie",price:350,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500"},{id:2,name:"Cargo Pants",price:420,img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500"},{id:3,name:"Icon Tee",price:180,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"},{id:4,name:"Tracksuit",price:580,img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500"},{id:5,name:"DORNNY Cap",price:120,img:"https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500"},{id:6,name:"Jacket",price:650,img:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500"}];
+let cart=[];
+function renderProducts(){document.getElementById('products').innerHTML=products.map(p=>`<div class="bg-white rounded-[20px] overflow-hidden border"><img src="${p.img}" class="w-full h-48 object-cover"><div class="p-4"><h3 class="font-bold text-sm">${p.name}</h3><p class="font-black mt-1">GHS ${p.price}</p><button onclick="addToCart(${p.id})" class="w-full bg-black text-white py-2 rounded-full mt-3 text-sm font-bold">ADD</button></div></div>`).join('');}
+function addToCart(id){let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({...p,qty:1});updateCart();toggleCart(true);}
+function updateCart(){document.getElementById('cartCount').innerText=cart.reduce((a,b)=>a+b.qty,0);let sub=cart.reduce((a,b)=>a+b.price*b.qty,0);document.getElementById('cartItems').innerHTML=cart.map(i=>`<div class="flex gap-4 bg-white p-3 rounded-xl"><img src="${i.img}" class="w-16 h-16 rounded"><div class="flex-1"><div class="font-bold text-sm">${i.name}</div><div>GHS ${i.price} x ${i.qty}</div></div><button onclick="remove(${i.id})">✕</button></div>`).join('')||'<p>Cart empty</p>';document.getElementById('total').innerText='GHS '+sub;}
+function remove(id){cart=cart.filter(x=>x.id!==id);updateCart();}
+function toggleCart(f){let el=document.getElementById('cart');if(f===true)el.classList.remove('hidden');else el.classList.toggle('hidden');}
+function showTab(t){document.getElementById('shopTab').classList.toggle('hidden',t!=='shop');document.getElementById('ambTab').classList.toggle('hidden',t!=='amb');}
+function checkout(){if(!cart.length)return alert('Cart empty');let msg='Hello DORNNY! Order:%0A'+cart.map(c=>`- ${c.name} x${c.qty}`).join('%0A')+'%0A'+document.getElementById('total').innerText;window.open('https://wa.me/233000000000?text='+msg,'_blank');}
+renderProducts();
+</script>
+</body>
+</html>
