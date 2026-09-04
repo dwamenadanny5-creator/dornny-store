@@ -1,19 +1,134 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DORNNY</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;background:#f5f5f5;padding-bottom:130px}.top{background:#fff;padding:10px;display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:10}.top input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#ddd}.card{background:#fff}.card .t{padding:8px;font-size:11px}.card .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card .t span{font-weight:900}.card img{width:100%;height:230px;object-fit:cover;display:block}.open{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#FFD700;padding:14px 30px;border-radius:30px;font-weight:900;border:0;z-index:20;box-shadow:0 4px 10px rgba(0,0,0,.2)}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:30}.nav div{text-align:center;font-size:9px;color:#888}</style></head><body>
-<div class="top"><span>✉️</span><input placeholder="Search Jeans, Shoes, Sneakers..."><span>📷</span><span style="background:#111;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center">⌕</span><span>♡</span></div>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;background:#f5f5f5;padding-bottom:130px}.top{background:#fff;padding:10px;display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:10}.top input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#ddd}.card{background:#fff}.card img{width:100%;height:230px;object-fit:cover;display:block}.card.t{padding:8px;font-size:11px;background:#fff}.card.t b{display:block}.card.t span{font-weight:900}.open{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#FFD700;padding:14px 30px;border-radius:30px;font-weight:900;border:0;z-index:20;box-shadow:0 4px 10px rgba(0,0,0,.2)}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:30}.nav div{text-align:center;font-size:9px;color:#888;cursor:pointer}.nav div.on{color:#000;font-weight:900}.page{display:none}.page.on{display:block}.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:15px}.modal.on{display:flex}.box{background:#fff;width:100%;max-width:350px;border-radius:14px;overflow:hidden;max-height:90vh;overflow:auto}.btn{width:92%;margin:6px 4%;padding:12px;border:0;border-radius:10px;font-weight:900}.y{background:#FFD700}.bk{background:#111;color:#fff}.in{width:92%;margin:6px 4%;padding:12px;border:1px solid #ddd;border-radius:10px}</style></head><body>
+<div class="top"><span>✉️</span><input id="q" placeholder="Search Jeans, Shoes, Sneakers..." oninput="search()"><span>📷</span><span style="background:#111;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center" onclick="search()">⌕</span><span>♡</span></div>
 
-<div class="grid">
-<div class="card"><div class="t"><b>Leather Shoes Brown</b><span>GH₵320</span></div><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop"></div>
-<div class="card"><div class="t"><b>Pink Joggers 120 GHS Full</b><span>GH₵120</span></div><img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop"></div>
-<div class="card"><div class="t"><b>Nike Air Sneakers Red</b><span>GH₵350</span></div><img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=400&fit=crop"></div>
-<div class="card"><div class="t"><b>Baggy Jeans Street</b><span>GH₵150</span></div><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=400&fit=crop"></div>
-<div class="card"><div class="t"><b>Airmax Sneakers White</b><span>GH₵300</span></div><img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop"></div>
-<div class="card"><div class="t"><b>T-shirt Black Cotton</b><span>GH₵80</span></div><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop"></div>
-</div>
+<div id="p-shop" class="page on"><div class="grid" id="grid"></div></div>
+<div id="p-category" class="page"><div style="background:#fff;padding:12px"><h3>Shops</h3><div id="olist"></div><button class="btn y" onclick="openShop()">OPEN SHOP - 50 GHS</button></div></div>
+<div id="p-trends" class="page"><div style="background:#fff;padding:12px"><h3>Trends 🔥</h3><p style="font-size:12px;color:#888">Popular this week</p><div id="tgrid" class="grid" style="margin-top:10px"></div></div></div>
+<div id="p-cart" class="page"><div style="background:#fff;padding:12px"><h3>Cart (<span id="cn">0</span>)</h3><div id="clist"></div></div></div>
+<div id="p-me" class="page"><div style="background:#fff;padding:12px"><h3 id="meT">My Shop</h3><div id="meBox"></div><div id="myProds"></div></div></div>
 
-<button class="open" onclick="document.getElementById('shopModal').style.display='flex'">OPEN SHOP - 50 GHS</button>
+<button class="open" onclick="openShop()">OPEN SHOP - 50 GHS</button>
 
-<div class="nav"><div>🏪<br>Shop</div><div>☰<br>Category</div><div>↗<br>Trends</div><div>🛒<br>Cart</div><div>👤<br>Me</div></div>
+<div class="nav"><div id="n-shop" class="on" onclick="tab('shop')">🏪<br>Shop</div><div id="n-category" onclick="tab('category')">☰<br>Category</div><div id="n-trends" onclick="tab('trends')">↗<br>Trends</div><div id="n-cart" onclick="tab('cart')">🛒<br>Cart</div><div id="n-me" onclick="tab('me')">👤<br>Me</div></div>
 
-<div id="shopModal" style="position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:15px"><div style="background:#fff;width:100%;max-width:340px;border-radius:14px;padding:15px"><h3>Open Shop - 50 GHS</h3><input id="n" placeholder="Full Name" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0"><input id="s" placeholder="Shop Name" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0"><input id="p" placeholder="WhatsApp 059..." style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0"><button style="width:100%;padding:12px;background:gold;border:0;border-radius:10px;font-weight:900;margin-top:8px" onclick="alert('Shop Registered! '+document.getElementById('s').value);document.getElementById('shopModal').style.display='none'">PAY 50 GHS & OPEN</button><button style="width:100%;padding:12px;background:#eee;border:0;border-radius:10px;margin-top:6px" onclick="document.getElementById('shopModal').style.display='none'">Close</button></div></div>
-</body></html>
+<div id="mProd" class="modal" onclick="if(event.target==this)closeProd()"><div class="box"><img id="mi" style="width:100%;height:380px;object-fit:cover"><div style="padding:12px"><h3 id="mn"></h3><p id="mp" style="font-weight:900;font-size:18px;margin:6px 0"></p><p id="ms" style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px"></p><button class="btn bk" onclick="addCart()">ADD TO CART</button><button class="btn y" onclick="buyWA()">BUY ON WHATSAPP</button><button class="btn" style="background:#eee" onclick="closeProd()">Close</button></div></div></div>
+
+<div id="mShop" class="modal"><div class="box" style="padding:15px"><h3>Open Shop - 50 GHS</h3><p style="font-size:11px;color:#666;margin:6px 0">Pay 50 GHS to open shop + add real photos from phone</p><input id="oname" class="in" placeholder="Full Name"><input id="oshop" class="in" placeholder="Shop Name"><input id="ophone" class="in" placeholder="WhatsApp 059..."><input id="oloc" class="in" placeholder="Location - Accra"><button class="btn y" onclick="regShop()">PAY 50 GHS & OPEN SHOP</button><button class="btn" style="background:#eee" onclick="closeShop()">Cancel</button></div></div>
+
+<div id="mAdd" class="modal"><div class="box" style="padding:15px"><h3>Add Product - Real Photo</h3><input id="aname" class="in" placeholder="Name e.g. Leather Shoes Brown"><input id="aprice" class="in" type="number" placeholder="Price GH₵ 320"><label style="display:block;width:92%;margin:10px 4%;padding:18px;border:3px dashed gold;border-radius:12px;text-align:center;background:#fffbe6;font-weight:900">📷 TAP TO ADD REAL PHOTO<input id="afile" type="file" accept="image/*" style="display:none" onchange="preview(this)"></label><img id="aprev" style="width:92%;margin:0 4%;height:200px;object-fit:cover;border-radius:10px;display:none"><button class="btn y" onclick="addProd()">ADD TO MY SHOP</button><button class="btn" style="background:#eee" onclick="closeAdd()">Cancel</button></div></div>
+
+<script>
+var def=[
+{name:"Nike Air Sneakers Red",price:350,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",shop:"Sneaker Hub",owner:"Dornny",phone:"0594221108"},
+{name:"Baggy Jeans Street",price:150,img:"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=400&fit=crop",shop:"Jeans Store",owner:"Dornny",phone:"0594221108"},
+{name:"Airmax Sneakers White",price:300,img:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop",shop:"Sneaker Hub",owner:"Dornny",phone:"0594221108"},
+{name:"T-shirt Black Cotton",price:80,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",shop:"Dornny Wear",owner:"Dornny",phone:"0594221108"},
+{name:"Leather Shoes Brown",price:320,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",shop:"Dornny Shoes",owner:"Dornny",phone:"0594221108"},
+{name:"Pink Joggers 120 GHS",price:120,img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop",shop:"Dornny Wear",owner:"Dornny",phone:"0594221108"}
+];
+var my=JSON.parse(localStorage.getItem("dornny_my")||"[]");
+var owners=JSON.parse(localStorage.getItem("dornny_owners")||"[]");
+var curOwner=JSON.parse(localStorage.getItem("dornny_cur")||"null");
+var all=def.concat(my);
+var cart=[];var cur=null;var tmpImg="";
+function build(){
+all.forEach(function(it,i){it.id=i;});
+draw(all);
+drawTrends();
+drawOwners();
+drawMe();
+}
+function draw(list){
+var g=document.getElementById("grid");g.innerHTML="";
+list.forEach(function(it){
+g.innerHTML+='<div class="card" onclick="openProd('+it.id+')"><img src="'+it.img+'"><div class="t"><b>'+it.name+'</b><span>GH₵'+it.price+'</span></div></div>';
+});
+}
+function drawTrends(){
+var t=document.getElementById("tgrid");t.innerHTML="";
+all.slice(0,4).forEach(function(it){
+t.innerHTML+='<div class="card" onclick="openProd('+it.id+')"><img src="'+it.img+'" style="height:180px"><div class="t"><b>'+it.name+'</b><span>GH₵'+it.price+'</span></div></div>';
+});
+}
+function tab(n){
+document.querySelectorAll(".page").forEach(function(p){p.classList.remove("on")});
+document.querySelectorAll(".nav div").forEach(function(d){d.classList.remove("on")});
+document.getElementById("p-"+n).classList.add("on");
+document.getElementById("n-"+n).classList.add("on");
+}
+function search(){
+var q=document.getElementById("q").value.toUpperCase();
+if(!q){draw(all);return;}
+var f=all.filter(function(x){return x.name.toUpperCase().indexOf(q)>=0;});
+draw(f);
+}
+function openProd(id){
+cur=all.find(function(x){return x.id==id;});
+document.getElementById("mi").src=cur.img;
+document.getElementById("mn").innerText=cur.name;
+document.getElementById("mp").innerText="GH₵"+cur.price;
+document.getElementById("ms").innerHTML="🏪 "+cur.shop+"<br>👤 "+cur.owner+"<br>📱 "+cur.phone;
+document.getElementById("mProd").classList.add("on");
+}
+function closeProd(){document.getElementById("mProd").classList.remove("on");}
+function addCart(){
+cart.push(cur);
+document.getElementById("cn").innerText=cart.length;
+var cl=document.getElementById("clist");var tot=0;cl.innerHTML="";
+cart.forEach(function(c){tot+=c.price;cl.innerHTML+='<div style="background:#fff;padding:10px;border:1px solid #eee;border-radius:10px;margin:5px 0;display:flex;gap:10px"><img src="'+c.img+'" style="width:50px;height:50px;border-radius:8px"><div><b>'+c.name+'</b><br>GH₵'+c.price+'</div></div>';});
+cl.innerHTML+='<div style="padding:12px;background:#fff;border-radius:10px;margin-top:8px"><b>Total GH₵'+tot+'</b><br><button class="btn bk" onclick="window.open(\'https://wa.me/233594221108?text=Order Total GH₵'+tot+'\')">CHECKOUT WHATSAPP</button></div>';
+closeProd();tab("cart");
+}
+function buyWA(){
+var ph=cur.phone.replace(/\D/g,"");
+if(ph.charAt(0)=="0"){ph="233"+ph.substring(1);}
+window.open("https://wa.me/"+ph+"?text=I want "+encodeURIComponent(cur.name)+" GH₵"+cur.price);
+}
+function openShop(){document.getElementById("mShop").classList.add("on");}
+function closeShop(){document.getElementById("mShop").classList.remove("on");}
+function openAdd(){if(!curOwner){alert("Open Shop first - 50 GHS");openShop();return;}document.getElementById("mAdd").classList.add("on");}
+function closeAdd(){document.getElementById("mAdd").classList.remove("on");tmpImg="";document.getElementById("aprev").style.display="none";}
+function preview(inp){
+if(inp.files[0]){var r=new FileReader();r.onload=function(e){tmpImg=e.target.result;document.getElementById("aprev").src=tmpImg;document.getElementById("aprev").style.display="block";};r.readAsDataURL(inp.files[0]);}
+}
+function regShop(){
+var n=document.getElementById("oname").value;
+var s=document.getElementById("oshop").value;
+var p=document.getElementById("ophone").value;
+if(!n||!s||!p){alert("Fill all fields");return;}
+var o={name:n,shop:s,phone:p,loc:document.getElementById("oloc").value||"Accra"};
+owners.push(o);curOwner=o;
+localStorage.setItem("dornny_owners",JSON.stringify(owners));
+localStorage.setItem("dornny_cur",JSON.stringify(o));
+closeShop();drawMe();drawOwners();
+alert("🎉 Shop Opened: "+s+" - Now add real photos!");
+tab("me");
+}
+function addProd(){
+var n=document.getElementById("aname").value;
+var pr=document.getElementById("aprice").value;
+if(!n||!pr){alert("Name and price required");return;}
+var it={name:n,price:parseFloat(pr),img:tmpImg||"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",shop:curOwner.shop,owner:curOwner.name,phone:curOwner.phone};
+my.push(it);localStorage.setItem("dornny_my",JSON.stringify(my));
+all=def.concat(my);build();closeAdd();tab("shop");
+}
+function drawOwners(){
+var o=document.getElementById("olist");
+if(!owners.length){o.innerHTML='<p style="color:#888;font-size:11px;padding:10px">No shops yet - Be first!</p>';return;}
+o.innerHTML="";owners.forEach(function(x){o.innerHTML+='<div style="background:#fff;padding:10px;border-radius:10px;margin:6px 0;border:1px solid #eee;display:flex;gap:10px"><div style="width:40px;height:40px;background:#111;color:gold;border-radius:50%;display:flex;align-items:center;justify-content:center">'+x.shop.charAt(0)+'</div><div><b>'+x.shop+'</b><br><span style="font-size:11px">'+x.name+' - '+x.loc+'</span></div></div>';});
+}
+function drawMe(){
+var b=document.getElementById("meBox");
+var l=document.getElementById("myProds");
+if(curOwner){
+b.innerHTML='<div style="background:#111;color:#fff;padding:14px;border-radius:12px"><b>'+curOwner.shop+'</b><br>'+curOwner.name+'<br><button class="btn y" style="margin-top:8px" onclick="openAdd()">+ ADD REAL PHOTO PRODUCT</button></div>';
+if(!my.length){l.innerHTML='<p style="color:#888;font-size:12px;padding:10px">No products yet</p>';}
+else{l.innerHTML="";my.forEach(function(it){l.innerHTML+='<div style="background:#fff;padding:10px;border:1px solid #eee;border-radius:10px;margin:6px 0;display:flex;gap:10px"><img src="'+it.img+'" style="width:60px;height:60px;border-radius:8px;object-fit:cover"><div><b>'+it.name+'</b><br>GH₵'+it.price+'</div></div>';});}
+}else{
+b.innerHTML='<div style="background:#fffbe6;padding:12px;border-radius:10px;border:1px dashed gold;text-align:center">Pay 50 GHS to Open Shop<br>Sell with Real Photos</div><button class="btn y" onclick="openShop()">OPEN SHOP - 50 GHS</button>';
+l.innerHTML="";
+}
+}
+build();
+</script></body></html>
