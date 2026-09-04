@@ -6,130 +6,98 @@
 <title>DORNNY - Ghana's Streetwear Marketplace</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5;color:#111}
+body{font-family:-apple-system,sans-serif;background:#f5f5f5;color:#111}
 .topbar{background:#0a0a0a;color:#fff;padding:12px 16px;position:sticky;top:0;z-index:99;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:900;letter-spacing:5px;font-size:18px}
-.nav{display:flex;gap:14px;font-size:11px;font-weight:700;align-items:center}
-.nav a{color:#fff;text-decoration:none;opacity:.8}.nav a:hover{opacity:1}
-.cart-count{background:#FFD60A;color:#000;padding:2px 7px;border-radius:20px;font-size:11px}
-.hero{background:#0a0a0a;color:#fff;padding:50px 20px 40px;text-align:center}
-.hero h1{font-size:38px;line-height:0.95;letter-spacing:-1px;font-weight:900}
-.hero h1 span{color:#FFD60A}
-.hero p{margin:18px auto;color:#aaa;max-width:340px;font-size:14px;line-height:1.4}
-.btn{display:inline-block;padding:14px 28px;border-radius:30px;font-weight:800;text-decoration:none;font-size:14px;margin:6px;border:none;cursor:pointer}
-.btn-yellow{background:#FFD60A;color:#000}.btn-yellow:hover{background:#ffcc00}
-.btn-outline{background:transparent;color:#fff;border:1.5px solid #333}
-.badge-bar{background:#FFD60A;color:#000;text-align:center;padding:10px;font-weight:800;font-size:12px;letter-spacing:0.5px}
-.search-wrap{padding:14px 16px;background:#fff;display:flex;gap:8px;position:sticky;top:49px;z-index:98;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-.search-wrap input{flex:1;padding:12px 14px;border:1.5px solid #eee;border-radius:12px;font-size:14px}
-.search-wrap button{padding:12px 18px;border-radius:12px;border:none;background:#111;color:#fff;font-weight:700}
+.logo{font-weight:900;letter-spacing:5px}
+.nav{display:flex;gap:12px;font-size:11px;font-weight:700}
+.nav a{color:#fff;text-decoration:none;opacity:.8}
 .grid{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .card img{width:100%;height:170px;object-fit:cover}
 .card-body{padding:10px 12px}
-.card-title{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-shop{font-size:11px;color:#888;margin:2px 0}
-.card-price{font-weight:900;margin-top:4px;font-size:14px}
+.card-title{font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-shop{font-size:10px;color:#888;margin:2px 0}
+.card-shop span{color:#000;font-weight:700}
+.card-price{font-weight:900;margin-top:4px}
 .card-actions{display:flex;gap:6px;margin-top:8px}
-.card-actions button{flex:1;padding:8px;border-radius:20px;border:none;font-size:11px;font-weight:700;cursor:pointer}
-.add{background:#111;color:#fff}.buy{background:#FFD60A}
-.sell-section{background:#111;color:#fff;padding:30px 20px;margin:20px 12px;border-radius:20px;text-align:center}
-.sell-section h2{font-size:22px}.sell-section span{color:#FFD60A}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px}
-.modal-box{background:#fff;border-radius:20px;padding:22px;width:100%;max-width:360px}
-.modal-box h3{font-size:18px;margin-bottom:12px}.modal-box input,.modal-box textarea{width:100%;padding:12px;margin:6px 0;border:1.5px solid #eee;border-radius:12px;font-size:14px}
-.close{float:right;cursor:pointer;font-size:20px}
-.footer{text-align:center;padding:30px 20px;color:#999;font-size:11px}
+.card-actions button{flex:1;padding:9px;border-radius:20px;border:none;font-size:11px;font-weight:800;cursor:pointer}
+.add{background:#111;color:#fff}.buy{background:#FFD60A;color:#000}
+.hero{background:#0a0a0a;color:#fff;padding:40px 20px;text-align:center}
+.hero h1{font-size:36px;font-weight:900;line-height:.9}.hero h1 span{color:#FFD60A}
+.hero p{color:#aaa;margin:14px auto;font-size:13px;max-width:320px}
+.btn{padding:14px 26px;border-radius:30px;font-weight:800;border:none;display:inline-block;text-decoration:none;font-size:13px;margin:5px;cursor:pointer}
+.btn-y{background:#FFD60A;color:#000}.btn-o{background:transparent;color:#fff;border:1px solid #333}
+.bar{background:#FFD60A;text-align:center;padding:10px;font-weight:800;font-size:11px}
+.search{padding:12px;background:#fff;display:flex;gap:8px;position:sticky;top:48px;z-index:90}
+.search input{flex:1;padding:11px;border:1.5px solid #eee;border-radius:12px}
+.search button{padding:11px 16px;background:#111;color:#fff;border:none;border-radius:12px;font-weight:700}
+.sell{background:#111;color:#fff;margin:18px 12px;padding:28px 20px;border-radius:20px;text-align:center}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:16px}
+.box{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:360px}
+.box input,.box textarea{width:100%;padding:11px;margin:6px 0;border:1.5px solid #eee;border-radius:12px}
+.footer{text-align:center;padding:28px;color:#999;font-size:11px}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-<div class="logo">DORNNY</div>
-<div class="nav">
-<a href="#">MARKET</a>
-<a onclick="openSell()">SELL</a>
-<a onclick="openCart()">CART <span class="cart-count" id="cartNum">0</span></a>
-</div>
-</div>
+<div class="topbar"><div class="logo">DORNNY</div><div class="nav"><a href="#">MARKET</a><a onclick="openSell()">SELL</a><a onclick="openCart()">CART (<span id="cartNum">0</span>)</a></div></div>
 
-<div class="hero">
-<h1>BUY & SELL<br><span>ON DORNNY</span></h1>
-<p>Ghana's streetwear marketplace. From Accra to Kumasi - pay on delivery, MoMo accepted.</p>
-<br>
-<a class="btn btn-yellow" onclick="openSell()">OPEN SHOP - 50 GHS</a><br>
-<a class="btn btn-outline" onclick="openAmb()">BECOME AMBASSADOR - EARN 15 GHS</a>
-<p style="margin-top:12px;font-size:11px;color:#666">AMBASSADORS EARN 15 GHS PER SELLER THEY BRING</p>
-</div>
+<div class="hero"><h1>BUY & SELL<br><span>ON DORNNY</span></h1><p>Ghana streetwear marketplace - buyer chats seller direct on WhatsApp!</p><br><a class="btn btn-y" onclick="openSell()">OPEN SHOP - 50 GHS</a><br><a class="btn btn-o" onclick="alert('Earn 15 GHS per seller! Message owner to become ambassador')">BECOME AMBASSADOR</a></div>
+<div class="bar">BUY BUTTON GOES DIRECT TO SELLER'S WHATSAPP • PAY ON DELIVERY</div>
 
-<div class="badge-bar">FREE DELIVERY ACCRA • PAY ON DELIVERY • MoMo: 0XX XXX XXXX</div>
-
-<div class="search-wrap">
-<input id="searchInput" placeholder="Search sneakers, hoodies, watches..." oninput="searchProd()">
-<button onclick="searchProd()">SEARCH</button>
-</div>
+<div class="search"><input id="q" placeholder="Search sneakers, hoodies..." oninput="doSearch()"><button onclick="doSearch()">SEARCH</button></div>
 
 <div class="grid" id="grid"></div>
 
-<div class="sell-section">
-<h2>START SELLING ON <span>DORNNY</span></h2>
-<p style="color:#aaa;margin:12px 0;font-size:13px">Join 40+ sellers. 50 GHS only to open shop. We handle delivery.</p>
-<a class="btn btn-yellow" onclick="openSell()">OPEN YOUR SHOP NOW</a>
-</div>
+<div class="sell"><h2>START SELLING ON <span style="color:#FFD60A">DORNNY</span></h2><p style="color:#aaa;margin:10px 0;font-size:13px">50 GHS to open shop. Buyers message you direct.</p><a class="btn btn-y" onclick="openSell()">OPEN YOUR SHOP</a></div>
 
-<div class="footer">DORNNY © 2026 • Made in Accra, Ghana • WhatsApp: +233 XX XXX XXXX<br>Not Jumia, BETTER - Built for streetwear culture</div>
+<div class="footer">DORNNY 2026 • Accra, Ghana • Direct Seller Marketplace</div>
 
-<div class="modal" id="sellModal">
-<div class="modal-box">
-<span class="close" onclick="closeSell()">×</span>
-<h3>Open Your Shop - 50 GHS</h3>
-<input id="shopName" placeholder="Your Shop Name (e.g. Kofi Kicks)">
-<input id="sellerPhone" placeholder="Your WhatsApp Number">
-<textarea id="whatSell" placeholder="What do you sell? e.g. Sneakers, thrift..."></textarea>
-<button class="btn btn-yellow" style="width:100%" onclick="submitSell()">SEND TO DORNNY ON WHATSAPP</button>
-<p style="font-size:11px;color:#888;margin-top:8px">Pay 50 GHS via MoMo after we reply. Shop goes live in 2 hours.</p>
-</div>
-</div>
+<div class="modal" id="sellModal"><div class="box"><span style="float:right;cursor:pointer" onclick="closeSell()">×</span><h3>Open Shop - 50 GHS</h3><input id="shopName" placeholder="Shop Name"><input id="sellerPhone" placeholder="Your WhatsApp Number e.g. 233541234567"><textarea id="whatSell" placeholder="What do you sell?"></textarea><button class="btn btn-y" style="width:100%" onclick="sendSell()">SEND TO DORNNY OWNER</button></div></div>
 
-<div class="modal" id="cartModal">
-<div class="modal-box">
-<span class="close" onclick="closeCart()">×</span>
-<h3>Your Cart</h3>
-<div id="cartItems" style="margin:10px 0;max-height:200px;overflow:auto"></div>
-<div style="font-weight:900;margin:10px 0">Total: <span id="cartTotal">0 GHS</span></div>
-<button class="btn btn-yellow" style="width:100%" onclick="checkout()">ORDER VIA WHATSAPP</button>
-</div>
-</div>
+<div class="modal" id="cartModal"><div class="box"><span style="float:right;cursor:pointer" onclick="closeCart()">×</span><h3>Cart</h3><div id="cartItems"></div><div style="font-weight:900;margin:10px 0" id="cartTotal"></div><button class="btn btn-y" style="width:100%" onclick="alert('Cart checkout goes to sellers individually. Use BUY button for direct chat')">BUY GOES TO SELLER DIRECT</button></div></div>
 
 <script>
+// OWNER NUMBER - CHANGE THIS TO YOUR NUMBER
+const OWNER_PHONE = "233000000000";
+
+// PRODUCTS - Each has seller phone! Edit these numbers to real sellers
 let products=[
-{title:"DORNNY Essential Hoodie Grey",shop:"DORNNY Official",price:250,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"},
-{title:"DORNNY Cargo Pants Black",shop:"DORNNY Official",price:220,img:"https://images.unsplash.com/photo-1584093420050-6bb3daa45d5d?w=400"},
-{title:"Air Jordan 1 Retro",shop:"Kofi Kicks",price:850,img:"https://images.unsplash.com/photo-1603808033176-935819eb3b3a?w=400"},
-{title:"Vintage Pink Sweatpants",shop:"Thrift Queen GH",price:120,img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"},
-{title:"Luxury Watch Gold",shop:"Accra Watches",price:450,img:"https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=400"},
-{title:"Designer Cross Bag",shop:"Style Hub",price:180,img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400"},
-{title:"DORNNY Logo Tee White",shop:"DORNNY Official",price:120,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"},
-{title:"Nike Tech Fleece Set",shop:"Kumasi Drips",price:600,img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400"}
+{title:"DORNNY Hoodie Grey",shop:"DORNNY Official",price:250,phone:"233000000000",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"},
+{title:"Cargo Pants Black",shop:"DORNNY Official",price:220,phone:"233000000000",img:"https://images.unsplash.com/photo-1584093420050-6bb3daa45d5d?w=400"},
+{title:"Air Jordan 1",shop:"Kofi Kicks",price:850,phone:"233541234567",img:"https://images.unsplash.com/photo-1603808033176-935819eb3b3a?w=400"},
+{title:"Pink Sweatpants",shop:"Thrift Queen",price:120,phone:"233201234567",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"},
+{title:"Gold Watch",shop:"Accra Watches",price:450,phone:"233241234567",img:"https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=400"},
+{title:"Cross Bag",shop:"Style Hub",price:180,phone:"233501234567",img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400"},
+{title:"DORNNY Tee White",shop:"DORNNY Official",price:120,phone:"233000000000",img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"},
+{title:"Nike Tech Fleece",shop:"Kumasi Drips",price:600,phone:"233271234567",img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400"}
 ];
 let cart=[];
 function render(list=products){
 let g=document.getElementById('grid');g.innerHTML='';
 list.forEach((p,i)=>{
-g.innerHTML+=`<div class="card"><img src="${p.img}"><div class="card-body"><div class="card-title">${p.title}</div><div class="card-shop">${p.shop}</div><div class="card-price">${p.price} GHS</div><div class="card-actions"><button class="add" onclick="addCart(${i})">ADD</button><button class="buy" onclick="buyNow(${i})">BUY</button></div></div></div>`;
+g.innerHTML+=`<div class="card"><img src="${p.img}"><div class="card-body"><div class="card-title">${p.title}</div><div class="card-shop">by <span>${p.shop}</span></div><div class="card-price">${p.price} GHS</div><div class="card-actions"><button class="add" onclick="addCart(${i})">ADD</button><button class="buy" onclick="buyDirect(${i})">BUY</button></div></div></div>`;
 });
 }
-function addCart(i){cart.push(products[i]);updateCart();document.getElementById('cartNum').style.transform='scale(1.3)';setTimeout(()=>document.getElementById('cartNum').style.transform='scale(1)',200)}
-function updateCart(){document.getElementById('cartNum').innerText=cart.length;let items=document.getElementById('cartItems');let total=0;items.innerHTML='';cart.forEach(c=>{total+=c.price;items.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:13px"><span>${c.title}</span><b>${c.price}</b></div>`});document.getElementById('cartTotal').innerText=total+' GHS';}
+function addCart(i){cart.push(products[i]);document.getElementById('cartNum').innerText=cart.length;let items=document.getElementById('cartItems');let total=0;items.innerHTML='';cart.forEach(c=>{total+=c.price;items.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:12px"><span>${c.title}</span><b>${c.price}</b></div>`});document.getElementById('cartTotal').innerText='Total: '+total+' GHS';}
+function buyDirect(i){
+let p=products[i];
+let msg=`Hi ${p.shop}! I saw ${p.title} (${p.price} GHS) on DORNNY marketplace. Is it still available?`;
+window.open(`https://wa.me/${p.phone}?text=${encodeURIComponent(msg)}`,'_blank');
+}
 function openSell(){document.getElementById('sellModal').style.display='flex'}
 function closeSell(){document.getElementById('sellModal').style.display='none'}
-function openCart(){document.getElementById('cartModal').style.display='flex';updateCart()}
+function openCart(){document.getElementById('cartModal').style.display='flex'}
 function closeCart(){document.getElementById('cartModal').style.display='none'}
-function submitSell(){let name=document.getElementById('shopName').value;let phone=document.getElementById('sellerPhone').value;let what=document.getElementById('whatSell').value;let msg=`Hi DORNNY! I want to open shop: Shop: ${name}, Phone: ${phone}, Products: ${what}`;window.open(`https://wa.me/233000000000?text=${encodeURIComponent(msg)}`,'_blank');closeSell();}
-function buyNow(i){let p=products[i];let msg=`Hi DORNNY! I want to buy: ${p.title} - ${p.price} GHS from ${p.shop}`;window.open(`https://wa.me/233000000000?text=${encodeURIComponent(msg)}`,'_blank');}
-function checkout(){if(cart.length==0){alert('Cart empty!');return}let total=cart.reduce((s,c)=>s+c.price,0);let list=cart.map(c=>c.title).join(', ');let msg=`Hi DORNNY! Order: ${list} | Total: ${total} GHS | Deliver to: [your location]`;window.open(`https://wa.me/233000000000?text=${encodeURIComponent(msg)}`,'_blank');}
-function searchProd(){let q=document.getElementById('searchInput').value.toLowerCase();let f=products.filter(p=>p.title.toLowerCase().includes(q));render(f);}
-function openAmb(){let msg=`Hi DORNNY! I want to be AMBASSADOR. How do I earn 15 GHS per seller?`;window.open(`https://wa.me/233000000000?text=${encodeURIComponent(msg)}`,'_blank');}
+function sendSell(){
+let name=document.getElementById('shopName').value;
+let phone=document.getElementById('sellerPhone').value;
+let what=document.getElementById('whatSell').value;
+let msg=`Hi DORNNY OWNER! Shop application: Name: ${name}, Phone: ${phone}, Selling: ${what}. I will pay 50 GHS MoMo.`;
+window.open(`https://wa.me/${OWNER_PHONE}?text=${encodeURIComponent(msg)}`,'_blank');
+closeSell();
+}
+function doSearch(){let q=document.getElementById('q').value.toLowerCase();render(products.filter(p=>p.title.toLowerCase().includes(q)||p.shop.toLowerCase().includes(q)))}
 render();
 </script>
 </body>
