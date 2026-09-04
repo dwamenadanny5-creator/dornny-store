@@ -1,60 +1,51 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DORNNY - Ghana's WhatsApp Marketplace</title>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DORNNY Marketplace</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#f8f9fa}
-.header{background:linear-gradient(135deg,#0a3d1f,#1a5c2e);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:800;font-size:22px}.logo span{color:#f4b400}
-.btn{border:none;border-radius:22px;padding:10px 18px;font-weight:700;cursor:pointer}
-.btn-gold{background:#f4b400;color:#000}.btn-green{background:#0a3d1f;color:#fff}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
-.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:pointer}
-.card img{width:100%;height:150px;object-fit:cover}.card-body{padding:10px}
-.price{color:#0a3d1f;font-weight:800}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;justify-content:center;align-items:center;padding:16px}
-.modal.active{display:flex}.modal-box{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:380px;max-height:90vh;overflow:auto}
-.input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:8px 0}
-</style></head><body>
-<div class="header"><div class="logo">DORNNY<span>.</span></div><div style="display:flex;gap:8px">
-<button class="btn btn-gold" onclick="openAmbassador()">Ambassador</button>
-<button class="btn btn-gold" onclick="openShop()">Open Shop (50 GHS)</button></div></div>
-
-<div id="products" class="grid"></div>
-
-<div class="modal" id="viewModal">
-<div class="modal-box" style="padding:0;overflow:hidden;max-width:320px;width:92%;border-radius:20px">
-<img id="vImg" style="width:100%;height:220px;object-fit:cover">
-<div style="padding:16px"><h3 id="vTitle"></h3><p id="vPrice" class="price" style="margin:8px 0"></p>
-<p id="vDesc" style="font-size:13px;color:#666"></p>
-<button class="btn btn-green" style="width:100%;margin-top:12px" onclick="buyNow()">BUY ON WHATSAPP</button>
-<button class="btn" style="width:100%;margin-top:8px;background:#eee" onclick="closeModals()">Close</button>
-</div></div></div>
-
-<div class="modal" id="shopModal"><div class="modal-box">
-<h2>Open Your Shop - 50 GHS</h2><p style="font-size:13px;margin:8px 0">Pay MoMo to 0594221108 then fill form</p>
-<input id="sName" class="input" placeholder="Shop Name">
-<input id="sPhone" class="input" placeholder="WhatsApp Number 233...">
-<input id="sMomo" class="input" placeholder="MoMo Transaction ID">
-<button class="btn btn-green" style="width:100%" onclick="submitShop()">Submit Shop</button>
-<button class="btn" style="width:100%;margin-top:8px;background:#eee" onclick="closeModals()">Cancel</button>
-</div></div>
-
-<div class="modal" id="ambModal"><div class="modal-box">
-<h2>Ambassador Account</h2>
-<input id="aName" class="input" placeholder="Your Name">
-<input id="aPhone" class="input" placeholder="Your WhatsApp">
-<input id="aMomo" class="input" placeholder="MoMo for payments">
-<button class="btn btn-green" style="width:100%" onclick="createAmbassador()">CREATE MY ACCOUNT</button>
-<div id="dash" style="display:none;margin-top:12px;border-top:1px solid #eee;padding-top:12px">
-<p>Your Link: <span id="refLink" style="font-size:11px;word-break:break-all"></span></p>
-<p>Sellers: <b id="refCount">0</b> | Earned: <b id="refEarn">0 GHS</b></p>
-<button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="shareAmb()">Share Link</button>
-</div>
-<button class="btn" style="width:100%;margin-top:8px;background:#eee" onclick="closeModals()">Close</button>
-</div></div>
-
+body{margin:0;font-family:Arial;background:#f5f5f5}
+.head{background:#0a3d1f;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
+.head b{font-size:20px}.head b span{color:#f4b400}
+.btn{background:#f4b400;color:#000;border:none;padding:10px 15px;border-radius:20px;font-weight:bold;margin-left:5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:#fff;border-radius:10px;overflow:hidden}
+.card img{width:100%;height:140px;object-fit:cover}
+.card div{padding:8px;font-size:13px}
+.price{color:#0a3d1f;font-weight:bold}
+.pop{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:99}
+.pop.show{display:flex}
+.box{background:#fff;width:90%;max-width:320px;border-radius:15px;overflow:hidden}
+.box img{width:100%;height:220px;object-fit:cover}
+.box2{padding:15px}
+</style>
+</head>
+<body>
+<div class="head"><b>DORNNY<span>.</span></b><div><button class="btn">Ambassador</button><button class="btn">Open Shop (50 GHS)</button></div></div>
+<div class="grid" id="list"></div>
+<div class="pop" id="pop" onclick="if(event.target==this)hide()"><div class="box"><img id="pImg"><div class="box2"><h3 id="pTitle"></h3><p id="pPrice" class="price"></p><p id="pDesc" style="font-size:12px;color:#666"></p><button class="btn" style="width:100%;margin-top:10px;background:#0a3d1f;color:#fff" onclick="buy()">BUY ON WHATSAPP</button><button class="btn" style="width:100%;margin-top:5px;background:#eee" onclick="hide()">Close</button></div></div></div>
 <script>
-const products=[
-{title:"DORNNY Hoodie Black",price:"180 GHS",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400",desc:"Original Ghana hoodie - warm & quality",phone:"233594221108"},
-{title:"Sneakers White",price:"250 GHS",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",desc:"Trendy sneakers - all sizes",phone:"233594221108"},
-{title:"Vintage T-Shirt",price:"80 GHS",img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",desc:"Soft cotton tee",phone:"233594221108"},
-{title:"Ladies Bag",price:"120 GHS",img:"https://images.unsplash.com/photo-1584917865442-de</script></body></html>
+var items=[
+{t:"Hoodie Black",p:"180 GHS",i:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400",d:"Original Ghana hoodie",m:"233594221108"},
+{t:"Sneakers White",p:"250 GHS",i:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",d:"Trendy sneakers",m:"233594221108"},
+{t:"T-Shirt",p:"80 GHS",i:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",d:"Soft cotton",m:"233594221108"},
+{t:"Ladies Bag",p:"120 GHS",i:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400",d:"Stylish bag",m:"233594221108"},
+{t:"Watch",p:"200 GHS",i:"https://images.unsplash.com/photo-1524805444973-bf390e004138?w=400",d:"Classic watch",m:"233594221108"},
+{t:"Cap Black",p:"60 GHS",i:"https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400",d:"DORNNY cap",m:"233594221108"}
+];
+var cur=null;
+function show(){
+var h="";
+for(var k=0;k<items.length;k++){
+h+='<div class="card" onclick="view('+k+')"><img src="'+items[k].i+'"><div><b>'+items[k].t+'</b><br><span class="price">'+items[k].p+'</span></div></div>';
+}
+document.getElementById("list").innerHTML=h;
+}
+function view(k){cur=items[k];document.getElementById("pImg").src=cur.i;document.getElementById("pTitle").innerHTML=cur.t;document.getElementById("pPrice").innerHTML=cur.p;document.getElementById("pDesc").innerHTML=cur.d;document.getElementById("pop").classList.add("show");}
+function hide(){document.getElementById("pop").classList.remove("show");}
+function buy(){window.open("https://wa.me/"+cur.m+"?text=Hi I want "+cur.t+" "+cur.p+" from DORNNY");}
+show();
+</script>
+</body>
+</html>
