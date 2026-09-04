@@ -24,3 +24,94 @@ header a{color:#fff;text-decoration:none;opacity:.8}
 .search-wrap button{background:#000;color:#fff;border:0;padding:0 18px;border-radius:10px;font-weight:700}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
 .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DORNNY - Ghana's Marketplace</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,Arial}
+body{background:#f5f5f5}
+header{background:#000;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:99}
+header b{letter-spacing:3px;font-size:18px}
+header div{font-size:12px;display:flex;gap:12px}
+header a{color:#fff;text-decoration:none;opacity:.8}
+.hero{background:#000;color:#fff;text-align:center;padding:48px 20px 36px}
+.hero h1{font-size:38px;line-height:1.1;font-weight:900}
+.hero h1 span{color:#facc15}
+.hero p{color:#aaa;margin:14px 0 24px;font-size:14px}
+.btn{display:inline-block;padding:14px 24px;border-radius:28px;font-weight:800;font-size:14px;border:0;cursor:pointer;text-decoration:none}
+.btn-yellow{background:#facc15;color:#000}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid #333;margin-top:12px}
+.yellow-bar{background:#facc15;color:#000;text-align:center;padding:8px;font-weight:800;font-size:11px}
+.search-wrap{padding:12px;display:flex;gap:8px;background:#fff}
+.search-wrap input{flex:1;padding:12px 14px;border-radius:10px;border:1.5px solid #e5e5e5;outline:0}
+.search-wrap button{background:#000;color:#fff;border:0;padding:0 18px;border-radius:10px;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer}
+.card img{width:100%;height:160px;object-fit:cover;background:#eee}
+.card-body{padding:10px}
+.card-body h4{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-body p{font-size:11px;color:#777;margin:2px 0}
+.card-body b{font-size:14px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:200;padding:18px}
+.modal.open{display:flex}
+.modal-box{background:#fff;width:100%;max-width:400px;border-radius:18px;padding:20px;max-height:90vh;overflow:auto}
+.modal-box h2{font-size:20px;margin-bottom:6px}
+.modal-box p.sub{color:#666;font-size:13px;margin-bottom:14px}
+.modal-box input{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:10px;margin:6px 0}
+.stat{background:#f8f8f8;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<header><b>DORNNY</b><div><a href="#market">MARKET</a><a href="#" onclick="openAmbassador()">SELL</a><a href="#">CART</a></div></header>
+<div class="hero"><h1>BUY & SELL<br><span>ON DORNNY</span></h1><p>Ghana's marketplace - buyer chats seller direct on WhatsApp!</p><button class="btn btn-yellow" onclick="openShop()">OPEN SHOP - 50 GHS</button><br><button class="btn btn-outline" onclick="openAmbassador()">BECOME AMBASSADOR</button></div>
+<div class="yellow-bar">BUY GOES DIRECT TO SELLER - PAY ON DELIVERY</div>
+<div class="search-wrap" id="market"><input id="search" placeholder="Search sneakers, hoodies..." oninput="render()"><button onclick="render()">SEARCH</button></div>
+<div class="grid" id="grid"></div><div class="modal" id="shopModal"><div class="modal-box"><h2>Open Your Shop</h2><p class="sub">Pay 50 GHS MoMo to <b>0594221108</b></p><input id="sName" placeholder="Shop Name"><input id="sPhone" placeholder="WhatsApp e.g. 024..."><input id="sTitle" placeholder="Product Name"><input id="sPrice" placeholder="Price GHS" type="number"><p id="refInfo" style="font-size:12px;background:#fef08a;padding:8px;border-radius:8px;display:none"></p><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-yellow" style="flex:1" onclick="submitShop()">CHAT OWNER</button><button class="btn" style="background:#eee;flex:1" onclick="closeModals()">Cancel</button></div></div></div>
+<div class="modal" id="ambModal"><div class="modal-box"><div id="ambLogin"><h2>Become Ambassador</h2><p class="sub">Earn 15 GHS per seller!</p><input id="aName" placeholder="Full Name"><input id="aPhone" placeholder="WhatsApp"><input id="aMomo" placeholder="MoMo Number"><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-yellow" style="flex:1" onclick="createAmbassador()">CREATE ACCOUNT</button><button class="btn" style="background:#eee" onclick="closeModals()">Cancel</button></div></div><div id="ambDash" style="display:none"><h2>Ambassador Account</h2><div class="stat"><span>Code</span><b id="dashCode">---</b></div><div class="stat"><span>Name</span><b id="dashName">---</b></div><div style="background:#000;color:#fff;padding:12px;border-radius:12px;margin-top:12px"><p style="font-size:11px;color:#aaa">YOUR LINK</p><p id="dashLink" style="font-size:12px;word-break:break-all;color:#facc15"></p></div><button class="btn btn-yellow" style="width:100%;margin-top:12px" onclick="shareAmb()">SHARE ON WHATSAPP</button><button class="btn" style="width:100%;background:#eee;margin-top:8px" onclick="copyLink()">COPY LINK</button><button class="btn" style="width:100%;background:#000;color:#fff;margin-top:8px" onclick="closeModals()">Close</button></div></div></div>
+<div class="modal" id="viewModal"><div class="modal-box" style="padding:0;overflow:hidden;max-width:420px"><img id="vImg" style="width:100%;height:320px;object-fit:cover"><div style="padding:16px"><div style="display:flex;justify-content:space-between;align-items:center"><h2 id="vTitle" style="font-size:18px">Product</h2><b id="vPrice" style="background:#facc15;padding:6px 12px;border-radius:20px">0 GHS</b></div><p id="vShop" style="color:#666;font-size:13px;margin:6px 0">Shop</p><p style="font-size:13px;color:#444;margin:10px 0">Pay on delivery. Chat seller direct on WhatsApp. Verified seller on DORNNY.</p><div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-yellow" style="flex:1" id="vBuyBtn">BUY ON WHATSAPP</button><button class="btn" style="background:#eee" onclick="closeModals()">Close</button></div></div></div></div>
+<script>
+let OWNER_PHONE="233594221108";
+let products=[
+{title:"DORNNY Hoodie Grey",shop:"DORNNY Official",price:250,phone:OWNER_PHONE,img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"},
+{title:"DORNNY Hoodie Black",shop:"DORNNY Official",price:250,phone:OWNER_PHONE,img:"https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400"},
+{title:"Air Force White",shop:"Kicks Ghana",price:350,phone:OWNER_PHONE,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"},
+{title:"Campus Sneaker",shop:"DORNNY Official",price:280,phone:OWNER_PHONE,img:"https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=400"},
+{title:"Vintage Hoodie",shop:"DORNNY Official",price:200,phone:OWNER_PHONE,img:"https://images.unsplash.com/photo-1578768079052-aa76e52ff2a5?w=400"},
+{title:"Running Shoe",shop:"DORNNY Official",price:300,phone:OWNER_PHONE,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"}
+];
+function render(){
+let q=document.getElementById('search').value.toLowerCase();
+let g=document.getElementById('grid');g.innerHTML="";
+products.forEach((p,idx)=>{
+if(p.title.toLowerCase().includes(q)||p.shop.toLowerCase().includes(q)){
+g.innerHTML+=`<div class="card" onclick="viewItem(${idx})"><img src="${p.img}"><div class="card-body"><h4>${p.title}</h4><p>${p.shop}</p><b>${p.price} GHS</b><button style="margin-top:8px;width:100%;background:#000;color:#fff;border:0;padding:9px;border-radius:8px;font-weight:800;font-size:12px" onclick="event.stopPropagation();buy('${p.phone}','${p.title}','${p.price}')">BUY ON WHATSAPP</button></div></div>`;
+}
+});
+}
+function viewItem(idx){
+let p=products[idx];
+document.getElementById('vImg').src=p.img;
+document.getElementById('vTitle').innerText=p.title;
+document.getElementById('vShop').innerText=p.shop+' - Verified';
+document.getElementById('vPrice').innerText=p.price+' GHS';
+document.getElementById('vBuyBtn').onclick=function(){buy(p.phone,p.title,p.price)};
+document.getElementById('viewModal').classList.add('open');
+}
+function buy(phone,title,price){window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`Hi! I saw ${title} (${price} GHS) on DORNNY. Is it still available?`)}`,'_blank');}
+function getRef(){let u=new URLSearchParams(window.location.search);return u.get('ref')||localStorage.getItem('current_ref')||'';}
+function openShop(){let ref=getRef();let info=document.getElementById('refInfo');if(ref){info.style.display='block';info.innerText='Referral: '+ref;localStorage.setItem('current_ref',ref);}else{info.style.display='none';}document.getElementById('shopModal').classList.add('open');}
+function submitShop(){let n=document.getElementById('sName').value;let ph=document.getElementById('sPhone').value;let t=document.getElementById('sTitle').value;let pr=document.getElementById('sPrice').value;if(!n||!ph){alert('Enter shop name and phone');return;}let ref=getRef();window.open(`https://wa.me/${OWNER_PHONE}?text=${encodeURIComponent(`Hi Danny! OPEN SHOP on DORNNY\nShop: ${n}\nPhone: ${ph}\nProduct: ${t}\nPrice: ${pr} GHS\nRef: ${ref||'None'}\nI sent 50 GHS MoMo`)}`,'_blank');}
+function openAmbassador(){let saved=localStorage.getItem('dornny_amb');if(saved){showDash(JSON.parse(saved));}else{document.getElementById('ambLogin').style.display='block';document.getElementById('ambDash').style.display='none';}document.getElementById('ambModal').classList.add('open');}
+function createAmbassador(){let name=document.getElementById('aName').value.trim();let phone=document.getElementById('aPhone').value.trim();let momo=document.getElementById('aMomo').value.trim();if(!name||!phone){alert('Enter name and phone');return;}let code='DORNNY-'+name.split(' ')[0].toUpperCase().substring(0,6)+'-'+Math.floor(10+Math.random()*90);let data={name,phone,momo,code,refs:0,earn:0};localStorage.setItem('dornny_amb',JSON.stringify(data));showDash(data);}
+function showDash(d){document.getElementById('ambLogin').style.display='none';document.getElementById('ambDash').style.display='block';document.getElementById('dashCode').innerText=d.code;document.getElementById('dashName').innerText=d.name;document.getElementById('dashLink').innerText=`https://dwamenadanny5-creator.github.io/dornny-store/?ref=${d.code}`;}
+function shareAmb(){let saved=JSON.parse(localStorage.getItem('dornny_amb'));let link=`https://dwamenadanny5-creator.github.io/dornny-store/?ref=${saved.code}`;window.open(`https://wa.me/?text=${encodeURIComponent(`Join DORNNY! Use my code: ${saved.code} ${link}`)}`,'_blank');}
+function copyLink(){navigator.clipboard.writeText(document.getElementById('dashLink').innerText).then(()=>alert('Copied!'));}
+function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'));}
+let urlRef=new URLSearchParams(window.location.search).get('ref');if(urlRef){localStorage.setItem('current_ref',urlRef);}
+render();
+</script>
+</body>
+</html>
