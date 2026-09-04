@@ -1,50 +1,115 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DORNNY - Manfinity Style</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f6f6f6;padding-bottom:70px}.topS{position:sticky;top:0;background:#fff;z-index:20;padding:8px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #eee}.topS input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px 14px;font-size:14px}.ic{width:36px;height:36px;background:#111;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}.cats{display:flex;gap:10px;overflow-x:auto;padding:10px;background:#fff;white-space:nowrap;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}.cat{flex:0 0 auto;text-align:center;width:70px}.cat div{width:56px;height:56px;border-radius:50%;background:#eee;margin:0 auto 4px;overflow:hidden}.cat div img{width:100%;height:100%;object-fit:cover}.cat span{font-size:11px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px}.card{background:#fff;border-radius:8px;overflow:hidden;position:relative}.card img.main{width:100%;height:260px;object-fit:cover;display:block;background:#eee}.badge{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:0}.badge span{font-size:9px;padding:3px 6px;font-weight:900}.hot{background:linear-gradient(90deg,#ff3d00,#ff8a00);color:#fff;border-radius:0 0 6px 0}.save{background:#ff3d00;color:#fff;border-radius:0 0 0 6px}.info{padding:8px}.title{font-size:12px;line-height:14px;height:28px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.best{font-size:10px;color:#b8860b;background:#fff8dc;padding:2px 0}.price{color:#ff3d00;font-weight:900;font-size:15px}.price small{font-size:11px}.off{background:#ffeded;color:#ff3d00;font-size:10px;padding:2px 4px;border-radius:4px;margin-left:4px}.cartBtn{position:absolute;bottom:48px;right:8px;width:28px;height:28px;background:#fff;border:1px solid #eee;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.15)}.trends{color:#7b2cff;background:#f0e6ff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:900}.brand{font-size:11px;font-weight:800;margin-top:2px}.est{font-size:10px;color:#888}.page{display:none}.page.on{display:block}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:50}.nav b{font-size:9px;color:#888;text-align:center}.nav b.on{color:#000}.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:99;padding:10px}.modal.on{display:flex}.box{background:#fff;width:100%;max-width:400px;border-radius:12px;max-height:92vh;overflow-y:auto}.btn{width:92%;margin:6px 4%;padding:12px;border:0;border-radius:10px;font-weight:900}.y{background:#FFD700}.bk{background:#111;color:#fff}.in{width:92%;margin:6px 4%;padding:12px;border:1px solid #ddd;border-radius:10px}.shop-card{background:#fff;padding:10px;border-radius:10px;margin:6px 0;display:flex;gap:8px;border:1px solid #eee}</style></head><body>
-<div class="topS"><span onclick="history.back()">‹</span><input id="q" value="Manfinity Plus Size" oninput="filter()" placeholder="Manfinity Plus Size"><span class="ic">📷</span><span class="ic" style="background:#000" onclick="filter()">⌕</span><span>☰</span><span>♡</span></div>
-<div class="cats" id="catBar"><div class="cat" onclick="goCat('')"><div style="background:#111"></div><span>Plus Size...</span></div><div class="cat" onclick="goCat('HOODIE')"><div><img src="https://picsum.photos/seed/h1/100/100"></div><span>Plus Size B...</span></div><div class="cat" onclick="goCat('JEAN')"><div><img src="https://picsum.photos/seed/j1/100/100"></div><span>Plus Size C...</span></div><div class="cat" onclick="goCat('SHOE')"><div><img src="https://picsum.photos/seed/s1/100/100"></div><span>Plus Size S...</span></div></div>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DORNNY</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:sans-serif;background:#f5f5f5;padding-bottom:130px}
+.top{position:sticky;top:0;background:#fff;z-index:10;padding:10px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #eee}
+.top input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px 14px;font-size:13px}
+.searchBtn{width:36px;height:36px;background:#111;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e5e5e5}
+.card{background:#fff}
+.card.txt{padding:8px 10px;background:#fff}
+.card.txt b{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.txt span{font-size:13px;font-weight:900}
+.card img{width:100%;height:240px;object-fit:cover;display:block;background:#fff}
+.open{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#FFD700;padding:14px 40px;border-radius:30px;font-weight:900;z-index:20;border:0;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:30}
+.nav b{font-size:9px;color:#888;text-align:center}.nav b.on{color:#000}
+.page{display:none}.page.on{display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:12px}.modal.on{display:flex}
+.box{background:#fff;width:100%;max-width:360px;border-radius:14px;max-height:90vh;overflow:auto}
+.btn{width:92%;margin:6px 4%;padding:12px;border:0;border-radius:10px;font-weight:900}.y{background:#FFD700}.bk{background:#111;color:#fff}
+.in{width:92%;margin:6px 4%;padding:12px;border:1px solid #ddd;border-radius:10px}
+</style></head><body>
+<div class="top">
+<span>✉️</span>
+<input id="q" placeholder="Search Jeans, Shoes, Sneakers..." oninput="filt()">
+<span>📷</span>
+<span class="searchBtn" onclick="filt()">⌕</span>
+<span>♡</span>
+</div>
 
-<div id="shop" class="page on"><div style="display:flex;justify-content:space-between;padding:6px 8px;background:#fff"><b id="tit">Dornny - 12 items</b><div><span onclick="openOwner('shop')" style="background:#111;color:#fff;padding:4px 8px;border-radius:14px;font-size:10px">+SHOP</span> <span onclick="openOwner('ambassador')" style="background:gold;padding:4px 8px;border-radius:14px;font-size:10px">+AMBAS</span></div></div><div class="grid" id="grid"></div></div>
-<div id="category" class="page"><div style="padding:10px;background:#fff"><h3>🏪 Shops</h3><div id="ownerList"></div><h3 style="margin-top:12px">⭐ Ambassadors</h3><div id="ambList"></div></div></div>
-<div id="trends" class="page"><h3 style="padding:10px;background:#fff">🔥 Trends</h3><div id="tlist" class="grid"></div></div>
-<div id="cart" class="page"><div style="padding:10px;background:#fff"><h3>Cart (<span id="cn">0</span>)</h3><div id="clist">Empty</div></div></div>
-<div id="sell" class="page"><div style="padding:10px;background:#fff"><div id="ownerBox"></div><button class="btn y" onclick="openSell()">+ ADD REAL PHOTO PRODUCT - SHEIN STYLE</button><div id="mylist"></div></div></div>
-<div id="me" class="page"><div style="padding:10px;background:#fff"><h3 id="meTitle">Me</h3><div id="meBox"></div><button class="btn bk" onclick="openOwner('shop')">REGISTER SHOP OWNER</button><button class="btn y" onclick="openOwner('ambassador')">REGISTER AMBASSADOR</button></div></div>
+<div id="shop" class="page on"><div class="grid" id="grid"></div></div>
+<div id="category" class="page"><div style="background:#fff;padding:10px"><h3>Shops</h3><div id="olist"></div></div></div>
+<div id="trends" class="page"><div style="background:#fff;padding:10px"><h3>Trends</h3><div id="tlist" class="grid"></div></div></div>
+<div id="cart" class="page"><div style="background:#fff;padding:10px"><h3>Cart (<span id="cn">0</span>)</h3><div id="clist"></div></div></div>
+<div id="me" class="page"><div style="background:#fff;padding:10px"><h3 id="meT">My Shop</h3><div id="meBox"></div><div id="myProds"></div></div></div>
 
-<div class="nav"><b id="n-shop" class="on" onclick="tab('shop')">Shop</b><b id="n-category" onclick="tab('category')">Shops</b><b id="n-trends" onclick="tab('trends')">Trends</b><b id="n-cart" onclick="tab('cart')">Cart</b><b id="n-sell" onclick="tab('sell')">Sell</b><b id="n-me" onclick="tab('me')">Me</b></div>
+<button class="open" onclick="openO()">OPEN SHOP - 50 GHS</button>
 
-<div class="modal" id="mP" onclick="if(event.target==this)closeP()"><div class="box"><img id="mi" style="width:100%;height:360px;object-fit:cover"><div style="padding:12px"><div id="mtrend" class="trends" style="display:inline-block">Trends</div><h4 id="mn" style="margin-top:6px"></h4><p id="mbest" class="best"></p><p><span id="mp" class="price"></span><span id="moff" class="off"></span></p><p id="ms" style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;margin-top:6px"></p><button class="btn bk" onclick="addC()">ADD TO CART</button><button class="btn y" onclick="buyW()">BUY WHATSAPP</button><button class="btn" style="background:#eee" onclick="closeP()">Close</button></div></div></div>
+<div class="nav">
+<b id="n-shop" class="on" onclick="tab('shop')">🏪<br>Shop</b>
+<b id="n-category" onclick="tab('category')">☰<br>Category</b>
+<b id="n-trends" onclick="tab('trends')">↗️<br>Trends</b>
+<b id="n-cart" onclick="tab('cart')">🛒<br>Cart</b>
+<b id="n-me" onclick="tab('me')">👤<br>Me</b>
+</div>
 
-<div class="modal" id="mS"><div class="box"><div style="padding:14px"><h3>Sell - SHEIN Style + Real Photo</h3><input id="sname" class="in" placeholder="Product name e.g. Manfinity Plus Size Men's..."><input id="sprice" class="in" type="number" placeholder="Price GH₵ e.g. 88.76"><input id="sphone" class="in" placeholder="WhatsApp"><label style="display:block;width:92%;margin:10px 4%;padding:18px;border:3px dashed gold;border-radius:12px;text-align:center;background:#fffbe6;font-weight:900">📷 TAP - ADD REAL MODEL PHOTO FROM PHONE<input id="sfile" type="file" accept="image/*" style="display:none" onchange="previewImg(this)"></label><img id="prev" style="width:92%;margin:0 4%;height:220px;object-fit:cover;border-radius:12px;display:none"><button class="btn y" onclick="addSell()">ADD TO SHEIN GRID WITH REAL PHOTO</button><button class="btn" style="background:#eee" onclick="closeSell()">Cancel</button></div></div></div>
+<div class="modal" id="mP" onclick="if(event.target==this)closeP()"><div class="box"><img id="mi" style="width:100%;height:380px;object-fit:cover"><div style="padding:12px"><h3 id="mn"></h3><p id="mp" style="font-weight:900;font-size:16px"></p><p id="ms" style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;margin-top:8px"></p><button class="btn bk" onclick="addC()">ADD TO CART</button><button class="btn y" onclick="buyW()">BUY ON WHATSAPP</button><button class="btn" style="background:#eee" onclick="closeP()">Close</button></div></div></div>
 
-<div class="modal" id="mO"><div class="box"><div style="padding:14px"><h3 id="regTitle">Register</h3><div style="display:flex;gap:6px;margin:8px 0"><button id="btnShop" onclick="setRole('shop')" style="flex:1;padding:10px;border-radius:10px;border:2px solid #111;background:#111;color:#fff;font-weight:800">🏪 SHOP OWNER</button><button id="btnAmb" onclick="setRole('ambassador')" style="flex:1;padding:10px;border-radius:10px;border:2px solid gold;background:#fff;font-weight:800">⭐ AMBASSADOR</button></div><input id="oname" class="in" placeholder="Full Name"><input id="oshop" class="in" placeholder="Shop Name"><input id="ophone" class="in" placeholder="WhatsApp 059..."><input id="oloc" class="in" placeholder="Location"><label style="display:block;width:92%;margin:8px 4%;padding:10px;border:2px dashed #111;border-radius:10px;text-align:center">📸 Real Photo<input id="ofile" type="file" accept="image/*" style="display:none" onchange="previewOwner(this)"></label><img id="prevOwner" style="width:92%;margin:0 4%;height:130px;object-fit:cover;border-radius:10px;display:none"><button class="btn y" onclick="registerOwner()">REGISTER</button><button class="btn" style="background:#eee" onclick="closeOwner()">Cancel</button></div></div></div>
+<div class="modal" id="mO"><div class="box"><div style="padding:14px"><h3>Open Shop - 50 GHS</h3><p style="font-size:11px;color:#888;margin:6px 0">Pay 50 GHS to open your shop + add real photos</p><input id="oname" class="in" placeholder="Full Name"><input id="oshop" class="in" placeholder="Shop Name"><input id="ophone" class="in" placeholder="WhatsApp 059..."><input id="oloc" class="in" placeholder="Location - Accra"><button class="btn y" onclick="reg()">PAY 50 GHS & OPEN SHOP</button><button class="btn" style="background:#eee" onclick="closeO()">Cancel</button></div></div></div>
+
+<div class="modal" id="mS"><div class="box"><div style="padding:14px"><h3>Add Product - Real Photo</h3><input id="sname" class="in" placeholder="Name e.g. Leather Shoes Brown"><input id="sprice" class="in" type="number" placeholder="Price GH₵ e.g. 320"><label style="display:block;width:92%;margin:10px 4%;padding:18px;border:3px dashed gold;border-radius:12px;text-align:center;background:#fffbe6;font-weight:900">📷 TAP - ADD REAL PHOTO<input id="sfile" type="file" accept="image/*" style="display:none" onchange="prev(this)"></label><img id="prev" style="width:92%;margin:0 4%;height:200px;object-fit:cover;border-radius:10px;display:none"><button class="btn y" onclick="add()">ADD TO SHOP</button><button class="btn" style="background:#eee" onclick="closeS()">Cancel</button></div></div></div>
 
 <script>
-var defaultItems=[
-{id:1,n:"Manfinity Hypemode Plus Size...",p:88.76,op:205,off:"-57% Last day",best:"#9 Bestseller in Black Men Plus...",brand:"",trend:"",img:"https://images.unsplash.com/photo-1516257984-b1b4d3e462a3?w=400&h=500&fit=crop",shop:"Manfinity EMRG",s:"Dornny",phone:"",loc:"Accra",role:"shop"},
-{id:2,n:"2pcs Plus Size Men's Contrast...",p:94.77,op:195,off:"-51% Last day",best:"#6 Bestseller in Knitted Fabric...",brand:"HOT SELLER Save GHC",trend:"",img:"https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&h=500&fit=crop",shop:"Manfinity",s:"Dornny",phone:"",loc:"Accra",role:"shop"},
-{id:3,n:"Manfinity EMRG Men Plus Size...",p:179.91,op:419,off:"-57% Last day",best:"",brand:"Manfinity EMRG",trend:"Trends",img:"https://images.unsplash.com/photo-1516257984-b1b4d3e462a3?w=400&h=500&fit=crop",shop:"Manfinity EMRG",s:"Dornny",phone:"",loc:"Accra",role:"shop"},
-{id:4,n:"ATHSTREX Plus Size Striped...",p:84.44,op:180,off:"Last day",best:"7K+ Sold Recently",brand:"ATHSTREX",trend:"Trends",img:"https://images.unsplash.com/photo-1582418702059-97ebafb69d09?w=400&h=500&fit=crop",shop:"ATHSTREX",s:"Dornny",phone:"",loc:"Accra",role:"shop"},
-{id:5,n:"PAVTRO Plus Size Men's Shirt...",p:120.5,op:250,off:"-52% Last day",best:"#12 Bestseller",brand:"PAVTRO",trend:"PLUS SIZE+",img:"https://images.unsplash.com/photo-1507680434567-5739c80be1ac?w=400&h=500&fit=crop",shop:"PAVTRO",s:"Dornny",phone:"",loc:"Accra",role:"shop"},
-{id:6,n:"MANFINITY EMRG Graphic Tee...",p:95.3,op:210,off:"-55% Last day",best:"",brand:"MANFINITY EMRG",trend:"PLUS SIZE+",img:"https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=500&fit=crop",shop:"Manfinity",s:"Dornny",phone:"",loc:"Accra",role:"shop"},
-{id:7,n:"Gray Hoodie - Manfinity Plus",p:180,op:300,off:"-40%",best:"#5 Bestseller",brand:"Dornny Market",trend:"Trends",img:"",shop:"Dornny Market",s:"Dornny",phone:"",loc:"Accra",role:"shop",e:"🧥",c:"#ccc"},
-{id:8,n:"White Sneakers - Plus Size",p:250,op:400,off:"-37%",best:"",brand:"Dornny Market",trend:"",img:"",shop:"Dornny Market",s:"Dornny",phone:"",loc:"Accra",role:"shop",e:"👟",c:"#eee"},
-{id:9,n:"Black Sneakers Manfinity",p:280,op:450,off:"-37%",best:"#3 Bestseller",brand:"Manfinity",trend:"",img:"",shop:"Manfinity",s:"Dornny",phone:"",loc:"Accra",role:"shop",e:"👟",c:"#333"},
-{id:10,n:"Blue Jeans Plus Size",p:126,op:260,off:"-51%",best:"",brand:"Manfinity EMRG",trend:"Trends",img:"",shop:"Manfinity EMRG",s:"Dornny",phone:"",loc:"Accra",role:"shop",e:"👖",c:"#5af"},
-{id:11,n:"Leather Shoes Formal",p:320,op:500,off:"-36%",best:"",brand:"PAVTRO",trend:"",img:"",shop:"PAVTRO",s:"Dornny",phone:"",loc:"Accra",role:"shop",e:"👞",c:"#a67c52"},
-{id:12,n:"Pink Joggers Plus Size",p:120,op:200,off:"-40%",best:"",brand:"ATHSTREX",trend:"Trends",img:"",shop:"ATHSTREX",s:"Dornny",phone:"",loc:"Accra",role:"shop",e:"🩳",c:"#f9c"}
+var def=[
+{n:"Leather Shoes Brown",p:320,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",shop:"Dornny Shoes",s:"Dornny",phone:"0594221108"},
+{n:"Pink Joggers 120 GHS Full",p:120,img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop",shop:"Dornny Wear",s:"Dornny",phone:"0594221108"},
+{n:"Nike Air Sneakers Red",p:350,img:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=400&fit=crop",shop:"Sneaker Hub",s:"Dornny",phone:"0594221108"},
+{n:"Baggy Jeans Street",p:150,img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop",shop:"Jeans Store",s:"Dornny",phone:"0594221108"},
+{n:"Airmax Sneakers White",p:300,img:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop",shop:"Sneaker Hub",s:"Dornny",phone:"0594221108"},
+{n:"T-shirt Black Cotton",p:80,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",shop:"Dornny Wear",s:"Dornny",phone:"0594221108"}
 ];
-var myItems=JSON.parse(localStorage.getItem("dornny_my")||"[]");
-var owners=JSON.parse(localStorage.getItem("dornny_owners")||"[]");
-var currentOwner=JSON.parse(localStorage.getItem("dornny_current")||"null");
-var items=defaultItems.concat(myItems);
-var cart=[],cur=null,tempImg="",tempOwnerImg="",currentRole="shop";
-function draw(list){var g=document.getElementById("grid");g.innerHTML="";list.forEach(it=>{var imgHtml=it.img?'<img class="main" src="'+it.img+'">':'<div class="main" style="background:'+(it.c||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:60px">'+(it.e||'👕')+'</div>';var topBadge=it.brand&&it.brand.includes("HOT")?'<div class="badge"><span class="hot">HOT SELLER</span><span class="save">Save GHC</span></div>':'';var trendBadge=it.trend?'<div style="position:absolute;top:8px;left:6px;z-index:2"><span class="trends">'+it.trend+'</span> '+(it.brand&&!it.brand.includes("HOT")?'<span style="font-size:9px;background:#fff;padding:2px 4px;border-radius:4px">PLUS SIZE+</span>':'')+'</div>':'';var title=it.n;var best=it.best?'<div class="best">'+it.best+'</div>':'';var price='<span class="price">GH₵'+it.p+'</span><span class="off">'+it.off+'</span><div class="est">Estimated</div>';var brand=it.brand&&!it.brand.includes("HOT")?'<div class="brand">'+(it.trend?'<span class="trends">Trends</span> ':'')+it.brand+'</div>':'';if(it.brand&&it.brand.includes("Manfinity")&&!it.trend)brand='<div class="brand"><span style="font-size:9px">⧉</span> '+it.brand+' ›</div>';g.innerHTML+='<div class="card" onclick="openP('+it.id+')">'+topBadge+trendBadge+imgHtml+'<div class="cartBtn">🛒</div><div class="info"><div class="title">'+title+'</div>'+best+brand+'<div>'+price+'</div></div></div>';});document.getElementById("tit").innerText="All - "+list.length+" items";}
-function tab(n){document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));document.querySelectorAll(".nav b").forEach(b=>b.classList.remove("on"));document.getElementById(n).classList.add("on");document.getElementById("n-"+n).classList.add("on");if(n=="sell")drawMy();if(n=="me")drawMe();if(n=="category")drawOwners();if(n=="trends")drawTrends();}
-function drawTrends(){var tl=document.getElementById("tlist");tl.innerHTML="";items.slice(0,8).forEach(it=>{var imgHtml=it.img?'<img class="main" src="'+it.img+'">':'<div class="main" style="background:'+(it.c||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:50px">'+(it.e||'👕')+'</div>';tl.innerHTML+='<div class="card" onclick="openP('+it.id+')">'+imgHtml+'<div class="info"><div class="title">'+it.n+'</div><div class="price">GH₵'+it.p+'</div></div></div>';});}
-function goCat(k){tab("shop");if(!k){draw(items);return;}draw(items.filter(x=>x.n.toUpperCase().indexOf(k)>=0));}
-function filter(){var q=document.getElementById("q").value.toUpperCase();if(!q){draw(items);return;}draw(items.filter(x=>x.n.toUpperCase().indexOf(q)>=0||x.shop.toUpperCase().indexOf(q)>=0));}
-function openP(id){cur=items.find(x=>x.id==id);document.getElementById("mi").src=cur.img||"";if(!cur.img){document.getElementById("mi").style.display="none";}else{document.getElementById("mi").style.display="block";}document.getElementById("mn").innerText=cur.n;document.getElementById("mtrend").style.display=cur.trend?"inline-block":"none";document.getElementById("mtrend").innerText=cur.trend||"Trends";document.getElementById("mbest").innerText=cur.best||cur.brand||cur.shop;document.getElementById("mp").innerText="GH₵"+cur.p;document.getElementById("moff").innerText=cur.off||"";document.getElementById("ms").innerHTML="🏪 "+cur.shop+"<br>👤 "+cur.s+"<br>📍 "+(cur.loc||"Accra")+"<br>📱 "+(cur.phone||"0594221108");document.getElementById("mP").classList.add("on");}
+var my=JSON.parse(localStorage.getItem("d_my")||"[]");
+var owners=JSON.parse(localStorage.getItem("d_owners")||"[]");
+var curO=JSON.parse(localStorage.getItem("d_cur")||"null");
+var items=def.concat(my);
+var cart=[],cur=null,tmp="";
+function draw(list){
+var g=document.getElementById("grid");g.innerHTML="";
+list.forEach(it=>{
+g.innerHTML+='<div class="card" onclick="openP('+it.id+')"><div class="txt"><b>'+it.n+'</b><span>GH₵'+it.p+'</span></div><img src="'+it.img+'"></div>';
+});
+}
+function tab(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));
+document.querySelectorAll(".nav b").forEach(b=>b.classList.remove("on"));
+document.getElementById(n).classList.add("on");
+document.getElementById("n-"+n).classList.add("on");
+if(n=="me")drawMe();
+if(n=="category")drawOwners();
+}
+function filt(){
+var q=document.getElementById("q").value.toUpperCase();
+if(!q){draw(items);return;}
+draw(items.filter(x=>x.n.toUpperCase().includes(q)));
+}
+function openP(id){
+cur=items.find(x=>x.id==id);
+document.getElementById("mi").src=cur.img;
+document.getElementById("mn").innerText=cur.n;
+document.getElementById("mp").innerText="GH₵"+cur.p;
+document.getElementById("ms").innerHTML="🏪 "+cur.shop+"<br>👤 "+cur.s+"<br>📱 "+cur.phone;
+document.getElementById("mP").classList.add("on");
+}
 function closeP(){document.getElementById("mP").classList.remove("on");}
-function addC(){cart.push(cur);document.getElementById("cn").innerText=cart.length;var cl=document.getElementById("clist"),tot=0;cl.innerHTML="";cart.forEach(c=>{tot+=c.p;cl.innerHTML+="<div class=shop-card><img src='"+(c.img||"")+"' style=width:60px;height:60px;border-radius:8px;object-fit:cover;background:#eee><div><b>"+c.n+"</b><br>GH₵"+c.p+"</div></div>";});cl.innerHTML+="<div style=background:#fff;padding:12px;border-radius:10px;margin-top:8px><b>Total GH₵"+tot+"</b><button class=btn bk onclick=\"window.open('https://wa.me/233594221108?text=Order GH₵"+tot+"')\">CHECKOUT WHATSAPP</button></div>";closeP();tab("cart");}
-function buyW(){var ph=(cur.phone||"233594221108").replace(/\D/g,"");if(ph.startsWith("0"))ph="233"+ph.slice(1);window.open("https://wa.me/"+ph+"?text=I want "+encodeURIComponent(cur.n));}
-function previewImg(i){if(i.files[0]){var r=new FileReader();r.onload=e=>{tempImg=e.target.result;document.getElementById("prev").src=tempImg;document.getElementById("prev").style.display="block";};r.readAsDataURL(i.files[0]);}}
-function previewOwner(i){if(i.files[0]){var r=new File
+function addC(){
+cart.push(cur);
+document.getElementById("cn").innerText=cart.length;
+var cl=document.getElementById("clist");var tot=0;cl.innerHTML="";
+cart.forEach(c=>{tot+=c.p;cl.innerHTML+='<div style="background:#fff;padding:10px;border:1px solid #eee;border-radius:10px;margin:5px 0;display:flex;gap:10px"><img src="'+c.img+'" style="width:50px;height:50px;border-radius:8px"><div><b>'+c.n+'</b><br>GH₵'+c.p+'</div></div>';});
+cl.innerHTML+='<div style="padding:12px;background:#fff;border-radius:10px;margin-top:8px"><b>Total GH₵'+tot+'</b><button class="btn bk" onclick="window.open(\'https://wa.me/233594221108?text=Order GH₵'+tot+'\')">CHECKOUT WHATSAPP</button></div>';
+closeP();tab("cart");
+}
+function buyW(){
+var ph=(cur.phone||"233594221108").replace(/\D/g,"");
+if(ph.startsWith("0"))ph="233"+ph.slice(1);
+window.open("https://wa.me/"+ph+"?text=I want "+encodeURIComponent(cur.n)+" GH₵"+cur.p);
+}
+function openO(){document.getElementById("mO").classList.add("on");}
+function closeO(){document.getElementById("mO").classList.remove("on");}
+function openS(){if(!curO){alert("Open Shop first - 50 GHS");openO();return;}document.getElementById("mS").classList.add("on");}
+function closeS(){document.getElementById("mS").classList.remove("on");tmp="";document.getElementById("prev").style.display="none";}
+function prev(i){
+if(i.files[0]){var r=new FileReader();r.onload=e=>{tmp=e.target.result;document.getElementById("prev").src
