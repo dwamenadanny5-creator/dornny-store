@@ -1,115 +1,19 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DORNNY</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:sans-serif;background:#f5f5f5;padding-bottom:130px}
-.top{position:sticky;top:0;background:#fff;z-index:10;padding:10px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #eee}
-.top input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px 14px;font-size:13px}
-.searchBtn{width:36px;height:36px;background:#111;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e5e5e5}
-.card{background:#fff}
-.card.txt{padding:8px 10px;background:#fff}
-.card.txt b{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card.txt span{font-size:13px;font-weight:900}
-.card img{width:100%;height:240px;object-fit:cover;display:block;background:#fff}
-.open{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#FFD700;padding:14px 40px;border-radius:30px;font-weight:900;z-index:20;border:0;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:30}
-.nav b{font-size:9px;color:#888;text-align:center}.nav b.on{color:#000}
-.page{display:none}.page.on{display:block}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:12px}.modal.on{display:flex}
-.box{background:#fff;width:100%;max-width:360px;border-radius:14px;max-height:90vh;overflow:auto}
-.btn{width:92%;margin:6px 4%;padding:12px;border:0;border-radius:10px;font-weight:900}.y{background:#FFD700}.bk{background:#111;color:#fff}
-.in{width:92%;margin:6px 4%;padding:12px;border:1px solid #ddd;border-radius:10px}
-</style></head><body>
-<div class="top">
-<span>✉️</span>
-<input id="q" placeholder="Search Jeans, Shoes, Sneakers..." oninput="filt()">
-<span>📷</span>
-<span class="searchBtn" onclick="filt()">⌕</span>
-<span>♡</span>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DORNNY</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;background:#f5f5f5;padding-bottom:130px}.top{background:#fff;padding:10px;display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:10}.top input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px;font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#ddd}.card{background:#fff}.card .t{padding:8px;font-size:11px}.card .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card .t span{font-weight:900}.card img{width:100%;height:230px;object-fit:cover;display:block}.open{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#FFD700;padding:14px 30px;border-radius:30px;font-weight:900;border:0;z-index:20;box-shadow:0 4px 10px rgba(0,0,0,.2)}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:30}.nav div{text-align:center;font-size:9px;color:#888}</style></head><body>
+<div class="top"><span>✉️</span><input placeholder="Search Jeans, Shoes, Sneakers..."><span>📷</span><span style="background:#111;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center">⌕</span><span>♡</span></div>
+
+<div class="grid">
+<div class="card"><div class="t"><b>Leather Shoes Brown</b><span>GH₵320</span></div><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop"></div>
+<div class="card"><div class="t"><b>Pink Joggers 120 GHS Full</b><span>GH₵120</span></div><img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop"></div>
+<div class="card"><div class="t"><b>Nike Air Sneakers Red</b><span>GH₵350</span></div><img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=400&fit=crop"></div>
+<div class="card"><div class="t"><b>Baggy Jeans Street</b><span>GH₵150</span></div><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=400&fit=crop"></div>
+<div class="card"><div class="t"><b>Airmax Sneakers White</b><span>GH₵300</span></div><img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop"></div>
+<div class="card"><div class="t"><b>T-shirt Black Cotton</b><span>GH₵80</span></div><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop"></div>
 </div>
 
-<div id="shop" class="page on"><div class="grid" id="grid"></div></div>
-<div id="category" class="page"><div style="background:#fff;padding:10px"><h3>Shops</h3><div id="olist"></div></div></div>
-<div id="trends" class="page"><div style="background:#fff;padding:10px"><h3>Trends</h3><div id="tlist" class="grid"></div></div></div>
-<div id="cart" class="page"><div style="background:#fff;padding:10px"><h3>Cart (<span id="cn">0</span>)</h3><div id="clist"></div></div></div>
-<div id="me" class="page"><div style="background:#fff;padding:10px"><h3 id="meT">My Shop</h3><div id="meBox"></div><div id="myProds"></div></div></div>
+<button class="open" onclick="document.getElementById('shopModal').style.display='flex'">OPEN SHOP - 50 GHS</button>
 
-<button class="open" onclick="openO()">OPEN SHOP - 50 GHS</button>
+<div class="nav"><div>🏪<br>Shop</div><div>☰<br>Category</div><div>↗<br>Trends</div><div>🛒<br>Cart</div><div>👤<br>Me</div></div>
 
-<div class="nav">
-<b id="n-shop" class="on" onclick="tab('shop')">🏪<br>Shop</b>
-<b id="n-category" onclick="tab('category')">☰<br>Category</b>
-<b id="n-trends" onclick="tab('trends')">↗️<br>Trends</b>
-<b id="n-cart" onclick="tab('cart')">🛒<br>Cart</b>
-<b id="n-me" onclick="tab('me')">👤<br>Me</b>
-</div>
-
-<div class="modal" id="mP" onclick="if(event.target==this)closeP()"><div class="box"><img id="mi" style="width:100%;height:380px;object-fit:cover"><div style="padding:12px"><h3 id="mn"></h3><p id="mp" style="font-weight:900;font-size:16px"></p><p id="ms" style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px;margin-top:8px"></p><button class="btn bk" onclick="addC()">ADD TO CART</button><button class="btn y" onclick="buyW()">BUY ON WHATSAPP</button><button class="btn" style="background:#eee" onclick="closeP()">Close</button></div></div></div>
-
-<div class="modal" id="mO"><div class="box"><div style="padding:14px"><h3>Open Shop - 50 GHS</h3><p style="font-size:11px;color:#888;margin:6px 0">Pay 50 GHS to open your shop + add real photos</p><input id="oname" class="in" placeholder="Full Name"><input id="oshop" class="in" placeholder="Shop Name"><input id="ophone" class="in" placeholder="WhatsApp 059..."><input id="oloc" class="in" placeholder="Location - Accra"><button class="btn y" onclick="reg()">PAY 50 GHS & OPEN SHOP</button><button class="btn" style="background:#eee" onclick="closeO()">Cancel</button></div></div></div>
-
-<div class="modal" id="mS"><div class="box"><div style="padding:14px"><h3>Add Product - Real Photo</h3><input id="sname" class="in" placeholder="Name e.g. Leather Shoes Brown"><input id="sprice" class="in" type="number" placeholder="Price GH₵ e.g. 320"><label style="display:block;width:92%;margin:10px 4%;padding:18px;border:3px dashed gold;border-radius:12px;text-align:center;background:#fffbe6;font-weight:900">📷 TAP - ADD REAL PHOTO<input id="sfile" type="file" accept="image/*" style="display:none" onchange="prev(this)"></label><img id="prev" style="width:92%;margin:0 4%;height:200px;object-fit:cover;border-radius:10px;display:none"><button class="btn y" onclick="add()">ADD TO SHOP</button><button class="btn" style="background:#eee" onclick="closeS()">Cancel</button></div></div></div>
-
-<script>
-var def=[
-{n:"Leather Shoes Brown",p:320,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",shop:"Dornny Shoes",s:"Dornny",phone:"0594221108"},
-{n:"Pink Joggers 120 GHS Full",p:120,img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop",shop:"Dornny Wear",s:"Dornny",phone:"0594221108"},
-{n:"Nike Air Sneakers Red",p:350,img:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=400&fit=crop",shop:"Sneaker Hub",s:"Dornny",phone:"0594221108"},
-{n:"Baggy Jeans Street",p:150,img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop",shop:"Jeans Store",s:"Dornny",phone:"0594221108"},
-{n:"Airmax Sneakers White",p:300,img:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop",shop:"Sneaker Hub",s:"Dornny",phone:"0594221108"},
-{n:"T-shirt Black Cotton",p:80,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",shop:"Dornny Wear",s:"Dornny",phone:"0594221108"}
-];
-var my=JSON.parse(localStorage.getItem("d_my")||"[]");
-var owners=JSON.parse(localStorage.getItem("d_owners")||"[]");
-var curO=JSON.parse(localStorage.getItem("d_cur")||"null");
-var items=def.concat(my);
-var cart=[],cur=null,tmp="";
-function draw(list){
-var g=document.getElementById("grid");g.innerHTML="";
-list.forEach(it=>{
-g.innerHTML+='<div class="card" onclick="openP('+it.id+')"><div class="txt"><b>'+it.n+'</b><span>GH₵'+it.p+'</span></div><img src="'+it.img+'"></div>';
-});
-}
-function tab(n){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));
-document.querySelectorAll(".nav b").forEach(b=>b.classList.remove("on"));
-document.getElementById(n).classList.add("on");
-document.getElementById("n-"+n).classList.add("on");
-if(n=="me")drawMe();
-if(n=="category")drawOwners();
-}
-function filt(){
-var q=document.getElementById("q").value.toUpperCase();
-if(!q){draw(items);return;}
-draw(items.filter(x=>x.n.toUpperCase().includes(q)));
-}
-function openP(id){
-cur=items.find(x=>x.id==id);
-document.getElementById("mi").src=cur.img;
-document.getElementById("mn").innerText=cur.n;
-document.getElementById("mp").innerText="GH₵"+cur.p;
-document.getElementById("ms").innerHTML="🏪 "+cur.shop+"<br>👤 "+cur.s+"<br>📱 "+cur.phone;
-document.getElementById("mP").classList.add("on");
-}
-function closeP(){document.getElementById("mP").classList.remove("on");}
-function addC(){
-cart.push(cur);
-document.getElementById("cn").innerText=cart.length;
-var cl=document.getElementById("clist");var tot=0;cl.innerHTML="";
-cart.forEach(c=>{tot+=c.p;cl.innerHTML+='<div style="background:#fff;padding:10px;border:1px solid #eee;border-radius:10px;margin:5px 0;display:flex;gap:10px"><img src="'+c.img+'" style="width:50px;height:50px;border-radius:8px"><div><b>'+c.n+'</b><br>GH₵'+c.p+'</div></div>';});
-cl.innerHTML+='<div style="padding:12px;background:#fff;border-radius:10px;margin-top:8px"><b>Total GH₵'+tot+'</b><button class="btn bk" onclick="window.open(\'https://wa.me/233594221108?text=Order GH₵'+tot+'\')">CHECKOUT WHATSAPP</button></div>';
-closeP();tab("cart");
-}
-function buyW(){
-var ph=(cur.phone||"233594221108").replace(/\D/g,"");
-if(ph.startsWith("0"))ph="233"+ph.slice(1);
-window.open("https://wa.me/"+ph+"?text=I want "+encodeURIComponent(cur.n)+" GH₵"+cur.p);
-}
-function openO(){document.getElementById("mO").classList.add("on");}
-function closeO(){document.getElementById("mO").classList.remove("on");}
-function openS(){if(!curO){alert("Open Shop first - 50 GHS");openO();return;}document.getElementById("mS").classList.add("on");}
-function closeS(){document.getElementById("mS").classList.remove("on");tmp="";document.getElementById("prev").style.display="none";}
-function prev(i){
-if(i.files[0]){var r=new FileReader();r.onload=e=>{tmp=e.target.result;document.getElementById("prev").src
+<div id="shopModal" style="position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:15px"><div style="background:#fff;width:100%;max-width:340px;border-radius:14px;padding:15px"><h3>Open Shop - 50 GHS</h3><input id="n" placeholder="Full Name" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0"><input id="s" placeholder="Shop Name" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0"><input id="p" placeholder="WhatsApp 059..." style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0"><button style="width:100%;padding:12px;background:gold;border:0;border-radius:10px;font-weight:900;margin-top:8px" onclick="alert('Shop Registered! '+document.getElementById('s').value);document.getElementById('shopModal').style.display='none'">PAY 50 GHS & OPEN</button><button style="width:100%;padding:12px;background:#eee;border:0;border-radius:10px;margin-top:6px" onclick="document.getElementById('shopModal').style.display='none'">Close</button></div></div>
+</body></html>
