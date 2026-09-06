@@ -7,8 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, arrayUnion, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
   authDomain: "dornnysmarket.firebaseapp.com",
@@ -19,33 +18,33 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-window.db = db; window.addDoc=addDoc; window.collection=collection; window.onSnapshot=onSnapshot; window.doc=doc; window.updateDoc=updateDoc; window.arrayUnion=arrayUnion; window.arrayRemove=arrayRemove; window.query=query; window.orderBy=orderBy; window.getDoc=getDoc; window.setDoc=setDoc;
+window.db=db; window.addDoc=addDoc; window.collection=collection; window.onSnapshot=onSnapshot; window.doc=doc; window.updateDoc=updateDoc; window.arrayUnion=arrayUnion; window.query=query; window.orderBy=orderBy;
 </script>
-<style>.active{color:#ef4444!important;font-weight:bold}</style>
+<style>.active{color:#ef4444!important;font-weight:bold}.cat-btn.active-cat{background:black;color:white}</style>
 </head>
 <body class="bg-gray-100 pb-20">
-<!-- HEADER -->
 <header class="bg-white sticky top-0 z-50 p-3 flex justify-between items-center shadow">
 <h1 class="font-black text-red-600 text-xl">DORNNY MARKET</h1>
-<div class="flex gap-3">
-<button onclick="showTab('notif')"><i class="fa fa-bell"></i><span id="notifCount" class="bg-red-500 text-white text-xs px-1 rounded-full hidden">0</span></button>
+<div class="flex gap-3 items-center">
+<button onclick="showTab('notif')"><i class="fa fa-bell"></i></button>
 <a href="sell.html" class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">+SELL</a>
 </div>
 </header>
 
-<!-- HOME / SHOP -->
 <div id="tab-home" class="tab">
-<div class="p-2 flex gap-2 overflow-x-auto bg-white">
-<button onclick="filterCat('all')" class="cat-btn bg-black text-white px-4 py-1 rounded-full text-sm">All</button>
-<button onclick="filterCat('fashion')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Fashion</button>
-<button onclick="filterCat('phones')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Phones</button>
-<button onclick="filterCat('shoes')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Shoes</button>
-<button onclick="filterCat('food')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Food</button>
+<div class="p-2 flex gap-2 overflow-x-auto bg-white sticky top-[56px] z-40">
+<button onclick="filterCat('all')" id="c-all" class="cat-btn active-cat px-4 py-1 rounded-full text-sm whitespace-nowrap">All</button>
+<button onclick="filterCat('fashion')" id="c-fashion" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Fashion</button>
+<button onclick="filterCat('phones')" id="c-phones" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Phones</button>
+<button onclick="filterCat('shoes')" id="c-shoes" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Shoes</button>
+<button onclick="filterCat('food')" id="c-food" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Food</button>
+<button onclick="filterCat('furniture')" id="c-furniture" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Furniture</button>
+<button onclick="filterCat('cars')" id="c-cars" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Cars</button>
+<button onclick="filterCat('home')" id="c-home" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm whitespace-nowrap">Home Deco</button>
 </div>
 <div id="products" class="grid grid-cols-2 gap-2 p-2"></div>
 </div>
 
-<!-- CATEGORY -->
 <div id="tab-category" class="tab hidden p-4">
 <h2 class="font-bold text-lg mb-3">Categories</h2>
 <div class="grid grid-cols-2 gap-3">
@@ -53,34 +52,26 @@ window.db = db; window.addDoc=addDoc; window.collection=collection; window.onSna
 <div onclick="filterCat('phones')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-mobile text-2xl"></i><p>Phones</p></div>
 <div onclick="filterCat('shoes')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-shoe-prints text-2xl"></i><p>Shoes</p></div>
 <div onclick="filterCat('food')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-utensils text-2xl"></i><p>Food</p></div>
+<div onclick="filterCat('furniture')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-couch text-2xl"></i><p>Furniture</p></div>
+<div onclick="filterCat('cars')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-car text-2xl"></i><p>Cars</p></div>
+<div onclick="filterCat('home')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-house text-2xl"></i><p>Home Deco</p></div>
 </div>
 </div>
 
-<!-- TREND -->
-<div id="tab-trend" class="tab hidden"><div id="trendProducts" class="grid grid-cols-2 gap-2 p-2"></div></div>
-
-<!-- CART -->
+<div id="tab-trend" class="tab hidden"><div class="p-2 bg-orange-100 text-orange-700 text-sm font-bold">🔥 Trending Now</div><div id="trendProducts" class="grid grid-cols-2 gap-2 p-2"></div></div>
 <div id="tab-cart" class="tab hidden p-3"><h2 class="font-bold text-lg">My Cart</h2><div id="cartList"></div><button onclick="checkout()" class="w-full bg-red-600 text-white py-3 rounded-xl mt-3">Checkout on WhatsApp</button></div>
-
-<!-- CHATS -->
-<div id="tab-chats" class="tab hidden p-3"><h2 class="font-bold text-lg">Messages</h2><div id="chatList" class="space-y-2"></div></div>
-
-<!-- ME -->
+<div id="tab-chats" class="tab hidden p-3"><h2 class="font-bold text-lg">Messages</h2><div id="chatList" class="space-y-2 mt-2"><div class="bg-white p-3 rounded-xl">No messages yet. When buyer clicks WhatsApp, chat starts here.</div></div></div>
 <div id="tab-me" class="tab hidden p-4 text-center">
 <img src="https://i.pravatar.cc/100" class="w-20 h-20 rounded-full mx-auto">
-<h2 class="font-bold mt-2">Danny Shop</h2>
-<p class="text-sm text-gray-500">Seller • Verified</p>
-<div class="grid grid-cols-3 gap-2 mt-4">
-<div class="bg-white p-3 rounded-xl"><p id="myLikes" class="font-bold">0</p><p class="text-xs">Likes</p></div>
-<div class="bg-white p-3 rounded-xl"><p id="myFollowers" class="font-bold">0</p><p class="text-xs">Followers</p></div>
-<div class="bg-white p-3 rounded-xl"><p id="myProducts" class="font-bold">0</p><p class="text-xs">Products</p></div>
-</div>
+<h2 class="font-bold mt-2">Danny Shop</h2><p class="text-sm text-gray-500">Seller • Verified ✓</p>
+<div class="grid grid-cols-3 gap-2 mt-4"><div class="bg-white p-3 rounded-xl"><p id="myLikes" class="font-bold">0</p><p class="text-xs">Likes</p></div><div class="bg-white p-3 rounded-xl"><p id="myFollowers" class="font-bold">0</p><p class="text-xs">Followers</p></div><div class="bg-white p-3 rounded-xl"><p id="myProducts" class="font-bold">0</p><p class="text-xs">Products</p></div></div>
 <button onclick="openShop()" class="w-full mt-4 bg-black text-white py-3 rounded-xl">Open Shop - 50 GHS</button>
 <a href="sell.html" class="block w-full mt-2 bg-green-500 text-white py-3 rounded-xl">Upload Product</a>
+<p class="text-xs mt-3 text-gray-500">Buyers will get your WhatsApp automatically when they click Buy</p>
 </div>
+<div id="tab-notif" class="tab hidden p-3"><h2 class="font-bold">Notifications</h2><div class="bg-white p-3 rounded-xl mt-2">🔔 New like on your product!</div><div class="bg-white p-3 rounded-xl mt-2">💬 New comment: "Is this available?"</div></div>
 
-<!-- BOTTOM NAV -->
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 text-gray-400 text-xs">
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 text-gray-400 text-[11px]">
 <button onclick="showTab('home')" id="nav-home" class="active flex flex-col items-center"><i class="fa fa-store text-lg"></i>Shop</button>
 <button onclick="showTab('category')" id="nav-category" class="flex flex-col items-center"><i class="fa fa-list text-lg"></i>Category</button>
 <button onclick="showTab('trend')" id="nav-trend" class="flex flex-col items-center"><i class="fa fa-fire text-lg"></i>Trend</button>
@@ -89,77 +80,68 @@ window.db = db; window.addDoc=addDoc; window.collection=collection; window.onSna
 <button onclick="showTab('chats')" id="nav-chats" class="flex flex-col items-center"><i class="fa fa-comments text-lg"></i>Chats</button>
 </nav>
 
-<!-- PRODUCT MODAL -->
 <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[100] p-4 overflow-y-auto">
 <div class="bg-white rounded-2xl max-w-md mx-auto mt-10 p-4">
 <img id="mImg" class="w-full h-60 object-cover rounded-xl">
 <h2 id="mTitle" class="font-bold text-lg mt-2"></h2>
 <p id="mPrice" class="text-red-600 font-bold"></p>
 <p id="mSeller" class="text-sm text-gray-500"></p>
-<div class="flex gap-2 mt-2">
-<button onclick="likeProduct()" class="flex-1 bg-gray-100 py-2 rounded-xl"><i class="fa fa-heart"></i> <span id="mLikes">0</span></button>
-<button onclick="followSeller()" class="flex-1 bg-black text-white py-2 rounded-xl">Follow Seller</button>
-</div>
-<div class="mt-3">
-<h3 class="font-bold text-sm">Comments & Ratings</h3>
-<div id="mComments" class="space-y-1 mt-2 text-sm"></div>
-<div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Comment..." class="flex-1 border p-2 rounded-xl"><button onclick="addComment()" class="bg-red-600 text-white px-4 rounded-xl">Send</button></div>
-<div class="flex gap-1 mt-2"><span onclick="rate(1)">⭐</span><span onclick="rate(2)">⭐</span><span onclick="rate(3)">⭐</span><span onclick="rate(4)">⭐</span><span onclick="rate(5)">⭐</span></div>
-</div>
-<div class="flex gap-2 mt-4">
-<button onclick="addToCart()" class="flex-1 border py-3 rounded-xl">Add to Cart</button>
-<button id="mWhatsapp" class="flex-1 bg-green-500 text-white py-3 rounded-xl">Buy on WhatsApp</button>
-</div>
-<button onclick="document.getElementById('productModal').classList.add('hidden')" class="w-full mt-2 text-gray-500">Close</button>
+<div class="flex gap-2 mt-2"><button onclick="likeProduct()" class="flex-1 bg-gray-100 py-2 rounded-xl"><i class="fa fa-heart text-red-500"></i> <span id="mLikes">0</span> Like</button><button onclick="followSeller()" class="flex-1 bg-black text-white py-2 rounded-xl">+ Follow</button></div>
+<div class="mt-3"><h3 class="font-bold text-sm">Comments & Ratings</h3><div id="mComments" class="space-y-1 mt-2 text-sm bg-gray-50 p-2 rounded-xl"></div><div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Add comment..." class="flex-1 border p-2 rounded-xl"><button onclick="addComment()" class="bg-red-600 text-white px-4 rounded-xl">Send</button></div><div class="flex gap-1 mt-2 text-xl"><span onclick="rate(1)">⭐</span><span onclick="rate(2)">⭐</span><span onclick="rate(3)">⭐</span><span onclick="rate(4)">⭐</span><span onclick="rate(5)">⭐</span> <span class="text-xs">Tap to rate</span></div></div>
+<div class="flex gap-2 mt-4"><button onclick="addToCart()" class="flex-1 border py-3 rounded-xl font-bold">Add to Cart</button><button id="mWhatsapp" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold">WhatsApp Buy</button></div>
+<button onclick="document.getElementById('productModal').classList.add('hidden')" class="w-full mt-2 text-gray-500 py-2">Close</button>
 </div>
 </div>
 
 <script>
 let allProducts=[], cart=[], currentProduct=null, currentCat='all';
+let demoProducts=[
+{id:'1',title:'Men Designer Shirt',price:'120',category:'fashion',image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400',seller:'Danny Fashion',whatsapp:'233245000000',likes:23,rating:4.5,comments:[]},
+{id:'2',title:'iPhone 13 Pro',price:'4500',category:'phones',image:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400',seller:'Phone Master',whatsapp:'233245000001',likes:89,rating:5.0,comments:[]},
+{id:'3',title:'Nike Air Shoes',price:'350',category:'shoes',image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400',seller:'Shoe Hub GH',whatsapp:'233245000002',likes:45,rating:4.8,comments:[]},
+{id:'4',title:'Jollof & Chicken',price:'50',category:'food',image:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400',seller:'Food Zone',whatsapp:'233245000003',likes:12,rating:4.9,comments:[]},
+{id:'5',title:'Luxury Sofa Chair',price:'1200',category:'furniture',image:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400',seller:'Furniture GH',whatsapp:'233245000004',likes:33,rating:4.7,comments:[]},
+{id:'6',title:'Toyota Corolla 2020',price:'85000',category:'cars',image:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400',seller:'Cars GH',whatsapp:'233245000005',likes:67,rating:5.0,comments:[]},
+{id:'7',title:'Home Deco Vase Set',price:'80',category:'home',image:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400',seller:'Home Deco GH',whatsapp:'233245000006',likes:19,rating:4.6,comments:[]},
+{id:'8',title:'Ladies Dress',price:'200',category:'fashion',image:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400',seller:'Danny Fashion',whatsapp:'233245000000',likes:31,rating:4.8,comments:[]}
+];
 function showTab(t){document.querySelectorAll('.tab').forEach(e=>e.classList.add('hidden'));document.getElementById('tab-'+t).classList.remove('hidden');document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById('nav-'+t)?.classList.add('active');}
-function filterCat(c){currentCat=c;showTab('home');renderProducts();}
+function filterCat(c){currentCat=c;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active-cat','bg-black','text-white'));document.getElementById('c-'+c)?.classList.add('active-cat');showTab('home');renderProducts();}
 function renderProducts(){
- let list = currentCat=='all'?allProducts:allProducts.filter(p=>p.category==currentCat);
- let trend = [...allProducts].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,6);
- document.getElementById('products').innerHTML = list.map(p=>`
-  <div onclick="openProduct('${p.id}')" class="bg-white rounded-xl p-2 shadow">
-   <img src="${p.image}" class="h-32 w-full object-cover rounded-lg">
-   <p class="font-bold text-sm truncate">${p.title}</p>
-   <p class="text-red-600 font-bold text-sm">₵${p.price}</p>
-   <div class="flex justify-between text-xs text-gray-500"><span><i class="fa fa-heart text-red-500"></i> ${p.likes||0}</span><span>★ ${p.rating||5.0}</span></div>
-   <p class="text-[10px] text-green-600">✓ ${p.seller||'Verified Seller'}</p>
-  </div>`).join('');
- document.getElementById('trendProducts').innerHTML = trend.map(p=>`
-  <div onclick="openProduct('${p.id}')" class="bg-white rounded-xl p-2 shadow border-2 border-orange-400">
-   <img src="${p.image}" class="h-32 w-full object-cover rounded-lg"><p class="font-bold text-sm">${p.title}</p><p class="text-red-600 font-bold">₵${p.price}</p><p class="text-xs text-orange-500">🔥 Trending</p>
-  </div>`).join('');
+let base = allProducts.length>0? allProducts : demoProducts;
+let list = currentCat=='all'?base:base.filter(p=>p.category==currentCat);
+let trend = [...base].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,6);
+document.getElementById('products').innerHTML = list.map(p=>`<div onclick="openProduct('${p.id}')" class="bg-white rounded-xl p-2 shadow"><img src="${p.image}" class="h-32 w-full object-cover rounded-lg"><p class="font-bold text-sm truncate">${p.title}</p><p class="text-red-600 font-bold text-sm">₵${p.price}</p><div class="flex justify-between text-xs text-gray-500"><span><i class="fa fa-heart text-red-500"></i> ${p.likes||0}</span><span>★ ${p.rating||5}</span></div><p class="text-[10px] text-green-600">✓ ${p.seller||'Verified'}</p></div>`).join('') || '<p class="col-span-2 text-center p-10 text-gray-500">No products in this category yet. Be first to upload!</p>';
+document.getElementById('trendProducts').innerHTML = trend.map(p=>`<div onclick="openProduct('${p.id}')" class="bg-white rounded-xl p-2 shadow border-2 border-orange-400"><img src="${p.image}" class="h-32 w-full object-cover rounded-lg"><p class="font-bold text-sm truncate">${p.title}</p><p class="text-red-600 font-bold">₵${p.price}</p><p class="text-xs text-orange-500">🔥 Trending • ${p.likes} likes</p></div>`).join('');
+document.getElementById('myProducts').innerText=base.length;
 }
 onSnapshot(collection(db,"products"),snap=>{
- allProducts=snap.docs.map(d=>({id:d.id,...d.data()}));
- renderProducts();
- document.getElementById('myProducts').innerText=allProducts.length;
+let fb = snap.docs.map(d=>({id:d.id,...d.data()}));
+allProducts = fb.length>0? fb : [];
+renderProducts();
 });
 function openProduct(id){
- currentProduct=allProducts.find(p=>p.id==id);
- document.getElementById('mImg').src=currentProduct.image;
- document.getElementById('mTitle').innerText=currentProduct.title;
- document.getElementById('mPrice').innerText='₵'+currentProduct.price;
- document.getElementById('mSeller').innerText=currentProduct.seller+' • '+currentProduct.whatsapp;
- document.getElementById('mLikes').innerText=currentProduct.likes||0;
- document.getElementById('mWhatsapp').onclick=()=>{window.open('https://wa.me/'+currentProduct.whatsapp.replace(/[^0-9]/g,'')+'?text=Hi, I want '+currentProduct.title,'_blank')};
- document.getElementById('productModal').classList.remove('hidden');
- loadComments();
+let base = allProducts.length>0? allProducts : demoProducts;
+currentProduct=base.find(p=>p.id==id);
+document.getElementById('mImg').src=currentProduct.image;
+document.getElementById('mTitle').innerText=currentProduct.title;
+document.getElementById('mPrice').innerText='₵'+currentProduct.price;
+document.getElementById('mSeller').innerText=currentProduct.seller+' • '+currentProduct.whatsapp+' • Verified';
+document.getElementById('mLikes').innerText=currentProduct.likes||0;
+document.getElementById('mWhatsapp').onclick=()=>{window.open('https://wa.me/'+currentProduct.whatsapp.replace(/[^0-9]/g,'')+'?text=Hi, I want '+encodeURIComponent(currentProduct.title)+' for ₵'+currentProduct.price,'_blank')};
+document.getElementById('productModal').classList.remove('hidden');
+loadComments();
 }
 function addToCart(){cart.push(currentProduct);localStorage.setItem('cart',JSON.stringify(cart));updateCart();alert('Added to cart!');}
-function updateCart(){cart=JSON.parse(localStorage.getItem('cart')||'[]');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartList').innerHTML=cart.map(c=>`<div class="bg-white p-2 rounded-xl flex gap-2 mt-2"><img src="${c.image}" class="w-16 h-16 rounded-lg"><div><p class="font-bold text-sm">${c.title}</p><p class="text-red-600">₵${c.price}</p><p class="text-xs">${c.whatsapp}</p></div></div>`).join('');}
+function updateCart(){cart=JSON.parse(localStorage.getItem('cart')||'[]');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartList').innerHTML=cart.map(c=>`<div class="bg-white p-2 rounded-xl flex gap-2 mt-2"><img src="${c.image}" class="w-16 h-16 rounded-lg object-cover"><div><p class="font-bold text-sm">${c.title}</p><p class="text-red-600">₵${c.price}</p><p class="text-xs text-gray-500">Seller: ${c.seller} • ${c.whatsapp}</p></div></div>`).join('')||'Cart empty';}
 function checkout(){if(!cart.length)return alert('Cart empty');let msg=cart.map(c=>`${c.title} - ₵${c.price}`).join('%0A');let sellerWa=cart[0].whatsapp;window.open(`https://wa.me/${sellerWa.replace(/[^0-9]/g,'')}?text=I want to buy:%0A${msg}`,'_blank');}
-async function likeProduct(){if(!currentProduct)return;let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{likes:(currentProduct.likes||0)+1});}
-async function addComment(){let txt=document.getElementById('commentInput').value;if(!txt)return;let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{comments:arrayUnion({text:txt,user:"Buyer",time:Date.now()})});document.getElementById('commentInput').value='';}
-function loadComments(){document.getElementById('mComments').innerHTML=(currentProduct.comments||[]).map(c=>`<p><b>${c.user}:</b> ${c.text}</p>`).join('');}
-async function rate(n){let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{rating:n});alert('You rated '+n+' stars! Thank you!');}
-async function followSeller(){alert('You now follow '+currentProduct.seller+'! You will get notifications.');}
-function openShop(){window.open('https://paystack.com/pay/dornny-shop-50','_blank');alert('After paying 50 GHS, send receipt on WhatsApp: +233... to activate your shop. You can then upload unlimited products!');}
-updateCart();
+async function likeProduct(){if(!currentProduct)return;if(allProducts.length>0){let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{likes:(currentProduct.likes||0)+1});}else{currentProduct.likes++;document.getElementById('mLikes').innerText=currentProduct.likes;renderProducts();}}
+async function addComment(){let txt=document.getElementById('commentInput').value;if(!txt)return;if(allProducts.length>0){let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{comments:arrayUnion({text:txt,user:"Buyer",time:Date.now()})});}else{currentProduct.comments.push({text:txt,user:"Buyer"});loadComments();}document.getElementById('commentInput').value='';}
+function loadComments(){document.getElementById('mComments').innerHTML=(currentProduct.comments||[]).map(c=>`<p><b>${c.user}:</b> ${c.text}</p>`).join('')||'No comments yet. Be first!';}
+async function rate(n){if(allProducts.length>0){let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{rating:n});}alert('You rated '+n+' stars! Thank you!');}
+async function followSeller(){alert('You now follow '+currentProduct.seller+'! You will get notifications when they post new items.');}
+function openShop(){window.open('https://paystack.com/pay/dornny-shop-50','_blank');alert('Pay 50 GHS to open shop. After payment, WhatsApp receipt to +233 to activate. Then you can upload unlimited products!');}
+updateCart();renderProducts();
 </script>
 </body>
 </html>
