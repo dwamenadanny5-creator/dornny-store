@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sell on Dornny Market</title>
+<style>
+body{font-family:Arial;padding:15px;background:#f5f5f5}
+.box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+input,select,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
+button{width:100%;padding:14px;background:#ff0000;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold}
+h2{text-align:center;color:#333}
+.note{background:#fff3cd;padding:10px;border-radius:8px;font-size:13px;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>📦 +SELL on Dornny Market</h2>
+<div class="note">💡 Can't upload? WhatsApp Danny: <b>055... your number</b></div>
+<form id="sellForm">
+<input type="text" id="pName" placeholder="Product Name e.g. iPhone 13 Pro" required>
+<input type="number" id="pPrice" placeholder="Price in GHc e.g. 3500" required>
+<select id="pCategory" required>
+<option value="">Select Category</option>
+<option>Electronics</option><option>Fashion</option><option>Shoes & Sneakers</option><option>Phones</option><option>Home</option><option>Other</option>
+</select>
+<input type="text" id="pWhatsApp" placeholder="Your WhatsApp e.g. 0551234567" required>
+<input type="text" id="pLocation" placeholder="Location e.g. Accra, Circle" required>
+<input type="file" id="pImage" accept="image/*" required>
+<textarea id="pDesc" placeholder="Small description (optional)"></textarea>
+<button type="submit">🚀 Submit for Approval</button>
+</form>
+<p style="text-align:center;font-size:12px;color:gray">Your product will be reviewed within 1 hour</p>
+</div>
+<script>
+document.getElementById('sellForm').onsubmit = function(e){
+ e.preventDefault();
+ const file = document.getElementById('pImage').files[0];
+ const reader = new FileReader();
+ reader.onload = function(ev){
+   let product = {
+     id: Date.now(),
+     name: document.getElementById('pName').value,
+     price: document.getElementById('pPrice').value,
+     category: document.getElementById('pCategory').value,
+     whatsapp: document.getElementById('pWhatsApp').value,
+     location: document.getElementById('pLocation').value,
+     desc: document.getElementById('pDesc').value,
+     image: ev.target.result,
+     status: 'pending',
+     date: new Date().toLocaleString()
+   };
+   let pending = JSON.parse(localStorage.getItem('dornny_pending')||'[]');
+   pending.push(product);
+   localStorage.setItem('dornny_pending', JSON.stringify(pending));
+   alert('✅ Success! Sent to Dornny for approval!');
+   window.location.href = 'index.html';
+ }
+ reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>
