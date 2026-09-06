@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Dornny</title>
+<style>
+body{font-family:Arial;padding:10px;background:#111;color:white}
+.card{background:white;color:black;padding:10px;margin:10px 0;border-radius:10px}
+img{width:100%;max-height:200px;object-fit:cover;border-radius:8px}
+button{padding:10px 15px;margin:5px;border:none;border-radius:6px;font-weight:bold}
+.approve{background:green;color:white}
+.reject{background:red;color:white}
+</style>
+</head>
+<body>
+<h2>👑 DORNNY ADMIN - Pending Products</h2>
+<div id="list"></div>
+<script>
+function loadPending(){
+ let pending = JSON.parse(localStorage.getItem('dornny_pending')||'[]');
+ let live = JSON.parse(localStorage.getItem('dornny_live')||'[]');
+ let html='';
+ if(pending.length==0) html='<p>No pending products</p>';
+ pending.forEach((p,i)=>{
+   html+=`<div class="card"><img src="${p.image}"><h3>${p.name} - GHc ${p.price}</h3><p>${p.category} | ${p.location} | ${p.whatsapp}</p><p>${p.desc}</p><small>${p.date}</small><br><button class="approve" onclick="approve(${i})">✅ Approve</button><button class="reject" onclick="reject(${i})">❌ Reject</button></div>`;
+ });
+ document.getElementById('list').innerHTML=html;
+}
+function approve(i){
+ let pending = JSON.parse(localStorage.getItem('dornny_pending')||'[]');
+ let live = JSON.parse(localStorage.getItem('dornny_live')||'[]');
+ let prod = pending.splice(i,1)[0];
+ prod.status='approved';
+ live.unshift(prod);
+ localStorage.setItem('dornny_pending', JSON.stringify(pending));
+ localStorage.setItem('dornny_live', JSON.stringify(live));
+ alert('Approved! Now live on site');
+ loadPending();
+}
+function reject(i){
+ let pending = JSON.parse(localStorage.getItem('dornny_pending')||'[]');
+ pending.splice(i,1);
+ localStorage.setItem('dornny_pending', JSON.stringify(pending));
+ alert('Rejected');
+ loadPending();
+}
+loadPending();
+</script>
+</body>
+</html>
