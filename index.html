@@ -1,200 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DORNNY MARKET</title>
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#f5f5f5;color:#222;padding-bottom:80px}
-.header{background:#fff;padding:10px 12px;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.logo{color:#cc0000;font-weight:900;font-size:20px}
-.head-right{display:flex;gap:10px;align-items:center}
-.btn-sell{background:#0a8a00;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:700;font-size:13px}
-.icon-btn{position:relative;background:#f0f0f0;border:none;width:36px;height:36px;border-radius:50%;font-size:16px}
-.badge{position:absolute;top:-4px;right:-4px;background:#ff3b30;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:10px}
-.ref-bar{background:#111;color:#fff;padding:12px;margin:8px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
-.ref-bar b{color:#ffeb3b}
-.ref-bar button{background:#ffeb3b;color:#111;border:none;padding:6px 12px;border-radius:8px;font-weight:800;font-size:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;max-width:600px;margin:0 auto}
-.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;flex-direction:column}
-.card-img{width:100%;height:160px;background:#f0f0f0;overflow:hidden;position:relative;cursor:pointer}
-.card-img img{width:100%;height:100%;object-fit:cover}
-.badge-ver{color:#cc0000;background:#ffe5e5;font-size:9px;font-weight:800;padding:3px 8px;border-radius:12px;position:absolute;top:6px;left:6px;z-index:2}
-.card-body{padding:10px;flex:1;display:flex;flex-direction:column}
-.card-title{font-size:13px;font-weight:700;line-height:1.3;height:34px;overflow:hidden;margin-bottom:6px;cursor:pointer}
-.card-price{color:#0a8a00;font-weight:900;font-size:15px;margin-bottom:4px}
-.card-old{color:#888;font-size:11px;text-decoration:line-through;margin-left:4px}
-.card-loc{font-size:11px;color:#888;margin-bottom:8px}
-.btn-wa{background:#0a8a00;color:#fff;border:none;width:100%;padding:10px;border-radius:8px;font-weight:700;font-size:13px;margin-top:6px}
-.btn-cart{background:#111;color:#fff;border:none;width:100%;padding:9px;border-radius:8px;font-weight:700;font-size:12px;margin-top:auto}
-.btn-chat{background:#fff;color:#111;border:1px solid #ddd;width:100%;padding:8px;border-radius:8px;font-weight:700;font-size:12px;margin-top:6px}
-.cat-bar{display:flex;gap:8px;overflow-x:auto;padding:8px;max-width:600px;margin:0 auto}
-.cat-chip{background:#fff;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.cat-chip.on{background:#111;color:#fff}
-.page{display:none;max-width:600px;margin:0 auto;padding:12px}
-.page.on{display:block}
-.me-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:8px 0;z-index:200}
-.nav-item{text-align:center;font-size:11px;color:#888;padding:4px 12px}
-.nav-item.on{color:#cc0000;font-weight:700}
-.nav-item b{display:block;font-size:18px}
-.featured{grid-column:1 / -1;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.12);border:2px solid #0a8a00;display:flex;cursor:pointer}
-.featured.card-img{width:130px;height:130px;flex-shrink:0}
-.featured-info{padding:10px;flex:1}
-.seller-box{background:#fff;border-radius:12px;padding:16px;margin:8px auto;max-width:400px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:8px 0;font-size:15px}
-.btn-black{background:#111;color:#fff;border:none;width:100%;padding:12px;border-radius:8px;font-weight:800;margin-top:8px}
-.btn-green{background:#0a8a00;color:#fff;border:none;width:100%;padding:12px;border-radius:8px;font-weight:800;margin-top:8px}
-.btn-paystack{background:#00c3ff;color:#fff;border:none;width:100%;padding:14px;border-radius:8px;font-weight:800;margin-top:8px;font-size:15px}
-.pay-card{background:#111;color:#fff;border-radius:12px;padding:16px;text-align:center;margin:12px 0}
-.pay-card b{color:#ffeb3b;font-size:28px}
-.detail-img{width:100%;height:280px;object-fit:cover;border-radius:12px;background:#fff}
-.detail-box{background:#fff;border-radius:12px;padding:16px;margin-top:10px}
-.notif-item{background:#fff;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;gap:10px;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.chat-list{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08)}
-.chat-row{padding:12px;border-bottom:1px solid #f0f0f0;display:flex;gap:10px;align-items:center}
-.star{color:#ffaa00;font-size:18px;cursor:pointer}
-.follow-btn{background:#cc0000;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:700;font-size:13px}
-.comment-item{background:#f9f9f9;border-radius:10px;padding:10px;margin-bottom:8px}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dornny's Market - Ghana's Marketplace</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="header">
-<div class="logo">DORNNY MARKET</div>
-<div class="head-right">
-<button class="btn-sell" onclick="openSeller()">+SELL</button>
-<button class="icon-btn" onclick="showPage('p-notif','nav-chats')">🔔<span id="notifCount" class="badge" style="display:none">0</span></button>
-<button class="icon-btn" onclick="showPage('p-chats','nav-chats')">💬<span id="chatCount" class="badge" style="display:none">0</span></button>
-<button class="icon-btn" onclick="showPage('p-me','nav-me')">👤</button>
+<body class="bg-gray-50">
+<header class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center">
+<h1 class="font-bold text-xl">DORNNY'S MARKET</h1>
+<a href="/sell.html" class="bg-white text-black px-4 py-2 rounded-full text-sm font-bold">+ Sell</a>
+</header>
+<div class="p-4">
+<input id="search" placeholder="Search shoes, phones, clothes..." class="w-full p-3 rounded-full border shadow-sm">
 </div>
+<div id="products" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-3">
+<p class="col-span-full text-center py-10">Loading products...</p>
 </div>
-
-<div id="p-shop" class="page on">
-<div class="ref-bar"><div><div style="font-size:11px;opacity:.8">Earn 15 GHS per friend</div><div><b id="myCode">DORN0000</b> - <span id="earn">0 GHS</span> - <span id="fcount">0 friends</span></div></div><button onclick="shareRef()">Share</button></div>
-<div class="cat-bar" id="catBar"></div>
-<div class="grid" id="grid"></div>
-</div>
-
-<div id="p-product" class="page">
-<button onclick="showPage('p-shop','nav-home')" style="background:#fff;border:none;padding:8px 12px;border-radius:20px;margin-bottom:10px">← Back</button>
-<img id="dImg" class="detail-img" src="">
-<div class="detail-box">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="badge-ver" style="position:static">VERIFIED ✓</div><div id="dRating"></div></div>
-<h2 id="dTitle" style="font-size:17px;margin-bottom:6px"></h2>
-<div id="dPrice" style="color:#0a8a00;font-weight:900;font-size:20px;margin-bottom:4px"></div>
-<div id="dLoc" style="font-size:13px;color:#888;margin-bottom:6px"></div>
-<div id="dSellerBox" style="background:#f9f9f9;padding:10px;border-radius:10px;margin:10px 0;display:flex;justify-content:space-between;align-items:center"><div><b id="dSellerName"></b><br><small><span id="dFollowers">0</span> followers | <span id="dStars">⭐ 4.8</span> | <span id="dCommentCount">0</span> comments</small></div><button id="dFollowBtn" class="follow-btn" onclick="followCurrentSeller()">+ Follow</button></div>
-<button id="dCartBtn" class="btn-cart">🛒 Add to Cart</button>
-<button id="dChatBtn" class="btn-chat">💬 Message Seller on Platform</button>
-<button id="dWaBtn" class="btn-wa">WhatsApp Buy - 0594221108</button>
-<div style="margin-top:14px;border-top:1px solid #eee;padding-top:12px"><b>⭐ Rate this seller:</b><div style="margin-top:6px"><span class="star" onclick="rateSeller(1)">★</span><span class="star" onclick="rateSeller(2)">★</span><span class="star" onclick="rateSeller(3)">★</span><span class="star" onclick="rateSeller(4)">★</span><span class="star" onclick="rateSeller(5)">★</span><small style="margin-left:8px;color:#888" id="rateInfo">Tap to rate</small></div></div>
-<div style="margin-top:16px;border-top:1px solid #eee;padding-top:14px">
-<b>💬 Comments about this product (<span id="dCommentCount2">0</span>)</b>
-<div id="dComments" style="margin-top:10px;max-height:300px;overflow-y:auto"></div>
-<div style="display:flex;gap:8px;margin-top:10px"><input id="commentInput" class="input" style="margin:0;flex:1" placeholder="Write comment..."><button class="btn-green" style="width:auto;padding:12px 16px;margin:0" onclick="addComment()">Post</button></div>
-</div>
-</div>
-</div>
-
-<div id="p-cart" class="page"><h3 style="padding:8px">Cart (<span id="cartCount">0</span>)</h3><div id="cartGrid" style="padding:8px"></div><button onclick="checkoutWa()" style="background:#0a8a00;color:#fff;border:none;width:100%;padding:14px;border-radius:10px;font-weight:800;margin-top:10px">Checkout via WhatsApp - 0594221108</button></div>
-<div id="p-notif" class="page"><h3 style="margin-bottom:10px">🔔 Notifications (<span id="notifTotal">0</span>)</h3><div id="notifList"></div><button class="btn-black" style="background:#fff;color:#111;border:1px solid #ddd;margin-top:10px" onclick="clearNotifs()">Clear All</button></div>
-<div id="p-chats" class="page"><h3 style="margin-bottom:10px">💬 Messages</h3><div class="chat-list" id="chatList"></div></div>
-<div id="p-chat-detail" class="page"><button onclick="showPage('p-chats','nav-chats')" style="background:#fff;border:none;padding:8px 12px;border-radius:20px;margin-bottom:10px">← Back</button><div class="me-card"><b id="chatWith">Chat</b><br><small id="chatProd"></small></div><div id="chatMsgs" style="background:#fff;border-radius:12px;padding:12px;min-height:200px;max-height:400px;overflow-y:auto;margin-bottom:10px"></div><div style="display:flex;gap:8px"><input id="chatInput" class="input" style="margin:0;flex:1" placeholder="Type message..."><button class="btn-green" style="width:auto;padding:12px 20px;margin:0" onclick="sendMsg()">Send</button></div></div>
-<div id="p-me" class="page"><div class="me-card"><h3>My Account - Danny</h3><p id="meCode" style="margin-top:8px;font-weight:800"></p><p id="meEarn" style="color:#0a8a00;font-weight:800;font-size:18px;margin-top:6px"></p><div style="margin-top:10px;display:flex;gap:8px"><div style="flex:1;background:#f5f5f5;padding:10px;border-radius:10px;text-align:center"><b id="meFollow">0</b><br><small>Following</small></div><div style="flex:1;background:#f5f5f5;padding:10px;border-radius:10px;text-align:center"><b id="meFollowers">0</b><br><small>Followers</small></div></div><button style="background:#111;color:#fff;border:none;padding:10px 16px;border-radius:8px;margin-top:10px;width:100%;font-weight:700" onclick="shareRef()">Share Referral - Earn 15 GHS</button></div></div>
-
-<div id="p-seller" class="page"><div class="seller-box"><h3 style="color:#cc0000">Open Shop - GH₵ 50</h3><div id="authForm"><input id="sPhone" class="input" placeholder="Phone - 0594221108" type="tel"><input id="sPass" class="input" placeholder="Password (min 4)" type="password"><input id="sName" class="input" placeholder="Shop Name"><button class="btn-black" onclick="sellerLogin()">Login / Create Shop</button></div><div id="paySection" style="display:none"><div class="pay-card"><b>GH₵ 50</b><div style="font-size:12px;margin-top:8px">Pay with Paystack Test<br>MoMo: <span style="color:#ffeb3b">0594221108</span></div></div><p id="sellerInfo" style="font-weight:700;margin:8px 0"></p>
-<button class="btn-paystack" onclick="payWithPaystack()">💳 Pay 50 GHS with Paystack (TEST)</button>
-<button class="btn-green" onclick="pay50()">✅ I Paid via MoMo - Activate</button>
-<button class="btn-black" style="background:#fff;color:#111;border:1px solid #ddd" onclick="contactPay()">Contact WhatsApp</button>
-<div style="margin-top:10px;background:#fff3cd;padding:10px;border-radius:8px;font-size:11px">🧪 TEST MODE: Use Paystack test card: 4084 0840 8408 4081, Exp 12/30, CVV 408, PIN 0000</div>
-</div><div id="shopActive" style="display:none"><div style="background:#e6ffe6;padding:12px;border-radius:8px;text-align:center"><div style="font-size:32px">✅</div><b style="color:#0a8a00">Shop Active!</b><p id="activeShopName"></p><p><span id="activeFollowers">0</span> followers | ⭐ <span id="activeRating">5.0</span></p></div><button class="btn-green" onclick="alert('Send product to 0594221108 WhatsApp')">+ Add Product</button><button class="btn-black" style="background:#e9e9e9;color:#111;margin-top:8px" onclick="sellerLogout()">Logout</button></div></div></div>
-
-<div class="nav"><div class="nav-item on" id="nav-home" onclick="showPage('p-shop','nav-home')"><b>🏠</b>Home</div><div class="nav-item" id="nav-cart" onclick="showPage('p-cart','nav-cart')"><b>🛒</b><span id="cartBadge">0</span><br>Cart</div><div class="nav-item" id="nav-chats" onclick="showPage('p-chats','nav-chats')"><b>💬</b>Chats</div><div class="nav-item" id="nav-me" onclick="showPage('p-me','nav-me')"><b>👤</b>Me</div></div>
-
-<script>
-var waNumber="233594221108";
-var PAYSTACK_KEY="pk_test_ff67497ad6c77a992c255aebe97bee4a467d7817";
-var prods=[
-{t:"New SIM Card Supported Smart Watch Phone",p:370,old:770,dis:"-52%",loc:"Accra - Circle",img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",v:true,f:true,seller:"Danny Tech",sellerPhone:"0594221108",followers:124,rating:4.8,ratings:[5,5,4,5],comments:[{user:"Kwame",text:"Very nice watch, battery good!",time:"2h ago"},{user:"Ama",text:"Seller is trusted",time:"5h ago"}]},
-{t:"Men Luxury Watch - Waterproof",p:120,loc:"Takoradi",img:"https://images.unsplash.com/photo-1524805444973-bf35eade5a65?w=400",v:true,seller:"Time Hub Gh",sellerPhone:"0241234567",followers:89,rating:4.6,ratings:[5,4,5],comments:[{user:"Kofi",text:"Original watch",time:"1d ago"}]},
-{t:"HP Laptop Core i5 - 8GB 256GB",p:1800,loc:"Accra - Madina",img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400",v:true,seller:"Danny Tech",sellerPhone:"0594221108",followers:124,rating:4.8,ratings:[5,5,4,5],comments:[]},
-{t:"PlayStation 5 - With 2 Pads + Games",p:3500,loc:"Accra",img:"https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400",v:true,seller:"Game Zone",sellerPhone:"0509876543",followers:210,rating:5.0,ratings:[5,5,5],comments:[{user:"Yaw",text:"PS5 working perfect!",time:"3h ago"}]},
-{t:"African Print Dress - New Fashion 2024",p:85,loc:"Kumasi",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400",v:true,seller:"Fashion Hub",sellerPhone:"0271112222",followers:156,rating:4.9,ratings:[5,5,5,4],comments:[]},
-{t:"Wireless Earbuds Pro Max - BT 5.3",p:150,old:250,loc:"Accra",img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400",v:true,seller:"Danny Tech",sellerPhone:"0594221108",followers:124,rating:4.8,ratings:[5,5,4,5],comments:[]},
-{t:"iPhone 12 Pro - 128GB - Used",p:2800,loc:"Kumasi",img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400",v:true,seller:"Phone Hub",sellerPhone:"0553334444",followers:98,rating:4.7,ratings:[5,4,5],comments:[]},
-{t:"Red Running Sneakers Size 42",p:250,loc:"Tema",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",v:true,seller:"Sneaker Gh",sellerPhone:"0205556666",followers:67,rating:4.5,ratings:[4,5,4],comments:[]}
-];
-var cart=JSON.parse(localStorage.getItem("d_cart")||"[]");
-var myRef=localStorage.getItem("myRefCode");if(!myRef){myRef="DORN"+Math.floor(1000+Math.random()*9000);localStorage.setItem("myRefCode",myRef);}
-var refData=JSON.parse(localStorage.getItem("refData")||'{"count":0,"earned":0,"referredBy":null}');
-var sellers=JSON.parse(localStorage.getItem("dornny_sellers")||"{}");
-var currentSeller=JSON.parse(localStorage.getItem("dornny_current_seller")||"null");
-var notifs=JSON.parse(localStorage.getItem("d_notifs")||"[]");
-var chats=JSON.parse(localStorage.getItem("d_chats")||"[]");
-var following=JSON.parse(localStorage.getItem("d_following")||"[]");
-var savedComments=JSON.parse(localStorage.getItem("d_comments")||"{}");
-for(var k=0;k<prods.length;k++){if(savedComments[k]) prods[k].comments=savedComments[k];}
-var currentView=null;var currentChat=null;
-function showPage(pid,nid){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});document.getElementById(pid).classList.add('on');document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('on')});var nav=document.getElementById(nid);if(nav) nav.classList.add('on');if(pid==='p-shop') buildGrid();if(pid==='p-cart') buildCart();if(pid==='p-me') buildMe();if(pid==='p-seller') showSellerState();if(pid==='p-notif') buildNotifs();if(pid==='p-chats') buildChats();}
-function openSeller(){showPage('p-seller','nav-me');}
-function addNotif(title,msg){var n={id:Date.now(),title:title,msg:msg,time:new Date().toLocaleTimeString()};notifs.unshift(n);if(notifs.length>20) notifs.pop();localStorage.setItem("d_notifs",JSON.stringify(notifs));updateNotifUI();}
-function updateNotifUI(){var c=document.getElementById('notifCount');if(notifs.length>0){c.style.display='inline';c.innerText=notifs.length;}else{c.style.display='none';}var nt=document.getElementById('notifTotal');if(nt) nt.innerText=notifs.length;}
-function buildNotifs(){var g=document.getElementById('notifList');if(notifs.length===0){g.innerHTML='<div style="text-align:center;padding:30px;color:#888;background:#fff;border-radius:10px">No notifications</div>';updateNotifUI();return;}g.innerHTML="";for(var i=0;i<notifs.length;i++){g.innerHTML+='<div class="notif-item"><div style="width:36px;height:36px;background:#ffeb3b;border-radius:50%;display:flex;align-items:center;justify-content:center">🔔</div><div style="flex:1"><b style="font-size:13px">'+notifs[i].title+'</b><br><small style="color:#666">'+notifs[i].msg+'</small><br><small style="color:#aaa">'+notifs[i].time+'</small></div></div>';}updateNotifUI();}
-function clearNotifs(){notifs=[];localStorage.setItem("d_notifs",JSON.stringify(notifs));buildNotifs();}
-function buildCats(){var cats=["All","Electronics","Fashion","Gaming","Laptops","Watches"];var bar=document.getElementById('catBar');bar.innerHTML="";for(var i=0;i<cats.length;i++){var c=cats[i];var cls=i===0?"cat-chip on":"cat-chip";bar.innerHTML+='<div class="'+cls+'" onclick="filterCat(this,\''+c+'\')">'+c+'</div>';}}
-function filterCat(el,cat){document.querySelectorAll('.cat-chip').forEach(function(ch){ch.classList.remove('on')});el.classList.add('on');if(cat==="All"){buildGrid();return;}var filtered=[];for(var i=0;i<prods.length;i++){var t=prods[i].t.toLowerCase();if(cat==="Electronics"&&(t.indexOf("watch")>-1||t.indexOf("earbud")>-1||t.indexOf("laptop")>-1||t.indexOf("phone")>-1)) filtered.push(prods[i]);else if(cat==="Fashion"&&(t.indexOf("dress")>-1||t.indexOf("sneaker")>-1)) filtered.push(prods[i]);else if(cat==="Gaming"&&t.indexOf("playstation")>-1) filtered.push(prods[i]);else if(cat==="Laptops"&&t.indexOf("laptop")>-1) filtered.push(prods[i]);else if(cat==="Watches"&&t.indexOf("watch")>-1) filtered.push(prods[i]);}buildGrid(filtered);}
-function buildGrid(list){var arr=list||prods;var g=document.getElementById('grid');g.innerHTML="";for(var idx=0;idx<arr.length;idx++){var p=arr[idx];var realIdx=prods.indexOf(p);if(realIdx===-1) realIdx=idx;var oldHtml=p.old?'<span class="card-old">GHc '+p.old+'</span>':'';var disHtml=p.dis?'<span style="background:#ff3b30;color:#fff;padding:2px 6px;border-radius:6px;font-size:10px;margin-left:4px">'+p.dis+'</span>':'';var verHtml='<div class="badge-ver">VERIFIED ✓</div>';var priceLine='<div class="card-price">GHc '+p.p+oldHtml+disHtml+'</div>';var locLine='<div class="card-loc">📍 '+p.loc+' • '+p.seller+' • ⭐'+p.rating+' • 💬'+p.comments.length+'</div>';var imgHtml='<div class="card-img" onclick="viewProduct('+realIdx+')">'+verHtml+'<img src="'+p.img+'" loading="lazy"></div>';if(p.f){g.innerHTML+='<div class="featured" onclick="viewProduct('+realIdx+')">'+imgHtml+'<div class="featured-info"><div style="font-size:13px;font-weight:700">'+p.t+'</div>'+priceLine+locLine+'<div style="margin-top:6px"><button class="btn-cart" onclick="event.stopPropagation();addToCart('+realIdx+')">🛒 Add</button><button class="btn-chat" onclick="event.stopPropagation();openChat('+realIdx+')">💬 Message</button><button class="btn-wa" onclick="event.stopPropagation();buyWa('+realIdx+')">WhatsApp Buy</button></div></div></div>';}else{g.innerHTML+='<div class="card">'+imgHtml+'<div class="card-body"><div class="card-title" onclick="viewProduct('+realIdx+')">'+p.t+'</div>'+priceLine+locLine+'<button class="btn-cart" onclick="addToCart('+realIdx+')">🛒 Add to Cart</button><button class="btn-chat" onclick="openChat('+realIdx+')">💬 Message</button><button class="btn-wa" onclick="buyWa('+realIdx+')">WhatsApp Buy</button></div></div>';}}updateCartUI();updateNotifUI();}
-function viewProduct(i){currentView=i;var p=prods[i];document.getElementById('dImg').src=p.img;document.getElementById('dTitle').innerText=p.t;document.getElementById('dPrice').innerText="GH₵ "+p.p+(p.old?" (was GH₵ "+p.old+")":"");document.getElementById('dLoc').innerText="📍 "+p.loc+" • Seller: "+p.seller;document.getElementById('dSellerName').innerText=p.seller;document.getElementById('dFollowers').innerText=p.followers;document.getElementById('dStars').innerText="⭐ "+p.rating+" ("+p.ratings.length+")";document.getElementById('dCommentCount').innerText=p.comments.length;document.getElementById('dCommentCount2').innerText=p.comments.length;document.getElementById('dRating').innerText="⭐ "+p.rating;var isFollowing=following.indexOf(p.seller)>-1;document.getElementById('dFollowBtn').innerText=isFollowing?"✓ Following":"+ Follow";document.getElementById('dFollowBtn').style.background=isFollowing?"#0a8a00":"#cc0000";document.getElementById('dCartBtn').onclick=function(){addToCart(i);};document.getElementById('dChatBtn').onclick=function(){openChat(i);};document.getElementById('dWaBtn').onclick=function(){buyWa(i);};buildComments();showPage('p-product','nav-home');}
-function addToCart(i){cart.push(prods[i]);localStorage.setItem("d_cart",JSON.stringify(cart));updateCartUI();addNotif("Added to Cart",""+prods[i].t+" added");}
-function updateCartUI(){document.getElementById('cartCount').innerText=cart.length;var b=document.getElementById('cartBadge');if(b) b.innerText=cart.length;var myCodeEl=document.getElementById('myCode');if(myCodeEl) myCodeEl.innerText=myRef;var earnEl=document.getElementById('earn');if(earnEl) earnEl.innerText=refData.earned+" GHS";var fc=document.getElementById('fcount');if(fc) fc.innerText=refData.count+" friends";var cc=document.getElementById('chatCount');if(chats.length>0){cc.style.display='inline';cc.innerText=chats.length;}else{cc.style.display='none';}}
-function buyWa(i){var p=prods[i];var msg="Hello Dornny Market! I want to buy: "+p.t+" - GH₵ "+p.p+" ("+p.loc+") | My Code: "+myRef;if(refData.referredBy) msg+=" | Referred by: "+refData.referredBy;var url="https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg);addNotif("WhatsApp Order","Ordering "+p.t);window.open(url,"_blank");}
-function buildCart(){var g=document.getElementById('cartGrid');if(cart.length===0){g.innerHTML='<div style="text-align:center;padding:40px;color:#888">Cart empty</div>';updateCartUI();return;}g.innerHTML="";var total=0;for(var i=0;i<cart.length;i++){total+=cart[i].p;g.innerHTML+='<div style="background:#fff;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;gap:10px;align-items:center"><img src="'+cart[i].img+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px"><div style="flex:1"><b style="font-size:13px">'+cart[i].t+'</b><br><small style="color:#0a8a00">GH₵ '+cart[i].p+'</small></div><button onclick="remCart('+i+')" style="border:none;background:#ffe5e5;padding:6px 10px;border-radius:6px">X</button></div>';}g.innerHTML+='<div style="background:#111;color:#fff;padding:12px;border-radius:10px;margin-top:8px;display:flex;justify-content:space-between;font-weight:800"><span>Total ('+cart.length+')</span><span>GH₵ '+total+'</span></div>';updateCartUI();}
-function remCart(i){cart.splice(i,1);localStorage.setItem("d_cart",JSON.stringify(cart));buildCart();}
-function checkoutWa(){if(cart.length===0){alert("Cart empty");return;}var total=0;var txt="Hello Dornny Market! I want to buy "+cart.length+" items:\n";for(var i=0;i<cart.length;i++){txt+="- "+cart[i].t+" GH₵ "+cart[i].p+"\n";total+=cart[i].p;}txt+="Total: GH₵ "+total+" | Code: "+myRef;window.open("https://wa.me/"+waNumber+"?text="+encodeURIComponent(txt),"_blank");}
-function openChat(i){var p=prods[i];var chatId=p.seller+"_"+p.t;var existing=null;for(var j=0;j<chats.length;j++){if(chats[j].id===chatId) existing=chats[j];}if(!existing){var newChat={id:chatId,seller:p.seller,product:p.t,productImg:p.img,msgs:[{from:"system",text:"Started chat about "+p.t+" with "+p.seller,time:new Date().toLocaleTimeString()}]};chats.unshift(newChat);localStorage.setItem("d_chats",JSON.stringify(chats));existing=newChat;addNotif("New Chat","Chatting with "+p.seller);}currentChat=existing;showChatDetail();}
-function showChatDetail(){if(!currentChat) return;document.getElementById('chatWith').innerText=currentChat.seller;document.getElementById('chatProd').innerText=currentChat.product;var box=document.getElementById('chatMsgs');box.innerHTML="";for(var i=0;i<currentChat.msgs.length;i++){var m=currentChat.msgs[i];var isMe=m.from==="me";box.innerHTML+='<div style="margin:8px 0;display:flex;justify-content:'+(isMe?'flex-end':'flex-start')+'"><div style="background:'+(isMe?'#0a8a00':'#f0f0f0')+';color:'+(isMe?'#fff':'#111')+';padding:8px 12px;border-radius:12px;max-width:75%;font-size:13px">'+m.text+'<br><small style="opacity:.7;font-size:10px">'+m.time+'</small></div></div>';}showPage('p-chat-detail','nav-chats');box.scrollTop=box.scrollHeight;}
-function sendMsg(){var inp=document.getElementById('chatInput');var txt=inp.value.trim();if(!txt||!currentChat) return;currentChat.msgs.push({from:"me",text:txt,time:new Date().toLocaleTimeString()});setTimeout(function(){currentChat.msgs.push({from:"seller",text:"Thanks! Reply soon. WhatsApp: 0594221108",time:new Date().toLocaleTimeString()});localStorage.setItem("d_chats",JSON.stringify(chats));showChatDetail();addNotif("Message from "+currentChat.seller,currentChat.seller+" replied");},1000);localStorage.setItem("d_chats",JSON.stringify(chats));inp.value="";showChatDetail();}
-function buildChats(){var g=document.getElementById('chatList');if(chats.length===0){g.innerHTML='<div style="padding:30px;text-align:center;color:#888">No messages yet<br><small>Tap 💬 Message to chat</small></div>';updateCartUI();return;}g.innerHTML="";for(var i=0;i<chats.length;i++){var c=chats[i];var last=c.msgs[c.msgs.length-1];g.innerHTML+='<div class="chat-row" onclick="currentChat=chats['+i+'];showChatDetail()"><img src="'+c.productImg+'" style="width:50px;height:50px;border-radius:8px;object-fit:cover"><div style="flex:1"><b style="font-size:13px">'+c.seller+'</b><br><small>'+c.product+'</small><br><small style="color:#888">'+last.text.substring(0,40)+'</small></div><small style="color:#aaa">'+last.time+'</small></div>';}updateCartUI();}
-function followCurrentSeller(){if(currentView===null) return;var p=prods[currentView];var idx=following.indexOf(p.seller);if(idx>-1){following.splice(idx,1);p.followers--;addNotif("Unfollowed","Unfollowed "+p.seller);}else{following.push(p.seller);p.followers++;addNotif("Following","Followed "+p.seller);}localStorage.setItem("d_following",JSON.stringify(following));document.getElementById('dFollowers').innerText=p.followers;var isFollowing=following.indexOf(p.seller)>-1;document.getElementById('dFollowBtn').innerText=isFollowing?"✓ Following":"+ Follow";document.getElementById('dFollowBtn').style.background=isFollowing?"#0a8a00":"#cc0000";buildGrid();buildMe();}
-function rateSeller(stars){if(currentView===null){alert("Open product first");return;}var p=prods[currentView];p.ratings.push(stars);var sum=0;for(var i=0;i<p.ratings.length;i++) sum+=p.ratings[i];p.rating=(sum/p.ratings.length).toFixed(1);document.getElementById('dStars').innerText="⭐ "+p.rating+" ("+p.ratings.length+")";document.getElementById('dRating').innerText="⭐ "+p.rating;document.getElementById('rateInfo').innerText="Rated "+stars+" stars! Avg "+p.rating;addNotif("Rated "+p.seller,"Rated "+p.seller+" "+stars+" stars");buildGrid();}
-function buildComments(){if(currentView===null) return;var p=prods[currentView];var g=document.getElementById('dComments');if(p.comments.length===0){g.innerHTML='<div style="text-align:center;padding:20px;color:#888;background:#f9f9f9;border-radius:10px">No comments yet - Be first!</div>';return;}g.innerHTML="";for(var i=0;i<p.comments.length;i++){var c=p.comments[i];g.innerHTML+='<div class="comment-item"><div style="display:flex;justify-content:space-between"><b style="font-size:13px">'+c.user+'</b><small style="color:#888">'+c.time+'</small></div><div style="font-size:13px;color:#333;margin-top:4px">'+c.text+'</div></div>';}}
-function addComment(){if(currentView===null) return;var inp=document.getElementById('commentInput');var txt=inp.value.trim();if(!txt) return;var p=prods[currentView];var newC={user:"Buyer "+myRef.substring(0,4),text:txt,time:"now"};p.comments.push(newC);savedComments[currentView]=p.comments;localStorage.setItem("d_comments",JSON.stringify(savedComments));inp.value="";buildComments();document.getElementById('dCommentCount').innerText=p.comments.length;document.getElementById('dCommentCount2').innerText=p.comments.length;addNotif("Comment added","You commented on "+p.t);buildGrid();}
-function payWithPaystack(){
-if(!currentSeller){alert("Login first");return;}
-var handler=PaystackPop.setup({
-key:PAYSTACK_KEY,
-email:currentSeller.phone+"@dornny.com",
-amount:50*100,
-currency:"GHS",
-ref:"DORNNY_"+Date.now()+"_"+currentSeller.phone,
-metadata:{custom_fields:[{display_name:"Shop Name",variable_name:"shop_name",value:currentSeller.name},{display_name:"Phone",variable_name:"phone",value:currentSeller.phone}]},
-callback:function(response){
-currentSeller.paid=true;
-sellers[currentSeller.phone].paid=true;
-sellers[currentSeller.phone].paystackRef=response.reference;
-localStorage.setItem("dornny_sellers",JSON.stringify(sellers));
-localStorage.setItem("dornny_current_seller",JSON.stringify(currentSeller));
-addNotif("Payment Success","Paid 50 GHS via Paystack - Ref: "+response.reference);
-showSellerState();
-alert("✅ Payment Successful! Ref: "+response.reference+"\nYour shop "+currentSeller.name+" is now ACTIVE! (TEST MODE)");
-var msg="Hello Dornny Market! I paid 50 GHS via Paystack TEST. Ref: "+response.reference+" Phone: "+currentSeller.phone+" Shop: "+currentSeller.name;
-window.open("https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg),"_blank");
-},
-onClose:function(){addNotif("Payment Cancelled","You cancelled");alert("Payment cancelled");}
-});
-handler.openIframe();
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
+  authDomain: "dornnysmarket.firebaseapp.com",
+  projectId: "dornnysmarket",
+  storageBucket: "dornnysmarket.firebasestorage.app",
+  messagingSenderId: "726307073658",
+  appId: "1:726307073658:web:957d1225916799d9fa95c3",
+  measurementId: "G-WYVEH8VG5V"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let allProducts = [];
+async function loadProducts(){
+  const q = query(collection(db, "products"), orderBy("createdAt","desc"));
+  const snap = await getDocs(q);
+  allProducts = [];
+  snap.forEach(doc=>{ allProducts.push({id:doc.id, ...doc.data()}); });
+  render(allProducts);
 }
-function shareRef(){var link=location.href.split('?')[0]+"?ref="+myRef;var text="Join Dornny Market! Use code "+myRef+" for 5 GHS off! "+link;if(navigator.share){navigator.share({title:"DORNNY MARKET",text:text,url:link});}else{prompt("Copy & share:",text);}}
-function buildMe(){var mc=document.getElementById('meCode');if(mc) mc.innerText="Your Code: "+myRef;var me=document.getElementById('meEarn');if(me) me.innerText=refData.earned+" GHS Earned | "+refData.count+" Friends";var mf=document.getElementById('meFollow');if(mf) mf.innerText=following.length;var mfs=document.getElementById('meFollowers');if(mfs) mfs.innerText=currentSeller?currentSeller.followers||0:0;updateCartUI();updateNotifUI();}
-function sellerLogin(){var phone=document.getElementById('sPhone').value.trim();var pass=document.getElementById('sPass').value.trim();var name=document.getElementById('sName').value.trim()||"My Shop";if(phone.length<10||pass.length<4){alert('Enter valid phone and password');return;}if(sellers[phone]){if(sellers[phone].pass!==pass){alert('Wrong password');return;}}else{sellers[phone]={phone:phone,pass:pass,name:name,paid:false,followers:0,rating:5.0,joined:Date.now()};localStorage.setItem("dornny_sellers",JSON.stringify(sellers));}currentSeller=sellers[phone];localStorage.setItem("dornny_current_seller",JSON.stringify(currentSeller));addNotif("Shop Login","Welcome "+currentSeller.name);showSellerState();}
-function showSellerState(){var auth=document.getElementById('authForm');var pay=document.getElementById('paySection');var active=document.getElementById('shopActive');if(!auth) return;if(!currentSeller){auth.style.display='block';pay.style.display='none';active.style.display='none';return;}document.getElementById('sellerInfo').innerText=currentSeller.name+" - "+currentSeller.phone;document.getElementById('activeShopName').innerText=currentSeller.name+" - "+currentSeller.phone;var af=document.getElementById('activeFollowers');if(af) af.innerText=currentSeller.followers||0;var ar=document.getElementById('activeRating');if(ar) ar.innerText=currentSeller.rating||"5.0";if(currentSeller.paid){auth.style.display='none';pay.style.display='none';active.style.display='block';}else{auth.style.display='none';pay.style.display='block';active.style.display='none';}}
-function pay50(){if(!currentSeller) return;var msg="Hello Dornny Market! I paid 50 GHS to open shop. Phone: "+currentSeller.phone+" Shop: "+currentSeller.name;if(confirm("Confirm you paid 50 GHS MoMo to 0594221108? Shop: "+currentSeller.name)){currentSeller.paid=true;sellers[currentSeller.phone].paid=true;localStorage.setItem("dornny_sellers",JSON.stringify(sellers));localStorage.setItem("dornny_current_seller",JSON.stringify(currentSeller));addNotif("Shop Active","Your shop "+currentSeller.name+" active!");showSellerState();alert("✅ Shop Activated!");window.open("https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg),"_blank");}}
-function contactPay(){if(!currentSeller){alert('Login first');return;}var msg="Hello! I want to open shop. Pay 50 GHS. Phone: "+currentSeller.phone+" Shop: "+currentSeller.name;window.open("https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg),"_blank");}
-function sellerLogout(){localStorage.removeItem("dornny_current_seller");currentSeller=null;showSellerState();}
-var params=new URLSearchParams(location.search);var r=params.get('ref');if(r&&!refData.referredBy&&r.toUpperCase()!==myRef){refData.referredBy=r.toUpperCase();localStorage.setItem("refData",JSON.stringify(refData));}
-buildCats();buildGrid();buildMe();buildCart();buildChats();buildNotifs();showSellerState();
+function render(list){
+  const container = document.getElementById('products');
+  if(list.length==0){ container.innerHTML="<p class='col-span-full text-center py-10'>No products yet. Be first to sell!</p>"; return; }
+  container.innerHTML = list.map(p=>`
+    <div class="bg-white rounded-xl overflow-hidden shadow-sm border">
+      <img src="${p.image}" class="w-full h-36 object-cover">
+      <div class="p-3">
+        <h3 class="font-bold text-sm truncate">${p.name}</h3>
+        <p class="text-xs text-gray-500 truncate">${p.category||''}</p>
+        <p class="font-bold mt-1">GHS ${p.price}</p>
+        <a href="https://wa.me/233${p.whatsapp.replace(/^0/,'')}?text=Hi, I'm interested in ${encodeURIComponent(p.name)} on Dornny's Market" target="_blank" class="block mt-2 bg-green-500 text-white text-center py-2 rounded-full text-xs font-bold">Chat Seller on WhatsApp</a>
+      </div>
+    </div>
+  `).join('');
+}
+document.getElementById('search').addEventListener('input', e=>{
+  const val = e.target.value.toLowerCase();
+  const filtered = allProducts.filter(p=> p.name.toLowerCase().includes(val) || (p.category||'').toLowerCase().includes(val));
+  render(filtered);
+});
+loadProducts();
 </script>
 </body>
 </html>
