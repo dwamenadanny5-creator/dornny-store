@@ -4,45 +4,162 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DORNNY MARKET</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
+  authDomain: "dornnysmarket.firebaseapp.com",
+  projectId: "dornnysmarket",
+  storageBucket: "dornnysmarket.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcd"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+window.db = db; window.addDoc=addDoc; window.collection=collection; window.onSnapshot=onSnapshot; window.doc=doc; window.updateDoc=updateDoc; window.arrayUnion=arrayUnion; window.arrayRemove=arrayRemove; window.query=query; window.orderBy=orderBy; window.getDoc=getDoc; window.setDoc=setDoc;
+</script>
+<style>.active{color:#ef4444!important;font-weight:bold}</style>
 </head>
-<body class="bg-gray-100">
-<div class="bg-white p-3 flex justify-between sticky top-0 shadow z-10">
-<b class="text-red-600 text-xl">DORNNY MARKET</b>
-<a href="sell.html" class="bg-green-500 text-white px-4 py-1 rounded-full font-bold">+SELL</a>
+<body class="bg-gray-100 pb-20">
+<!-- HEADER -->
+<header class="bg-white sticky top-0 z-50 p-3 flex justify-between items-center shadow">
+<h1 class="font-black text-red-600 text-xl">DORNNY MARKET</h1>
+<div class="flex gap-3">
+<button onclick="showTab('notif')"><i class="fa fa-bell"></i><span id="notifCount" class="bg-red-500 text-white text-xs px-1 rounded-full hidden">0</span></button>
+<a href="sell.html" class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">+SELL</a>
 </div>
-<div class="flex gap-2 p-2 overflow-auto bg-white">
-<button onclick="filterCat('all')" class="bg-black text-white px-4 py-1 rounded-full text-sm">All</button>
-<button onclick="filterCat('fashion')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Fashion</button>
-<button onclick="filterCat('phones')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Phones</button>
-<button onclick="filterCat('shoes')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Shoes</button>
-<button onclick="filterCat('food')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Food</button>
-<button onclick="filterCat('furniture')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Furniture</button>
-<button onclick="filterCat('cars')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Cars</button>
-<button onclick="filterCat('home')" class="bg-gray-100 border px-3 py-1 rounded-full text-sm">Home Deco</button>
+</header>
+
+<!-- HOME / SHOP -->
+<div id="tab-home" class="tab">
+<div class="p-2 flex gap-2 overflow-x-auto bg-white">
+<button onclick="filterCat('all')" class="cat-btn bg-black text-white px-4 py-1 rounded-full text-sm">All</button>
+<button onclick="filterCat('fashion')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Fashion</button>
+<button onclick="filterCat('phones')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Phones</button>
+<button onclick="filterCat('shoes')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Shoes</button>
+<button onclick="filterCat('food')" class="cat-btn bg-gray-200 px-4 py-1 rounded-full text-sm">Food</button>
 </div>
-<div id="products" class="grid grid-cols-2 gap-3 p-3 pb-20"></div>
+<div id="products" class="grid grid-cols-2 gap-2 p-2"></div>
+</div>
+
+<!-- CATEGORY -->
+<div id="tab-category" class="tab hidden p-4">
+<h2 class="font-bold text-lg mb-3">Categories</h2>
+<div class="grid grid-cols-2 gap-3">
+<div onclick="filterCat('fashion')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-shirt text-2xl"></i><p>Fashion</p></div>
+<div onclick="filterCat('phones')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-mobile text-2xl"></i><p>Phones</p></div>
+<div onclick="filterCat('shoes')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-shoe-prints text-2xl"></i><p>Shoes</p></div>
+<div onclick="filterCat('food')" class="bg-white p-6 rounded-xl text-center shadow"><i class="fa fa-utensils text-2xl"></i><p>Food</p></div>
+</div>
+</div>
+
+<!-- TREND -->
+<div id="tab-trend" class="tab hidden"><div id="trendProducts" class="grid grid-cols-2 gap-2 p-2"></div></div>
+
+<!-- CART -->
+<div id="tab-cart" class="tab hidden p-3"><h2 class="font-bold text-lg">My Cart</h2><div id="cartList"></div><button onclick="checkout()" class="w-full bg-red-600 text-white py-3 rounded-xl mt-3">Checkout on WhatsApp</button></div>
+
+<!-- CHATS -->
+<div id="tab-chats" class="tab hidden p-3"><h2 class="font-bold text-lg">Messages</h2><div id="chatList" class="space-y-2"></div></div>
+
+<!-- ME -->
+<div id="tab-me" class="tab hidden p-4 text-center">
+<img src="https://i.pravatar.cc/100" class="w-20 h-20 rounded-full mx-auto">
+<h2 class="font-bold mt-2">Danny Shop</h2>
+<p class="text-sm text-gray-500">Seller • Verified</p>
+<div class="grid grid-cols-3 gap-2 mt-4">
+<div class="bg-white p-3 rounded-xl"><p id="myLikes" class="font-bold">0</p><p class="text-xs">Likes</p></div>
+<div class="bg-white p-3 rounded-xl"><p id="myFollowers" class="font-bold">0</p><p class="text-xs">Followers</p></div>
+<div class="bg-white p-3 rounded-xl"><p id="myProducts" class="font-bold">0</p><p class="text-xs">Products</p></div>
+</div>
+<button onclick="openShop()" class="w-full mt-4 bg-black text-white py-3 rounded-xl">Open Shop - 50 GHS</button>
+<a href="sell.html" class="block w-full mt-2 bg-green-500 text-white py-3 rounded-xl">Upload Product</a>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 text-gray-400 text-xs">
+<button onclick="showTab('home')" id="nav-home" class="active flex flex-col items-center"><i class="fa fa-store text-lg"></i>Shop</button>
+<button onclick="showTab('category')" id="nav-category" class="flex flex-col items-center"><i class="fa fa-list text-lg"></i>Category</button>
+<button onclick="showTab('trend')" id="nav-trend" class="flex flex-col items-center"><i class="fa fa-fire text-lg"></i>Trend</button>
+<button onclick="showTab('cart')" id="nav-cart" class="flex flex-col items-center"><i class="fa fa-shopping-cart text-lg"></i>Cart (<span id="cartCount">0</span>)</button>
+<button onclick="showTab('me')" id="nav-me" class="flex flex-col items-center"><i class="fa fa-user text-lg"></i>Me</button>
+<button onclick="showTab('chats')" id="nav-chats" class="flex flex-col items-center"><i class="fa fa-comments text-lg"></i>Chats</button>
+</nav>
+
+<!-- PRODUCT MODAL -->
+<div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[100] p-4 overflow-y-auto">
+<div class="bg-white rounded-2xl max-w-md mx-auto mt-10 p-4">
+<img id="mImg" class="w-full h-60 object-cover rounded-xl">
+<h2 id="mTitle" class="font-bold text-lg mt-2"></h2>
+<p id="mPrice" class="text-red-600 font-bold"></p>
+<p id="mSeller" class="text-sm text-gray-500"></p>
+<div class="flex gap-2 mt-2">
+<button onclick="likeProduct()" class="flex-1 bg-gray-100 py-2 rounded-xl"><i class="fa fa-heart"></i> <span id="mLikes">0</span></button>
+<button onclick="followSeller()" class="flex-1 bg-black text-white py-2 rounded-xl">Follow Seller</button>
+</div>
+<div class="mt-3">
+<h3 class="font-bold text-sm">Comments & Ratings</h3>
+<div id="mComments" class="space-y-1 mt-2 text-sm"></div>
+<div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Comment..." class="flex-1 border p-2 rounded-xl"><button onclick="addComment()" class="bg-red-600 text-white px-4 rounded-xl">Send</button></div>
+<div class="flex gap-1 mt-2"><span onclick="rate(1)">⭐</span><span onclick="rate(2)">⭐</span><span onclick="rate(3)">⭐</span><span onclick="rate(4)">⭐</span><span onclick="rate(5)">⭐</span></div>
+</div>
+<div class="flex gap-2 mt-4">
+<button onclick="addToCart()" class="flex-1 border py-3 rounded-xl">Add to Cart</button>
+<button id="mWhatsapp" class="flex-1 bg-green-500 text-white py-3 rounded-xl">Buy on WhatsApp</button>
+</div>
+<button onclick="document.getElementById('productModal').classList.add('hidden')" class="w-full mt-2 text-gray-500">Close</button>
+</div>
+</div>
+
 <script>
-let demo=[
-{title:"iPhone 13 Pro",price:4500,cat:"phones",img:"https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=300"},
-{title:"Ladies Dress",price:250,cat:"fashion",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300"},
-{title:"Nike Air Shoes",price:350,cat:"shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300"},
-{title:"Toyota Corolla",price:85000,cat:"cars",img:"https://images.unsplash.com/photo-1550355291-bbee04a92027?w=300"},
-{title:"Luxury Sofa",price:1200,cat:"furniture",img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300"},
-{title:"Jollof Pack",price:50,cat:"food",img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300"},
-{title:"Wall Decor Art",price:300,cat:"home",img:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=300"}
-];
-function render(list){
-let h="";
-list.forEach(p=>{
-h+=`<div class="bg-white rounded-xl p-2 shadow"><img src="${p.img}" class="h-32 w-full object-cover rounded-lg"><b class="text-sm block mt-1">${p.title}</b><p class="text-red-600 font-bold text-sm">₵${p.price}</p><a href="https://wa.me/233245123456?text=I want ${p.title} for ₵${p.price}" class="bg-green-500 text-white text-xs block text-center py-1.5 rounded-full mt-1">WhatsApp Buy</a></div>`;
+let allProducts=[], cart=[], currentProduct=null, currentCat='all';
+function showTab(t){document.querySelectorAll('.tab').forEach(e=>e.classList.add('hidden'));document.getElementById('tab-'+t).classList.remove('hidden');document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById('nav-'+t)?.classList.add('active');}
+function filterCat(c){currentCat=c;showTab('home');renderProducts();}
+function renderProducts(){
+ let list = currentCat=='all'?allProducts:allProducts.filter(p=>p.category==currentCat);
+ let trend = [...allProducts].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,6);
+ document.getElementById('products').innerHTML = list.map(p=>`
+  <div onclick="openProduct('${p.id}')" class="bg-white rounded-xl p-2 shadow">
+   <img src="${p.image}" class="h-32 w-full object-cover rounded-lg">
+   <p class="font-bold text-sm truncate">${p.title}</p>
+   <p class="text-red-600 font-bold text-sm">₵${p.price}</p>
+   <div class="flex justify-between text-xs text-gray-500"><span><i class="fa fa-heart text-red-500"></i> ${p.likes||0}</span><span>★ ${p.rating||5.0}</span></div>
+   <p class="text-[10px] text-green-600">✓ ${p.seller||'Verified Seller'}</p>
+  </div>`).join('');
+ document.getElementById('trendProducts').innerHTML = trend.map(p=>`
+  <div onclick="openProduct('${p.id}')" class="bg-white rounded-xl p-2 shadow border-2 border-orange-400">
+   <img src="${p.image}" class="h-32 w-full object-cover rounded-lg"><p class="font-bold text-sm">${p.title}</p><p class="text-red-600 font-bold">₵${p.price}</p><p class="text-xs text-orange-500">🔥 Trending</p>
+  </div>`).join('');
+}
+onSnapshot(collection(db,"products"),snap=>{
+ allProducts=snap.docs.map(d=>({id:d.id,...d.data()}));
+ renderProducts();
+ document.getElementById('myProducts').innerText=allProducts.length;
 });
-document.getElementById("products").innerHTML=h;
+function openProduct(id){
+ currentProduct=allProducts.find(p=>p.id==id);
+ document.getElementById('mImg').src=currentProduct.image;
+ document.getElementById('mTitle').innerText=currentProduct.title;
+ document.getElementById('mPrice').innerText='₵'+currentProduct.price;
+ document.getElementById('mSeller').innerText=currentProduct.seller+' • '+currentProduct.whatsapp;
+ document.getElementById('mLikes').innerText=currentProduct.likes||0;
+ document.getElementById('mWhatsapp').onclick=()=>{window.open('https://wa.me/'+currentProduct.whatsapp.replace(/[^0-9]/g,'')+'?text=Hi, I want '+currentProduct.title,'_blank')};
+ document.getElementById('productModal').classList.remove('hidden');
+ loadComments();
 }
-function filterCat(c){
-if(c=='all')render(demo);
-else render(demo.filter(i=>i.cat==c));
-}
-render(demo);
+function addToCart(){cart.push(currentProduct);localStorage.setItem('cart',JSON.stringify(cart));updateCart();alert('Added to cart!');}
+function updateCart(){cart=JSON.parse(localStorage.getItem('cart')||'[]');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartList').innerHTML=cart.map(c=>`<div class="bg-white p-2 rounded-xl flex gap-2 mt-2"><img src="${c.image}" class="w-16 h-16 rounded-lg"><div><p class="font-bold text-sm">${c.title}</p><p class="text-red-600">₵${c.price}</p><p class="text-xs">${c.whatsapp}</p></div></div>`).join('');}
+function checkout(){if(!cart.length)return alert('Cart empty');let msg=cart.map(c=>`${c.title} - ₵${c.price}`).join('%0A');let sellerWa=cart[0].whatsapp;window.open(`https://wa.me/${sellerWa.replace(/[^0-9]/g,'')}?text=I want to buy:%0A${msg}`,'_blank');}
+async function likeProduct(){if(!currentProduct)return;let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{likes:(currentProduct.likes||0)+1});}
+async function addComment(){let txt=document.getElementById('commentInput').value;if(!txt)return;let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{comments:arrayUnion({text:txt,user:"Buyer",time:Date.now()})});document.getElementById('commentInput').value='';}
+function loadComments(){document.getElementById('mComments').innerHTML=(currentProduct.comments||[]).map(c=>`<p><b>${c.user}:</b> ${c.text}</p>`).join('');}
+async function rate(n){let ref=doc(db,"products",currentProduct.id);await updateDoc(ref,{rating:n});alert('You rated '+n+' stars! Thank you!');}
+async function followSeller(){alert('You now follow '+currentProduct.seller+'! You will get notifications.');}
+function openShop(){window.open('https://paystack.com/pay/dornny-shop-50','_blank');alert('After paying 50 GHS, send receipt on WhatsApp: +233... to activate your shop. You can then upload unlimited products!');}
+updateCart();
 </script>
 </body>
 </html>
