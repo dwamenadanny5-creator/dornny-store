@@ -1,37 +1,117 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DORNNY</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;background:#f5f5f5;padding-bottom:130px}.top{background:#fff;padding:10px;display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:10}.top input{flex:1;background:#f2f2f2;border:0;border-radius:20px;padding:10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#ddd}.card{background:#fff;cursor:pointer}.card img{width:100%;height:230px;object-fit:cover}.card.t{padding:8px;font-size:11px}.open{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#FFD700;padding:14px 30px;border-radius:30px;font-weight:900;border:0;z-index:20}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:8px 0;z-index:30;border-top:1px solid #ddd}.nav div{font-size:9px;color:#888;text-align:center}.nav div.on{color:#000;font-weight:900}.page{display:none}.page.on{display:block}.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:15px}.modal.on{display:flex}.box{background:#fff;width:100%;max-width:360px;border-radius:14px;overflow:auto;max-height:90vh}.btn{width:92%;margin:6px 4%;padding:12px;border:0;border-radius:10px;font-weight:900}.y{background:#FFD700}.bk{background:#111;color:#fff}.in{width:92%;margin:6px 4%;padding:12px;border:1px solid #ddd;border-radius:10px}.dot{position:absolute;top:-4px;right:-4px;background:red;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center}.notif{background:#fff;padding:12px;border-radius:10px;margin:6px;border-left:4px solid gold}</style></head><body>
-<div class="top"><input id="q" placeholder="Search..." oninput="search()"><div style="position:relative" onclick="tab('notifs')"><span>🔔</span><div id="notifDot" class="dot" style="display:none">0</div></div><span onclick="search()" style="background:#111;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center">⌕</span><span onclick="tab('msgs')">💬</span></div>
-<div id="p-shop" class="page on"><div class="grid" id="grid"></div></div>
-<div id="p-category" class="page"><div style="background:#fff;padding:12px"><h3>Shops ⭐</h3><div id="olist"></div></div></div>
-<div id="p-notifs" class="page"><div style="background:#fff;padding:12px"><h3>Notifications 🔔</h3><button class="btn y" onclick="enablePush()">🔔 ENABLE PHONE NOTIFICATIONS</button><div id="notifList"></div></div></div>
-<div id="p-cart" class="page"><div style="background:#fff;padding:12px"><h3>Cart (<span id="cn">0</span>)</h3><div id="clist"></div></div></div>
-<div id="p-msgs" class="page"><div style="background:#fff;padding:12px"><h3>Messages 💬</h3><div id="chatList"></div><div id="chatBox" style="display:none"><div id="msgs" style="height:250px;overflow:auto;background:#f9f9f9;padding:10px;border-radius:10px"></div><div style="display:flex;gap:6px;margin-top:8px"><input id="msgInput" class="in" style="flex:1;margin:0" placeholder="Type..."><button class="btn bk" style="width:60px;margin:0" onclick="sendMsg()">Send</button></div></div></div></div>
-<div id="p-me" class="page"><div style="background:#fff;padding:12px"><h3>My Shop</h3><div id="meBox"></div><div id="myProds"></div></div></div>
-<button class="open" onclick="openShop()">OPEN SHOP - 50 GHS</button>
-<div class="nav"><div id="n-shop" class="on" onclick="tab('shop')">🏪<br>Shop</div><div id="n-category" onclick="tab('category')">☰<br>Shops</div><div id="n-notifs" onclick="tab('notifs')">🔔<br>Alerts</div><div id="n-cart" onclick="tab('cart')">🛒<br>Cart</div><div id="n-me" onclick="tab('me')">👤<br>Me</div></div>
-<div id="mProd" class="modal" onclick="if(event.target==this)closeProd()"><div class="box"><img id="mi" style="width:100%;height:360px;object-fit:cover"><div style="padding:12px"><h3 id="mn"></h3><p id="mp" style="font-weight:900"></p><p id="ms" style="font-size:11px;background:#f5f5f5;padding:8px;border-radius:8px"></p><button class="btn bk" onclick="addCart()">ADD TO CART</button><button class="btn y" onclick="openChat()">💬 MESSAGE SELLER</button><button class="btn" style="background:#25D366;color:#fff" onclick="buyWA()">BUY WHATSAPP</button><p style="font-size:11px;font-weight:900;margin-top:10px">Rate: <span onclick="rate(5)" style="color:gold;cursor:pointer">★★★★★</span></p><button class="btn" style="background:#eee" onclick="closeProd()">Close</button></div></div></div>
-<div id="mShop" class="modal"><div class="box" style="padding:15px"><h3>Open Shop</h3><input id="oname" class="in" placeholder="Full Name"><input id="oshop" class="in" placeholder="Shop Name"><input id="oemail" class="in" placeholder="Email"><input id="ophone" class="in" placeholder="WhatsApp 059..."><button class="btn y" onclick="regShop()">PAY 50 GHS & OPEN</button><button class="btn" style="background:#eee" onclick="closeShop()">Cancel</button></div></div>
-<div id="mAdd" class="modal"><div class="box" style="padding:15px"><h3>Add Product</h3><input id="aname" class="in" placeholder="Name"><input id="aprice" class="in" type="number" placeholder="Price GH₵"><label style="display:block;width:92%;margin:10px 4%;padding:18px;border:3px dashed gold;border-radius:12px;text-align:center;background:#fffbe6">📷 ADD REAL PHOTO<input id="afile" type="file" accept="image/*" style="display:none" onchange="preview(this)"></label><img id="aprev" style="width:92%;margin:0 4%;height:200px;object-fit:cover;border-radius:10px;display:none"><button class="btn y" onclick="addProd()">POST & NOTIFY ALL USERS 🔔</button><button class="btn" style="background:#eee" onclick="closeAdd()">Cancel</button></div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dornny Store - 15 GHS Referral</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui;background:#f5f5f7;padding-bottom:70px}
+.top{display:flex;gap:8px;padding:10px;background:#fff;position:sticky;top:0;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.top input{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px}
+.page{display:none;padding:12px}.page.on{display:block}
+.card{background:#fff;border-radius:12px;padding:10px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.btn{background:#000;color:#fff;border:none;padding:10px 16px;border-radius:8px;width:100%;margin-top:6px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #eee}
+.nav div{padding:6px 12px;border-radius:20px}.nav.on{background:#000;color:#fff}
+.badge{background:red;color:#fff;border-radius:50%;padding:2px 6px;font-size:10px;margin-left:4px}
+.ref-box{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:12px;padding:16px;margin-bottom:12px}
+.ref-code{font-size:22px;font-weight:bold;letter-spacing:2px;background:rgba(255,255,255,.2);padding:8px;border-radius:8px;text-align:center;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="top"><input id="q" placeholder="Search products..."><button onclick="doSearch()">Search</button></div>
+<div id="p-shop" class="page on">
+<div class="ref-box">
+<h3>🎉 Earn 15 GHS per referral!</h3>
+<p>Your code: <span id="myCode">----</span></p>
+<p>Referred: <span id="refCount">0</span> | Earned: <span id="refEarn">0 GHS</span></p>
+<button onclick="shareRef()" style="background:#fff;color:#667eea;padding:8px 12px;border:none;border-radius:8px;margin-top:8px">Share My Link</button>
+<div style="margin-top:10px"><input id="applyRef" placeholder="Have referral code?"><button onclick="applyReferral()">Apply</button></div>
+</div>
+<div id="shopGrid"></div>
+</div>
+<div id="p-category" class="page"><h2>Categories</h2><div id="catGrid"></div></div>
+<div id="p-cart" class="page"><h2>Cart</h2><div id="cartGrid"></div><button class="btn" onclick="checkout()">Checkout</button></div>
+<div id="p-me" class="page">
+<div class="card"><h3>My Account</h3><p id="meCode"></p><p id="meStats"></p><input id="meRefInput" placeholder="Enter friend code"><button class="btn" onclick="applyReferral()">Apply</button></div>
+<div class="card"><h3>Withdraw</h3><p>Balance: <span id="bal">0 GHS</span></p><button class="btn" onclick="withdraw()">Request Withdrawal</button></div>
+</div>
+<div class="nav">
+<div id="n-shop" class="on" onclick="showPage('p-shop','n-shop')">Shop</div>
+<div id="n-cat" onclick="showPage('p-category','n-cat')">Category</div>
+<div id="n-cart" onclick="showPage('p-cart','n-cart')">Cart <span id="cartBadge" class="badge" style="display:none">0</span></div>
+<div id="n-me" onclick="showPage('p-me','n-me')">Me</div>
+</div>
 <script>
-var def=[{name:"Nike Air Sneakers Red",price:350,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",shop:"Sneaker Hub",owner:"Dornny",phone:"0594221108",rating:4.8},{name:"Baggy Jeans Street",price:150,img:"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",shop:"Jeans Store",owner:"Dornny",phone:"0594221108",rating:4.5},{name:"T-shirt Black Cotton",price:80,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",shop:"Dornny Wear",owner:"Dornny",phone:"0594221108",rating:4.6},{name:"Airmax White",price:300,img:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400",shop:"Sneaker Hub",owner:"Dornny",phone:"0594221108",rating:4.9}];
-var my=JSON.parse(localStorage.getItem("dornny_my")||"[]");var owners=JSON.parse(localStorage.getItem("dornny_owners")||"[]");var curOwner=JSON.parse(localStorage.getItem("dornny_cur")||"null");var notifs=JSON.parse(localStorage.getItem("dornny_notifs")||"[]");var msgs=JSON.parse(localStorage.getItem("dornny_msgs")||"[]");var all=def.concat(my);var cart=[];var cur=null;var tmpImg="";var chatShop=null;
-function build(){all.forEach(function(it,i){it.id=i});draw(all);drawOwners();drawNotifs();drawMe();updateDot();}
-function draw(list){var g=document.getElementById("grid");g.innerHTML="";list.forEach(function(it){g.innerHTML+='<div class="card" onclick="openProd('+it.id+')"><img src="'+it.img+'"><div class="t"><b>'+it.name+'</b> GH₵'+it.price+' ⭐'+it.rating+'</div></div>'})}
-function tab(n){document.querySelectorAll(".page").forEach(function(p){p.classList.remove("on")});document.querySelectorAll(".nav div").forEach(function(d){d.classList.remove("on")});document.getElementById("p-"+n).classList.add("on");var el=document.getElementById("n-"+n);if(el)el.classList.add("on");if(n=="notifs")clearNotifs();}
-function search(){var q=document.getElementById("q").value.toUpperCase();if(!q){draw(all);return}draw(all.filter(function(x){return x.name.toUpperCase().indexOf(q)>=0}))}
-function openProd(id){cur=all.find(function(x){return x.id==id});document.getElementById("mi").src=cur.img;document.getElementById("mn").innerText=cur.name;document.getElementById("mp").innerText="GH₵"+cur.price;document.getElementById("ms").innerHTML=cur.shop+" ⭐"+cur.rating+"<br>"+cur.owner+" "+cur.phone;document.getElementById("mProd").classList.add("on")}
-function closeProd(){document.getElementById("mProd").classList.remove("on")}
-function addCart(){cart.push(cur);document.getElementById("cn").innerText=cart.length;var cl=document.getElementById("clist");var tot=0;cl.innerHTML="";cart.forEach(function(c){tot+=c.price;cl.innerHTML+='<div style="padding:10px;border:1px solid #eee;border-radius:10px;margin:5px 0;display:flex;gap:10px"><img src="'+c.img+'" style="width:50px;height:50px;border-radius:8px"><div><b>'+c.name+'</b><br>GH₵'+c.price+'</div></div>'});cl.innerHTML+='<div style="padding:12px"><b>Total GH₵'+tot+'</b><br><button class="btn bk" onclick="checkout('+tot+')">CHECKOUT & NOTIFY SELLER 🔔</button></div>';closeProd();tab("cart")}
-function checkout(tot){addNotif("🛒 New Order!","New Order GH₵"+tot+" - "+cur.name);addNotif("✅ Order Confirmed","You bought "+cur.name+" GH₵"+tot+" from "+cur.shop);pushNotify("Order Confirmed GH₵"+tot,"You bought "+cur.name);alert("Order placed! Notifications sent 🔔")}
-function buyWA(){var ph=cur.phone.replace(/\D/g,"");if(ph.charAt(0)=="0")ph="233"+ph.substring(1);addNotif("💬 WhatsApp Lead","Someone wants "+cur.name);window.open("https://wa.me/"+ph+"?text=I want "+encodeURIComponent(cur.name))}
-function enablePush(){if("Notification" in window){Notification.requestPermission().then(function(p){if(p=="granted"){alert("✅ Phone notifications ON!");new Notification("DORNNY 🔔",{body:"You will get new products alerts!"})}})}}
-function pushNotify(t,b){if("Notification" in window && Notification.permission=="granted"){new Notification(t,{body:b})}}
-function addNotif(t,b){var n={title:t,body:b,time:new Date().toLocaleString(),read:false};notifs.unshift(n);localStorage.setItem("dornny_notifs",JSON.stringify(notifs));drawNotifs();updateDot();pushNotify(t,b)}
-function drawNotifs(){var l=document.getElementById("notifList");if(!notifs.length){l.innerHTML='<p style="color:#888;font-size:11px">No alerts yet. Tap ENABLE to get phone alerts when sellers post!</p>';return}l.innerHTML="";notifs.forEach(function(n){l.innerHTML+='<div class="notif"><b>'+n.title+'</b><br><span style="font-size:12px">'+n.body+'</span><br><span style="font-size:9px;color:#888">'+n.time+'</span></div>'})}
-function updateDot(){var unread=notifs.filter(function(n){return!n.read}).length;var d=document.getElementById("notifDot");if(unread>0){d.style.display="flex";d.innerText=unread}else{d.style.display="none"}}
-function clearNotifs(){notifs.forEach(function(n){n.read=true});localStorage.setItem("dornny_notifs",JSON.stringify(notifs));updateDot()}
-function openChat(){chatShop=cur.shop;closeProd();tab("msgs");document.getElementById("chatBox").style.display="block";drawMsgs()}
-function sendMsg(){var txt=document.getElementById("msgInput").value;if(!txt)return;msgs.push({shop:chatShop,text:txt,from:"me",time:new Date().toLocaleTimeString()});localStorage.setItem("dornny_msgs",JSON.stringify(msgs));document.getElementById("msgInput").value="";drawMsgs();addNotif("💬 New Message",txt)}
-function drawMsgs(){var box=document.getElementById("msgs");box.innerHTML="";msgs.filter(function(m){return m.shop==chatShop}).forEach(function(m){box.innerHTML+='<div style="padding:8px;border-radius:10px;margin:4px 0;font-size:12px;background:'+(m.from=="me"?"#FFD700;margin-left:auto":"#fff")+'">'+m.text+'<br><span style="font-size:8px">'+m.time+'</span></div>'});box.scrollTop=box.scrollHeight}
-function rate(n){addNotif("⭐ New Rating",cur.shop+" got "+n+" stars!");alert("Rated "+n+" stars!");closeProd()}
-function openShop(){document.getElementById("mShop").classList.add("on")}function closeShop(){document.getElementById("mShop").classList.remove("on")}function openAdd(){if(!curOwner){alert("Open Shop first");openShop();return}document.getElementById("mAdd").classList.add("on")}function closeAdd(){document.getElementById("mAdd").classList.remove("on");tmpImg="";document.getElementById("aprev").style.display="none"}function preview(inp){if(inp.files[0]){var r=new FileReader();r.onload=function(e){tmpImg=e.target.result;document.getElementById("aprev").src=tmpImg;document.getElementById("aprev").style.display="block"};r.readAsDataURL(inp.files[0])}}function regShop(){var n=document.getElementById("oname").value;var s=document.getElementById("oshop").value;var p=document.getElementById("ophone").value;if(!n||!s||!p){alert("Fill all");return}var o={name:n,shop:s,phone:p,email:document.getElementById("oemail").value,rating:5};owners.push(o);curOwner=o;localStorage.setItem("dornny_owners",JSON.stringify(owners));localStorage.setItem("dornny_cur",JSON.stringify(o));closeShop();drawMe();drawOwners();addNotif("🎉 Shop Opened","Welcome "+s+" is live!");pushNotify("Welcome to DORNNY",s+" opened!");tab("me")}function addProd(){var n=document.getElementById("aname").value;var pr=document.getElementById("aprice").value;if(!n||!pr){alert("Fill");return}var it={name:n,price:parseFloat(pr),img:tmpImg||"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",shop:curOwner.shop,owner:curOwner.name,phone:curOwner.phone,rating:5};my.push(it);localStorage.setItem("dornny_my",JSON.stringify(my));all=def.concat(my);build();closeAdd();var msg="New from "+curOwner.shop+": "+n+" GH₵"+pr;addNotif("🆕 New Product!","🔥 "+msg);pushNotify("🆕 New in DORNNY Market!",msg);alert("Product posted! All users notified 🔔");tab("shop")}function drawOwners(){var o=document.getElementById("olist");if(!owners.length){o.innerHTML='<p style="color:#888">No shops yet</p>';return}o.innerHTML="";owners.forEach(function(x){o.innerHTML+='<div style="background:#fff;padding:12px;border-radius:10px;margin:6px 0;border:1px solid #eee"><b>'+x.shop+'</b> ⭐5<br>'+x.name+'</div>'})}function drawMe(){var b=document.getElementById("meBox");var l=document.getElementById("myProds");if(curOwner){b.innerHTML='<div style="background:#111;color:#fff;padding:14px;border-radius:12px"><b>'+curOwner.shop+'</b><br>'+curOwner.name+'<br><button class="btn y" style="margin-top:8px" onclick="openAdd()">+ ADD PRODUCT & NOTIFY USERS 🔔</button></div>';l.innerHTML="";my.forEach(function(it){l.innerHTML+='<div style="background:#fff;padding:10px;border:1px solid #eee;border-radius:10px;margin:6px 0;display:flex;gap:10px"><img src="'+it.img+'" style="width:60px;height:60px;border-radius:8px"><div><b>'+it.name+'</b><br>GH₵'+it.price+'</div></div>'})}else{b.innerHTML='<button class="btn y" onclick="openShop()">OPEN SHOP - 50 GHS</button>';l.innerHTML=""}}build();setTimeout(function(){if("Notification" in window && Notification.permission=="default"){if(confirm("🔔 Enable phone notifications? Get alerts when sellers post!"))enablePush()}},1500);
-</script></body></html>
+var prods=[{name:"Wireless Earbuds",price:120,cat:"Electronics"},{name:"Sneakers Red",price:250,cat:"Fashion"},{name:"Phone Case",price:45,cat:"Accessories"},{name:"Smart Watch",price:300,cat:"Electronics"}];
+var cart=JSON.parse(localStorage.getItem("cart")||"[]");
+var myRef=localStorage.getItem("myRefCode");
+if(!myRef){myRef="DORN"+Math.floor(1000+Math.random()*9000); localStorage.setItem("myRefCode",myRef);}
+var refData=JSON.parse(localStorage.getItem("refData")||'{"count":0,"earned":0,"used":false,"referredBy":null}');
+function showPage(p,n){
+document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
+document.getElementById(p).classList.add('on');
+document.querySelectorAll('.nav div').forEach(e=>e.classList.remove('on'));
+document.getElementById(n).classList.add('on');
+if(p=='p-shop') buildShop();
+if(p=='p-cart') buildCart();
+if(p=='p-me') buildMe();
+}
+function buildShop(list){
+var arr=list||prods;
+var g=document.getElementById('shopGrid'); g.innerHTML="";
+arr.forEach((pr,i)=>{g.innerHTML+='<div class="card"><h4>'+pr.name+'</h4><p>'+pr.price+' GHS - '+pr.cat+'</p><button class="btn" onclick="addCart('+i+')">Add to Cart</button></div>';});
+document.getElementById('myCode').innerText=myRef;
+document.getElementById('refCount').innerText=refData.count;
+document.getElementById('refEarn').innerText=refData.earned+" GHS";
+}
+function buildMe(){
+document.getElementById('meCode').innerText="Your code: "+myRef;
+document.getElementById('meStats').innerText="Referred "+refData.count+" friends, Earned "+refData.earned+" GHS";
+document.getElementById('bal').innerText=refData.earned+" GHS";
+}
+function addCart(i){cart.push(prods[i]); localStorage.setItem("cart",JSON.stringify(cart)); updateBadge(); alert("Added");}
+function updateBadge(){var b=document.getElementById('cartBadge'); if(cart.length>0){b.style.display="inline"; b.innerText=cart.length}else b.style.display="none";}
+function buildCart(){
+var g=document.getElementById('cartGrid'); if(cart.length==0){g.innerHTML="<p>Cart empty</p>";return;}
+g.innerHTML=""; var total=0;
+cart.forEach((pr,idx)=>{total+=pr.price; g.innerHTML+='<div class="card">'+pr.name+' - '+pr.price+' GHS <button onclick="remCart('+idx+')">Remove</button></div>';});
+if(refData.referredBy){g.innerHTML+='<div class="card">Referral Discount: -5 GHS</div>'; total=Math.max(0,total-5);}
+g.innerHTML+='<div class="card"><b>Total: '+total+' GHS</b></div>';
+}
+function remCart(i){cart.splice(i,1); localStorage.setItem("cart",JSON.stringify(cart)); buildCart(); updateBadge();}
+function checkout(){
+if(cart.length==0)return alert("Cart empty");
+if(refData.referredBy &&!refData.firstOrderDone){
+var allRefs=JSON.parse(localStorage.getItem("allReferrals")||"{}");
+var code=refData.referredBy; if(!allRefs[code]) allRefs[code]={count:0,earned:0};
+allRefs[code].count+=1; allRefs[code].earned+=15;
+localStorage.setItem("allReferrals",JSON.stringify(allRefs));
+if(code==myRef){refData.count=allRefs[code].count; refData.earned=allRefs[code].earned;}
+refData.firstOrderDone=true; localStorage.setItem("refData",JSON.stringify(refData));
+alert("Referrer "+code+" earned 15 GHS!");
+}
+alert("Order placed!"); cart=[]; localStorage.setItem("cart",JSON.stringify(cart)); buildCart(); updateBadge();
+}
+function applyReferral(){
+var input=document.getElementById('applyRef')||document.getElementById('meRefInput');
+var code=(input?input.value:"").trim().toUpperCase(); if(!code) return alert("Enter code");
+if(code==myRef) return alert("Cannot use own code"); if(refData.referredBy) return alert("Already used: "+refData.referredBy);
+refData.referredBy=code; localStorage.setItem("refData",JSON.stringify(refData));
+alert("Applied! Code "+code+" - You get 5 GHS off, friend gets 15 GHS after your order!"); buildCart();
+}
+function shareRef(){
+var link=location.origin+location.pathname+"?ref="+myRef;
+if(navigator.share){navigator.share({title:"Join Dornny Store",text:"Use my code "+myRef+" ",url:link})}
+else{prompt("Share this link:",link+" Code: "+myRef)}
+}
+function withdraw(){if(refData.earned<50) return alert("Min 50 GHS. You have "+refData.earned); alert("Withdrawal "+refData.earned+" GHS sent! MoMo soon.");}
+function doSearch(){var q=document.getElementById('q').value.toLowerCase(); var f=prods.filter(p=>p.name.toLowerCase().includes(q)); buildShop(f);}
+var urlParams=new URLSearchParams(location.search); var refParam=urlParams.get('ref');
+if(refParam &&!refData.referredBy && refParam!=myRef){refData.referredBy=refParam.toUpperCase(); localStorage.setItem("refData",JSON.stringify(refData)); setTimeout(()=>alert("Referred by "+refParam+" - 5 GHS discount!"),500);}
+buildShop(); updateBadge();
+var all=JSON.parse(localStorage.getItem("allReferrals")||"{}"); if(all[myRef]){refData.count=all[myRef].count; refData.earned=all[myRef].earned; localStorage.setItem("refData",JSON.stringify(refData));}
+</script>
+</body>
+</html>
