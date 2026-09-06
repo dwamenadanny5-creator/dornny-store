@@ -15,8 +15,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .search button{padding:10px 16px;background:#111;color:#fff;border:none;border-radius:10px;font-weight:600}
 .page{display:none;padding:12px;max-width:600px;margin:0 auto}
 .page.on{display:block}
-.hero-ref{background:linear-gradient(135deg,#111 0%,#333 100%);color:#fff;border-radius:16px;padding:18px;margin:12px 0;position:relative;overflow:hidden}
-.ref-title{font-size:16px;font-weight:800;display:flex;align-items:center;gap:6px}
+.hero-ref{background:linear-gradient(135deg,#111 0%,#333 100%);color:#fff;border-radius:16px;padding:18px;margin:12px 0}
+.ref-title{font-size:16px;font-weight:800}
 .ref-code-box{background:#fff;color:#111;padding:10px 14px;border-radius:10px;font-weight:900;letter-spacing:1.5px;font-size:18px;text-align:center;margin:10px 0;display:flex;justify-content:space-between;align-items:center}
 .ref-stats{display:flex;gap:12px;font-size:13px;opacity:.9;margin-top:6px}
 .ref-stats b{color:#ffeb3b}
@@ -25,10 +25,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .apply-row input{flex:1;padding:10px;border-radius:10px;border:none;outline:none}
 .apply-row button{padding:10px 14px;border-radius:10px;border:none;background:#ffeb3b;color:#111;font-weight:800}
 .products{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.prod{background:#fff;border-radius:16px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;flex-direction:column}
-.prod-img{width:100%;height:110px;background:#f2f2f7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:8px}
+.prod{background:#fff;border-radius:16px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;flex-direction:column;position:relative}
+.prod-badge{position:absolute;top:8px;left:8px;background:#ff3b30;color:#fff;font-size:10px;padding:3px 6px;border-radius:6px;font-weight:800;z-index:2}
+.prod-img{width:100%;height:130px;background:#f2f2f7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:8px;overflow:hidden}
+.prod-img img{width:100%;height:100%;object-fit:contain}
 .prod-name{font-size:13px;font-weight:600;line-height:1.3;height:32px;overflow:hidden}
 .prod-price{font-weight:800;margin-top:6px}
+.prod-old{font-size:11px;color:#888;text-decoration:line-through;margin-left:4px}
 .prod-cat{font-size:11px;color:#888}
 .prod.btn{margin-top:8px;padding:9px;background:#111;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:13px}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
@@ -38,18 +41,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .total-card{background:#111;color:#fff;border-radius:14px;padding:14px;margin-top:10px;display:flex;justify-content:space-between;font-weight:800;font-size:16px}
 .checkout-btn{width:100%;padding:14px;background:#ff3b30;color:#fff;border:none;border-radius:14px;font-weight:800;font-size:16px;margin-top:12px}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:8px 0 10px;z-index:100}
-.nav-item{text-align:center;padding:6px 16px;border-radius:20px;font-size:12px;color:#888;transition:.2s}
+.nav-item{text-align:center;padding:6px 16px;border-radius:20px;font-size:12px;color:#888}
 .nav-item.on{background:#111;color:#fff}
 .nav-item b{display:block;font-size:18px}
 .badge{background:#ff3b30;color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:4px;vertical-align:middle}
 .me-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.featured{grid-column:1 / -1;display:flex;gap:12px;background:#fff;border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);border:2px solid #111}
+.featured.prod-img{width:120px;height:120px;flex-shrink:0}
 </style>
 </head>
 <body>
-<div class="header">
-<div class="logo">DORNNY<span>.</span></div>
-<div class="search"><input id="q" placeholder="Search products"><button onclick="doSearch()">Search</button></div>
-</div>
+<div class="header"><div class="logo">DORNNY<span>.</span></div><div class="search"><input id="q" placeholder="Search products"><button onclick="doSearch()">Search</button></div></div>
 <div id="p-shop" class="page on">
 <div class="hero-ref">
 <div class="ref-title">🎉 Earn 15 GHS per friend</div>
@@ -75,6 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 <script>
 var prods=[
+{name:"New SIM Card Supported Smart Watch Phone",price:370,oldPrice:770,discount:"-52%",cat:"Electronics",emoji:"⌚",badge:"Festival Deal",featured:true,img:"watch_thumb.jpg"},
 {name:"Wireless Earbuds Pro",price:120,cat:"Electronics",emoji:"🎧"},
 {name:"Red Running Sneakers",price:250,cat:"Fashion",emoji:"👟"},
 {name:"Leather Phone Case",price:45,cat:"Accessories",emoji:"📱"},
@@ -89,90 +92,22 @@ var myRef=localStorage.getItem("myRefCode");
 if(!myRef){myRef="DORN"+Math.floor(1000+Math.random()*9000); localStorage.setItem("myRefCode",myRef);}
 var refData=JSON.parse(localStorage.getItem("refData")||'{"count":0,"earned":0,"referredBy":null,"firstOrderDone":false}');
 var allRefs=JSON.parse(localStorage.getItem("allReferrals")||"{}");
-function showPage(p,n){
-document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
-document.getElementById(p).classList.add('on');
-document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('on'));
-document.getElementById(n).classList.add('on');
-if(p==='p-shop') buildShop();
-if(p==='p-category') buildCats();
-if(p==='p-cart') buildCart();
-if(p==='p-me') buildMe();
-}
-function buildShop(list){
-var arr=list||prods;
-var g=document.getElementById('shopGrid'); g.innerHTML="";
-arr.forEach((pr,i)=>{
-var idx=prods.indexOf(pr); if(idx===-1) idx=i;
-g.innerHTML+='<div class="prod"><div class="prod-img">'+pr.emoji+'</div><div class="prod-name">'+pr.name+'</div><div class="prod-cat">'+pr.cat+'</div><div class="prod-price">'+pr.price+' GHS</div><button class="btn" onclick="addCart('+idx+')">Add to Cart</button></div>';
-});
-document.getElementById('myCode').innerText=myRef;
-document.getElementById('refCount').innerText=refData.count;
-document.getElementById('refEarn').innerText=refData.earned+" GHS";
-}
-function buildCats(){
-var cats=[...new Set(prods.map(p=>p.cat))];
-var g=document.getElementById('catGrid'); g.innerHTML="";
-cats.forEach(c=>{g.innerHTML+='<div class="cat-card" onclick="filterCat(\''+c+'\')">'+c+'</div>';});
-}
+function showPage(p,n){document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));document.getElementById(p).classList.add('on');document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('on'));document.getElementById(n).classList.add('on');if(p==='p-shop') buildShop();if(p==='p-category') buildCats();if(p==='p-cart') buildCart();if(p==='p-me') buildMe();}
+function buildShop(list){var arr=list||prods;var g=document.getElementById('shopGrid'); g.innerHTML="";arr.forEach((pr,i)=>{var idx=prods.indexOf(pr); if(idx===-1) idx=i;var imgHtml=pr.img? '<img src="'+pr.img+'" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'"><span style=\'display:none\'>'+pr.emoji+'</span>' : pr.emoji;var badge=pr.badge? '<div class="prod-badge">'+pr.badge+'</div>' : (pr.discount?'<div class="prod-badge">'+pr.discount+'</div>':'');var oldP=pr.oldPrice?'<span class="prod-old">'+pr.oldPrice+' GHS</span>':'';if(pr.featured){g.innerHTML+='<div class="featured">'+badge+'<div class="prod-img">'+imgHtml+'</div><div class="featured-info"><div style="background:#ffeb3b;color:#111;font-size:10px;padding:2px 6px;border-radius:6px;display:inline-block;font-weight:800;margin-bottom:4px">'+(pr.badge||'HOT DEAL')+'</div><div class="prod-name" style="height:auto;font-size:14px">'+pr.name+'</div><div style="margin:6px 0"><span class="prod-price" style="font-size:18px">GH₵ '+pr.price+'</span>'+oldP+' <span style="background:#ff3b30;color:#fff;padding:2px 6px;border-radius:6px;font-size:11px">'+(pr.discount||'')+'</span></div><div style="font-size:11px;color:#0a0">In stock • SIM Supported</div><button class="btn" style="background:#ff3b30;width:100%;padding:10px;border:none;border-radius:10px;color:#fff;font-weight:800;margin-top:8px" onclick="addCart('+idx+')">Add To Cart</button></div></div>';}else{g.innerHTML+='<div class="prod">'+badge+'<div class="prod-img">'+imgHtml+'</div><div class="prod-name">'+pr.name+'</div><div class="prod-cat">'+pr.cat+'</div><div><span class="prod-price">'+pr.price+' GHS</span>'+oldP+'</div><button class="btn" onclick="addCart('+idx+')">Add to Cart</button></div>';}});document.getElementById('myCode').innerText=myRef;document.getElementById('refCount').innerText=refData.count;document.getElementById('refEarn').innerText=refData.earned+" GHS";}
+function buildCats(){var cats=[...new Set(prods.map(p=>p.cat))];var g=document.getElementById('catGrid'); g.innerHTML="";cats.forEach(c=>{g.innerHTML+='<div class="cat-card" onclick="filterCat(\''+c+'\')">'+c+'</div>';});}
 function filterCat(c){var f=prods.filter(p=>p.cat===c); showPage('p-shop','n-shop'); buildShop(f);}
 function addCart(i){cart.push(prods[i]); saveCart(); alert(prods[i].name+" added!"); }
 function saveCart(){localStorage.setItem("d_cart",JSON.stringify(cart)); updateBadge();}
-function updateBadge(){
-var b=document.getElementById('cartBadge'), c=document.getElementById('cartCount');
-if(cart.length>0){b.style.display="inline"; b.innerText=cart.length; c.innerText=cart.length}else{b.style.display="none"; c.innerText="0";}
-}
-function buildCart(){
-var g=document.getElementById('cartGrid'), t=document.getElementById('cartTotal');
-if(cart.length===0){g.innerHTML='<div class="empty">🛒<br>Cart empty<br><small>Add products from Shop</small></div>'; t.innerHTML=""; return;}
-g.innerHTML=""; var total=0;
-cart.forEach((pr,idx)=>{total+=pr.price; g.innerHTML+='<div class="cart-item"><div><b>'+pr.name+'</b><br><small>'+pr.price+' GHS</small></div><button onclick="remCart('+idx+')" style="padding:6px 10px;border:none;background:#ffe5e5;border-radius:8px">✕</button></div>';});
-var discount=0; if(refData.referredBy) discount=5;
-if(discount>0){g.innerHTML+='<div class="cart-item" style="background:#e8ffe8"><div>Referral Discount ('+refData.referredBy+')</div><div>-'+discount+' GHS</div></div>'; total=Math.max(0,total-discount);}
-t.innerHTML='<div class="total-card"><span>Total</span><span>'+total+' GHS</span></div>';
-}
+function updateBadge(){var b=document.getElementById('cartBadge'), c=document.getElementById('cartCount');if(cart.length>0){b.style.display="inline"; b.innerText=cart.length; c.innerText=cart.length}else{b.style.display="none"; c.innerText="0";}}
+function buildCart(){var g=document.getElementById('cartGrid'), t=document.getElementById('cartTotal');if(cart.length===0){g.innerHTML='<div class="empty">🛒<br>Cart empty<br><small>Add products from Shop</small></div>'; t.innerHTML=""; return;}g.innerHTML=""; var total=0;cart.forEach((pr,idx)=>{total+=pr.price; g.innerHTML+='<div class="cart-item"><div><b>'+pr.name+'</b><br><small>'+pr.price+' GHS</small></div><button onclick="remCart('+idx+')" style="padding:6px 10px;border:none;background:#ffe5e5;border-radius:8px">✕</button></div>';});var discount=0; if(refData.referredBy) discount=5;if(discount>0){g.innerHTML+='<div class="cart-item" style="background:#e8ffe8"><div>Referral Discount ('+refData.referredBy+')</div><div>-'+discount+' GHS</div></div>'; total=Math.max(0,total-discount);}t.innerHTML='<div class="total-card"><span>Total</span><span>'+total+' GHS</span></div>';}
 function remCart(i){cart.splice(i,1); saveCart(); buildCart();}
-function checkout(){
-if(cart.length===0) return alert("Cart empty");
-if(refData.referredBy &&!refData.firstOrderDone){
-var code=refData.referredBy;
-if(!allRefs[code]) allRefs[code]={count:0,earned:0};
-allRefs[code].count+=1; allRefs[code].earned+=15;
-localStorage.setItem("allReferrals",JSON.stringify(allRefs));
-if(code===myRef){refData.count=allRefs[code].count; refData.earned=allRefs[code].earned;}
-refData.firstOrderDone=true; localStorage.setItem("refData",JSON.stringify(refData));
-alert("🎉 Your referrer "+code+" earned 15 GHS! You got 5 GHS off!");
-}
-alert("✅ Order placed! Thank you!");
-cart=[]; saveCart(); buildCart();
-}
-function applyReferral(){
-var el1=document.getElementById('applyRef'), el2=document.getElementById('meRefInput');
-var code=((el1&&el1.value)||(el2&&el2.value)||"").trim().toUpperCase();
-if(!code) return alert("Enter referral code");
-if(code===myRef) return alert("Cannot use own code");
-if(refData.referredBy) return alert("Already used code: "+refData.referredBy);
-refData.referredBy=code; localStorage.setItem("refData",JSON.stringify(refData));
-alert("✅ Applied! "+code+" - You get 5 GHS off, friend gets 15 GHS after your first order!");
-if(el1) el1.value=""; if(el2) el2.value=""; buildCart();
-}
-function shareRef(){
-var link=location.href.split('?')[0]+"?ref="+myRef;
-var text="Join Dornny Store! Use my code "+myRef+" for 5 GHS off 🛍️ "+link;
-if(navigator.share){navigator.share({title:"Dornny Store",text:text,url:link});}
-else{prompt("Share this link to earn 15 GHS per friend:",text);}
-}
+function checkout(){if(cart.length===0) return alert("Cart empty");if(refData.referredBy &&!refData.firstOrderDone){var code=refData.referredBy;if(!allRefs[code]) allRefs[code]={count:0,earned:0};allRefs[code].count+=1; allRefs[code].earned+=15;localStorage.setItem("allReferrals",JSON.stringify(allRefs));if(code===myRef){refData.count=allRefs[code].count; refData.earned=allRefs[code].earned;}refData.firstOrderDone=true; localStorage.setItem("refData",JSON.stringify(refData));alert("🎉 Your referrer "+code+" earned 15 GHS! You got 5 GHS off!");}alert("✅ Order placed! Thank you!");cart=[]; saveCart(); buildCart();}
+function applyReferral(){var el1=document.getElementById('applyRef'), el2=document.getElementById('meRefInput');var code=((el1&&el1.value)||(el2&&el2.value)||"").trim().toUpperCase();if(!code) return alert("Enter referral code");if(code===myRef) return alert("Cannot use own code");if(refData.referredBy) return alert("Already used code: "+refData.referredBy);refData.referredBy=code; localStorage.setItem("refData",JSON.stringify(refData));alert("✅ Applied! "+code+" - You get 5 GHS off, friend gets 15 GHS after your first order!");if(el1) el1.value=""; if(el2) el2.value=""; buildCart();}
+function shareRef(){var link=location.href.split('?')[0]+"?ref="+myRef;var text="Join Dornny Store! Use my code "+myRef+" for 5 GHS off 🛍️ "+link;if(navigator.share){navigator.share({title:"Dornny Store",text:text,url:link});}else{prompt("Share this link to earn 15 GHS per friend:",text);}}
 function withdraw(){if(refData.earned<50) return alert("Min withdrawal 50 GHS. You have "+refData.earned+" GHS. Refer more friends!"); alert("✅ Withdrawal request for "+refData.earned+" GHS sent! MoMo payment in 24h.");}
 function doSearch(){var q=document.getElementById('q').value.toLowerCase(); if(!q) return buildShop(); var f=prods.filter(p=>p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)); buildShop(f);}
-function buildMe(){
-document.getElementById('meCode').innerText="Your referral code: "+myRef;
-document.getElementById('meStats').innerText="Referred "+refData.count+" friends";
-document.getElementById('bal').innerText=refData.earned+" GHS";
-}
-var params=new URLSearchParams(location.search); var refParam=params.get('ref');
-if(refParam &&!refData.referredBy && refParam.toUpperCase()!==myRef){refData.referredBy=refParam.toUpperCase(); localStorage.setItem("refData",JSON.stringify(refData)); setTimeout(()=>alert("👋 Welcome! Referred by "+refParam+" - You get 5 GHS discount on first order!"),800);}
-if(allRefs[myRef]){refData.count=allRefs[myRef].count; refData.earned=allRefs[myRef].earned; localStorage.setItem("refData",JSON.stringify(refData));}
-buildShop(); updateBadge(); buildMe();
+function buildMe(){document.getElementById('meCode').innerText="Your referral code: "+myRef;document.getElementById('meStats').innerText="Referred "+refData.count+" friends";document.getElementById('bal').innerText=refData.earned+" GHS";}
+var params=new URLSearchParams(location.search); var refParam=params.get('ref');if(refParam &&!refData.referredBy && refParam.toUpperCase()!==myRef){refData.referredBy=refParam.toUpperCase(); localStorage.setItem("refData",JSON.stringify(refData)); setTimeout(()=>alert("👋 Welcome! Referred by "+refParam+" - You get 5 GHS discount on first order!"),800);}if(allRefs[myRef]){refData.count=allRefs[myRef].count; refData.earned=allRefs[myRef].earned; localStorage.setItem("refData",JSON.stringify(refData));}buildShop(); updateBadge(); buildMe();
 </script>
 </body>
 </html>
