@@ -2,62 +2,42 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sell - DORNNY MARKET</title>
+<title>Upload - DORNNY</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
-  authDomain: "dornnysmarket.firebaseapp.com",
-  projectId: "dornnysmarket",
-  storageBucket: "dornnysmarket.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcd"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-window.upload=async()=>{
-let s=document.getElementById('shop').value;
-let w=document.getElementById('whatsapp').value;
-let t=document.getElementById('title').value;
-let p=document.getElementById('price').value;
-let c=document.getElementById('category').value;
-let i=document.getElementById('image').value;
-if(!s||!w||!t||!p||!i){alert('Please fill ALL fields!');return;}
-await addDoc(collection(db,"products"),{seller:s,whatsapp:w,title:t,price:p,category:c,image:i,likes:0,rating:5,comments:[],time:Date.now()});
-alert('✅ Product Uploaded! Buyers will see it now in Shop + Category + Trend!');
-location.href='index.html';
-}
-</script>
 </head>
 <body class="bg-gray-100 p-4">
-<h1 class="font-black text-xl text-center">Upload Product</h1>
-<p class="text-center text-sm text-gray-500">DORNNY MARKET - Sellers upload here</p>
-<div class="bg-white p-4 rounded-2xl mt-4 space-y-3 shadow max-w-md mx-auto">
-<input id="shop" placeholder="Shop Name e.g. Danny Fashion" class="w-full border p-3 rounded-xl">
-<input id="whatsapp" placeholder="Your WhatsApp Number e.g. 233245123456" class="w-full border p-3 rounded-xl">
-<input id="title" placeholder="Product Name e.g. iPhone 14" class="w-full border p-3 rounded-xl">
-<input id="price" type="number" placeholder="Price in GHS e.g. 3500" class="w-full border p-3 rounded-xl">
-<select id="category" class="w-full border p-3 rounded-xl">
-<option value="fashion">Fashion</option>
-<option value="phones">Phones</option>
-<option value="shoes">Shoes</option>
-<option value="food">Food</option>
-<option value="furniture">Furniture</option>
-<option value="cars">Cars</option>
-<option value="home">Home Decoration</option>
+<script>
+let regPaid=localStorage.getItem('dm_reg_paid')=='yes';
+let exp=localStorage.getItem('dm_monthly_expiry');
+let active=exp && new Date()<new Date(exp);
+if(!regPaid){alert('Pay 50 GHS Registration first! Go to Me tab');location.href='index.html';}
+else if(!active){alert('Monthly 50 GHS expired! Pay in Me tab');location.href='index.html';}
+</script>
+<div class="max-w-[500px] mx-auto bg-white p-4 rounded-2xl shadow">
+<h1 class="font-bold text-xl text-center">Upload Product</h1>
+<p class="text-xs text-center text-green-600">✅ 50 GHS Reg + 50 GHS Monthly Paid</p>
+<input id="sName" placeholder="Shop Name" class="w-full border p-3 rounded-xl mt-4 mb-2 text-sm">
+<input id="sPhone" placeholder="WhatsApp Number" class="w-full border p-3 rounded-xl mb-2 text-sm">
+<input id="pTitle" placeholder="Product Name e.g. Bed" class="w-full border p-3 rounded-xl mb-2 text-sm">
+<input id="pPrice" type="number" placeholder="Price GHS e.g. 32" class="w-full border p-3 rounded-xl mb-2 text-sm">
+<select id="pCat" class="w-full border p-3 rounded-xl mb-3 text-sm bg-gray-100">
+<option value="home">Home Decoration</option><option value="fashion">Fashion</option><option value="phones">Phones</option><option value="shoes">Shoes</option><option value="food">Food</option><option value="electronics">Electronics</option><option value="furniture">Furniture</option><option value="cars">Cars</option>
 </select>
-<input id="image" placeholder="Image Link - paste from Google or imgbb.com" class="w-full border p-3 rounded-xl">
-<p class="text-xs text-gray-500">How to get image link: Go to google.com, search product, long press image -> Copy image link -> Paste here</p>
-<button onclick="upload()" class="w-full bg-green-500 text-white py-3 rounded-xl font-bold text-lg">UPLOAD TO MARKET</button>
-<a href="index.html" class="block text-center mt-3 text-red-600 font-bold">← Back to Shop</a>
+<div class="border-2 border-dashed rounded-xl p-4 text-center">
+<p class="text-sm font-bold">📸 Choose from Gallery / Files</p>
+<input id="fileInput" type="file" accept="image/*" class="hidden" onchange="handleFile(this)">
+<button onclick="document.getElementById('fileInput').click()" class="bg-black text-white px-5 py-2 rounded-full text-sm mt-2">Select Image</button>
+<div id="preview" class="hidden mt-3"><img id="prevImg" class="w-full h-48 object-cover rounded-xl"><p class="text-xs text-green-600 mt-1">✅ Image selected from gallery</p></div>
 </div>
-<div class="max-w-md mx-auto mt-4 bg-yellow-100 p-3 rounded-xl text-xs">
-<b>After upload:</b><br>
-- Your product will show in Shop immediately<br>
-- Buyers click your product -> See WhatsApp Buy button -> They chat you directly<br>
-- You pay 50 GHS only once to open shop (click Me tab)
+<div class="text-center text-xs my-2 text-gray-400">OR paste Google link</div>
+<input id="pImgLink" placeholder="Paste image link (optional)" class="w-full border p-3 rounded-xl mb-3 text-sm bg-gray-50">
+<button onclick="doUpload()" class="bg-green-500 text-white w-full py-3 rounded-full font-bold">UPLOAD TO MARKET</button>
+<a href="index.html" class="block text-center text-red-600 font-bold mt-4 text-sm">← Back to Shop</a>
 </div>
+<script>
+let selectedBase64="";
+function handleFile(input){let file=input.files[0];if(!file)return;let reader=new FileReader();reader.onload=e=>{selectedBase64=e.target.result;document.getElementById('prevImg').src=selectedBase64;document.getElementById('preview').classList.remove('hidden');};reader.readAsDataURL(file);}
+function doUpload(){let name=document.getElementById('sName').value||localStorage.getItem('dm_name')||'Shop';let phone=document.getElementById('sPhone').value||localStorage.getItem('dm_phone')||'059...';let title=document.getElementById('pTitle').value;let price=document.getElementById('pPrice').value;let cat=document.getElementById('pCat').value;let link=document.getElementById('pImgLink').value;if(!title||!price)return alert('Enter title & price');if(!selectedBase64&&!link)return alert('Select image from gallery');let finalImg=selectedBase64||link;let product={title,price,cat,img:finalImg,shop:name,likes:0,rating:5.0};let list=JSON.parse(localStorage.getItem('dm_user_products')||'[]');list.push(product);localStorage.setItem('dm_user_products',JSON.stringify(list));alert('✅ Uploaded '+title+' - Now in Shop');location.href='index.html';}
+</script>
 </body>
 </html>
