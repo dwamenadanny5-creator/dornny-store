@@ -2,61 +2,58 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sell on Dornny Market</title>
-<style>
-body{font-family:Arial;padding:15px;background:#f5f5f5}
-.box{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-input,select,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
-button{width:100%;padding:14px;background:#ff0000;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold}
-h2{text-align:center;color:#333}
-.note{background:#fff3cd;padding:10px;border-radius:8px;font-size:13px;margin:10px 0}
-</style>
+<title>Sell - Dornny's Market</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="box">
-<h2>📦 +SELL on Dornny Market</h2>
-<div class="note">💡 Can't upload? WhatsApp Danny: <b>055... your number</b></div>
-<form id="sellForm">
-<input type="text" id="pName" placeholder="Product Name e.g. iPhone 13 Pro" required>
-<input type="number" id="pPrice" placeholder="Price in GHc e.g. 3500" required>
-<select id="pCategory" required>
-<option value="">Select Category</option>
-<option>Electronics</option><option>Fashion</option><option>Shoes & Sneakers</option><option>Phones</option><option>Home</option><option>Other</option>
-</select>
-<input type="text" id="pWhatsApp" placeholder="Your WhatsApp e.g. 0551234567" required>
-<input type="text" id="pLocation" placeholder="Location e.g. Accra, Circle" required>
-<input type="file" id="pImage" accept="image/*" required>
-<textarea id="pDesc" placeholder="Small description (optional)"></textarea>
-<button type="submit">🚀 Submit for Approval</button>
-</form>
-<p style="text-align:center;font-size:12px;color:gray">Your product will be reviewed within 1 hour</p>
+<body class="bg-gray-100 p-4">
+<div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow">
+<h2 class="text-2xl font-bold mb-4">Sell Your Item</h2>
+<input id="name" placeholder="Product Name" class="w-full p-3 border rounded mb-3">
+<input id="price" type="number" placeholder="Price GHS" class="w-full p-3 border rounded mb-3">
+<input id="category" placeholder="Category" class="w-full p-3 border rounded mb-3">
+<input id="whatsapp" placeholder="Your WhatsApp e.g. 0244..." class="w-full p-3 border rounded mb-3">
+<textarea id="desc" placeholder="Description" class="w-full p-3 border rounded mb-3"></textarea>
+<input id="image" type="file" accept="image/*" class="w-full p-3 border rounded mb-3">
+<img id="preview" class="hidden w-full h-48 object-cover rounded mb-3">
+<button id="submitBtn" class="w-full bg-black text-white p-3 rounded-xl font-bold">Upload Product</button>
+<p id="status" class="text-center mt-3"></p>
+<a href="/" class="block text-center mt-4 text-sm underline">Back to Market</a>
 </div>
-<script>
-document.getElementById('sellForm').onsubmit = function(e){
- e.preventDefault();
- const file = document.getElementById('pImage').files[0];
- const reader = new FileReader();
- reader.onload = function(ev){
-   let product = {
-     id: Date.now(),
-     name: document.getElementById('pName').value,
-     price: document.getElementById('pPrice').value,
-     category: document.getElementById('pCategory').value,
-     whatsapp: document.getElementById('pWhatsApp').value,
-     location: document.getElementById('pLocation').value,
-     desc: document.getElementById('pDesc').value,
-     image: ev.target.result,
-     status: 'pending',
-     date: new Date().toLocaleString()
-   };
-   let pending = JSON.parse(localStorage.getItem('dornny_pending')||'[]');
-   pending.push(product);
-   localStorage.setItem('dornny_pending', JSON.stringify(pending));
-   alert('✅ Success! Sent to Dornny for approval!');
-   window.location.href = 'index.html';
- }
- reader.readAsDataURL(file);
-}
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
+  authDomain: "dornnysmarket.firebaseapp.com",
+  projectId: "dornnysmarket",
+  storageBucket: "dornnysmarket.firebasestorage.app",
+  messagingSenderId: "726307073658",
+  appId: "1:726307073658:web:957d1225916799d9fa95c3",
+  measurementId: "G-WYVEH8VG5V"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let base64Image = "";
+document.getElementById('image').addEventListener('change', e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{ base64Image = ev.target.result; document.getElementById('preview').src=base64Image; document.getElementById('preview').classList.remove('hidden'); };
+  reader.readAsDataURL(file);
+});
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const name=document.getElementById('name').value.trim();
+  const price=document.getElementById('price').value.trim();
+  const category=document.getElementById('category').value.trim();
+  const whatsapp=document.getElementById('whatsapp').value.trim();
+  const desc=document.getElementById('desc').value.trim();
+  const status=document.getElementById('status');
+  if(!name||!price||!whatsapp||!base64Image){status.innerText="Fill all fields + image"; return;}
+  status.innerText="Uploading..."; document.getElementById('submitBtn').disabled=true;
+  try{
+    await addDoc(collection(db,"products"),{name,price:Number(price),category,whatsapp,desc,image:base64Image,createdAt:serverTimestamp(),approved:true});
+    status.innerText="✅ Uploaded! Redirecting..."; setTimeout(()=>{window.location.href="/";},2000);
+  }catch(err){ status.innerText="Error: "+err.message; document.getElementById('submitBtn').disabled=false; }
+});
 </script>
 </body>
 </html>
