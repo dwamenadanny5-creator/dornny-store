@@ -4,13 +4,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DORNNY MARKET</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}</style>
 </head>
 <body class="bg-gray-100 pb-24">
 <div class="bg-white p-3 sticky top-0 z-20 shadow">
 <div class="flex justify-between items-center"><b class="text-red-600 text-xl">DORNNY MARKET</b><div class="flex gap-2"><button onclick="showPage('notif')">🔔</button><a href="sell.html" class="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-bold">+SELL</a></div></div>
 <input id="search" oninput="doSearch()" placeholder="Search iPhone, dress..." class="w-full mt-2 bg-gray-100 border rounded-full px-4 py-2 text-sm outline-none">
 </div>
-<div class="flex gap-2 p-2 overflow-auto bg-white sticky top-[88px] z-10" style="scrollbar-width:none">
+<div class="flex gap-2 p-2 overflow-auto bg-white sticky top-[88px] z-10 no-scrollbar">
 <button onclick="filterCat('all')" class="cat bg-black text-white px-4 py-1.5 rounded-full text-sm">All</button>
 <button onclick="filterCat('fashion')" class="cat bg-gray-200 px-4 py-1.5 rounded-full text-sm">Fashion</button>
 <button onclick="filterCat('phones')" class="cat bg-gray-200 px-4 py-1.5 rounded-full text-sm">Phones</button>
@@ -22,40 +23,28 @@
 <button onclick="filterCat('cars')" class="cat bg-gray-200 px-4 py-1.5 rounded-full text-sm">Cars</button>
 </div>
 <div id="products" class="grid grid-cols-2 gap-3 p-3"></div>
-<div id="p-category" class="hidden p-4"><h2 class="font-bold">Categories</h2><div class="grid grid-cols-2 gap-3 mt-3"><div onclick="filterCat('fashion');showPage('shop')" class="bg-white p-6 rounded-xl shadow text-center">👗 Fashion</div><div onclick="filterCat('phones');showPage('shop')" class="bg-white p-6 rounded-xl shadow text-center">📱 Phones</div><div onclick="filterCat('shoes');showPage('shop')" class="bg-white p-6 rounded-xl shadow text-center">👟 Shoes</div><div onclick="filterCat('electronics');showPage('shop')" class="bg-white p-6 rounded-xl shadow text-center">💻 Electronics</div></div></div>
+<div id="p-category" class="hidden p-4"><h2 class="font-bold">Categories</h2><div class="grid grid-cols-2 gap-3 mt-3"><div onclick="filterCat('fashion');showPage('shop')" class="bg-white p-6 rounded-xl shadow text-center">👗 Fashion</div><div onclick="filterCat('phones');showPage('shop')" class="bg-white p-6 rounded-xl shadow text-center">📱 Phones</div></div></div>
 <div id="p-trend" class="hidden p-4"><h2 class="font-bold">🔥 Trending</h2><div id="trendList" class="grid grid-cols-2 gap-3 mt-3"></div></div>
 <div id="p-cart" class="hidden p-4"><h2 class="font-bold">Cart (<span id="cCount">0</span>)</h2><div id="cList" class="mt-3"></div></div>
-<div id="p-chats" class="hidden p-4"><h2 class="font-bold">💬 Following / Chats</h2><div id="chatList" class="mt-3"></div></div>
-<div id="p-notif" class="hidden p-4"><h2 class="font-bold">🔔 Info</h2><div class="bg-white p-3 rounded-xl mt-3 shadow text-sm">Pay 50 GHS registration + 50 GHS monthly to sell</div></div>
-
+<div id="p-chats" class="hidden p-4"><h2 class="font-bold">💬 Following</h2><div id="chatList" class="mt-3"></div></div>
+<div id="p-notif" class="hidden p-4"><h2 class="font-bold">🔔 Info</h2><div class="bg-white p-3 rounded-xl mt-3 shadow text-sm">Pay 50 GHS reg + 50 GHS monthly to sell</div></div>
 <div id="p-me" class="hidden p-4">
 <h2 class="font-bold">My Profile</h2>
-<div id="regPayBox" class="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-xl mt-3">
-<h3 class="font-bold text-center">STEP 1: Registration 50 GHS</h3>
-<div class="bg-white p-3 rounded-lg mt-3 text-sm"><p><b>MoMo:</b> 0594221108</p><p><b>Amount:</b> 50 GHS One-time</p></div>
-<input id="regMomoId" placeholder="Transaction ID - 50 GHS Reg" class="w-full border p-2 rounded mt-3 text-sm">
-<button onclick="payForReg()" class="bg-black text-white w-full py-3 rounded-full font-bold mt-2">Pay 50 GHS Registration</button>
-</div>
-<div id="monthlyBox" class="hidden bg-blue-50 border-2 border-blue-400 p-4 rounded-xl mt-3">
-<h3 class="font-bold text-center">STEP 2: Monthly 50 GHS</h3>
-<div class="bg-white p-3 rounded-lg mt-3 text-sm"><p><b>MoMo:</b> 0594221108</p><p><b>Monthly:</b> 50 GHS / 30 days</p><p id="monthlyStatus" class="text-xs mt-1"></p></div>
-<input id="monthlyMomoId" placeholder="Transaction ID - 50 GHS Monthly" class="w-full border p-2 rounded mt-3 text-sm">
-<button onclick="payMonthly()" class="bg-blue-600 text-white w-full py-3 rounded-full font-bold mt-2">Pay 50 GHS Monthly</button>
-</div>
-<div id="regFormBox" class="hidden bg-white p-4 rounded-xl mt-3 shadow">
-<div id="activeBadge" class="bg-green-100 text-green-700 text-xs p-2 rounded text-center mb-3"></div>
-<input id="uName" placeholder="Your Shop Name" class="w-full border p-2 rounded mb-2">
-<input id="uPhone" placeholder="WhatsApp 059..." class="w-full border p-2 rounded mb-2">
-<button onclick="doRegister()" class="bg-red-600 text-white w-full py-2 rounded-full">Save Profile</button>
-<p id="uStatus" class="text-sm text-green-600 mt-2"></p>
-<div id="followedList" class="mt-3 text-sm"></div>
-</div>
+<div id="regPayBox" class="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-xl mt-3"><h3 class="font-bold text-center">STEP 1: Registration 50 GHS</h3><div class="bg-white p-3 rounded-lg mt-3 text-sm"><p><b>MoMo:</b> 0594221108</p><p><b>Amount:</b> 50 GHS One-time</p></div><input id="regMomoId" placeholder="Transaction ID - 50 GHS Reg" class="w-full border p-2 rounded mt-3 text-sm"><button onclick="payForReg()" class="bg-black text-white w-full py-3 rounded-full font-bold mt-2">Pay 50 GHS Registration</button></div>
+<div id="monthlyBox" class="hidden bg-blue-50 border-2 border-blue-400 p-4 rounded-xl mt-3"><h3 class="font-bold text-center">STEP 2: Monthly 50 GHS</h3><div class="bg-white p-3 rounded-lg mt-3 text-sm"><p><b>MoMo:</b> 0594221108</p><p><b>Monthly:</b> 50 GHS / 30 days</p><p id="monthlyStatus" class="text-xs mt-1"></p></div><input id="monthlyMomoId" placeholder="Transaction ID - 50 GHS Monthly" class="w-full border p-2 rounded mt-3 text-sm"><button onclick="payMonthly()" class="bg-blue-600 text-white w-full py-3 rounded-full font-bold mt-2">Pay 50 GHS Monthly</button></div>
+<div id="regFormBox" class="hidden bg-white p-4 rounded-xl mt-3 shadow"><div id="activeBadge" class="bg-green-100 text-green-700 text-xs p-2 rounded text-center mb-3"></div><input id="uName" placeholder="Your Shop Name" class="w-full border p-2 rounded mb-2"><input id="uPhone" placeholder="WhatsApp 059..." class="w-full border p-2 rounded mb-2"><button onclick="doRegister()" class="bg-red-600 text-white w-full py-2 rounded-full">Save Profile</button><p id="uStatus" class="text-sm text-green-600 mt-2"></p><div id="followedList" class="mt-3 text-sm"></div></div>
 </div>
 
-<div id="modal" class="hidden fixed inset-0 bg-black/60 z-30 flex items-end justify-center">
+<div id="modal" class="hidden fixed inset-0 bg-black/70 z-30 flex items-end justify-center">
 <div class="bg-white w-full max-w-[500px] rounded-t-2xl max-h-[92vh] overflow-auto"><div class="p-3">
 <button onclick="closeModal()" class="float-right bg-gray-100 w-8 h-8 rounded-full">✕</button>
-<img id="mImg" class="w-full h-64 object-cover rounded-xl">
+<div class="relative w-full h-72 bg-black rounded-xl overflow-hidden">
+<div id="sliderTrack" class="flex h-full transition-transform duration-300 ease-out"></div>
+<button onclick="prevImg()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 w-8 h-8 rounded-full">‹</button>
+<button onclick="nextImg()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 w-8 h-8 rounded-full">›</button>
+<div id="dots" class="absolute bottom-2 left-0 right-0 flex justify-center gap-1"></div>
+<div id="imgCount" class="absolute top-2 left-2 bg-black/60 text-white text-[11px] px-2 py-1 rounded-full">1/1</div>
+</div>
 <h2 id="mTitle" class="font-bold text-lg mt-2"></h2>
 <p id="mPrice" class="text-red-600 font-bold text-xl"></p>
 <div class="flex justify-between items-center"><p id="mShop" class="text-sm"></p><button id="followBtn" onclick="followSeller()" class="bg-black text-white px-4 py-1 rounded-full text-xs">+ Follow</button></div>
@@ -76,32 +65,33 @@
 </div>
 
 <script>
-let curCat='all',curItem=null;
+let curCat='all',curItem=null,curImgIdx=0,curImgs=[];
 let baseItems=[
-{title:"iPhone 13 Pro",price:4500,cat:"phones",img:"https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=300",shop:"Danny Phones",likes:34,rating:4.5},
-{title:"Ladies Dress",price:250,cat:"fashion",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300",shop:"Ama Fashion",likes:52,rating:4.8},
-{title:"Nike Air Shoes",price:350,cat:"shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300",shop:"Kofi Kicks",likes:67,rating:4.9},
-{title:"Jollof Pack",price:50,cat:"food",img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300",shop:"Mama Food",likes:91,rating:5.0},
-{title:"HP Laptop",price:3500,cat:"electronics",img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300",shop:"Tech World",likes:22,rating:4.6},
-{title:"Wall Decor",price:300,cat:"home",img:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=300",shop:"Decor GH",likes:17,rating:4.7},
-{title:"Toyota Corolla",price:85000,cat:"cars",img:"https://images.unsplash.com/photo-1550355291-bbee04a92027?w=300",shop:"Dornny Autos",likes:41,rating:4.8},
-{title:"Luxury Sofa",price:1200,cat:"furniture",img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300",shop:"Home Plus",likes:9,rating:4.4}
+{title:"iPhone 13 Pro",price:4500,cat:"phones",img:"https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=500",shop:"Danny Phones",likes:34,rating:4.5,images:["https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=500","https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500","https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"]},
+{title:"Ladies Dress",price:250,cat:"fashion",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500",shop:"Ama Fashion",likes:52,rating:4.8,images:["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500","https://images.unsplash.com/photo-1515372039744-b8f02a3c67ae?w=500","https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500"]},
+{title:"Nike Air Shoes",price:350,cat:"shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",shop:"Kofi Kicks",likes:67,rating:4.9},
+{title:"Jollof Pack",price:50,cat:"food",img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500",shop:"Mama Food",likes:91,rating:5.0}
 ];
 let userProducts=JSON.parse(localStorage.getItem('dm_user_products')||'[]');
 let items=[...baseItems,...userProducts];
 let cart=JSON.parse(localStorage.getItem('dm_cart')||'[]');
 let follows=JSON.parse(localStorage.getItem('dm_follows')||'[]');
 let coms=JSON.parse(localStorage.getItem('dm_coms')||'{}');
-function render(list){let h="";list.forEach(p=>{let idx=items.indexOf(p);h+=`<div onclick="openM(${idx})" class="bg-white rounded-xl p-2 shadow"><img src="${p.img}" class="h-32 w-full object-cover rounded-lg"><b class="text-sm block truncate">${p.title}</b><p class="text-[11px] text-gray-500">${p.shop}</p><div class="flex justify-between"><span class="text-red-600 font-bold text-sm">₵${p.price}</span><span class="text-[11px]">❤️${p.likes} ⭐${p.rating}</span></div></div>`;});document.getElementById('products').innerHTML=h||'<p class="col-span-2 text-center text-gray-400">No products</p>';}
+function render(list){let h="";list.forEach(p=>{let idx=items.indexOf(p);let img=(p.images&&p.images[0])||p.img;h+=`<div onclick="openM(${idx})" class="bg-white rounded-xl p-2 shadow"><img src="${img}" class="h-32 w-full object-cover rounded-lg"><b class="text-sm block truncate">${p.title}</b><p class="text-[11px] text-gray-500">${p.shop} • ${(p.images?p.images.length:1)} 📸</p><div class="flex justify-between"><span class="text-red-600 font-bold text-sm">₵${p.price}</span><span class="text-[11px]">❤️${p.likes} ⭐${p.rating}</span></div></div>`;});document.getElementById('products').innerHTML=h||'<p class="col-span-2 text-center text-gray-400">No products</p>';}
 function filterCat(c){curCat=c;doSearch();showPage('shop');}
 function doSearch(){let q=document.getElementById('search').value.toLowerCase();let f=items.filter(i=>(curCat=='all'||i.cat==curCat)&&(i.title.toLowerCase().includes(q)||i.shop.toLowerCase().includes(q)));render(f);}
-function showPage(p){['products','p-category','p-trend','p-cart','p-me','p-chats','p-notif'].forEach(id=>document.getElementById(id).classList.add('hidden'));if(p=='shop')document.getElementById('products').classList.remove('hidden');if(p=='category')document.getElementById('p-category').classList.remove('hidden');if(p=='trend'){document.getElementById('p-trend').classList.remove('hidden');let s=[...items].sort((a,b)=>b.likes-a.likes);let h="";s.forEach(it=>{h+=`<div onclick="openM(${items.indexOf(it)})" class="bg-white p-2 rounded-xl shadow"><img src="${it.img}" class="h-24 w-full object-cover rounded"><b class="text-xs">${it.title}</b><p class="text-[11px] text-red-600">₵${it.price}</p></div>`});document.getElementById('trendList').innerHTML=h;}if(p=='cart'){document.getElementById('p-cart').classList.remove('hidden');renderCart();}if(p=='me'){document.getElementById('p-me').classList.remove('hidden');checkReg();showFollows();}if(p=='chats'){document.getElementById('p-chats').classList.remove('hidden');showChats();}if(p=='notif')document.getElementById('p-notif').classList.remove('hidden');}
-function openM(i){curItem=items[i];document.getElementById('mImg').src=curItem.img;document.getElementById('mTitle').innerText=curItem.title;document.getElementById('mPrice').innerText='₵'+curItem.price;document.getElementById('mShop').innerText=curItem.shop;document.getElementById('mLikes').innerText=curItem.likes;document.getElementById('mRate').innerText='⭐ '+curItem.rating+' Rating';document.getElementById('mWa').href=`https://wa.me/233245123456?text=Hi ${curItem.shop}, I want ${curItem.title} for ₵${curItem.price}`;updateFollowBtn();loadComments();document.getElementById('modal').classList.remove('hidden');}
+function showPage(p){['products','p-category','p-trend','p-cart','p-me','p-chats','p-notif'].forEach(id=>document.getElementById(id).classList.add('hidden'));if(p=='shop')document.getElementById('products').classList.remove('hidden');if(p=='category')document.getElementById('p-category').classList.remove('hidden');if(p=='trend'){document.getElementById('p-trend').classList.remove('hidden');let s=[...items].sort((a,b)=>b.likes-a.likes);let h="";s.forEach(it=>{h+=`<div onclick="openM(${items.indexOf(it)})" class="bg-white p-2 rounded-xl shadow"><img src="${(it.images&&it.images[0])||it.img}" class="h-24 w-full object-cover rounded"><b class="text-xs">${it.title}</b><p class="text-[11px] text-red-600">₵${it.price}</p></div>`});document.getElementById('trendList').innerHTML=h;}if(p=='cart'){document.getElementById('p-cart').classList.remove('hidden');renderCart();}if(p=='me'){document.getElementById('p-me').classList.remove('hidden');checkReg();showFollows();}if(p=='chats'){document.getElementById('p-chats').classList.remove('hidden');showChats();}if(p=='notif')document.getElementById('p-notif').classList.remove('hidden');}
+function openM(i){curItem=items[i];curImgs=curItem.images && curItem.images.length>0?curItem.images:[curItem.img];curImgIdx=0;renderSlider();document.getElementById('mTitle').innerText=curItem.title;document.getElementById('mPrice').innerText='₵'+curItem.price;document.getElementById('mShop').innerText=curItem.shop;document.getElementById('mLikes').innerText=curItem.likes;document.getElementById('mRate').innerText='⭐ '+curItem.rating+' Rating';document.getElementById('mWa').href=`https://wa.me/233245123456?text=Hi ${curItem.shop}, I want ${curItem.title} for ₵${curItem.price}`;updateFollowBtn();loadComments();document.getElementById('modal').classList.remove('hidden');}
+function renderSlider(){let track=document.getElementById('sliderTrack');track.innerHTML=curImgs.map(src=>`<div class="min-w-full h-full"><img src="${src}" class="w-full h-full object-cover"></div>`).join('');updateSliderPos();let dots=document.getElementById('dots');dots.innerHTML=curImgs.map((_,idx)=>`<div class="${idx==curImgIdx?'bg-white':'bg-white/40'} w-2 h-2 rounded-full"></div>`).join('');document.getElementById('imgCount').innerText=(curImgIdx+1)+'/'+curImgs.length;}
+function updateSliderPos(){document.getElementById('sliderTrack').style.transform=`translateX(-${curImgIdx*100}%)`;document.getElementById('imgCount').innerText=(curImgIdx+1)+'/'+curImgs.length;let dots=document.getElementById('dots');if(dots)dots.innerHTML=curImgs.map((_,idx)=>`<div class="${idx==curImgIdx?'bg-white':'bg-white/40'} w-2 h-2 rounded-full"></div>`).join('');}
+function nextImg(){curImgIdx=(curImgIdx+1)%curImgs.length;updateSliderPos();}
+function prevImg(){curImgIdx=(curImgIdx-1+curImgs.length)%curImgs.length;updateSliderPos();}
+let startX=0;document.addEventListener('touchstart',e=>{if(!e.target.closest('#sliderTrack'))return;startX=e.touches[0].clientX;});document.addEventListener('touchend',e=>{if(!e.target.closest('#sliderTrack'))return;let endX=e.changedTouches[0].clientX;if(startX-endX>50)nextImg();if(endX-startX>50)prevImg();});
 function closeModal(){document.getElementById('modal').classList.add('hidden');}
 function doLike(){curItem.likes++;document.getElementById('mLikes').innerText=curItem.likes;doSearch();}
 function doCart(){cart.push(curItem);localStorage.setItem('dm_cart',JSON.stringify(cart));updCart();alert('Added to cart');}
 function updCart(){document.getElementById('cCount').innerText=cart.length;}
-function renderCart(){let h="";cart.forEach((p,i)=>{h+=`<div class="bg-white p-2 rounded flex gap-2 mb-2 shadow"><img src="${p.img}" class="w-16 h-16 rounded object-cover"><div><b class="text-sm">${p.title}</b><p class="text-red-600 text-sm">₵${p.price}</p></div><button onclick="cart.splice(${i},1);localStorage.setItem('dm_cart',JSON.stringify(cart));updCart();renderCart();" class="text-red-600 text-xs ml-auto">Remove</button></div>`});if(!h)h='<p class="text-sm text-gray-400">Cart empty</p>';else h+=`<a href="https://wa.me/233245123456?text=I want ${cart.length} items from Dornny" target="_blank" class="bg-green-500 text-white block text-center py-3 rounded-full mt-3 font-bold">WhatsApp Checkout</a>`;document.getElementById('cList').innerHTML=h;}
+function renderCart(){let h="";cart.forEach((p,i)=>{h+=`<div class="bg-white p-2 rounded flex gap-2 mb-2 shadow"><img src="${(p.images&&p.images[0])||p.img}" class="w-16 h-16 rounded object-cover"><div><b class="text-sm">${p.title}</b><p class="text-red-600 text-sm">₵${p.price}</p></div><button onclick="cart.splice(${i},1);localStorage.setItem('dm_cart',JSON.stringify(cart));updCart();renderCart();" class="text-red-600 text-xs ml-auto">Remove</button></div>`});if(!h)h='<p class="text-sm text-gray-400">Cart empty</p>';else h+=`<a href="https://wa.me/233245123456?text=I want ${cart.length} items from Dornny" target="_blank" class="bg-green-500 text-white block text-center py-3 rounded-full mt-3 font-bold">WhatsApp Checkout</a>`;document.getElementById('cList').innerHTML=h;}
 function followSeller(){let s=curItem.shop;if(follows.includes(s))follows=follows.filter(x=>x!=s);else follows.push(s);localStorage.setItem('dm_follows',JSON.stringify(follows));updateFollowBtn();doSearch();}
 function updateFollowBtn(){let b=document.getElementById('followBtn');if(follows.includes(curItem.shop)){b.innerText='✓ Following';b.className='bg-green-500 text-white px-4 py-1 rounded-full text-xs';}else{b.innerText='+ Follow';b.className='bg-black text-white px-4 py-1 rounded-full text-xs';}}
 function showFollows(){document.getElementById('followedList').innerHTML=follows.length?'Following: '+follows.join(', '):'Not following anyone yet';}
