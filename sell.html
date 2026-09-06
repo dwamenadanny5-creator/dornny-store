@@ -1,59 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sell - Dornny's Market</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sell - DORNNY MARKET</title>
 <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-4">
-<div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow">
-<h2 class="text-2xl font-bold mb-4">Sell Your Item</h2>
-<input id="name" placeholder="Product Name" class="w-full p-3 border rounded mb-3">
-<input id="price" type="number" placeholder="Price GHS" class="w-full p-3 border rounded mb-3">
-<input id="category" placeholder="Category" class="w-full p-3 border rounded mb-3">
-<input id="whatsapp" placeholder="Your WhatsApp e.g. 0244..." class="w-full p-3 border rounded mb-3">
-<textarea id="desc" placeholder="Description" class="w-full p-3 border rounded mb-3"></textarea>
-<input id="image" type="file" accept="image/*" class="w-full p-3 border rounded mb-3">
-<img id="preview" class="hidden w-full h-48 object-cover rounded mb-3">
-<button id="submitBtn" class="w-full bg-black text-white p-3 rounded-xl font-bold">Upload Product</button>
-<p id="status" class="text-center mt-3"></p>
-<a href="/" class="block text-center mt-4 text-sm underline">Back to Market</a>
-</div>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
   authDomain: "dornnysmarket.firebaseapp.com",
   projectId: "dornnysmarket",
-  storageBucket: "dornnysmarket.firebasestorage.app",
-  messagingSenderId: "726307073658",
-  appId: "1:726307073658:web:957d1225916799d9fa95c3",
-  measurementId: "G-WYVEH8VG5V"
+  storageBucket: "dornnysmarket.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcd"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let base64Image = "";
-document.getElementById('image').addEventListener('change', e=>{
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev=>{ base64Image = ev.target.result; document.getElementById('preview').src=base64Image; document.getElementById('preview').classList.remove('hidden'); };
-  reader.readAsDataURL(file);
-});
-document.getElementById('submitBtn').addEventListener('click', async ()=>{
-  const name=document.getElementById('name').value.trim();
-  const price=document.getElementById('price').value.trim();
-  const category=document.getElementById('category').value.trim();
-  const whatsapp=document.getElementById('whatsapp').value.trim();
-  const desc=document.getElementById('desc').value.trim();
-  const status=document.getElementById('status');
-  if(!name||!price||!whatsapp||!base64Image){status.innerText="Fill all fields + image"; return;}
-  status.innerText="Uploading..."; document.getElementById('submitBtn').disabled=true;
-  try{
-    await addDoc(collection(db,"products"),{name,price:Number(price),category,whatsapp,desc,image:base64Image,createdAt:serverTimestamp(),approved:true});
-    status.innerText="✅ Uploaded! Redirecting..."; setTimeout(()=>{window.location.href="/";},2000);
-  }catch(err){ status.innerText="Error: "+err.message; document.getElementById('submitBtn').disabled=false; }
-});
+window.upload=async()=>{
+let s=document.getElementById('shop').value;
+let w=document.getElementById('whatsapp').value;
+let t=document.getElementById('title').value;
+let p=document.getElementById('price').value;
+let c=document.getElementById('category').value;
+let i=document.getElementById('image').value;
+if(!s||!w||!t||!p||!i){alert('Please fill ALL fields!');return;}
+await addDoc(collection(db,"products"),{seller:s,whatsapp:w,title:t,price:p,category:c,image:i,likes:0,rating:5,comments:[],time:Date.now()});
+alert('✅ Product Uploaded! Buyers will see it now in Shop + Category + Trend!');
+location.href='index.html';
+}
 </script>
+</head>
+<body class="bg-gray-100 p-4">
+<h1 class="font-black text-xl text-center">Upload Product</h1>
+<p class="text-center text-sm text-gray-500">DORNNY MARKET - Sellers upload here</p>
+<div class="bg-white p-4 rounded-2xl mt-4 space-y-3 shadow max-w-md mx-auto">
+<input id="shop" placeholder="Shop Name e.g. Danny Fashion" class="w-full border p-3 rounded-xl">
+<input id="whatsapp" placeholder="Your WhatsApp Number e.g. 233245123456" class="w-full border p-3 rounded-xl">
+<input id="title" placeholder="Product Name e.g. iPhone 14" class="w-full border p-3 rounded-xl">
+<input id="price" type="number" placeholder="Price in GHS e.g. 3500" class="w-full border p-3 rounded-xl">
+<select id="category" class="w-full border p-3 rounded-xl">
+<option value="fashion">Fashion</option>
+<option value="phones">Phones</option>
+<option value="shoes">Shoes</option>
+<option value="food">Food</option>
+<option value="furniture">Furniture</option>
+<option value="cars">Cars</option>
+<option value="home">Home Decoration</option>
+</select>
+<input id="image" placeholder="Image Link - paste from Google or imgbb.com" class="w-full border p-3 rounded-xl">
+<p class="text-xs text-gray-500">How to get image link: Go to google.com, search product, long press image -> Copy image link -> Paste here</p>
+<button onclick="upload()" class="w-full bg-green-500 text-white py-3 rounded-xl font-bold text-lg">UPLOAD TO MARKET</button>
+<a href="index.html" class="block text-center mt-3 text-red-600 font-bold">← Back to Shop</a>
+</div>
+<div class="max-w-md mx-auto mt-4 bg-yellow-100 p-3 rounded-xl text-xs">
+<b>After upload:</b><br>
+- Your product will show in Shop immediately<br>
+- Buyers click your product -> See WhatsApp Buy button -> They chat you directly<br>
+- You pay 50 GHS only once to open shop (click Me tab)
+</div>
 </body>
 </html>
