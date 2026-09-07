@@ -14,69 +14,53 @@
 </div>
 <input id="search" oninput="doSearch()" placeholder="Search..." class="w-full mt-2 p-3 rounded-full bg-gray-100 outline-none">
 </div>
-
 <div class="flex gap-2 p-2 overflow-auto no-scrollbar">
-<button onclick="filterCat('all')" id="c-all" class="cat bg-black text-white px-5 py-2 rounded-full">All</button>
-<button onclick="filterCat('fashion')" id="c-fashion" class="cat bg-white px-5 py-2 rounded-full">Fashion</button>
-<button onclick="filterCat('phones')" id="c-phones" class="cat bg-white px-5 py-2 rounded-full">Phones</button>
-<button onclick="filterCat('shoes')" id="c-shoes" class="cat bg-white px-5 py-2 rounded-full">Shoes</button>
-<button onclick="filterCat('food')" id="c-food" class="cat bg-white px-5 py-2 rounded-full">Food</button>
+<button onclick="filterCat('all')" class="cat bg-black text-white px-5 py-2 rounded-full">All</button>
+<button onclick="filterCat('fashion')" class="cat bg-white px-5 py-2 rounded-full">Fashion</button>
+<button onclick="filterCat('phones')" class="cat bg-white px-5 py-2 rounded-full">Phones</button>
+<button onclick="filterCat('shoes')" class="cat bg-white px-5 py-2 rounded-full">Shoes</button>
+<button onclick="filterCat('food')" class="cat bg-white px-5 py-2 rounded-full">Food</button>
 </div>
-
 <div id="p-home" class="p-2"><div id="list" class="grid grid-cols-2 gap-2"></div></div>
 <div id="p-cart" class="hidden p-4"><h2 class="font-bold">🛒 Cart</h2><div id="cartList" class="bg-white p-3 rounded-xl mt-3">Empty</div></div>
 <div id="p-shop" class="hidden p-4"><h2 class="font-bold">🏪 Shop</h2><div class="bg-white p-3 rounded-xl mt-3 text-sm">Pay 50 GHS to register & start selling</div></div>
 <div id="p-trend" class="hidden p-4"><h2 class="font-bold">🔥 Trending</h2><div id="trendList" class="grid grid-cols-2 gap-2 mt-3"></div></div>
 <div id="p-me" class="hidden p-4"><h2 class="font-bold">👤 Me - Following & Messages</h2><div class="bg-white p-3 rounded-xl mt-3"><div id="followList"></div><hr class="my-2"><div id="inbox"></div></div></div>
 <div id="p-notif" class="hidden p-4"><h2 class="font-bold">🔔</h2><div class="bg-white p-3 rounded-xl mt-3">Monthly 50 GHS after 30 days</div></div>
-
-<!-- PRODUCT VIEW WITH ALL YOUR REQUESTS -->
-<div id="viewModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col overflow-auto">
-<div class="flex justify-between p-3 text-white"><button onclick="closeView()" class="text-2xl">✕</button><span id="slideInfo">1/3</span></div>
-<div class="flex-1 flex items-center relative overflow-hidden" ontouchstart="ts(event)" ontouchend="te(event)">
-<img id="vImg" class="w-full h-[50vh] object-contain">
-<button onclick="prevImg()" class="absolute left-2 bg-white/50 rounded-full w-10 h-10">‹</button>
-<button onclick="nextImg()" class="absolute right-2 bg-white/50 rounded-full w-10 h-10">›</button>
+<div id="viewModal" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 flex flex-col overflow-auto">
+<div class="flex justify-between p-3 text-white sticky top-0 bg-black z-10"><button onclick="closeView()" class="text-2xl">✕</button><span id="slideInfo" class="bg-white/20 px-3 py-1 rounded-full">1/3</span><button onclick="toggleZoom()" class="bg-white/20 px-3 py-1 rounded-full">⛶ Big/Small</button></div>
+<div class="flex items-center justify-center relative bg-black" ontouchstart="ts(event)" ontouchend="te(event)">
+<img id="vImg" onclick="toggleZoom()" class="w-full h-[85vh] object-contain transition-all duration-300">
+<button onclick="prevImg()" class="absolute left-2 bg-white/60 rounded-full w-12 h-12 text-xl">‹</button>
+<button onclick="nextImg()" class="absolute right-2 bg-white/60 rounded-full w-12 h-12 text-xl">›</button>
 </div>
-<div class="bg-white p-4 rounded-t-2xl">
+<div id="detailsBox" class="bg-white p-4 rounded-t-2xl">
 <h2 id="vName" class="font-bold text-lg"></h2>
 <p id="vSeller" class="text-sm text-gray-600"></p>
 <p id="vPrice" class="text-red-600 font-bold"></p>
-
-<!-- BUYER ACTIONS YOU ASKED -->
 <div class="grid grid-cols-2 gap-2 mt-3">
 <button id="whatsBtn" class="bg-green-500 text-white p-3 rounded-xl font-bold">💬 WhatsApp Seller</button>
 <button onclick="followSeller()" id="followBtn" class="bg-black text-white p-3 rounded-xl font-bold">+ Follow Seller</button>
 </div>
 <button onclick="openChat()" class="bg-blue-600 text-white w-full p-3 rounded-xl mt-2 font-bold">✉️ Send Message on Platform</button>
-
-<!-- RATE SELLER -->
 <div class="mt-3 p-3 bg-gray-100 rounded-xl">
 <p class="font-bold text-sm">⭐ Rate this seller:</p>
-<div class="flex gap-1 text-2xl mt-1" id="stars">
-<span onclick="rateSeller(1)">⭐</span><span onclick="rateSeller(2)">⭐</span><span onclick="rateSeller(3)">⭐</span><span onclick="rateSeller(4)">⭐</span><span onclick="rateSeller(5)">⭐</span>
-</div>
+<div class="flex gap-1 text-2xl mt-1"><span onclick="rateSeller(1)">⭐</span><span onclick="rateSeller(2)">⭐</span><span onclick="rateSeller(3)">⭐</span><span onclick="rateSeller(4)">⭐</span><span onclick="rateSeller(5)">⭐</span></div>
 <p id="rateInfo" class="text-xs mt-1"></p>
 </div>
-
-<!-- COMMENTS -->
 <div class="mt-3 p-3 bg-gray-100 rounded-xl">
 <p class="font-bold text-sm">💬 Comments on this product:</p>
 <div id="commentList" class="mt-2 text-sm"></div>
 <div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Write comment..." class="flex-1 p-2 rounded-full border"><button onclick="postComment()" class="bg-black text-white px-4 rounded-full">Post</button></div>
 </div>
-
 <button onclick="addCart()" class="bg-black text-white w-full p-3 rounded-xl mt-3">Add to Cart</button>
 </div>
 </div>
-
-<!-- MESSAGE MODAL -->
 <div id="chatModal" class="hidden fixed inset-0 bg-white z-[60] flex flex-col">
 <div class="p-3 bg-black text-white flex justify-between"><span id="chatSeller">Chat</span><button onclick="closeChat()">✕</button></div>
 <div id="chatBox" class="flex-1 p-3 overflow-auto"></div>
 <div class="p-3 flex gap-2 border-t"><input id="chatInput" class="flex-1 p-3 bg-gray-100 rounded-full" placeholder="Type message..."><button onclick="sendMsg()" class="bg-black text-white px-5 rounded-full">Send</button></div>
 </div>
-
 <div class="fixed bottom-0 left-0 right-0 bg-white flex justify-around p-3 border-t z-40">
 <button onclick="showPage('home')" class="flex flex-col items-center"><span>🏠</span><span class="text-xs">Home</span></button>
 <button onclick="showPage('cart')" class="flex flex-col items-center"><span>🛒</span><span class="text-xs">Cart</span></button>
@@ -84,39 +68,32 @@
 <button onclick="showPage('trend')" class="flex flex-col items-center"><span>🔥</span><span class="text-xs">Trend</span></button>
 <button onclick="showPage('me')" class="flex flex-col items-center"><span>👤</span><span class="text-xs">Me</span></button>
 </div>
-
 <script>
 let products=[
 {name:"Ladies Dress",price:"₵250",cat:"fashion",seller:"Ama Fashion",phone:"233244123456",likes:52,rate:4.8,imgs:["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500","https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500","https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500"]},
 {name:"Boys top",price:"₵70",cat:"fashion",seller:"Akoti",phone:"233244123457",likes:0,rate:5,imgs:["https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500","https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500","https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500"]}
 ];
-let curProd=null, curIdx=0, startX=0, curIdxProd=0;
-function render(list){
-let h=""; list.forEach((p,i)=>{
-h+=`<div onclick="openView(${i})" class="bg-white rounded-xl shadow"><img src="${p.imgs[0]}" class="w-full h-40 object-cover rounded-t-xl"><div class="p-2"><p class="font-bold text-sm">${p.name}</p><p class="text-xs text-gray-500">${p.seller}</p><p class="text-red-600 font-bold">${p.price}</p></div></div>`;
-}); document.getElementById('list').innerHTML=h; document.getElementById('trendList').innerHTML=h;
-}
+let curProd=null, curIdx=0, startX=0, isZoom=false;
+function render(list){let h=""; list.forEach((p,i)=>{h+=`<div onclick="openView(${i})" class="bg-white rounded-xl shadow"><img src="${p.imgs[0]}" class="w-full h-40 object-cover rounded-t-xl"><div class="p-2"><p class="font-bold text-sm">${p.name}</p><p class="text-xs text-gray-500">${p.seller}</p><p class="text-red-600 font-bold">${p.price}</p></div></div>`;}); document.getElementById('list').innerHTML=h; document.getElementById('trendList').innerHTML=h;}
 function filterCat(c){let f=c=='all'?products:products.filter(p=>p.cat==c); render(f);}
 function doSearch(){let q=document.getElementById('search').value.toLowerCase(); render(products.filter(p=>p.name.toLowerCase().includes(q)));}
 function showPage(p){['home','cart','shop','trend','me','notif'].forEach(id=>{let e=document.getElementById('p-'+id); if(e) e.classList.add('hidden')}); document.getElementById('p-'+p).classList.remove('hidden'); if(p=='me') loadMe(); if(p=='cart') loadCart();}
-function openView(i){curIdxProd=i; curProd=products[i]; curIdx=0; showSlide(); document.getElementById('viewModal').classList.remove('hidden'); document.getElementById('vSeller').innerText="Seller: "+curProd.seller; document.getElementById('whatsBtn').onclick=function(){window.open("https://wa.me/"+curProd.phone+"?text=Hello "+curProd.seller+", I'm interested in "+curProd.name,"_blank")}; loadComments(); loadRate();}
+function openView(i){curProd=products[i]; curIdx=0; isZoom=false; document.getElementById('vImg').className="w-full h-[85vh] object-contain transition-all duration-300"; showSlide(); document.getElementById('viewModal').classList.remove('hidden'); document.getElementById('vSeller').innerText="Seller: "+curProd.seller; document.getElementById('whatsBtn').onclick=function(){window.open("https://wa.me/"+curProd.phone+"?text=Hello "+curProd.seller+", I'm interested in "+curProd.name,"_blank")}; loadComments(); loadRate();}
 function closeView(){document.getElementById('viewModal').classList.add('hidden')}
 function showSlide(){document.getElementById('vImg').src=curProd.imgs[curIdx]; document.getElementById('vName').innerText=curProd.name; document.getElementById('vPrice').innerText=curProd.price; document.getElementById('slideInfo').innerText=(curIdx+1)+"/"+curProd.imgs.length;}
 function nextImg(){curIdx=(curIdx+1)%curProd.imgs.length; showSlide()} function prevImg(){curIdx=(curIdx-1+curProd.imgs.length)%curProd.imgs.length; showSlide()}
+function toggleZoom(){let img=document.getElementById('vImg'); if(!isZoom){img.className="w-full h-[95vh] object-contain transition-all duration-300"; isZoom=true;}else{img.className="w-full h-[45vh] object-contain transition-all duration-300"; isZoom=false;}}
 function ts(e){startX=e.touches[0].clientX} function te(e){let dx=e.changedTouches[0].clientX-startX; if(dx<-50) nextImg(); if(dx>50) prevImg();}
 function followSeller(){let f=JSON.parse(localStorage.getItem('follows')||"[]"); if(!f.includes(curProd.seller)){f.push(curProd.seller); localStorage.setItem('follows',JSON.stringify(f)); alert("You followed "+curProd.seller); document.getElementById('followBtn').innerText="✓ Following"} else alert("Already following");}
 function rateSeller(n){let r=JSON.parse(localStorage.getItem('rates')||"{}"); r[curProd.seller]=n; localStorage.setItem('rates',JSON.stringify(r)); document.getElementById('rateInfo').innerText="You rated "+curProd.seller+" "+n+" stars ⭐"; alert("Thanks for rating!")}
 function loadRate(){let r=JSON.parse(localStorage.getItem('rates')||"{}"); if(r[curProd.seller]) document.getElementById('rateInfo').innerText="You rated "+r[curProd.seller]+" stars";}
 function postComment(){let txt=document.getElementById('commentInput').value; if(!txt) return; let c=JSON.parse(localStorage.getItem('comments_'+curProd.name)||"[]"); c.push(txt); localStorage.setItem('comments_'+curProd.name,JSON.stringify(c)); document.getElementById('commentInput').value=""; loadComments();}
 function loadComments(){let c=JSON.parse(localStorage.getItem('comments_'+curProd.name)||"[]"); let h=""; c.forEach(t=>{h+=`<div class="bg-white p-2 rounded-lg mt-1">${t}</div>`}); document.getElementById('commentList').innerHTML=h||"No comments yet";}
-
 function openChat(){document.getElementById('chatModal').classList.remove('hidden'); document.getElementById('chatSeller').innerText="Chat with "+curProd.seller; loadChat();}
 function closeChat(){document.getElementById('chatModal').classList.add('hidden')}
 function sendMsg(){let txt=document.getElementById('chatInput').value; if(!txt) return; let m=JSON.parse(localStorage.getItem('msgs_'+curProd.seller)||"[]"); m.push({from:"me",text:txt}); localStorage.setItem('msgs_'+curProd.seller,JSON.stringify(m)); document.getElementById('chatInput').value=""; loadChat(); loadMe();}
 function loadChat(){let m=JSON.parse(localStorage.getItem('msgs_'+curProd.seller)||"[]"); let h=""; m.forEach(x=>{h+=`<div class="p-2 rounded-xl mt-1 ${x.from=='me'?'bg-black text-white ml-10':'bg-gray-200 mr-10'}">${x.text}</div>`}); document.getElementById('chatBox').innerHTML=h;}
-
 function loadMe(){let f=JSON.parse(localStorage.getItem('follows')||"[]"); document.getElementById('followList').innerHTML="Following: "+(f.join(", ")||"None"); let inboxH="Messages:<br>"; for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i); if(k.startsWith("msgs_")){let seller=k.replace("msgs_",""); let msgs=JSON.parse(localStorage.getItem(k)); inboxH+=`<div class="p-2 bg-gray-100 rounded mt-1">${seller}: ${msgs[msgs.length-1]?.text||""}</div>`}} document.getElementById('inbox').innerHTML=inboxH;}
-
 function addCart(){let c=JSON.parse(localStorage.getItem('cart')||"[]"); c.push(curProd); localStorage.setItem('cart',JSON.stringify(c)); alert('Added to cart!'); closeView();}
 function loadCart(){let c=JSON.parse(localStorage.getItem('cart')||"[]"); if(c.length==0){document.getElementById('cartList').innerHTML="Empty"; return;} let h=""; c.forEach(p=>{h+=`<div class="flex gap-2 border-b py-2"><img src="${p.imgs[0]}" class="w-12 h-12 rounded"><div>${p.name}<br><span class="text-red-600">${p.price}</span></div></div>`}); document.getElementById('cartList').innerHTML=h;}
 render(products);
