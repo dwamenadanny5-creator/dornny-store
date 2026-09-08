@@ -1,113 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DORNNY MARKET</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<style>.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dornny Market - Ghana's Online Market</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#f5f5f5}
+header{background:black;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+header h1{font-size:20px}
+header a{background:#00b050;color:white;padding:8px 15px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:14px}
+.searchBox{padding:10px;background:white;display:flex;gap:8px}
+.searchBox input{flex:1;padding:12px;border-radius:25px;border:1px solid #ddd;background:#f0f0f0}
+.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;background:white}
+.filterBar button{padding:8px 16px;border-radius:20px;border:1px solid #ddd;background:white;white-space:nowrap}
+.filterBar button.active{background:black;color:white}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:white;border-radius:15px;overflow:hidden;position:relative}
+.slider{position:relative;width:100%;height:160px;background:#eee;overflow:hidden}
+.slider img{width:100%;height:100%;object-fit:cover;display:none}
+.slider img.active{display:block}
+.dots{position:absolute;bottom:6px;left:0;right:0;display:flex;justify-content:center;gap:4px}
+.dots span{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%}
+.dots span.active{background:white}
+.navBtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.4);color:white;border:none;width:24px;height:24px;border-radius:50%;font-size:12px}
+.prev{left:5px}.next{right:5px}
+.info{padding:8px}
+.info h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info p{font-size:12px;color:#777}
+.price{color:#00b050;font-weight:bold;font-size:16px}
+.buyBtn{background:black;color:white;border:none;padding:8px;width:100%;border-radius:10px;margin-top:6px;font-weight:bold}
+.noProduct{text-align:center;padding:40px;color:#888;grid-column:1/-1}
+</style>
 </head>
-<body class="bg-gray-100 pb-24">
-<div class="bg-white p-3 sticky top-0 z-30 shadow">
-<div class="flex justify-between items-center">
-<h1 class="text-red-600 font-black text-xl">DORNNY MARKET</h1>
-<div class="flex gap-2"><span onclick="showPage('notif')" class="text-xl">🔔</span><button onclick="location.href='sell.html'" class="bg-green-600 text-white px-4 py-1 rounded-full font-bold">+SELL</button></div>
+<body>
+<header>
+<h1>Dornny Market</h1>
+<a href="sell.html">+ Sell</a>
+</header>
+<div class="searchBox">
+<input id="search" placeholder="Search products..." oninput="render()">
 </div>
-<input id="search" oninput="doSearch()" placeholder="Search..." class="w-full mt-2 p-3 rounded-full bg-gray-100 outline-none">
+<div class="filterBar">
+<button class="active" onclick="setCat('All',this)">All</button>
+<button onclick="setCat('Fashion',this)">Fashion</button>
+<button onclick="setCat('Boys top',this)">Boys top</button>
+<button onclick="setCat('Shoes',this)">Shoes</button>
+<button onclick="setCat('Electronics',this)">Electronics</button>
 </div>
-<div class="flex gap-2 p-2 overflow-auto no-scrollbar">
-<button onclick="filterCat('all')" class="cat bg-black text-white px-5 py-2 rounded-full">All</button>
-<button onclick="filterCat('fashion')" class="cat bg-white px-5 py-2 rounded-full">Fashion</button>
-<button onclick="filterCat('phones')" class="cat bg-white px-5 py-2 rounded-full">Phones</button>
-<button onclick="filterCat('shoes')" class="cat bg-white px-5 py-2 rounded-full">Shoes</button>
-<button onclick="filterCat('food')" class="cat bg-white px-5 py-2 rounded-full">Food</button>
-</div>
-<div id="p-home" class="p-2"><div id="list" class="grid grid-cols-2 gap-2"></div></div>
-<div id="p-cart" class="hidden p-4"><h2 class="font-bold">🛒 Cart</h2><div id="cartList" class="bg-white p-3 rounded-xl mt-3">Empty</div></div>
-<div id="p-shop" class="hidden p-4"><h2 class="font-bold">🏪 Shop</h2><div onclick="openPay()" class="bg-white p-4 rounded-xl mt-3 shadow border-2 border-green-500 cursor-pointer"><p class="font-bold">💰 Pay 50 GHS to register & start selling</p><p class="text-sm text-gray-600 mt-1">Tap here to pay with MoMo to 0594221108 and register your shop now</p><button class="bg-green-600 text-white w-full mt-2 p-2 rounded-full font-bold">Pay 50 GHS with MoMo REAL</button><p id="shopStatus" class="text-sm mt-2 font-bold text-green-600"></p></div></div>
-<div id="p-trend" class="hidden p-4"><h2 class="font-bold">🔥 Trending</h2><div id="trendList" class="grid grid-cols-2 gap-2 mt-3"></div></div>
-<div id="p-me" class="hidden p-4"><h2 class="font-bold">👤 Me - Following & Messages</h2><div class="bg-white p-3 rounded-xl mt-3"><div id="followList"></div><hr class="my-2"><div id="inbox"></div></div></div>
-<div id="p-notif" class="hidden p-4"><h2 class="font-bold">🔔</h2><div class="bg-white p-3 rounded-xl mt-3">Monthly 50 GHS after 30 days - Pay to 0594221108</div></div>
-<div id="payModal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-[70] flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl p-5 w-full max-w-sm">
-<div class="flex justify-between items-center"><h2 class="font-black text-lg">Pay 50 GHS REAL MoMo</h2><button onclick="closePay()" class="text-2xl">✕</button></div>
-<p class="text-sm text-gray-600 mt-2">Pay to DORNNY MARKET - 0594221108</p>
-<input id="payName" placeholder="Your Full Name" class="w-full p-3 border rounded-xl mt-3">
-<input id="payPhone" placeholder="Your Phone (WhatsApp)" class="w-full p-3 border rounded-xl mt-2">
-<input id="payMomo" placeholder="Your MoMo Number to pay FROM" class="w-full p-3 border rounded-xl mt-2">
-<div class="bg-green-100 p-3 rounded-xl mt-3 text-sm"><b>REAL MoMo Pay:</b><br>• Click Pay Now<br>• Select Mobile Money<br>• Approve on your phone<br>• 50 GHS goes to 0594221108<br>• Shop activated instantly</div>
-<button onclick="doPay()" class="bg-green-600 text-white w-full p-3 rounded-xl mt-3 font-bold">Pay 50 GHS REAL MoMo Now</button>
-<p class="text-xs text-center mt-2 text-gray-500">Secure via Paystack - MTN/Vodafone/AirtelTigo</p>
-</div>
-</div>
-<div id="viewModal" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 flex flex-col overflow-auto">
-<div class="flex justify-between p-3 text-white sticky top-0 bg-black z-10"><button onclick="closeView()" class="text-2xl">✕</button><span id="slideInfo" class="bg-white/20 px-3 py-1 rounded-full">1/3</span><button onclick="toggleZoom()" class="bg-white/20 px-3 py-1 rounded-full">⛶ Big/Small</button></div>
-<div class="flex items-center justify-center relative bg-black" ontouchstart="ts(event)" ontouchend="te(event)">
-<img id="vImg" onclick="toggleZoom()" class="w-full h-[85vh] object-contain transition-all duration-300">
-<button onclick="prevImg()" class="absolute left-2 bg-white/60 rounded-full w-12 h-12 text-xl">‹</button>
-<button onclick="nextImg()" class="absolute right-2 bg-white/60 rounded-full w-12 h-12 text-xl">›</button>
-</div>
-<div id="detailsBox" class="bg-white p-4 rounded-t-2xl">
-<h2 id="vName" class="font-bold text-lg"></h2><p id="vSeller" class="text-sm text-gray-600"></p><p id="vPrice" class="text-red-600 font-bold"></p>
-<div class="grid grid-cols-2 gap-2 mt-3"><button id="whatsBtn" class="bg-green-500 text-white p-3 rounded-xl font-bold">💬 WhatsApp Seller</button><button onclick="followSeller()" id="followBtn" class="bg-black text-white p-3 rounded-xl font-bold">+ Follow Seller</button></div>
-<button onclick="openChat()" class="bg-blue-600 text-white w-full p-3 rounded-xl mt-2 font-bold">✉️ Send Message on Platform</button>
-<div class="mt-3 p-3 bg-gray-100 rounded-xl"><p class="font-bold text-sm">⭐ Rate this seller:</p><div class="flex gap-1 text-2xl mt-1"><span onclick="rateSeller(1)">⭐</span><span onclick="rateSeller(2)">⭐</span><span onclick="rateSeller(3)">⭐</span><span onclick="rateSeller(4)">⭐</span><span onclick="rateSeller(5)">⭐</span></div><p id="rateInfo" class="text-xs mt-1"></p></div>
-<div class="mt-3 p-3 bg-gray-100 rounded-xl"><p class="font-bold text-sm">💬 Comments:</p><div id="commentList" class="mt-2 text-sm"></div><div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Write comment..." class="flex-1 p-2 rounded-full border"><button onclick="postComment()" class="bg-black text-white px-4 rounded-full">Post</button></div></div>
-<button onclick="addCart()" class="bg-black text-white w-full p-3 rounded-xl mt-3">Add to Cart</button>
-</div>
-</div>
-<div id="chatModal" class="hidden fixed inset-0 bg-white z-[60] flex flex-col"><div class="p-3 bg-black text-white flex justify-between"><span id="chatSeller">Chat</span><button onclick="closeChat()">✕</button></div><div id="chatBox" class="flex-1 p-3 overflow-auto"></div><div class="p-3 flex gap-2 border-t"><input id="chatInput" class="flex-1 p-3 bg-gray-100 rounded-full" placeholder="Type message..."><button onclick="sendMsg()" class="bg-black text-white px-5 rounded-full">Send</button></div></div>
-<div class="fixed bottom-0 left-0 right-0 bg-white flex justify-around p-3 border-t z-40">
-<button onclick="showPage('home')" class="flex flex-col items-center"><span>🏠</span><span class="text-xs">Home</span></button>
-<button onclick="showPage('cart')" class="flex flex-col items-center"><span>🛒</span><span class="text-xs">Cart</span></button>
-<button onclick="showPage('shop')" class="flex flex-col items-center"><span>🏪</span><span class="text-xs">Shop</span></button>
-<button onclick="showPage('trend')" class="flex flex-col items-center"><span>🔥</span><span class="text-xs">Trend</span></button>
-<button onclick="showPage('me')" class="flex flex-col items-center"><span>👤</span><span class="text-xs">Me</span></button>
-</div>
+<div id="grid" class="grid"></div>
+
 <script>
-let defaultProducts=[{name:"Ladies Dress",price:"₵250",cat:"fashion",seller:"Ama Fashion",phone:"233244123456",likes:52,rate:4.8,imgs:["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500","https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500","https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500"]},{name:"Boys top",price:"₵70",cat:"fashion",seller:"Akoti",phone:"233244123457",likes:0,rate:5,imgs:["https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500","https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500","https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500"]}];
-let saved = JSON.parse(localStorage.getItem('dornny_products')||"[]");
-let products = [...defaultProducts,...saved];
-let curProd=null, curIdx=0, startX=0, isZoom=false;
-function render(list){let h=""; list.forEach((p,i)=>{let realIdx=products.indexOf(p); h+=`<div onclick="openView(${realIdx})" class="bg-white rounded-xl shadow"><img src="${p.imgs[0]}" class="w-full h-40 object-cover rounded-t-xl"><div class="p-2"><p class="font-bold text-sm">${p.name}</p><p class="text-xs text-gray-500">${p.seller}</p><p class="text-red-600 font-bold">${p.price}</p></div></div>`;}); document.getElementById('list').innerHTML=h; document.getElementById('trendList').innerHTML=h;}
-function filterCat(c){let f=c=='all'?products:products.filter(p=>p.cat==c); render(f);}
-function doSearch(){let q=document.getElementById('search').value.toLowerCase(); render(products.filter(p=>p.name.toLowerCase().includes(q)));}
-function showPage(p){['home','cart','shop','trend','me','notif'].forEach(id=>{let e=document.getElementById('p-'+id); if(e) e.classList.add('hidden')}); document.getElementById('p-'+p).classList.remove('hidden'); if(p=='me') loadMe(); if(p=='cart') loadCart(); if(p=='shop') checkShop();}
-function checkShop(){let s=localStorage.getItem('shopPaid'); if(s){document.getElementById('shopStatus').innerText="✅ Registered: "+s;}}
-function openPay(){document.getElementById('payModal').classList.remove('hidden');}
-function closePay(){document.getElementById('payModal').classList.add('hidden');}
-function doPay(){
-let n=document.getElementById('payName').value, ph=document.getElementById('payPhone').value, m=document.getElementById('payMomo').value;
-if(!n||!ph||!m){alert("Fill all fields"); return;}
-let PAYSTACK_KEY="pk_test_xxxxxxxxxxxxxxxxxxxx";
-if(PAYSTACK_KEY.includes("xxxx")){
-alert("DEMO: Shop activated for "+n+" - Pay to 0594221108 manually if needed");
-localStorage.setItem('shopPaid',n+" | "+ph);
-closePay(); checkShop(); location.href='sell.html';
-return;
+let currentCat='All';
+let slideIntervals={};
+
+function setCat(cat,btn){
+ currentCat=cat;
+ document.querySelectorAll('.filterBar button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ render();
 }
-let handler=PaystackPop.setup({key:PAYSTACK_KEY,email:ph+"@dornny.com",amount:5000,currency:'GHS',channels:['mobile_money'],metadata:{custom_fields:[{display_name:"Customer Name",variable_name:"customer_name",value:n},{display_name:"MoMo Number",variable_name:"momo_number",value:m},{display_name:"Receiver",variable_name:"receiver",value:"0594221108"}]},callback:function(response){alert("REAL Payment successful! Ref: "+response.reference); localStorage.setItem('shopPaid',n+" | "+ph+" | PAID "+response.reference); closePay(); checkShop(); location.href='sell.html';},onClose:function(){alert("Payment window closed");}});
-handler.openIframe();
+
+function getProducts(){
+ let stored=JSON.parse(localStorage.getItem('dornnyProducts')||'[]');
+ // default products if nothing uploaded
+ if(stored.length===0){
+   return [
+     {id:1,name:"Demo Shoe",desc:"Nice shoe",price:"120",category:"Shoes",images:["https://via.placeholder.com/300?text=Shoe"]},
+     {id:2,name:"Demo Shirt",desc:"Club top",price:"80",category:"Boys top",images:["https://via.placeholder.com/300?text=Shirt"]}
+   ];
+ }
+ return stored;
 }
-function openView(i){curProd=products[i]; curIdx=0; isZoom=false; document.getElementById('vImg').className="w-full h-[85vh] object-contain transition-all duration-300"; showSlide(); document.getElementById('viewModal').classList.remove('hidden'); document.getElementById('vSeller').innerText="Seller: "+curProd.seller; document.getElementById('whatsBtn').onclick=function(){window.open("https://wa.me/"+curProd.phone+"?text=Hello "+curProd.seller+", I'm interested in "+curProd.name,"_blank")}; loadComments(); loadRate();}
-function closeView(){document.getElementById('viewModal').classList.add('hidden')}
-function showSlide(){document.getElementById('vImg').src=curProd.imgs[curIdx]; document.getElementById('vName').innerText=curProd.name; document.getElementById('vPrice').innerText=curProd.price; document.getElementById('slideInfo').innerText=(curIdx+1)+"/"+curProd.imgs.length;}
-function nextImg(){curIdx=(curIdx+1)%curProd.imgs.length; showSlide()} function prevImg(){curIdx=(curIdx-1+curProd.imgs.length)%curProd.imgs.length; showSlide()}
-function toggleZoom(){let img=document.getElementById('vImg'); if(!isZoom){img.className="w-full h-[95vh] object-contain transition-all duration-300"; isZoom=true;}else{img.className="w-full h-[45vh] object-contain transition-all duration-300"; isZoom=false;}}
-function ts(e){startX=e.touches[0].clientX} function te(e){let dx=e.changedTouches[0].clientX-startX; if(dx<-50) nextImg(); if(dx>50) prevImg();}
-function followSeller(){let f=JSON.parse(localStorage.getItem('follows')||"[]"); if(!f.includes(curProd.seller)){f.push(curProd.seller); localStorage.setItem('follows',JSON.stringify(f)); alert("You followed "+curProd.seller); document.getElementById('followBtn').innerText="✓ Following"} else alert("Already following");}
-function rateSeller(n){let r=JSON.parse(localStorage.getItem('rates')||"{}"); r[curProd.seller]=n; localStorage.setItem('rates',JSON.stringify(r)); document.getElementById('rateInfo').innerText="You rated "+curProd.seller+" "+n+" stars ⭐"; alert("Thanks for rating!")}
-function loadRate(){let r=JSON.parse(localStorage.getItem('rates')||"{}"); if(r[curProd.seller]) document.getElementById('rateInfo').innerText="You rated "+r[curProd.seller]+" stars";}
-function postComment(){let txt=document.getElementById('commentInput').value; if(!txt) return; let c=JSON.parse(localStorage.getItem('comments_'+curProd.name)||"[]"); c.push(txt); localStorage.setItem('comments_'+curProd.name,JSON.stringify(c)); document.getElementById('commentInput').value=""; loadComments();}
-function loadComments(){let c=JSON.parse(localStorage.getItem('comments_'+curProd.name)||"[]"); let h=""; c.forEach(t=>{h+=`<div class="bg-white p-2 rounded-lg mt-1">${t}</div>`}); document.getElementById('commentList').innerHTML=h||"No comments yet";}
-function openChat(){document.getElementById('chatModal').classList.remove('hidden'); document.getElementById('chatSeller').innerText="Chat with "+curProd.seller; loadChat();}
-function closeChat(){document.getElementById('chatModal').classList.add('hidden')}
-function sendMsg(){let txt=document.getElementById('chatInput').value; if(!txt) return; let m=JSON.parse(localStorage.getItem('msgs_'+curProd.seller)||"[]"); m.push({from:"me",text:txt}); localStorage.setItem('msgs_'+curProd.seller,JSON.stringify(m)); document.getElementById('chatInput').value=""; loadChat(); loadMe();}
-function loadChat(){let m=JSON.parse(localStorage.getItem('msgs_'+curProd.seller)||"[]"); let h=""; m.forEach(x=>{h+=`<div class="p-2 rounded-xl mt-1 ${x.from=='me'?'bg-black text-white ml-10':'bg-gray-200 mr-10'}">${x.text}</div>`}); document.getElementById('chatBox').innerHTML=h;}
-function loadMe(){let f=JSON.parse(localStorage.getItem('follows')||"[]"); document.getElementById('followList').innerHTML="Following: "+(f.join(", ")||"None"); let inboxH="Messages:<br>"; for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i); if(k.startsWith("msgs_")){let seller=k.replace("msgs_",""); let msgs=JSON.parse(localStorage.getItem(k)); inboxH+=`<div class="p-2 bg-gray-100 rounded mt-1">${seller}: ${msgs[msgs.length-1]?.text||""}</div>`}} document.getElementById('inbox').innerHTML=inboxH;}
-function addCart(){let c=JSON.parse(localStorage.getItem('cart')||"[]"); c.push(curProd); localStorage.setItem('cart',JSON.stringify(c)); alert('Added to cart!'); closeView();}
-function loadCart(){let c=JSON.parse(localStorage.getItem('cart')||"[]"); if(c.length==0){document.getElementById('cartList').innerHTML="Empty"; return;} let h=""; c.forEach(p=>{h+=`<div class="flex gap-2 border-b py-2"><img src="${p.imgs[0]}" class="w-12 h-12 rounded"><div>${p.name}<br><span class="text-red-600">${p.price}</span></div></div>`}); document.getElementById('cartList').innerHTML=h;}
-render(products); checkShop();
+
+function render(){
+ const grid=document.getElementById('grid');
+ const search=document.getElementById('search').value.toLowerCase();
+ let products=getProducts();
+
+ let filtered=products.filter(p=>{
+   const matchSearch = p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
+   const matchCat = currentCat==='All' || p.category===currentCat || p.desc===currentCat;
+   return matchSearch && matchCat;
+ });
+
+ if(filtered.length===0){
+   grid.innerHTML='<div class="noProduct">No products found<br><br><a href="sell.html" style="color:#00b050">Upload first product</a></div>';
+   return;
+ }
+
+ grid.innerHTML=filtered.map(p=>{
+   let imgs=p.images||[p.image||"https://via.placeholder.com/300"];
+   let dots=imgs.length>1?`<div class="dots">${imgs.map((_,i)=>`<span class="${i===0?'active':''}" id="dot-${p.id}-${i}"></span>`).join('')}</div>`:'';
+   let nav=imgs.length>1?`<button class="navBtn prev" onclick="slide(${p.id},-1)">‹</button><button class="navBtn next" onclick="slide(${p.id},1)">›</button>`:'';
+   let sliderImgs=imgs.map((src,i)=>`<img src="${src}" class="${i===0?'active':''}" id="img-${p.id}-${i}">`).join('');
+   return `
+   <div class="card" data-id="${p.id}">
+     <div class="slider" id="slider-${p.id}">
+       ${sliderImgs}
+       ${dots}
+       ${nav}
+     </div>
+     <div class="info">
+       <h3>${p.name}</h3>
+       <p>${p.desc} • ${p.category}</p>
+       <div class="price">GH₵ ${p.price}</div>
+       <button class="buyBtn" onclick="alert('Contact seller for ${p.name} - GH₵ ${p.price}')">Buy</button>
+     </div>
+   </div>`;
+ }).join('');
+
+ // auto slide every 3 sec for products with multiple images
+ filtered.forEach(p=>{
+   let imgs=p.images||[p.image];
+   if(imgs.length>1){
+     if(slideIntervals[p.id]) clearInterval(slideIntervals[p.id]);
+     let cur=0;
+     slideIntervals[p.id]=setInterval(()=>{
+       cur=(cur+1)%imgs.length;
+       showSlide(p.id,cur,imgs.length);
+     },3000);
+   }
+ });
+}
+
+let currentSlides={};
+function showSlide(id,index,total){
+ for(let i=0;i<total;i++){
+   let img=document.getElementById(`img-${id}-${i}`);
+   let dot=document.getElementById(`dot-${id}-${i}`);
+   if(img) img.classList.remove('active');
+   if(dot) dot.classList.remove('active');
+ }
+ let activeImg=document.getElementById(`img-${id}-${index}`);
+ let activeDot=document.getElementById(`dot-${id}-${index}`);
+ if(activeImg) activeImg.classList.add('active');
+ if(activeDot) activeDot.classList.add('active');
+ currentSlides[id]=index;
+}
+function slide(id,dir){
+ let products=getProducts();
+ let p=products.find(x=>x.id==id);
+ if(!p) return;
+ let total=(p.images||[p.image]).length;
+ let cur=currentSlides[id]||0;
+ cur=(cur+dir+total)%total;
+ showSlide(id,cur,total);
+}
+render();
 </script>
 </body>
 </html>
