@@ -1,1 +1,122 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Upload - Dornny Market</title><style>body{font-family:Arial;background:#f5f5f5;padding:15px}.card{background:white;padding:20px;border-radius:20px;max-width:400px;margin:auto}input,select{width:100%;padding:14px;margin:7px 0;border-radius:12px;border:1px solid #ddd;background:#f0f0f0;box-sizing:border-box}button{border:none;cursor:pointer}.blackBtn{background:black;color:white;padding:14px 20px;border-radius:30px;width:85%;font-weight:bold;display:block;margin:12px auto}.greenBtn{background:#00b050;color:white;padding:18px;border-radius:30px;width:100%;font-weight:bold;font-size:18px;margin-top:15px}.redBtn{background:#ff3b30;color:white;padding:10px;border-radius:20px;width:100%;font-size:13px;margin-top:8px}</style></head><body><div class="card"><h2 style="text-align:center;margin:0">Upload Product</h2><p style="text-align:center;color:#00b050;font-weight:bold">✅ FINAL FIX - Ultra Compressed</p><input id="pname" placeholder="Product name"><input id="pdesc" placeholder="Type e.g. Club top"><input id="pprice" type="number" placeholder="Price"><select id="pcat"><option>Fashion</option><option>Boys top</option><option>Shoes</option><option>Electronics</option></select><div style="border:2px dashed #ccc;border-radius:15px;padding:12px;text-align:center;margin-top:12px"><p>📸 Choose 1-2 Images (super compressed)</p><button class="blackBtn" onclick="document.getElementById('imageInput').click()">Select Images</button><input type="file" id="imageInput" accept="image/*" multiple hidden onchange="handleFiles(this)"><div id="preview" style="display:flex;flex-wrap:wrap;justify-content:center;margin-top:8px"></div><p id="count" style="color:#555;font-size:13px">No images</p></div><button class="greenBtn" id="upBtn" onclick="uploadProduct()">UPLOAD TO MARKET</button><button class="redBtn" onclick="clearStorage()">🗑️ Clear Old Storage If Full</button><a href="index.html" style="display:block;text-align:center;color:red;text-decoration:none;margin-top:12px;font-weight:bold">← Back to Shop</a><p id="storageInfo" style="font-size:11px;color:#888;text-align:center"></p></div><script>let selectedBase64=[];function updateStorageInfo(){let total=0;for(let k in localStorage){if(localStorage.hasOwnProperty(k)){total+=localStorage[k].length;}}document.getElementById('storageInfo').innerText='Storage used: '+(total/1024).toFixed(1)+' KB / ~5000 KB';}updateStorageInfo();function clearStorage(){if(confirm('Clear ALL old products to free space? You will need to re-upload.')){localStorage.clear();alert('✅ Storage cleared! Now try upload 1 image.');location.reload();}}function compressImage(file,cb){const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const MAX=350;let w=img.width,h=img.height;if(w>h){if(w>MAX){h*=MAX/w;w=MAX;}}else{if(h>MAX){w*=MAX/h;h=MAX;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.45));};img.src=e.target.result;};r.readAsDataURL(file);}function handleFiles(input){const files=Array.from(input.files).slice(0,2);selectedBase64=[];const preview=document.getElementById('preview');preview.innerHTML='';document.getElementById('count').innerText='Compressing...';let done=0;files.forEach((f,i)=>{compressImage(f,b64=>{selectedBase64[i]=b64;preview.innerHTML+=`<img src="${b64}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;margin:3px;border:2px solid #000">`;done++;if(done===files.length){document.getElementById('count').innerText=done+' images ready ✅ - Size: '+(b64.length/1024).toFixed(1)+'KB each - Click UPLOAD';}});});}function uploadProduct(){const btn=document.getElementById('upBtn');const name=document.getElementById('pname').value.trim();const desc=document.getElementById('pdesc').value.trim()||"Club top";const price=document.getElementById('pprice').value.trim();const cat=document.getElementById('pcat').value;if(!name||!price){alert("Fill name & price");return;}if(selectedBase64.length===0){alert("Select 1 image first");return;}btn.innerText="UPLOADING...";setTimeout(()=>{try{let products=JSON.parse(localStorage.getItem('dornnyProducts')||'[]');if(products.length>10){products=products.slice(0,8);}const newProduct={id:Date.now(),name:name,desc:desc,price:price,category:cat,images:selectedBase64,image:selectedBase64[0]};products.unshift(newProduct);localStorage.setItem('dornnyProducts',JSON.stringify(products));alert("✅ SUCCESS! "+name+" added!");window.location.href='index.html?v=1';}catch(e){alert("STILL FULL! Click 'Clear Old Storage' button then try again with ONLY 1 image! Error: "+e.message);btn.innerText="UPLOAD TO MARKET";updateStorageInfo();}},300);}</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sell - Dornny</title>
+<style>
+body{font-family:Arial;background:#f5f5f5;padding:15px}
+.card{background:white;padding:20px;border-radius:20px;max-width:400px;margin:auto}
+input,select{width:100%;padding:14px;margin:7px 0;border-radius:12px;border:1px solid #ddd;background:#f0f0f0;box-sizing:border-box}
+button{border:none;cursor:pointer}
+.b1{background:black;color:white;padding:14px 20px;border-radius:30px;width:85%;font-weight:bold;display:block;margin:12px auto}
+.b2{background:#00b050;color:white;padding:18px;border-radius:30px;width:100%;font-weight:bold;font-size:18px;margin-top:15px}
+.b3{background:#ff3b30;color:white;padding:10px;border-radius:20px;width:100%;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="card">
+<h2 style="text-align:center">Upload Product</h2>
+<p style="text-align:center;color:#00b050;font-weight:bold">✅ With All Categories</p>
+<input id="pname" placeholder="Product name">
+<input id="pdesc" placeholder="Description">
+<input id="pprice" type="number" placeholder="Price GH₵">
+<select id="pcat">
+<option>Men</option>
+<option>Women</option>
+<option>Kids</option>
+<option>Shoes</option>
+<option>Bags</option>
+<option>Jewelry & Accs</option>
+<option>Home</option>
+<option>Curve</option>
+<option>Lingerie & Sleep</option>
+<option>Sports</option>
+<option>Electronics</option>
+<option>Toys</option>
+<option>Office</option>
+<option>Pet</option>
+<option>Appliances</option>
+</select>
+<div style="border:2px dashed #ccc;border-radius:15px;padding:12px;text-align:center;margin-top:12px">
+<p>📸 1-2 Images (compressed)</p>
+<button class="b1" onclick="document.getElementById('f').click()">Select Images</button>
+<input type="file" id="f" accept="image/*" multiple hidden onchange="h(this)">
+<div id="pr" style="display:flex;flex-wrap:wrap;justify-content:center"></div>
+<p id="ct" style="font-size:13px">No images</p>
+</div>
+<button class="b2" id="up" onclick="up()">UPLOAD</button>
+<button class="b3" onclick="localStorage.clear();alert('Cleared!');location.reload()">🗑️ Clear If Full</button>
+<a href="index.html" style="display:block;text-align:center;color:red;text-decoration:none;margin-top:12px;font-weight:bold">← Back to Shop</a>
+<p id="si" style="font-size:11px;color:#888;text-align:center"></p>
+</div>
+<script>
+let sel=[];
+function si(){
+ let t=0;
+ for(let k in localStorage){
+  if(localStorage.hasOwnProperty(k)) t+=localStorage[k].length;
+ }
+ document.getElementById('si').innerText='Used: '+(t/1024).toFixed(1)+'KB';
+}
+si();
+function comp(file,cb){
+ const r=new FileReader();
+ r.onload=e=>{
+  const im=new Image();
+  im.onload=()=>{
+   const c=document.createElement('canvas');
+   const M=350;
+   let w=im.width,h=im.height;
+   if(w>h){if(w>M){h*=M/w;w=M}}
+   else{if(h>M){w*=M/h;h=M}}
+   c.width=w;c.height=h;
+   c.getContext('2d').drawImage(im,0,0,w,h);
+   cb(c.toDataURL('image/jpeg',0.45));
+  };
+  im.src=e.target.result;
+ };
+ r.readAsDataURL(file);
+}
+function h(input){
+ const files=Array.from(input.files).slice(0,2);
+ sel=[];
+ const pr=document.getElementById('pr');
+ pr.innerHTML='';
+ document.getElementById('ct').innerText='Compressing...';
+ let d=0;
+ files.forEach((f,i)=>{
+  comp(f,b64=>{
+   sel[i]=b64;
+   pr.innerHTML+=`<img src="${b64}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;margin:3px;border:2px solid #000">`;
+   d++;
+   if(d==files.length)document.getElementById('ct').innerText=d+' ready ✅';
+  });
+ });
+}
+function up(){
+ const b=document.getElementById('up');
+ const n=document.getElementById('pname').value.trim();
+ const de=document.getElementById('pdesc').value.trim()||"New";
+ const pr=document.getElementById('pprice').value.trim();
+ const ca=document.getElementById('pcat').value;
+ if(!n||!pr){alert("Name & Price");return}
+ if(sel.length==0){alert("Pick image");return}
+ b.innerText="UPLOADING...";
+ setTimeout(()=>{
+  try{
+   let p=JSON.parse(localStorage.getItem('dornnyProducts')||'[]');
+   if(p.length>20)p=p.slice(0,15);
+   p.unshift({id:Date.now(),name:n,desc:de,price:pr,category:ca,images:sel,image:sel[0]});
+   localStorage.setItem('dornnyProducts',JSON.stringify(p));
+   alert("✅ SUCCESS!");
+   location.href='index.html?v=1';
+  }catch(e){
+   alert("FULL! Click Clear");
+   b.innerText="UPLOAD";
+   si();
+  }
+ },300);
+}
+</script>
+</body>
+</html>
