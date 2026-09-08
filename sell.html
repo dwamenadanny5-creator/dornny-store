@@ -1,42 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Upload - DORNNY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upload Product - DORNNY</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-4">
-<script>
-let regPaid=localStorage.getItem('dm_reg_paid')=='yes';
-let exp=localStorage.getItem('dm_monthly_expiry');
-let active=exp && new Date()<new Date(exp);
-if(!regPaid){alert('Pay 50 GHS Registration first! Go to Me tab');location.href='index.html';}
-else if(!active){alert('Monthly 50 GHS expired! Pay in Me tab');location.href='index.html';}
-</script>
-<div class="max-w-[500px] mx-auto bg-white p-4 rounded-2xl shadow">
-<h1 class="font-bold text-xl text-center">Upload Product</h1>
-<p class="text-xs text-center text-green-600">✅ Slide Images Enabled</p>
-<input id="sName" placeholder="Shop Name" class="w-full border p-3 rounded-xl mt-4 mb-2 text-sm">
-<input id="pTitle" placeholder="Product Name e.g. Ladies Dress" class="w-full border p-3 rounded-xl mb-2 text-sm">
-<input id="pPrice" type="number" placeholder="Price GHS e.g. 250" class="w-full border p-3 rounded-xl mb-2 text-sm">
-<select id="pCat" class="w-full border p-3 rounded-xl mb-3 text-sm bg-gray-100">
-<option value="fashion">Fashion</option><option value="phones">Phones</option><option value="shoes">Shoes</option><option value="food">Food</option><option value="electronics">Electronics</option><option value="furniture">Furniture</option><option value="home">Home Deco</option><option value="cars">Cars</option>
+<div class="bg-white p-4 rounded-2xl max-w-md mx-auto">
+<h1 class="font-black text-xl text-center">Upload Product</h1>
+<p class="text-center text-green-600 text-sm font-bold">✅ Slide Images Enabled</p>
+<input id="seller" value="Akoti" placeholder="Seller Name" class="w-full p-3 bg-gray-100 rounded-xl mt-4 border">
+<input id="name" placeholder="Product Name e.g. Boys top" class="w-full p-3 bg-gray-100 rounded-xl mt-3 border">
+<input id="price" type="number" placeholder="Price e.g. 80" class="w-full p-3 bg-gray-100 rounded-xl mt-3 border">
+<select id="cat" class="w-full p-3 bg-gray-100 rounded-xl mt-3 border">
+<option value="fashion">Fashion</option>
+<option value="phones">Phones</option>
+<option value="shoes">Shoes</option>
+<option value="food">Food</option>
 </select>
-<div class="border-2 border-dashed rounded-xl p-4 text-center">
-<p class="text-sm font-bold">📸 Choose up to 5 Images (slide left/right)</p>
-<input id="fileInput" type="file" accept="image/*" multiple class="hidden" onchange="handleFiles(this)">
-<button onclick="document.getElementById('fileInput').click()" class="bg-black text-white px-5 py-2 rounded-full text-sm mt-2">Select Images from Gallery</button>
+<div class="border-2 border-dashed rounded-xl p-4 mt-4 text-center">
+<p class="font-bold text-sm">📸 Choose up to 5 Images (slide left/right)</p>
+<input type="file" id="imgInput" accept="image/*" multiple hidden>
+<button onclick="document.getElementById('imgInput').click()" class="bg-black text-white px-6 py-3 rounded-full mt-3 text-sm font-bold">Select Images from Gallery</button>
 <div id="preview" class="grid grid-cols-3 gap-2 mt-3"></div>
-<p id="imgCountText" class="text-xs text-gray-500 mt-2">No images selected</p>
+<p id="imgStatus" class="text-xs text-gray-500 mt-2">No images selected</p>
 </div>
-<button onclick="doUpload()" class="bg-green-500 text-white w-full py-3 rounded-full font-bold mt-4">UPLOAD TO MARKET</button>
-<a href="index.html" class="block text-center text-red-600 font-bold mt-4 text-sm">← Back to Shop</a>
+<button onclick="upload()" class="bg-green-600 text-white w-full p-4 rounded-full font-black mt-4">UPLOAD TO MARKET</button>
+<a href="index.html" class="block text-center text-red-600 font-bold mt-3 text-sm">← Back to Shop</a>
 </div>
 <script>
-let selectedImgs=[];
-function handleFiles(input){let files=Array.from(input.files).slice(0,5);selectedImgs=[];document.getElementById('preview').innerHTML='';let promises=files.map(file=>new Promise(res=>{let reader=new FileReader();reader.onload=e=>{selectedImgs.push(e.target.result);res();};reader.readAsDataURL(file);}));Promise.all(promises).then(()=>{renderPreviews();});}
-function renderPreviews(){let cont=document.getElementById('preview');cont.innerHTML=selectedImgs.map((src,i)=>`<div class="relative"><img src="${src}" class="w-full h-20 object-cover rounded-lg"><button onclick="selectedImgs.splice(${i},1);renderPreviews();" class="absolute -top-1 -right-1 bg-red-600 text-white w-5 h-5 rounded-full text-[10px]">✕</button></div>`).join('');document.getElementById('imgCountText').innerText=selectedImgs.length+'/5 images - buyer can slide left/right';}
-function doUpload(){let name=document.getElementById('sName').value||localStorage.getItem('dm_name')||'Shop';let title=document.getElementById('pTitle').value;let price=document.getElementById('pPrice').value;let cat=document.getElementById('pCat').value;if(!title||!price)return alert('Enter title & price');if(selectedImgs.length==0)return alert('Select at least 1 image');let product={title,price,cat,img:selectedImgs[0],images:selectedImgs,shop:name,likes:0,rating:5.0};let list=JSON.parse(localStorage.getItem('dm_user_products')||'[]');list.push(product);localStorage.setItem('dm_user_products',JSON.stringify(list));alert('✅ Uploaded with '+selectedImgs.length+' sliding images!');location.href='index.html';}
+let uploadedImgs=[];
+document.getElementById('imgInput').addEventListener('change',function(e){
+let files=Array.from(e.target.files).slice(0,5);
+if(files.length==0) return;
+uploadedImgs=[];
+document.getElementById('preview').innerHTML="";
+files.forEach(file=>{
+let reader=new FileReader();
+reader.onload=function(ev){
+uploadedImgs.push(ev.target.result);
+document.getElementById('preview').innerHTML+=`<img src="${ev.target.result}" class="w-full h-20 object-cover rounded-lg border">`;
+document.getElementById('imgStatus').innerText=uploadedImgs.length+" images selected ✅ - Now click UPLOAD";
+};
+reader.readAsDataURL(file);
+});
+});
+function upload(){
+let seller=document.getElementById('seller').value;
+let name=document.getElementById('name').value;
+let price=document.getElementById('price').value;
+let cat=document.getElementById('cat').value;
+if(!seller||!name||!price){alert("Fill all fields"); return;}
+if(uploadedImgs.length==0){alert("Select at least 1 image"); return;}
+let allProducts=JSON.parse(localStorage.getItem('dornny_products')||"[]");
+allProducts.push({name:name,price:"₵"+price,cat:cat,seller:seller,phone:"233594221108",likes:0,rate:5,imgs:uploadedImgs});
+localStorage.setItem('dornny_products',JSON.stringify(allProducts));
+alert("✅ SUCCESS! "+name+" uploaded! Going to main market now.");
+location.href="index.html";
+}
 </script>
 </body>
 </html>
