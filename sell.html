@@ -1,63 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Upload Product - DORNNY</title>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-4">
-<div class="bg-white p-4 rounded-2xl max-w-md mx-auto">
-<h1 class="font-black text-xl text-center">Upload Product</h1>
-<p class="text-center text-green-600 text-sm font-bold">✅ Slide Images Enabled</p>
-<input id="seller" value="Akoti" placeholder="Seller Name" class="w-full p-3 bg-gray-100 rounded-xl mt-4 border">
-<input id="name" placeholder="Product Name e.g. Boys top" class="w-full p-3 bg-gray-100 rounded-xl mt-3 border">
-<input id="price" type="number" placeholder="Price e.g. 80" class="w-full p-3 bg-gray-100 rounded-xl mt-3 border">
-<select id="cat" class="w-full p-3 bg-gray-100 rounded-xl mt-3 border">
-<option value="fashion">Fashion</option>
-<option value="phones">Phones</option>
-<option value="shoes">Shoes</option>
-<option value="food">Food</option>
-</select>
-<div class="border-2 border-dashed rounded-xl p-4 mt-4 text-center">
-<p class="font-bold text-sm">📸 Choose up to 5 Images (slide left/right)</p>
-<input type="file" id="imgInput" accept="image/*" multiple hidden>
-<button onclick="document.getElementById('imgInput').click()" class="bg-black text-white px-6 py-3 rounded-full mt-3 text-sm font-bold">Select Images from Gallery</button>
-<div id="preview" class="grid grid-cols-3 gap-2 mt-3"></div>
-<p id="imgStatus" class="text-xs text-gray-500 mt-2">No images selected</p>
-</div>
-<button onclick="upload()" class="bg-green-600 text-white w-full p-4 rounded-full font-black mt-4">UPLOAD TO MARKET</button>
-<a href="index.html" class="block text-center text-red-600 font-bold mt-3 text-sm">← Back to Shop</a>
-</div>
-<script>
-let uploadedImgs=[];
-document.getElementById('imgInput').addEventListener('change',function(e){
-let files=Array.from(e.target.files).slice(0,5);
-if(files.length==0) return;
-uploadedImgs=[];
-document.getElementById('preview').innerHTML="";
-files.forEach(file=>{
-let reader=new FileReader();
-reader.onload=function(ev){
-uploadedImgs.push(ev.target.result);
-document.getElementById('preview').innerHTML+=`<img src="${ev.target.result}" class="w-full h-20 object-cover rounded-lg border">`;
-document.getElementById('imgStatus').innerText=uploadedImgs.length+" images selected ✅ - Now click UPLOAD";
-};
-reader.readAsDataURL(file);
-});
-});
-function upload(){
-let seller=document.getElementById('seller').value;
-let name=document.getElementById('name').value;
-let price=document.getElementById('price').value;
-let cat=document.getElementById('cat').value;
-if(!seller||!name||!price){alert("Fill all fields"); return;}
-if(uploadedImgs.length==0){alert("Select at least 1 image"); return;}
-let allProducts=JSON.parse(localStorage.getItem('dornny_products')||"[]");
-allProducts.push({name:name,price:"₵"+price,cat:cat,seller:seller,phone:"233594221108",likes:0,rate:5,imgs:uploadedImgs});
-localStorage.setItem('dornny_products',JSON.stringify(allProducts));
-alert("✅ SUCCESS! "+name+" uploaded! Going to main market now.");
-location.href="index.html";
+let selectedBase64 = [];
+let selectedFiles = [];
+
+function openGallery() {
+  document.getElementById('imageInput').click();
 }
-</script>
-</body>
-</html>
+
+function handleFiles(input) {
+  const files = Array.from(input.files).slice(0, 5);
+  selectedFiles = files;
+  selectedBase64 = [];
+  const preview = document.getElementById('preview');
+  preview.innerHTML = '';
+  let loaded = 0;
+
+  if(files.length === 0) return;
+
+  files.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      selectedBase64[i] = e.target.result;
+      preview.innerHTML += `<img src="${e.target.result}" style="width:90px;height:90px;object-fit:cover;border-radius:10px;margin:4px;border:2px solid #000">`;
+      loaded++;
+      if(loaded === files.length){
+        document.getElementById('count').innerText = files.length + ' images selected ✅ - Now click UPLOAD';
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function uploadProduct() {
+  const name = document.getElementById('pname').value.trim();
+  const desc = document.getElementById('pdesc').value.trim() || "Club top";
+  const price = document.getElementById('pprice').value.trim();
+  const cat = document.getElementById('pcat').value;
+
+  if(!name ||!price){ alert("Please fill name and price"); return; }
+  if(selectedBase64.length === 0){ alert("Please select images first!"); return; }
+  if(selectedBase64.includes(undefined)){ alert("Wait for images to load..."); return; }
+
+  // Get old products
+  let products = JSON.parse(localStorage.getItem('dornnyProducts') || localStorage.getItem('products') || '[]');
+
+  const newProduct = {
+    id: Date.now(),
+    name: name,
+    desc: desc,
+    price: price,
+    category: cat,
+    images: selectedBase64, // all 5 images for slide
+    image: selectedBase64[0] // first for cover
+  };
+
+  products.unshift(newProduct);
+  localStorage.setItem('dornnyProducts', JSON.stringify(products));
+  localStorage.setItem('products', JSON.stringify(products)); // save both keys for compatibility
+
+  alert("✅ Uploaded! " + name + " added to market");
+  window.location.href = 'index.html';
+}
