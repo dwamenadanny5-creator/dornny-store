@@ -1,118 +1,53 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dornny Market Gh</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dornny Market Gh</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:#f5f5f5}
-.header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-.logo{font-weight:900;font-size:20px}
-.headerRight{display:flex;gap:8px;align-items:center}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#f5f5f5;padding-bottom:70px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;position:sticky;top:0;z-index:10}
+.logo{font-weight:900;font-size:20px}.headerRight{display:flex;gap:8px}
 .sellBtn,.liveBtn{padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:800;font-size:13px}
-.sellBtn{background:black;color:white}
-.liveBtn{background:red;color:white;animation:pulse 1.5s infinite}
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
-.searchBar{padding:10px;background:white}
-.searchBar input{width:100%;padding:12px 15px;border-radius:12px;border:1px solid #ddd;background:#f2f2f2}
-.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;white-space:nowrap;background:white}
+.sellBtn{background:black;color:white}.liveBtn{background:red;color:white}
+.searchBar{padding:10px;background:white} .searchBar input{width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;background:#f2f2f2}
+.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;white-space:nowrap;background:white;scrollbar-width:none}
+.filterBar::-webkit-scrollbar{display:none}
 .filterBar button{padding:7px 14px;border-radius:20px;border:1px solid #ddd;background:white;font-size:12px;flex-shrink:0}
 .filterBar button.active{background:black;color:white}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
 .card{background:white;border-radius:15px;overflow:hidden;position:relative}
-.slider{position:relative;width:100%;height:160px;background:#eee}
-.slider img{width:100%;height:100%;object-fit:cover;display:none}
-.slider img.active{display:block}
-.likeBtn{position:absolute;top:8px;right:8px;background:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:0;box-shadow:0 2px 5px rgba(0,0,0,.2)}
-.cardInfo{padding:8px 10px}
-.cardTitle{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cardPrice{color:#00c853;font-weight:800;font-size:14px;margin-top:2px}
-.cardLoc{font-size:11px;color:#888}
-.liveDot{position:absolute;top:8px;left:8px;background:red;color:white;padding:3px 7px;border-radius:10px;font-size:10px;font-weight:800;display:none}
-</style>
-</head>
-<body>
-
-<div class="header">
-<div class="logo">Dornny</div>
-<div class="headerRight">
-<a href="live.html" class="liveBtn">🔴 LIVE</a>
-<a href="sell.html" class="sellBtn">+ Sell</a>
-</div>
-</div>
-
-<div class="searchBar">
-<input id="search" placeholder="Search bags, shoes, dresses..." oninput="render()">
-</div>
-
+.card img{width:100%;height:160px;object-fit:cover}
+.cardInfo{padding:8px}.cardTitle{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cardPrice{color:#00c853;font-weight:800}.cardLoc{font-size:11px;color:#888}
+.bottomNav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #eee;z-index:20}
+.bottomNav div{text-align:center;font-size:10px;color:#888} .bottomNav div.active{color:black;font-weight:800}
+.bottomNav span{font-size:20px;display:block}
+</style></head><body>
+<div class="header"><div class="logo">Dornny</div><div class="headerRight"><a href="live.html" class="liveBtn">🔴 LIVE</a><a href="sell.html" class="sellBtn">+ Sell</a></div></div>
+<div class="searchBar"><input id="search" placeholder="Search..." oninput="render()"></div>
 <div class="filterBar" id="filterBar">
 <button class="active" onclick="setCat('All',this)">All</button>
-<button onclick="setCat('Bags',this)">Bags</button>
 <button onclick="setCat('Shoes',this)">Shoes</button>
-<button onclick="setCat('Dress',this)">Dress</button>
-<button onclick="setCat('Wigs',this)">Wigs</button>
-<button onclick="setCat('Accessories',this)">Accessories</button>
+<button onclick="setCat('Men',this)">Men</button>
+<button onclick="setCat('Women',this)">Women</button>
+<button onclick="setCat('Kids',this)">Kids</button>
+<button onclick="setCat('Pets',this)">Pets</button>
+<button onclick="setCat('Food',this)">Food</button>
+<button onclick="setCat('Appliances',this)">Appliances</button>
+<button onclick="setCat('Jewelry',this)">Jewery&Accs</button>
+<button onclick="setCat('Sport',this)">Sport</button>
+<button onclick="setCat('Electronics',this)">Electronics</button>
+<button onclick="setCat('Toys',this)">Toys</button>
+<button onclick="setCat('Office',this)">Office</button>
 </div>
-
 <div class="grid" id="grid"></div>
-
+<div class="bottomNav">
+<div class="active" onclick="location.href='index.html'"><span>🏠</span>Home</div>
+<div onclick="document.getElementById('filterBar').scrollIntoView()"><span>📦</span>Category</div>
+<div onclick="setCat('All',document.querySelector('.filterBar button'))"><span>🔥</span>Trend</div>
+<div onclick="location.href='cart.html'"><span>🛒</span>Cart</div>
+<div onclick="location.href='me.html'"><span>👤</span>Me</div>
+</div>
 <script>
-let cat='All';
-let products=[];
-try{ products=JSON.parse(localStorage.getItem('dornnyProducts')||'[]'); }catch(e){}
-
-if(products.length===0){
- products=[
-  {id:1,name:"Designer Bag GH120",price:120,category:"Bags",location:"Accra",images:["https://via.placeholder.com/300x300?text=Bag"]},
-  {id:2,name:"Heels Classy",price:200,category:"Shoes",location:"Kumasi",images:["https://via.placeholder.com/300x300?text=Shoes"]},
-  {id:3,name:"African Dress",price:180,category:"Dress",location:"Accra",images:["https://via.placeholder.com/300x300?text=Dress"]}
- ];
-}
-
-function setCat(c,el){
- cat=c;
- document.querySelectorAll('.filterBar button').forEach(b=>b.classList.remove('active'));
- el.classList.add('active');
- render();
-}
-
-function render(){
- const q=document.getElementById('search').value.toLowerCase();
- const grid=document.getElementById('grid');
- grid.innerHTML='';
- let filtered=products.filter(p=>{
-  let okCat = cat==='All' || (p.category||'').toLowerCase().includes(cat.toLowerCase());
-  let okSearch =!q || (p.name||'').toLowerCase().includes(q);
-  return okCat && okSearch;
- });
-
- filtered.forEach(p=>{
-  let img = p.images? p.images[0] : (p.image||'https://via.placeholder.com/300');
-  let d=document.createElement('div');
-  d.className='card';
-  d.innerHTML=`
-    <div class="slider">
-      <img class="active" src="${img}">
-      <div class="liveDot" id="dot-${p.id}">🔴 LIVE</div>
-      <button class="likeBtn">♡</button>
-    </div>
-    <div class="cardInfo">
-      <div class="cardTitle">${p.name||p.title}</div>
-      <div class="cardPrice">GH₵ ${p.price||0}</div>
-      <div class="cardLoc">${p.location||'Ghana'} • ${(p.category||'')}</div>
-    </div>
-  `;
-  d.onclick=()=>{ localStorage.setItem('selectedProduct',JSON.stringify(p)); location.href='product.html'; };
-  grid.appendChild(d);
- });
-}
-render();
-
-// Check if someone is live (from live.html)
-if(localStorage.getItem('dornnyLive')==='1'){
- setTimeout(()=>{ document.querySelectorAll('.liveDot').forEach(el=>el.style.display='block'); },500);
-}
-</script>
-</body>
-</html>
+let cat='All'; let products=[]; try{products=JSON.parse(localStorage.getItem('dornnyProducts')||'[]')}catch(e){}
+if(products.length===0){products=[{id:1,name:"Shoes GH200",price:200,category:"Shoes",location:"Accra",image:"https://via.placeholder.com/300"},{id:2,name:"Men Shirt",price:120,category:"Men",location:"Kumasi",image:"https://via.placeholder.com/300"},{id:3,name:"Women Dress",price:180,category:"Women",location:"Accra",image:"https://via.placeholder.com/300"}];}
+function setCat(c,el){cat=c;document.querySelectorAll('.filterBar button').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');render();}
+function render(){let q=document.getElementById('search').value.toLowerCase();let g=document.getElementById('grid');g.innerHTML='';products.filter(p=>(cat==='All'||(p.category||'').toLowerCase().includes(cat.toLowerCase()))&&(!q||(p.name||'').toLowerCase().includes(q))).forEach(p=>{let d=document.createElement('div');d.className='card';d.innerHTML=`<img src="${p.image||p.images?.[0]||'https://via.placeholder.com/300'}"><div class="cardInfo"><div class="cardTitle">${p.name||p.title}</div><div class="cardPrice">GH₵ ${p.price||0}</div><div class="cardLoc">${p.location||'Ghana'}</div></div>`;d.onclick=()=>{localStorage.setItem('selectedProduct',JSON.stringify(p));location.href='product.html'};g.appendChild(d);});}render();
+</script></body></html>
