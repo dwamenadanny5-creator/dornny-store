@@ -1,152 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dornny Market - Ghana's Online Market</title>
+<title>Dornny Market</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f5f5f5}
+body{background:#f5f5f5;padding-bottom:70px}
 header{background:black;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-header h1{font-size:20px}
-header a{background:#00b050;color:white;padding:8px 15px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:14px}
-.searchBox{padding:10px;background:white;display:flex;gap:8px}
-.searchBox input{flex:1;padding:12px;border-radius:25px;border:1px solid #ddd;background:#f0f0f0}
-.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;background:white}
-.filterBar button{padding:8px 16px;border-radius:20px;border:1px solid #ddd;background:white;white-space:nowrap}
+header h1{font-size:18px}
+header a{background:#00b050;color:white;padding:7px 14px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:13px}
+.searchBox{padding:10px;background:white;position:sticky;top:48px;z-index:99}
+.searchBox input{width:100%;padding:12px;border-radius:25px;border:1px solid #ddd;background:#f0f0f0}
+.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;background:white;white-space:nowrap}
+.filterBar button{padding:7px 14px;border-radius:20px;border:1px solid #ddd;background:white;font-size:12px;flex-shrink:0}
 .filterBar button.active{background:black;color:white}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
 .card{background:white;border-radius:15px;overflow:hidden;position:relative}
-.slider{position:relative;width:100%;height:160px;background:#eee;overflow:hidden}
+.slider{position:relative;width:100%;height:160px;background:#eee}
 .slider img{width:100%;height:100%;object-fit:cover;display:none}
 .slider img.active{display:block}
-.dots{position:absolute;bottom:6px;left:0;right:0;display:flex;justify-content:center;gap:4px}
-.dots span{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%}
-.dots span.active{background:white}
-.navBtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.4);color:white;border:none;width:24px;height:24px;border-radius:50%;font-size:12px}
-.prev{left:5px}.next{right:5px}
+.likeBtn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.4);color:white;border:none;width:26px;height:26px;border-radius:50%}
+.likeBtn.liked{color:#ff3040;background:white}
 .info{padding:8px}
-.info h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.info p{font-size:12px;color:#777}
-.price{color:#00b050;font-weight:bold;font-size:16px}
-.buyBtn{background:black;color:white;border:none;padding:8px;width:100%;border-radius:10px;margin-top:6px;font-weight:bold}
-.noProduct{text-align:center;padding:40px;color:#888;grid-column:1/-1}
+.info h3{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info p{font-size:10px;color:#777}
+.price{color:#00b050;font-weight:bold;font-size:14px}
+.row{display:flex;gap:4px;margin-top:5px}
+.row button{flex:1;border:none;padding:7px;border-radius:8px;font-size:11px;font-weight:bold}
+.bottomNav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:200}
+.bottomNav div{text-align:center;font-size:10px;color:#888}
+.bottomNav div.active{color:black;font-weight:bold}
+.bottomNav span{font-size:18px;display:block}
+.page{display:none;padding:10px}
+.page.active{display:block}
+.cartItem{background:white;padding:10px;border-radius:12px;display:flex;gap:10px;margin-bottom:8px;align-items:center}
+.cartItem img{width:55px;height:55px;object-fit:cover;border-radius:10px}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:300;display:none;overflow-y:auto}
+.modalContent{background:white;border-radius:20px;overflow:hidden;max-width:500px;margin:15px auto}
+.modalImg{width:100%;height:320px;object-fit:contain;background:#000}
+.commentBox{padding:10px;border-top:1px solid #eee}
+.commentBox input{width:70%;padding:10px;border-radius:20px;border:1px solid #ddd;background:#f0f0f0}
+.commentBox button{width:25%;padding:10px;border-radius:20px;border:none;background:black;color:white;margin-left:5px}
+.cmt{font-size:13px;padding:6px 0;border-bottom:1px solid #f5f5f5}
+.followBtn{background:#00b050;color:white;border:none;padding:6px 12px;border-radius:20px;font-size:12px}
+.catTile{background:white;padding:20px;border-radius:15px;text-align:center;font-weight:bold}
 </style>
 </head>
 <body>
-<header>
-<h1>Dornny Market</h1>
-<a href="sell.html">+ Sell</a>
-</header>
-<div class="searchBox">
-<input id="search" placeholder="Search products..." oninput="render()">
-</div>
-<div class="filterBar">
-<button class="active" onclick="setCat('All',this)">All</button>
-<button onclick="setCat('Fashion',this)">Fashion</button>
-<button onclick="setCat('Boys top',this)">Boys top</button>
-<button onclick="setCat('Shoes',this)">Shoes</button>
-<button onclick="setCat('Electronics',this)">Electronics</button>
-</div>
+<header><h1>Dornny Market</h1><a href="sell.html">+ Sell</a></header>
+
+<div id="homePage" class="page active">
+<div class="searchBox"><input id="search" placeholder="Search..." oninput="render()"></div>
+<div class="filterBar" id="filterBar"></div>
 <div id="grid" class="grid"></div>
+</div>
+
+<div id="catPage" class="page">
+<h3>📂 All Categories</h3>
+<div id="catGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"></div>
+</div>
+
+<div id="cartPage" class="page">
+<h3>🛒 Cart (<span id="cartCount">0</span>)</h3>
+<div id="cartList" style="margin-top:10px"></div>
+<button id="checkoutBtn" onclick="checkout()" style="width:100%;background:#00b050;color:white;padding:14px;border-radius:30px;border:none;font-weight:bold;margin-top:10px;display:none">Checkout via WhatsApp</button>
+</div>
+
+<div id="trendPage" class="page">
+<h3>🔥 Trending</h3>
+<div id="trendGrid" class="grid" style="margin-top:10px"></div>
+</div>
+
+<div id="mePage" class="page">
+<div style="background:white;padding:20px;border-radius:15px;text-align:center">
+<div style="width:70px;height:70px;background:black;color:white;border-radius:50%;margin:auto;line-height:70px;font-size:30px">Me</div>
+<h3>Dornny User</h3>
+<p style="font-size:13px;color:#777">Ghana Seller</p>
+<div style="display:flex;gap:10px;margin-top:15px">
+<div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myProdCount">0</b><br><span style="font-size:11px">Products</span></div>
+<div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myLikeCount">0</b><br><span style="font-size:11px">Liked</span></div>
+<div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myFollowCount">0</b><br><span style="font-size:11px">Following</span></div>
+</div>
+</div>
+<h4 style="margin:15px 0 10px">My Products</h4>
+<div id="myProducts" class="grid"></div>
+</div>
+
+<div class="bottomNav">
+<div class="active" onclick="showPage('homePage',this)"><span>🏠</span>Home</div>
+<div onclick="showPage('catPage',this)"><span>📂</span>Category</div>
+<div onclick="showPage('trendPage',this)"><span>🔥</span>Trend</div>
+<div onclick="showPage('cartPage',this)"><span>🛒</span>Cart</div>
+<div onclick="showPage('mePage',this)"><span>👤</span>Me</div>
+</div>
+
+<div id="productModal" class="modal" onclick="if(event.target==this)closeModal()">
+<div class="modalContent">
+<div style="position:relative">
+<img id="modalImg" class="modalImg" src="">
+<button onclick="closeModal()" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.5);color:white;border:none;width:30px;height:30px;border-radius:50%">✕</button>
+</div>
+<div style="padding:12px">
+<h2 id="modalName"></h2>
+<p id="modalDesc" style="color:#777;font-size:13px"></p>
+<div id="modalPrice" style="color:#00b050;font-weight:bold;font-size:20px;margin:8px 0"></div>
+<div style="display:flex;gap:8px;align-items:center;margin:8px 0"><span id="modalRating"></span><button class="followBtn" id="followBtn" onclick="toggleFollow()">+ Follow</button></div>
+<div style="display:flex;gap:8px;margin:10px 0">
+<button style="flex:1;padding:12px;border-radius:30px;background:#25D366;color:white;border:none;font-weight:bold" onclick="buyWhatsApp()">💬 WhatsApp</button>
+<button style="flex:1;padding:12px;border-radius:30px;background:black;color:white;border:none" onclick="addToCartFromModal()">Add to Cart</button>
+</div>
+<div><h4>Rate</h4><div id="rateStars" style="font-size:26px"><span onclick="rate(1)">☆</span><span onclick="rate(2)">☆</span><span onclick="rate(3)">☆</span><span onclick="rate(4)">☆</span><span onclick="rate(5)">☆</span></div></div>
+<div class="commentBox"><h4>Comments (<span id="cmtCount">0</span>)</h4><div id="cmtList"></div><div style="display:flex;margin-top:8px"><input id="cmtInput" placeholder="Message / Comment..."><button onclick="addComment()">Send</button></div></div>
+</div>
+</div>
+</div>
 
 <script>
-let currentCat='All';
-let slideIntervals={};
-
+const CATS=["All","Men","Women","Kids","Shoes","Bags","Jewelry & Accs","Home","Curve","Lingerie & Sleep","Sports","Electronics","Toys","Office","Pet","Appliances"];
+let currentCat='All',currentModal=null;
+function initCats(){
+ document.getElementById('filterBar').innerHTML=CATS.map(c=>`<button class="${c=='All'?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');
+ document.getElementById('catGrid').innerHTML=CATS.filter(c=>c!='All').map(c=>`<div class="catTile" onclick="setCatAndGo('${c}')">${c}</div>`).join('');
+}
+function showPage(id,el){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.bottomNav div').forEach(d=>d.classList.remove('active'));
+ el.classList.add('active');
+ if(id=='trendPage') renderTrend();
+ if(id=='cartPage') renderCart();
+ if(id=='mePage') renderMe();
+}
 function setCat(cat,btn){
  currentCat=cat;
- document.querySelectorAll('.filterBar button').forEach(b=>b.classList.remove('active'));
+ document.querySelectorAll('#filterBar button').forEach(b=>b.classList.remove('active'));
  btn.classList.add('active');
  render();
 }
-
-function getProducts(){
- let stored=JSON.parse(localStorage.getItem('dornnyProducts')||'[]');
- // default products if nothing uploaded
- if(stored.length===0){
-   return [
-     {id:1,name:"Demo Shoe",desc:"Nice shoe",price:"120",category:"Shoes",images:["https://via.placeholder.com/300?text=Shoe"]},
-     {id:2,name:"Demo Shirt",desc:"Club top",price:"80",category:"Boys top",images:["https://via.placeholder.com/300?text=Shirt"]}
-   ];
- }
- return stored;
+function setCatAndGo(cat){
+ currentCat=cat;
+ showPage('homePage',document.querySelectorAll('.bottomNav div')[0]);
+ document.querySelectorAll('#filterBar button').forEach(b=>{b.classList.toggle('active', b.textContent==cat);});
+ render();
 }
-
+function getProducts(){return JSON.parse(localStorage.getItem('dornnyProducts')||'[]');}
+function getLikes(){return JSON.parse(localStorage.getItem('dornnyLikes')||'[]')}
+function getCart(){return JSON.parse(localStorage.getItem('dornnyCart')||'[]')}
+function getFollows(){return JSON.parse(localStorage.getItem('dornnyFollows')||'[]')}
+function getComments(id){return JSON.parse(localStorage.getItem('dornnyCmt_'+id)||'[]')}
+function getRatings(){return JSON.parse(localStorage.getItem('dornnyRatings')||'{}')}
 function render(){
  const grid=document.getElementById('grid');
  const search=document.getElementById('search').value.toLowerCase();
  let products=getProducts();
-
  let filtered=products.filter(p=>{
-   const matchSearch = p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
-   const matchCat = currentCat==='All' || p.category===currentCat || p.desc===currentCat;
-   return matchSearch && matchCat;
+  let ms=p.name.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search);
+  let mc=currentCat=='All'||p.category==currentCat;
+  return ms&&mc;
  });
-
- if(filtered.length===0){
-   grid.innerHTML='<div class="noProduct">No products found<br><br><a href="sell.html" style="color:#00b050">Upload first product</a></div>';
-   return;
- }
-
+ if(filtered.length==0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#888">No products in '+currentCat+'<br><a href="sell.html" style="color:#00b050">+ Upload</a></div>';return;}
+ let likes=getLikes();
  grid.innerHTML=filtered.map(p=>{
-   let imgs=p.images||[p.image||"https://via.placeholder.com/300"];
-   let dots=imgs.length>1?`<div class="dots">${imgs.map((_,i)=>`<span class="${i===0?'active':''}" id="dot-${p.id}-${i}"></span>`).join('')}</div>`:'';
-   let nav=imgs.length>1?`<button class="navBtn prev" onclick="slide(${p.id},-1)">‹</button><button class="navBtn next" onclick="slide(${p.id},1)">›</button>`:'';
-   let sliderImgs=imgs.map((src,i)=>`<img src="${src}" class="${i===0?'active':''}" id="img-${p.id}-${i}">`).join('');
-   return `
-   <div class="card" data-id="${p.id}">
-     <div class="slider" id="slider-${p.id}">
-       ${sliderImgs}
-       ${dots}
-       ${nav}
-     </div>
-     <div class="info">
-       <h3>${p.name}</h3>
-       <p>${p.desc} • ${p.category}</p>
-       <div class="price">GH₵ ${p.price}</div>
-       <button class="buyBtn" onclick="alert('Contact seller for ${p.name} - GH₵ ${p.price}')">Buy</button>
-     </div>
-   </div>`;
+  let imgs=p.images||[p.image||""];
+  let isLiked=likes.includes(p.id);
+  return `<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${imgs[0]}" class="active" style="display:block"><button class="likeBtn ${isLiked?'liked':''}" onclick="event.stopPropagation();toggleLike(${p.id})">${isLiked?'❤️':'🤍'}</button></div><div class="info"><h3>${p.name}</h3><p>${p.desc} • ${p.category}</p><div class="price">GH₵ ${p.price}</div><div class="row"><button style="flex:1;background:#eee;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();addToCart(${p.id})">Cart</button><button style="flex:1;background:black;color:white;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();openModal(${p.id})">View</button></div></div></div>`;
  }).join('');
-
- // auto slide every 3 sec for products with multiple images
- filtered.forEach(p=>{
-   let imgs=p.images||[p.image];
-   if(imgs.length>1){
-     if(slideIntervals[p.id]) clearInterval(slideIntervals[p.id]);
-     let cur=0;
-     slideIntervals[p.id]=setInterval(()=>{
-       cur=(cur+1)%imgs.length;
-       showSlide(p.id,cur,imgs.length);
-     },3000);
-   }
- });
 }
-
-let currentSlides={};
-function showSlide(id,index,total){
- for(let i=0;i<total;i++){
-   let img=document.getElementById(`img-${id}-${i}`);
-   let dot=document.getElementById(`dot-${id}-${i}`);
-   if(img) img.classList.remove('active');
-   if(dot) dot.classList.remove('active');
- }
- let activeImg=document.getElementById(`img-${id}-${index}`);
- let activeDot=document.getElementById(`dot-${id}-${index}`);
- if(activeImg) activeImg.classList.add('active');
- if(activeDot) activeDot.classList.add('active');
- currentSlides[id]=index;
-}
-function slide(id,dir){
- let products=getProducts();
- let p=products.find(x=>x.id==id);
- if(!p) return;
- let total=(p.images||[p.image]).length;
- let cur=currentSlides[id]||0;
- cur=(cur+dir+total)%total;
- showSlide(id,cur,total);
-}
-render();
+function toggleLike(id){let likes=getLikes();likes=likes.includes(id)?likes.filter(x=>x!=id):[...likes,id];localStorage.setItem('dornnyLikes',JSON.stringify(likes));render();renderTrend();renderMe();}
+function addToCart(id){let cart=getCart();let ex=cart.find(x=>x.id==id);if(ex)ex.qty++;else cart.push({id:id,qty:1});localStorage.setItem('dornnyCart',JSON.stringify(cart));alert('Added to Cart 🛒');renderCart();}
+function renderCart(){let cart=getCart();let prods=getProducts();let list=document.getElementById('cartList');let count=document.getElementById('cartCount');count.innerText=cart.reduce((s,i)=>s+i.qty,0);if(cart.length==0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Cart empty</p>';document.getElementById('checkoutBtn').style.display='none';return;}document.getElementById('checkoutBtn').style.display='block';let total=0;list.innerHTML=cart.map(c=>{let p=prods.find(x=>x.id==c.id);if(!p)return'';total+=parseFloat(p.price)*c.qty;return `<div class="cartItem"><img src="${(p.images||[p.image])[0]}"><div style="flex:1"><b>${p.name}</b><br><span style="color:#00b050">GH₵ ${p.price} x ${c.qty}</span></div><button onclick="removeCart(${c.id})" style="background:#ff3b30;color:white;border:none;padding:6px 10px;border-radius:15px">✕</button></div>`;}).join('')+`<div style="background:white;padding:12px;border-radius:12px;font-weight:bold">Total: GH₵ ${total}</div>`;}
+function removeCart(id){localStorage.setItem('dornnyCart',JSON.stringify(getCart().filter(x=>x.id!=id)));renderCart();}
+function checkout(){let cart=getCart();let prods=getProducts();let text="Hello Dornny Market, I want to order:%0A";cart.forEach(c=>{let p=prods.find(x=>x.id==c.id);if(p)text+=`- ${p.name} GH₵ ${p.price} x${c.qty}%0A`;});let total=cart.reduce((s,c)=>{let p=prods.find(x=>x.id==c.id);return s+(p?parseFloat(p.price)*c.qty:0);},0);text+=`Total: GH₵ ${total}`;window.open(`https://wa.me/233000000000?text=${text}`,'_blank');}
+function renderTrend(){let prods=getProducts();let likes=getLikes();let ratings=getRatings();prods.sort((a,b)=>((likes.includes(b.id)?1:0)+(ratings[b.id]||0))-((likes.includes(a.id)?1:0)+(ratings[a.id]||0)));document.getElementById('trendGrid').innerHTML=prods.slice(0,12).map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div><div style="font-size:11px;color:#ff3040">❤️ ${likes.includes(p.id)?1:0} • ⭐ ${ratings[p.id]||0}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">Like products to see trending</p>';}
+function renderMe(){let prods=getProducts();document.getElementById('myProdCount').innerText=prods.length;document.getElementById('myLikeCount').innerText=getLikes().length;document.getElementById('myFollowCount').innerText=getFollows().length;document.getElementById('myProducts').innerHTML=prods.map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">No products yet</p>';}
+function openModal(id){let p=getProducts().find(x=>x.id==id);if(!p)return;currentModal=p;document.getElementById('modalName').innerText=p.name;document.getElementById('modalDesc').innerText=p.desc+' • '+p.category;document.getElementById('modalPrice').innerText='GH₵ '+p.price;document.getElementById('modalImg').src=(p.images||[p.image])[0];let ratings=getRatings();let r=ratings[id]||0;document.getElementById('modalRating').innerHTML=r?`⭐ ${r}/5`:'No rating';document.getElementById('followBtn').innerText=getFollows().includes(id)?'✓ Following':'+ Follow';updateComments();updateStars(r);document.getElementById('productModal').style.display='block';}
+function closeModal(){document.getElementById('productModal').style.display='none';}
+function addToCartFromModal(){if(currentModal)addToCart(currentModal.id);}
+function buyWhatsApp(){if(!currentModal)return;let msg=encodeURIComponent(`Hello Dornny, I want ${currentModal.name} GH₵ ${currentModal.price}`);window.open(`https://wa.me/233000000000?text=${msg}`,'_blank');}
+function toggleFollow(){if(!currentModal)return;let f=getFollows();f=f.includes(currentModal.id)?f.filter(x=>x!=currentModal.id):[...f,currentModal.id];localStorage.setItem('dornnyFollows',JSON.stringify(f));document.getElementById('followBtn').innerText=f.includes(currentModal.id)?'✓ Following':'+ Follow';renderMe();}
+function rate(star){if(!currentModal)return;let ratings=getRatings();ratings[currentModal.id]=star;localStorage.setItem('dornnyRatings',JSON.stringify(ratings));document.getElementById('modalRating').innerHTML=`⭐ ${star}/5`;updateStars(star);renderTrend();}
+function updateStars(a){document.querySelectorAll('#rateStars span').forEach((s,i)=>{s.innerText=i<a?'★':'☆';});}
+function updateComments(){if(!currentModal)return;let cmts=getComments(currentModal.id);document.getElementById('cmtCount').innerText=cmts.length;document.getElementById('cmtList').innerHTML=cmts.map(c=>`<div class="cmt"><b>${c.user}:</b> ${c.text}</div>`).join('')||'<p style="font-size:12px;color:#888">No comments yet</p>';}
+function addComment(){let inp=document.getElementById('cmtInput');let txt=inp.value.trim();if(!txt||!currentModal)return;let cmts=getComments(currentModal.id);cmts.push({user:'You',text:txt});localStorage.setItem('dornnyCmt_'+currentModal.id,JSON.stringify(cmts));inp.value='';updateComments();}
+initCats();render();renderCart();
 </script>
 </body>
 </html>
