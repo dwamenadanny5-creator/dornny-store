@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dornny Market</title>
+<title>Dornny Market Gh</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f5f5f5;padding-bottom:70px}
-header{background:black;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-header h1{font-size:18px}
-header a{background:#00b050;color:white;padding:7px 14px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:13px}
-.searchBox{padding:10px;background:white;position:sticky;top:48px;z-index:99}
-.searchBox input{width:100%;padding:12px;border-radius:25px;border:1px solid #ddd;background:#f0f0f0}
-.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;background:white;white-space:nowrap}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#f5f5f5}
+.header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.logo{font-weight:900;font-size:20px}
+.headerRight{display:flex;gap:8px;align-items:center}
+.sellBtn,.liveBtn{padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:800;font-size:13px}
+.sellBtn{background:black;color:white}
+.liveBtn{background:red;color:white;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.searchBar{padding:10px;background:white}
+.searchBar input{width:100%;padding:12px 15px;border-radius:12px;border:1px solid #ddd;background:#f2f2f2}
+.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;white-space:nowrap;background:white}
 .filterBar button{padding:7px 14px;border-radius:20px;border:1px solid #ddd;background:white;font-size:12px;flex-shrink:0}
 .filterBar button.active{background:black;color:white}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
@@ -19,142 +24,95 @@ header a{background:#00b050;color:white;padding:7px 14px;border-radius:20px;text
 .slider{position:relative;width:100%;height:160px;background:#eee}
 .slider img{width:100%;height:100%;object-fit:cover;display:none}
 .slider img.active{display:block}
-.likeBtn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.4);color:white;border:none;width:26px;height:26px;border-radius:50%}
-.likeBtn.liked{color:#ff3040;background:white}
-.info{padding:8px}
-.info h3{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.info p{font-size:10px;color:#777}
-.price{color:#00b050;font-weight:bold;font-size:14px}
-.row{display:flex;gap:4px;margin-top:5px}
-.row button{flex:1;border:none;padding:7px;border-radius:8px;font-size:11px;font-weight:bold}
-.bottomNav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:200}
-.bottomNav div{text-align:center;font-size:10px;color:#888}
-.bottomNav div.active{color:black;font-weight:bold}
-.bottomNav span{font-size:18px;display:block}
-.page{display:none;padding:10px}
-.page.active{display:block}
-.cartItem{background:white;padding:10px;border-radius:12px;display:flex;gap:10px;margin-bottom:8px;align-items:center}
-.cartItem img{width:55px;height:55px;object-fit:cover;border-radius:10px}
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:300;display:none;overflow-y:auto}
-.modalContent{background:white;border-radius:20px;overflow:hidden;max-width:500px;margin:15px auto}
-.modalImgWrap{position:relative;width:100%;height:350px;background:#000;display:flex;align-items:center;justify-content:center}
-.modalImg{max-width:100%;max-height:100%;object-fit:contain}
-.dotWrap{position:absolute;bottom:10px;left:0;right:0;text-align:center}
-.dot{width:8px;height:8px;background:rgba(255,255,255,0.5);display:inline-block;border-radius:50%;margin:0 3px}
-.dot.active{background:white}
-.navBtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.7);border:none;width:35px;height:35px;border-radius:50%;font-weight:bold}
-.prev{left:10px}.next{right:10px}
-.commentBox{padding:10px;border-top:1px solid #eee}
-.commentBox input{width:70%;padding:10px;border-radius:20px;border:1px solid #ddd;background:#f0f0f0}
-.commentBox button{width:25%;padding:10px;border-radius:20px;border:none;background:black;color:white;margin-left:5px}
-.cmt{font-size:13px;padding:6px 0;border-bottom:1px solid #f5f5f5}
-.followBtn{background:#00b050;color:white;border:none;padding:6px 12px;border-radius:20px;font-size:12px}
-.catTile{background:white;padding:20px;border-radius:15px;text-align:center;font-weight:bold}
-.authBox{background:white;padding:15px;border-radius:15px}
-.authBox input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ddd;background:#f0f0f0}
-.authBox button{width:100%;padding:12px;border-radius:25px;border:none;font-weight:bold;margin-top:8px}
+.likeBtn{position:absolute;top:8px;right:8px;background:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:0;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.cardInfo{padding:8px 10px}
+.cardTitle{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cardPrice{color:#00c853;font-weight:800;font-size:14px;margin-top:2px}
+.cardLoc{font-size:11px;color:#888}
+.liveDot{position:absolute;top:8px;left:8px;background:red;color:white;padding:3px 7px;border-radius:10px;font-size:10px;font-weight:800;display:none}
 </style>
 </head>
 <body>
-<header><h1>Dornny Market</h1><a href="sell.html">+ Sell</a></header>
-<div id="homePage" class="page active">
-<div class="searchBox"><input id="search" placeholder="Search..." oninput="render()"></div>
-<div class="filterBar" id="filterBar"></div>
-<div id="grid" class="grid"></div>
-</div>
-<div id="catPage" class="page"><h3>📂 All Categories</h3><div id="catGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"></div></div>
-<div id="cartPage" class="page"><h3>🛒 Cart (<span id="cartCount">0</span>)</h3><div id="cartList" style="margin-top:10px"></div><button id="checkoutBtn" onclick="checkout()" style="width:100%;background:#00b050;color:white;padding:14px;border-radius:30px;border:none;font-weight:bold;margin-top:10px;display:none">Checkout via WhatsApp</button></div>
-<div id="trendPage" class="page"><h3>🔥 Trending</h3><div id="trendGrid" class="grid" style="margin-top:10px"></div></div>
-<div id="mePage" class="page">
-<div id="authSection"></div>
-<div id="userSection" style="display:none">
-<div style="background:white;padding:20px;border-radius:15px;text-align:center">
-<div style="width:70px;height:70px;background:black;color:white;border-radius:50%;margin:auto;line-height:70px;font-size:30px" id="userAvatar">Me</div>
-<h3 id="userNameDisplay">Dornny User</h3>
-<p style="font-size:13px;color:#777" id="userPhoneDisplay">Ghana Seller</p>
-<div style="display:flex;gap:10px;margin-top:15px">
-<div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myProdCount">0</b><br><span style="font-size:11px">Products</span></div>
-<div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myLikeCount">0</b><br><span style="font-size:11px">Liked</span></div>
-<div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myFollowCount">0</b><br><span style="font-size:11px">Following</span></div>
-</div>
-<button onclick="logout()" style="margin-top:12px;background:#ff3b30;color:white;border:none;padding:8px 15px;border-radius:20px">Logout</button>
-</div>
-<h4 style="margin:15px 0 10px">My Products</h4>
-<div id="myProducts" class="grid"></div>
+
+<div class="header">
+<div class="logo">Dornny</div>
+<div class="headerRight">
+<a href="live.html" class="liveBtn">🔴 LIVE</a>
+<a href="sell.html" class="sellBtn">+ Sell</a>
 </div>
 </div>
-<div class="bottomNav">
-<div class="active" onclick="showPage('homePage',this)"><span>🏠</span>Home</div>
-<div onclick="showPage('catPage',this)"><span>📂</span>Category</div>
-<div onclick="showPage('trendPage',this)"><span>🔥</span>Trend</div>
-<div onclick="showPage('cartPage',this)"><span>🛒</span>Cart</div>
-<div onclick="showPage('mePage',this)"><span>👤</span>Me</div>
+
+<div class="searchBar">
+<input id="search" placeholder="Search bags, shoes, dresses..." oninput="render()">
 </div>
-<div id="productModal" class="modal" onclick="if(event.target==this)closeModal()">
-<div class="modalContent">
-<div class="modalImgWrap" id="imgWrap">
-<button class="navBtn prev" onclick="slide(-1)">‹</button>
-<img id="modalImg" class="modalImg" src="">
-<button class="navBtn next" onclick="slide(1)">›</button>
-<div class="dotWrap" id="dotWrap"></div>
-<button onclick="closeModal()" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.5);color:white;border:none;width:30px;height:30px;border-radius:50%">✕</button>
+
+<div class="filterBar" id="filterBar">
+<button class="active" onclick="setCat('All',this)">All</button>
+<button onclick="setCat('Bags',this)">Bags</button>
+<button onclick="setCat('Shoes',this)">Shoes</button>
+<button onclick="setCat('Dress',this)">Dress</button>
+<button onclick="setCat('Wigs',this)">Wigs</button>
+<button onclick="setCat('Accessories',this)">Accessories</button>
 </div>
-<div style="padding:12px">
-<h2 id="modalName"></h2>
-<p id="modalDesc" style="color:#777;font-size:13px"></p>
-<div id="modalPrice" style="color:#00b050;font-weight:bold;font-size:20px;margin:8px 0"></div>
-<div style="display:flex;gap:8px;align-items:center;margin:8px 0"><span id="modalRating"></span><button class="followBtn" id="followBtn" onclick="toggleFollow()">+ Follow</button></div>
-<div style="display:flex;gap:8px;margin:10px 0">
-<button style="flex:1;padding:12px;border-radius:30px;background:#25D366;color:white;border:none;font-weight:bold" onclick="buyWhatsApp()">💬 WhatsApp</button>
-<button style="flex:1;padding:12px;border-radius:30px;background:black;color:white;border:none" onclick="addToCartFromModal()">Add to Cart</button>
-</div>
-<div><h4>Rate</h4><div id="rateStars" style="font-size:26px"><span onclick="rate(1)">☆</span><span onclick="rate(2)">☆</span><span onclick="rate(3)">☆</span><span onclick="rate(4)">☆</span><span onclick="rate(5)">☆</span></div></div>
-<div class="commentBox"><h4>Comments (<span id="cmtCount">0</span>)</h4><div id="cmtList"></div><div style="display:flex;margin-top:8px"><input id="cmtInput" placeholder="Message / Comment..."><button onclick="addComment()">Send</button></div></div>
-</div>
-</div>
-</div>
+
+<div class="grid" id="grid"></div>
+
 <script>
-const CATS=["All","Men","Women","Kids","Shoes","Bags","Jewelry & Accs","Home","Curve","Lingerie & Sleep","Sports","Electronics","Toys","Office","Pet","Appliances"];
-const WA_NUMBER="233594221108";
-let currentCat='All',currentModal=null,curSlide=0,curImgs=[];
-function initCats(){document.getElementById('filterBar').innerHTML=CATS.map(c=>`<button class="${c=='All'?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');document.getElementById('catGrid').innerHTML=CATS.filter(c=>c!='All').map(c=>`<div class="catTile" onclick="setCatAndGo('${c}')">${c}</div>`).join('');}
-function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.bottomNav div').forEach(d=>d.classList.remove('active'));el.classList.add('active');if(id=='trendPage')renderTrend();if(id=='cartPage')renderCart();if(id=='mePage'){checkAuth();renderMe();}}
-function setCat(cat,btn){currentCat=cat;document.querySelectorAll('#filterBar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
-function setCatAndGo(cat){currentCat=cat;showPage('homePage',document.querySelectorAll('.bottomNav div')[0]);document.querySelectorAll('#filterBar button').forEach(b=>{b.classList.toggle('active',b.textContent==cat);});render();}
-function getProducts(){return JSON.parse(localStorage.getItem('dornnyProducts')||'[]');}
-function getLikes(){return JSON.parse(localStorage.getItem('dornnyLikes')||'[]')}
-function getCart(){return JSON.parse(localStorage.getItem('dornnyCart')||'[]')}
-function getFollows(){return JSON.parse(localStorage.getItem('dornnyFollows')||'[]')}
-function getComments(id){return JSON.parse(localStorage.getItem('dornnyCmt_'+id)||'[]')}
-function getRatings(){return JSON.parse(localStorage.getItem('dornnyRatings')||'{}')}
-function getUser(){return JSON.parse(localStorage.getItem('dornnyUser')||'null')}
-function checkAuth(){let u=getUser();let auth=document.getElementById('authSection');let userSec=document.getElementById('userSection');if(!u){userSec.style.display='none';auth.innerHTML=`<div class="authBox"><h3>🔐 Login / Register</h3><p style="font-size:12px;color:#00b050;margin:8px 0">Registration: GH₵ 50 via MoMo to 0594221108</p><div id="loginForm"><input id="lPhone" placeholder="Phone (059...)"><input id="lPass" type="password" placeholder="Password"><button style="background:black;color:white" onclick="login()">Login</button><button style="background:#eee" onclick="showReg()">New? Register GH₵50</button></div><div id="regForm" style="display:none"><input id="rName" placeholder="Full Name"><input id="rPhone" placeholder="Phone"><input id="rPass" type="password" placeholder="Password"><input id="rMomo" placeholder="MoMo Transaction ID (after paying 50)"><p style="font-size:11px;color:#777">Send GH₵50 to <b>0594221108</b> (Danny) via MoMo, then enter Trans ID</p><button style="background:#00b050;color:white" onclick="register()">Register - GH₵50 Paid</button><button style="background:#eee" onclick="showLogin()">Already have account? Login</button></div></div>`;}else{auth.innerHTML='';userSec.style.display='block';document.getElementById('userNameDisplay').innerText=u.name;document.getElementById('userPhoneDisplay').innerText=u.phone+' • Verified Seller';document.getElementById('userAvatar').innerText=u.name.charAt(0).toUpperCase();}}
-function showReg(){document.getElementById('loginForm').style.display='none';document.getElementById('regForm').style.display='block';}
-function showLogin(){document.getElementById('regForm').style.display='none';document.getElementById('loginForm').style.display='block';}
-function register(){let n=document.getElementById('rName').value.trim(),p=document.getElementById('rPhone').value.trim(),pw=document.getElementById('rPass').value.trim(),m=document.getElementById('rMomo').value.trim();if(!n||!p||!pw||!m){alert('Fill all + MoMo Trans ID');return;}if(m.length<5){alert('Enter valid MoMo Transaction ID');return;}let u={name:n,phone:p,pass:pw,momo:m,paid:50,date:Date.now()};localStorage.setItem('dornnyUser',JSON.stringify(u));alert('✅ Registered! Welcome '+n+' - GH₵50 verified');checkAuth();renderMe();}
-function login(){let ph=document.getElementById('lPhone').value.trim(),pw=document.getElementById('lPass').value.trim();let u=getUser();if(!u){alert('No account. Please Register first GH₵50');showReg();return;}if(u.phone==ph&&u.pass==pw){alert('Welcome back '+u.name);checkAuth();renderMe();}else{alert('Wrong phone or password');}}
-function logout(){if(confirm('Logout?')){localStorage.removeItem('dornnyUser');checkAuth();}}
-function render(){const grid=document.getElementById('grid');const search=document.getElementById('search').value.toLowerCase();let products=getProducts();let filtered=products.filter(p=>{let ms=p.name.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search);let mc=currentCat=='All'||p.category==currentCat;return ms&&mc;});if(filtered.length==0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#888">No products in '+currentCat+'<br><a href="sell.html" style="color:#00b050">+ Upload</a></div>';return;}let likes=getLikes();grid.innerHTML=filtered.map(p=>{let imgs=p.images||[p.image||""];let isLiked=likes.includes(p.id);return `<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${imgs[0]}" class="active" style="display:block"><button class="likeBtn ${isLiked?'liked':''}" onclick="event.stopPropagation();toggleLike(${p.id})">${isLiked?'❤️':'🤍'}</button></div><div class="info"><h3>${p.name}</h3><p>${p.desc} • ${p.category}</p><div class="price">GH₵ ${p.price}</div><div class="row"><button style="flex:1;background:#eee;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();addToCart(${p.id})">Cart</button><button style="flex:1;background:black;color:white;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();openModal(${p.id})">View</button></div></div></div>`;}).join('');}
-function toggleLike(id){let likes=getLikes();likes=likes.includes(id)?likes.filter(x=>x!=id):[...likes,id];localStorage.setItem('dornnyLikes',JSON.stringify(likes));render();renderTrend();renderMe();}
-function addToCart(id){let cart=getCart();let ex=cart.find(x=>x.id==id);if(ex)ex.qty++;else cart.push({id:id,qty:1});localStorage.setItem('dornnyCart',JSON.stringify(cart));alert('Added to Cart 🛒');renderCart();}
-function renderCart(){let cart=getCart();let prods=getProducts();let list=document.getElementById('cartList');let count=document.getElementById('cartCount');count.innerText=cart.reduce((s,i)=>s+i.qty,0);if(cart.length==0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Cart empty</p>';document.getElementById('checkoutBtn').style.display='none';return;}document.getElementById('checkoutBtn').style.display='block';let total=0;list.innerHTML=cart.map(c=>{let p=prods.find(x=>x.id==c.id);if(!p)return'';total+=parseFloat(p.price)*c.qty;return `<div class="cartItem"><img src="${(p.images||[p.image])[0]}"><div style="flex:1"><b>${p.name}</b><br><span style="color:#00b050">GH₵ ${p.price} x ${c.qty}</span></div><button onclick="removeCart(${c.id})" style="background:#ff3b30;color:white;border:none;padding:6px 10px;border-radius:15px">✕</button></div>`;}).join('')+`<div style="background:white;padding:12px;border-radius:12px;font-weight:bold">Total: GH₵ ${total}</div>`;}
-function removeCart(id){localStorage.setItem('dornnyCart',JSON.stringify(getCart().filter(x=>x.id!=id)));renderCart();}
-function checkout(){let cart=getCart();let prods=getProducts();let text="Hello Dornny Market, I want to order:%0A";cart.forEach(c=>{let p=prods.find(x=>x.id==c.id);if(p)text+=`- ${p.name} GH₵ ${p.price} x${c.qty}%0A`;});let total=cart.reduce((s,c)=>{let p=prods.find(x=>x.id==c.id);return s+(p?parseFloat(p.price)*c.qty:0);},0);text+=`Total: GH₵ ${total}`;window.open(`https://wa.me/${WA_NUMBER}?text=${text}`,'_blank');}
-function renderTrend(){let prods=getProducts();let likes=getLikes();let ratings=getRatings();prods.sort((a,b)=>((likes.includes(b.id)?1:0)+(ratings[b.id]||0))-((likes.includes(a.id)?1:0)+(ratings[a.id]||0)));document.getElementById('trendGrid').innerHTML=prods.slice(0,12).map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div><div style="font-size:11px;color:#ff3040">❤️ ${likes.includes(p.id)?1:0} • ⭐ ${ratings[p.id]||0}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">Like products to see trending</p>';}
-function renderMe(){let prods=getProducts();let u=getUser();if(!u)return;document.getElementById('myProdCount').innerText=prods.length;document.getElementById('myLikeCount').innerText=getLikes().length;document.getElementById('myFollowCount').innerText=getFollows().length;document.getElementById('myProducts').innerHTML=prods.map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">No products yet</p>';}
-function openModal(id){let p=getProducts().find(x=>x.id==id);if(!p)return;currentModal=p;curImgs=p.images||[p.image||""];curSlide=0;document.getElementById('modalName').innerText=p.name;document.getElementById('modalDesc').innerText=p.desc+' • '+p.category;document.getElementById('modalPrice').innerText='GH₵ '+p.price;showSlide();let ratings=getRatings();let r=ratings[id]||0;document.getElementById('modalRating').innerHTML=r?`⭐ ${r}/5`:'No rating';document.getElementById('followBtn').innerText=getFollows().includes(id)?'✓ Following':'+ Follow';updateComments();updateStars(r);document.getElementById('productModal').style.display='block';}
-function showSlide(){if(curImgs.length==0)return;document.getElementById('modalImg').src=curImgs[curSlide];let dots=document.getElementById('dotWrap');dots.innerHTML=curImgs.map((_,i)=>`<span class="dot ${i==curSlide?'active':''}"></span>`).join('');}
-function slide(d){curSlide=(curSlide+d+curImgs.length)%curImgs.length;showSlide();}
-let startX=0;document.getElementById('imgWrap').addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});document.getElementById('imgWrap').addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50){slide(dx<0?1:-1);}});
-function closeModal(){document.getElementById('productModal').style.display='none';}
-function addToCartFromModal(){if(currentModal)addToCart(currentModal.id);}
-function buyWhatsApp(){if(!currentModal)return;let msg=encodeURIComponent(`Hello Dornny, I want ${currentModal.name} GH₵ ${currentModal.price}`);window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');}
-function toggleFollow(){if(!currentModal)return;let f=getFollows();f=f.includes(currentModal.id)?f.filter(x=>x!=currentModal.id):[...f,currentModal.id];localStorage.setItem('dornnyFollows',JSON.stringify(f));document.getElementById('followBtn').innerText=f.includes(currentModal.id)?'✓ Following':'+ Follow';renderMe();}
-function rate(star){if(!currentModal)return;let ratings=getRatings();ratings[currentModal.id]=star;localStorage.setItem('dornnyRatings',JSON.stringify(ratings));document.getElementById('modalRating').innerHTML=`⭐ ${star}/5`;updateStars(star);renderTrend();}
-function updateStars(a){document.querySelectorAll('#rateStars span').forEach((s,i)=>{s.innerText=i<a?'★':'☆';});}
-function updateComments(){if(!currentModal)return;let cmts=getComments(currentModal.id);document.getElementById('cmtCount').innerText=cmts.length;document.getElementById('cmtList').innerHTML=cmts.map(c=>`<div class="cmt"><b>${c.user}:</b> ${c.text}</div>`).join('')||'<p style="font-size:12px;color:#888">No comments yet</p>';}
-function addComment(){let inp=document.getElementById('cmtInput');let txt=inp.value.trim();if(!txt||!currentModal)return;let cmts=getComments(currentModal.id);cmts.push({user:getUser()?.name||'You',text:txt});localStorage.setItem('dornnyCmt_'+currentModal.id,JSON.stringify(cmts));inp.value='';updateComments();}
-initCats();render();renderCart();checkAuth();
+let cat='All';
+let products=[];
+try{ products=JSON.parse(localStorage.getItem('dornnyProducts')||'[]'); }catch(e){}
+
+if(products.length===0){
+ products=[
+  {id:1,name:"Designer Bag GH120",price:120,category:"Bags",location:"Accra",images:["https://via.placeholder.com/300x300?text=Bag"]},
+  {id:2,name:"Heels Classy",price:200,category:"Shoes",location:"Kumasi",images:["https://via.placeholder.com/300x300?text=Shoes"]},
+  {id:3,name:"African Dress",price:180,category:"Dress",location:"Accra",images:["https://via.placeholder.com/300x300?text=Dress"]}
+ ];
+}
+
+function setCat(c,el){
+ cat=c;
+ document.querySelectorAll('.filterBar button').forEach(b=>b.classList.remove('active'));
+ el.classList.add('active');
+ render();
+}
+
+function render(){
+ const q=document.getElementById('search').value.toLowerCase();
+ const grid=document.getElementById('grid');
+ grid.innerHTML='';
+ let filtered=products.filter(p=>{
+  let okCat = cat==='All' || (p.category||'').toLowerCase().includes(cat.toLowerCase());
+  let okSearch =!q || (p.name||'').toLowerCase().includes(q);
+  return okCat && okSearch;
+ });
+
+ filtered.forEach(p=>{
+  let img = p.images? p.images[0] : (p.image||'https://via.placeholder.com/300');
+  let d=document.createElement('div');
+  d.className='card';
+  d.innerHTML=`
+    <div class="slider">
+      <img class="active" src="${img}">
+      <div class="liveDot" id="dot-${p.id}">🔴 LIVE</div>
+      <button class="likeBtn">♡</button>
+    </div>
+    <div class="cardInfo">
+      <div class="cardTitle">${p.name||p.title}</div>
+      <div class="cardPrice">GH₵ ${p.price||0}</div>
+      <div class="cardLoc">${p.location||'Ghana'} • ${(p.category||'')}</div>
+    </div>
+  `;
+  d.onclick=()=>{ localStorage.setItem('selectedProduct',JSON.stringify(p)); location.href='product.html'; };
+  grid.appendChild(d);
+ });
+}
+render();
+
+// Check if someone is live (from live.html)
+if(localStorage.getItem('dornnyLive')==='1'){
+ setTimeout(()=>{ document.querySelectorAll('.liveDot').forEach(el=>el.style.display='block'); },500);
+}
 </script>
 </body>
 </html>
