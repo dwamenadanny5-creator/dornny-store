@@ -35,57 +35,54 @@ header a{background:#00b050;color:white;padding:7px 14px;border-radius:20px;text
 .page.active{display:block}
 .cartItem{background:white;padding:10px;border-radius:12px;display:flex;gap:10px;margin-bottom:8px;align-items:center}
 .cartItem img{width:55px;height:55px;object-fit:cover;border-radius:10px}
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:300;display:none;overflow-y:auto}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:300;display:none;overflow-y:auto}
 .modalContent{background:white;border-radius:20px;overflow:hidden;max-width:500px;margin:15px auto}
-.modalImg{width:100%;height:320px;object-fit:contain;background:#000}
+.modalImgWrap{position:relative;width:100%;height:350px;background:#000;display:flex;align-items:center;justify-content:center}
+.modalImg{max-width:100%;max-height:100%;object-fit:contain}
+.dotWrap{position:absolute;bottom:10px;left:0;right:0;text-align:center}
+.dot{width:8px;height:8px;background:rgba(255,255,255,0.5);display:inline-block;border-radius:50%;margin:0 3px}
+.dot.active{background:white}
+.navBtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.7);border:none;width:35px;height:35px;border-radius:50%;font-weight:bold}
+.prev{left:10px}.next{right:10px}
 .commentBox{padding:10px;border-top:1px solid #eee}
 .commentBox input{width:70%;padding:10px;border-radius:20px;border:1px solid #ddd;background:#f0f0f0}
 .commentBox button{width:25%;padding:10px;border-radius:20px;border:none;background:black;color:white;margin-left:5px}
 .cmt{font-size:13px;padding:6px 0;border-bottom:1px solid #f5f5f5}
 .followBtn{background:#00b050;color:white;border:none;padding:6px 12px;border-radius:20px;font-size:12px}
 .catTile{background:white;padding:20px;border-radius:15px;text-align:center;font-weight:bold}
+.authBox{background:white;padding:15px;border-radius:15px}
+.authBox input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ddd;background:#f0f0f0}
+.authBox button{width:100%;padding:12px;border-radius:25px;border:none;font-weight:bold;margin-top:8px}
 </style>
 </head>
 <body>
 <header><h1>Dornny Market</h1><a href="sell.html">+ Sell</a></header>
-
 <div id="homePage" class="page active">
 <div class="searchBox"><input id="search" placeholder="Search..." oninput="render()"></div>
 <div class="filterBar" id="filterBar"></div>
 <div id="grid" class="grid"></div>
 </div>
-
-<div id="catPage" class="page">
-<h3>📂 All Categories</h3>
-<div id="catGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"></div>
-</div>
-
-<div id="cartPage" class="page">
-<h3>🛒 Cart (<span id="cartCount">0</span>)</h3>
-<div id="cartList" style="margin-top:10px"></div>
-<button id="checkoutBtn" onclick="checkout()" style="width:100%;background:#00b050;color:white;padding:14px;border-radius:30px;border:none;font-weight:bold;margin-top:10px;display:none">Checkout via WhatsApp</button>
-</div>
-
-<div id="trendPage" class="page">
-<h3>🔥 Trending</h3>
-<div id="trendGrid" class="grid" style="margin-top:10px"></div>
-</div>
-
+<div id="catPage" class="page"><h3>📂 All Categories</h3><div id="catGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"></div></div>
+<div id="cartPage" class="page"><h3>🛒 Cart (<span id="cartCount">0</span>)</h3><div id="cartList" style="margin-top:10px"></div><button id="checkoutBtn" onclick="checkout()" style="width:100%;background:#00b050;color:white;padding:14px;border-radius:30px;border:none;font-weight:bold;margin-top:10px;display:none">Checkout via WhatsApp</button></div>
+<div id="trendPage" class="page"><h3>🔥 Trending</h3><div id="trendGrid" class="grid" style="margin-top:10px"></div></div>
 <div id="mePage" class="page">
+<div id="authSection"></div>
+<div id="userSection" style="display:none">
 <div style="background:white;padding:20px;border-radius:15px;text-align:center">
-<div style="width:70px;height:70px;background:black;color:white;border-radius:50%;margin:auto;line-height:70px;font-size:30px">Me</div>
-<h3>Dornny User</h3>
-<p style="font-size:13px;color:#777">Ghana Seller</p>
+<div style="width:70px;height:70px;background:black;color:white;border-radius:50%;margin:auto;line-height:70px;font-size:30px" id="userAvatar">Me</div>
+<h3 id="userNameDisplay">Dornny User</h3>
+<p style="font-size:13px;color:#777" id="userPhoneDisplay">Ghana Seller</p>
 <div style="display:flex;gap:10px;margin-top:15px">
 <div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myProdCount">0</b><br><span style="font-size:11px">Products</span></div>
 <div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myLikeCount">0</b><br><span style="font-size:11px">Liked</span></div>
 <div style="flex:1;background:#f5f5f5;padding:12px;border-radius:12px"><b id="myFollowCount">0</b><br><span style="font-size:11px">Following</span></div>
 </div>
+<button onclick="logout()" style="margin-top:12px;background:#ff3b30;color:white;border:none;padding:8px 15px;border-radius:20px">Logout</button>
 </div>
 <h4 style="margin:15px 0 10px">My Products</h4>
 <div id="myProducts" class="grid"></div>
 </div>
-
+</div>
 <div class="bottomNav">
 <div class="active" onclick="showPage('homePage',this)"><span>🏠</span>Home</div>
 <div onclick="showPage('catPage',this)"><span>📂</span>Category</div>
@@ -93,11 +90,13 @@ header a{background:#00b050;color:white;padding:7px 14px;border-radius:20px;text
 <div onclick="showPage('cartPage',this)"><span>🛒</span>Cart</div>
 <div onclick="showPage('mePage',this)"><span>👤</span>Me</div>
 </div>
-
 <div id="productModal" class="modal" onclick="if(event.target==this)closeModal()">
 <div class="modalContent">
-<div style="position:relative">
+<div class="modalImgWrap" id="imgWrap">
+<button class="navBtn prev" onclick="slide(-1)">‹</button>
 <img id="modalImg" class="modalImg" src="">
+<button class="navBtn next" onclick="slide(1)">›</button>
+<div class="dotWrap" id="dotWrap"></div>
 <button onclick="closeModal()" style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.5);color:white;border:none;width:30px;height:30px;border-radius:50%">✕</button>
 </div>
 <div style="padding:12px">
@@ -114,75 +113,48 @@ header a{background:#00b050;color:white;padding:7px 14px;border-radius:20px;text
 </div>
 </div>
 </div>
-
 <script>
 const CATS=["All","Men","Women","Kids","Shoes","Bags","Jewelry & Accs","Home","Curve","Lingerie & Sleep","Sports","Electronics","Toys","Office","Pet","Appliances"];
-let currentCat='All',currentModal=null;
-function initCats(){
- document.getElementById('filterBar').innerHTML=CATS.map(c=>`<button class="${c=='All'?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');
- document.getElementById('catGrid').innerHTML=CATS.filter(c=>c!='All').map(c=>`<div class="catTile" onclick="setCatAndGo('${c}')">${c}</div>`).join('');
-}
-function showPage(id,el){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.bottomNav div').forEach(d=>d.classList.remove('active'));
- el.classList.add('active');
- if(id=='trendPage') renderTrend();
- if(id=='cartPage') renderCart();
- if(id=='mePage') renderMe();
-}
-function setCat(cat,btn){
- currentCat=cat;
- document.querySelectorAll('#filterBar button').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
- render();
-}
-function setCatAndGo(cat){
- currentCat=cat;
- showPage('homePage',document.querySelectorAll('.bottomNav div')[0]);
- document.querySelectorAll('#filterBar button').forEach(b=>{b.classList.toggle('active', b.textContent==cat);});
- render();
-}
+const WA_NUMBER="233594221108";
+let currentCat='All',currentModal=null,curSlide=0,curImgs=[];
+function initCats(){document.getElementById('filterBar').innerHTML=CATS.map(c=>`<button class="${c=='All'?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');document.getElementById('catGrid').innerHTML=CATS.filter(c=>c!='All').map(c=>`<div class="catTile" onclick="setCatAndGo('${c}')">${c}</div>`).join('');}
+function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.bottomNav div').forEach(d=>d.classList.remove('active'));el.classList.add('active');if(id=='trendPage')renderTrend();if(id=='cartPage')renderCart();if(id=='mePage'){checkAuth();renderMe();}}
+function setCat(cat,btn){currentCat=cat;document.querySelectorAll('#filterBar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+function setCatAndGo(cat){currentCat=cat;showPage('homePage',document.querySelectorAll('.bottomNav div')[0]);document.querySelectorAll('#filterBar button').forEach(b=>{b.classList.toggle('active',b.textContent==cat);});render();}
 function getProducts(){return JSON.parse(localStorage.getItem('dornnyProducts')||'[]');}
 function getLikes(){return JSON.parse(localStorage.getItem('dornnyLikes')||'[]')}
 function getCart(){return JSON.parse(localStorage.getItem('dornnyCart')||'[]')}
 function getFollows(){return JSON.parse(localStorage.getItem('dornnyFollows')||'[]')}
 function getComments(id){return JSON.parse(localStorage.getItem('dornnyCmt_'+id)||'[]')}
 function getRatings(){return JSON.parse(localStorage.getItem('dornnyRatings')||'{}')}
-function render(){
- const grid=document.getElementById('grid');
- const search=document.getElementById('search').value.toLowerCase();
- let products=getProducts();
- let filtered=products.filter(p=>{
-  let ms=p.name.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search);
-  let mc=currentCat=='All'||p.category==currentCat;
-  return ms&&mc;
- });
- if(filtered.length==0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#888">No products in '+currentCat+'<br><a href="sell.html" style="color:#00b050">+ Upload</a></div>';return;}
- let likes=getLikes();
- grid.innerHTML=filtered.map(p=>{
-  let imgs=p.images||[p.image||""];
-  let isLiked=likes.includes(p.id);
-  return `<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${imgs[0]}" class="active" style="display:block"><button class="likeBtn ${isLiked?'liked':''}" onclick="event.stopPropagation();toggleLike(${p.id})">${isLiked?'❤️':'🤍'}</button></div><div class="info"><h3>${p.name}</h3><p>${p.desc} • ${p.category}</p><div class="price">GH₵ ${p.price}</div><div class="row"><button style="flex:1;background:#eee;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();addToCart(${p.id})">Cart</button><button style="flex:1;background:black;color:white;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();openModal(${p.id})">View</button></div></div></div>`;
- }).join('');
-}
+function getUser(){return JSON.parse(localStorage.getItem('dornnyUser')||'null')}
+function checkAuth(){let u=getUser();let auth=document.getElementById('authSection');let userSec=document.getElementById('userSection');if(!u){userSec.style.display='none';auth.innerHTML=`<div class="authBox"><h3>🔐 Login / Register</h3><p style="font-size:12px;color:#00b050;margin:8px 0">Registration: GH₵ 50 via MoMo to 0594221108</p><div id="loginForm"><input id="lPhone" placeholder="Phone (059...)"><input id="lPass" type="password" placeholder="Password"><button style="background:black;color:white" onclick="login()">Login</button><button style="background:#eee" onclick="showReg()">New? Register GH₵50</button></div><div id="regForm" style="display:none"><input id="rName" placeholder="Full Name"><input id="rPhone" placeholder="Phone"><input id="rPass" type="password" placeholder="Password"><input id="rMomo" placeholder="MoMo Transaction ID (after paying 50)"><p style="font-size:11px;color:#777">Send GH₵50 to <b>0594221108</b> (Danny) via MoMo, then enter Trans ID</p><button style="background:#00b050;color:white" onclick="register()">Register - GH₵50 Paid</button><button style="background:#eee" onclick="showLogin()">Already have account? Login</button></div></div>`;}else{auth.innerHTML='';userSec.style.display='block';document.getElementById('userNameDisplay').innerText=u.name;document.getElementById('userPhoneDisplay').innerText=u.phone+' • Verified Seller';document.getElementById('userAvatar').innerText=u.name.charAt(0).toUpperCase();}}
+function showReg(){document.getElementById('loginForm').style.display='none';document.getElementById('regForm').style.display='block';}
+function showLogin(){document.getElementById('regForm').style.display='none';document.getElementById('loginForm').style.display='block';}
+function register(){let n=document.getElementById('rName').value.trim(),p=document.getElementById('rPhone').value.trim(),pw=document.getElementById('rPass').value.trim(),m=document.getElementById('rMomo').value.trim();if(!n||!p||!pw||!m){alert('Fill all + MoMo Trans ID');return;}if(m.length<5){alert('Enter valid MoMo Transaction ID');return;}let u={name:n,phone:p,pass:pw,momo:m,paid:50,date:Date.now()};localStorage.setItem('dornnyUser',JSON.stringify(u));alert('✅ Registered! Welcome '+n+' - GH₵50 verified');checkAuth();renderMe();}
+function login(){let ph=document.getElementById('lPhone').value.trim(),pw=document.getElementById('lPass').value.trim();let u=getUser();if(!u){alert('No account. Please Register first GH₵50');showReg();return;}if(u.phone==ph&&u.pass==pw){alert('Welcome back '+u.name);checkAuth();renderMe();}else{alert('Wrong phone or password');}}
+function logout(){if(confirm('Logout?')){localStorage.removeItem('dornnyUser');checkAuth();}}
+function render(){const grid=document.getElementById('grid');const search=document.getElementById('search').value.toLowerCase();let products=getProducts();let filtered=products.filter(p=>{let ms=p.name.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search);let mc=currentCat=='All'||p.category==currentCat;return ms&&mc;});if(filtered.length==0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#888">No products in '+currentCat+'<br><a href="sell.html" style="color:#00b050">+ Upload</a></div>';return;}let likes=getLikes();grid.innerHTML=filtered.map(p=>{let imgs=p.images||[p.image||""];let isLiked=likes.includes(p.id);return `<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${imgs[0]}" class="active" style="display:block"><button class="likeBtn ${isLiked?'liked':''}" onclick="event.stopPropagation();toggleLike(${p.id})">${isLiked?'❤️':'🤍'}</button></div><div class="info"><h3>${p.name}</h3><p>${p.desc} • ${p.category}</p><div class="price">GH₵ ${p.price}</div><div class="row"><button style="flex:1;background:#eee;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();addToCart(${p.id})">Cart</button><button style="flex:1;background:black;color:white;border:none;padding:7px;border-radius:8px;font-size:11px" onclick="event.stopPropagation();openModal(${p.id})">View</button></div></div></div>`;}).join('');}
 function toggleLike(id){let likes=getLikes();likes=likes.includes(id)?likes.filter(x=>x!=id):[...likes,id];localStorage.setItem('dornnyLikes',JSON.stringify(likes));render();renderTrend();renderMe();}
 function addToCart(id){let cart=getCart();let ex=cart.find(x=>x.id==id);if(ex)ex.qty++;else cart.push({id:id,qty:1});localStorage.setItem('dornnyCart',JSON.stringify(cart));alert('Added to Cart 🛒');renderCart();}
 function renderCart(){let cart=getCart();let prods=getProducts();let list=document.getElementById('cartList');let count=document.getElementById('cartCount');count.innerText=cart.reduce((s,i)=>s+i.qty,0);if(cart.length==0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Cart empty</p>';document.getElementById('checkoutBtn').style.display='none';return;}document.getElementById('checkoutBtn').style.display='block';let total=0;list.innerHTML=cart.map(c=>{let p=prods.find(x=>x.id==c.id);if(!p)return'';total+=parseFloat(p.price)*c.qty;return `<div class="cartItem"><img src="${(p.images||[p.image])[0]}"><div style="flex:1"><b>${p.name}</b><br><span style="color:#00b050">GH₵ ${p.price} x ${c.qty}</span></div><button onclick="removeCart(${c.id})" style="background:#ff3b30;color:white;border:none;padding:6px 10px;border-radius:15px">✕</button></div>`;}).join('')+`<div style="background:white;padding:12px;border-radius:12px;font-weight:bold">Total: GH₵ ${total}</div>`;}
 function removeCart(id){localStorage.setItem('dornnyCart',JSON.stringify(getCart().filter(x=>x.id!=id)));renderCart();}
-function checkout(){let cart=getCart();let prods=getProducts();let text="Hello Dornny Market, I want to order:%0A";cart.forEach(c=>{let p=prods.find(x=>x.id==c.id);if(p)text+=`- ${p.name} GH₵ ${p.price} x${c.qty}%0A`;});let total=cart.reduce((s,c)=>{let p=prods.find(x=>x.id==c.id);return s+(p?parseFloat(p.price)*c.qty:0);},0);text+=`Total: GH₵ ${total}`;window.open(`https://wa.me/233000000000?text=${text}`,'_blank');}
+function checkout(){let cart=getCart();let prods=getProducts();let text="Hello Dornny Market, I want to order:%0A";cart.forEach(c=>{let p=prods.find(x=>x.id==c.id);if(p)text+=`- ${p.name} GH₵ ${p.price} x${c.qty}%0A`;});let total=cart.reduce((s,c)=>{let p=prods.find(x=>x.id==c.id);return s+(p?parseFloat(p.price)*c.qty:0);},0);text+=`Total: GH₵ ${total}`;window.open(`https://wa.me/${WA_NUMBER}?text=${text}`,'_blank');}
 function renderTrend(){let prods=getProducts();let likes=getLikes();let ratings=getRatings();prods.sort((a,b)=>((likes.includes(b.id)?1:0)+(ratings[b.id]||0))-((likes.includes(a.id)?1:0)+(ratings[a.id]||0)));document.getElementById('trendGrid').innerHTML=prods.slice(0,12).map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div><div style="font-size:11px;color:#ff3040">❤️ ${likes.includes(p.id)?1:0} • ⭐ ${ratings[p.id]||0}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">Like products to see trending</p>';}
-function renderMe(){let prods=getProducts();document.getElementById('myProdCount').innerText=prods.length;document.getElementById('myLikeCount').innerText=getLikes().length;document.getElementById('myFollowCount').innerText=getFollows().length;document.getElementById('myProducts').innerHTML=prods.map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">No products yet</p>';}
-function openModal(id){let p=getProducts().find(x=>x.id==id);if(!p)return;currentModal=p;document.getElementById('modalName').innerText=p.name;document.getElementById('modalDesc').innerText=p.desc+' • '+p.category;document.getElementById('modalPrice').innerText='GH₵ '+p.price;document.getElementById('modalImg').src=(p.images||[p.image])[0];let ratings=getRatings();let r=ratings[id]||0;document.getElementById('modalRating').innerHTML=r?`⭐ ${r}/5`:'No rating';document.getElementById('followBtn').innerText=getFollows().includes(id)?'✓ Following':'+ Follow';updateComments();updateStars(r);document.getElementById('productModal').style.display='block';}
+function renderMe(){let prods=getProducts();let u=getUser();if(!u)return;document.getElementById('myProdCount').innerText=prods.length;document.getElementById('myLikeCount').innerText=getLikes().length;document.getElementById('myFollowCount').innerText=getFollows().length;document.getElementById('myProducts').innerHTML=prods.map(p=>`<div class="card" onclick="openModal(${p.id})"><div class="slider"><img src="${(p.images||[p.image])[0]}" class="active" style="display:block"></div><div class="info"><h3>${p.name}</h3><div class="price">GH₵ ${p.price}</div></div></div>`).join('')||'<p style="grid-column:1/-1;text-align:center;color:#888">No products yet</p>';}
+function openModal(id){let p=getProducts().find(x=>x.id==id);if(!p)return;currentModal=p;curImgs=p.images||[p.image||""];curSlide=0;document.getElementById('modalName').innerText=p.name;document.getElementById('modalDesc').innerText=p.desc+' • '+p.category;document.getElementById('modalPrice').innerText='GH₵ '+p.price;showSlide();let ratings=getRatings();let r=ratings[id]||0;document.getElementById('modalRating').innerHTML=r?`⭐ ${r}/5`:'No rating';document.getElementById('followBtn').innerText=getFollows().includes(id)?'✓ Following':'+ Follow';updateComments();updateStars(r);document.getElementById('productModal').style.display='block';}
+function showSlide(){if(curImgs.length==0)return;document.getElementById('modalImg').src=curImgs[curSlide];let dots=document.getElementById('dotWrap');dots.innerHTML=curImgs.map((_,i)=>`<span class="dot ${i==curSlide?'active':''}"></span>`).join('');}
+function slide(d){curSlide=(curSlide+d+curImgs.length)%curImgs.length;showSlide();}
+let startX=0;document.getElementById('imgWrap').addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});document.getElementById('imgWrap').addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50){slide(dx<0?1:-1);}});
 function closeModal(){document.getElementById('productModal').style.display='none';}
 function addToCartFromModal(){if(currentModal)addToCart(currentModal.id);}
-function buyWhatsApp(){if(!currentModal)return;let msg=encodeURIComponent(`Hello Dornny, I want ${currentModal.name} GH₵ ${currentModal.price}`);window.open(`https://wa.me/233000000000?text=${msg}`,'_blank');}
+function buyWhatsApp(){if(!currentModal)return;let msg=encodeURIComponent(`Hello Dornny, I want ${currentModal.name} GH₵ ${currentModal.price}`);window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');}
 function toggleFollow(){if(!currentModal)return;let f=getFollows();f=f.includes(currentModal.id)?f.filter(x=>x!=currentModal.id):[...f,currentModal.id];localStorage.setItem('dornnyFollows',JSON.stringify(f));document.getElementById('followBtn').innerText=f.includes(currentModal.id)?'✓ Following':'+ Follow';renderMe();}
 function rate(star){if(!currentModal)return;let ratings=getRatings();ratings[currentModal.id]=star;localStorage.setItem('dornnyRatings',JSON.stringify(ratings));document.getElementById('modalRating').innerHTML=`⭐ ${star}/5`;updateStars(star);renderTrend();}
 function updateStars(a){document.querySelectorAll('#rateStars span').forEach((s,i)=>{s.innerText=i<a?'★':'☆';});}
 function updateComments(){if(!currentModal)return;let cmts=getComments(currentModal.id);document.getElementById('cmtCount').innerText=cmts.length;document.getElementById('cmtList').innerHTML=cmts.map(c=>`<div class="cmt"><b>${c.user}:</b> ${c.text}</div>`).join('')||'<p style="font-size:12px;color:#888">No comments yet</p>';}
-function addComment(){let inp=document.getElementById('cmtInput');let txt=inp.value.trim();if(!txt||!currentModal)return;let cmts=getComments(currentModal.id);cmts.push({user:'You',text:txt});localStorage.setItem('dornnyCmt_'+currentModal.id,JSON.stringify(cmts));inp.value='';updateComments();}
-initCats();render();renderCart();
+function addComment(){let inp=document.getElementById('cmtInput');let txt=inp.value.trim();if(!txt||!currentModal)return;let cmts=getComments(currentModal.id);cmts.push({user:getUser()?.name||'You',text:txt});localStorage.setItem('dornnyCmt_'+currentModal.id,JSON.stringify(cmts));inp.value='';updateComments();}
+initCats();render();renderCart();checkAuth();
 </script>
 </body>
 </html>
