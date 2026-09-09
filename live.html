@@ -1,45 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dornny LIVE 🔴</title>
-<style>
-body{margin:0;font-family:system-ui;background:#000;color:#fff}
-.top{padding:10px;background:#111;display:flex;gap:6px;flex-wrap:wrap}
-.top input{flex:1;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff}
-.btn{padding:10px 14px;border-radius:8px;border:0;font-weight:700}
-.live{background:red;color:#fff}
-.back{background:#333;color:#fff;text-decoration:none;padding:10px 14px;border-radius:8px}
-#video{width:100%;height:60vh;background:#111;object-fit:cover}
-#info{background:#111;padding:12px}
-.buy{background:#00c853;color:#fff;width:100%;padding:14px;border-radius:10px;font-size:18px;font-weight:800;border:0;margin-top:10px}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live - Dornny</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="top">
-<input id="title" placeholder="What are you selling? e.g Bags GH120">
-<button class="btn live" onclick="startLive()">🔴 Start Live Camera</button>
-<a href="index.html" class="back">← Market</a>
+<body class="bg-black text-white min-h-screen p-3">
+<input id="title" placeholder="What are you selling? e.g Bags GH120" class="w-full p-3 rounded-xl bg-[#2a2a2a] text-white mb-3">
+<div class="flex gap-2 mb-3">
+<button id="startBtn" onclick="startLive()" class="bg-red-600 px-5 py-2.5 rounded-full font-bold">🔴 Start Live Camera</button>
+<a href="./index.html" class="bg-[#2a2a2a] px-5 py-2.5 rounded-full">← Market</a>
 </div>
-<video id="video" autoplay playsinline muted></video>
-<div id="info">
-<div id="liveStatus">📷 Click Start Live to show your face & products</div>
-<button class="btn buy" onclick="shareLive()">📤 Share Live Link on WhatsApp</button>
-<button class="btn buy" style="background:#ff6f00" onclick="location.href='index.html'">🛒 Buyers Go To Market</button>
-</div>
+<video id="video" autoplay muted playsinline class="w-full h-[60vh] bg-[#1a1a1a] rounded-2xl object-cover"></video>
+<p id="status" class="text-center mt-3 text-gray-400">Tap Start Live Camera and ALLOW camera when asked</p>
 <script>
 async function startLive(){
- try{
-  const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});
-  document.getElementById('video').srcObject=s;
-  document.getElementById('liveStatus').innerHTML='🔴 LIVE NOW - '+document.getElementById('title').value+'<br>Share link: '+location.href;
- }catch(e){ alert('Allow camera! Error: '+e.message); }
-}
-function shareLive(){
- const t=document.getElementById('title').value||'Dornny Live Sale';
- const url=location.href;
- const msg=encodeURIComponent('🔴 *'+t+'* LIVE NOW on Dornny Market! Watch me: '+url);
- window.open('https://wa.me/?text='+msg);
+  const status=document.getElementById('status');
+  try{
+    status.innerText='Requesting camera... please tap Allow';
+    const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:true});
+    document.getElementById('video').srcObject = stream;
+    status.innerText='🔴 LIVE! You are live now - '+ (document.getElementById('title').value||'Selling');
+    document.getElementById('startBtn').innerText='🔴 LIVE';
+  }catch(e){
+    alert('Camera blocked. Tap 🔒 lock icon at top -> Permissions -> Camera -> Allow, then refresh page. Error: '+e.message);
+    status.innerText='Camera permission denied. Tap 🔒 icon top to allow.';
+  }
 }
 </script>
 </body>
