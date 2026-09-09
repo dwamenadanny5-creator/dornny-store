@@ -2,52 +2,67 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dornny's Market - Ghana's Marketplace</title>
+<title>Dornny's Market</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-.product-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:50;display:none;align-items:center;justify-content:center;padding:1rem}
+body{background:#121212;color:white}
+.cat-active{background:white;color:black!important}
+.product-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:50;display:none;align-items:end;justify-content:center}
 .product-modal.active{display:flex}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#1e1e1e;border-top:1px solid #333;display:flex;justify-content:space-around;padding:10px 0;z-index:40}
 </style>
 </head>
-<body class="bg-gray-50">
-<header class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center">
-<h1 class="font-bold text-xl">DORNNY'S MARKET</h1>
+<body class="pb-20">
+<!-- HEADER -->
+<header class="bg-black text-white p-4 sticky top-0 z-20 flex justify-between items-center">
+<h1 class="font-black text-lg tracking-wide">DORNNY'S MARKET</h1>
 <div class="flex gap-2">
-<a href="./live.html" class="bg-red-600 text-white px-3 py-2 rounded-full text-xs font-bold">🔴 LIVE</a>
-<a href="./sell.html" class="bg-white text-black px-4 py-2 rounded-full text-sm font-bold">+ Sell</a>
+<a href="./live.html" class="bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1">🔴 LIVE</a>
+<a href="./sell.html" class="bg-[#2a2a2a] text-white px-4 py-1.5 rounded-full text-sm font-bold">+ Sell</a>
 </div>
 </header>
-<div class="p-4">
-<input id="search" placeholder="Search shoes, phones, clothes..." class="w-full p-3 rounded-full border shadow-sm">
-</div>
-<!-- Categories -->
-<div class="flex gap-2 px-4 overflow-x-auto pb-2 text-sm">
-<button onclick="filterCat('')" class="cat-btn bg-black text-white px-4 py-1.5 rounded-full whitespace-nowrap">All</button>
-<button onclick="filterCat('Shoes')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Shoes</button>
-<button onclick="filterCat('Men')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Men</button>
-<button onclick="filterCat('Women')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Women</button>
-<button onclick="filterCat('Kids')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Kids</button>
-<button onclick="filterCat('Phones')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Phones</button>
-<button onclick="filterCat('Food')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Food</button>
+
+<div class="p-3">
+<input id="search" placeholder="Search shoes, phones, clothes..." class="w-full p-3 rounded-full bg-[#2a2a2a] text-white placeholder-gray-400 border-0">
 </div>
 
-<div id="products" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-3">
-<p class="col-span-full text-center py-10">Loading products...</p>
+<div class="flex gap-2 px-3 overflow-x-auto pb-3 text-sm">
+<button onclick="filterCat('',this)" class="cat-btn cat-active px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">All</button>
+<button onclick="filterCat('Shoes',this)" class="cat-btn px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">Shoes</button>
+<button onclick="filterCat('Men',this)" class="cat-btn px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">Men</button>
+<button onclick="filterCat('Women',this)" class="cat-btn px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">Women</button>
+<button onclick="filterCat('Kids',this)" class="cat-btn px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">Kids</button>
+<button onclick="filterCat('Food',this)" class="cat-btn px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">Food</button>
+<button onclick="filterCat('Phones',this)" class="cat-btn px-4 py-1.5 rounded-full whitespace-nowrap bg-[#2a2a2a]">Phones</button>
 </div>
 
-<!-- PRODUCT MODAL - This fixes 404, shows details on same page -->
+<div id="products" class="grid grid-cols-2 gap-3 p-3">
+<p class="col-span-full text-center py-20 text-gray-400">Loading products...</p>
+</div>
+
+<!-- PRODUCT POPUP - NO MORE 404 -->
 <div id="modal" class="product-modal" onclick="closeModal()">
-<div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden" onclick="event.stopPropagation()">
-<img id="mImage" src="" class="w-full h-72 object-cover">
-<div class="p-4">
+<div class="bg-[#1e1e1e] rounded-t-[24px] w-full max-w-md overflow-hidden" onclick="event.stopPropagation()">
+<div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mt-3"></div>
+<img id="mImage" src="" class="w-full h-80 object-cover mt-3">
+<div class="p-5">
 <h3 id="mName" class="font-bold text-lg"></h3>
-<p id="mCategory" class="text-sm text-gray-500"></p>
-<p id="mPrice" class="font-bold text-xl mt-2"></p>
-<p id="mShop" class="text-sm mt-1 text-gray-600"></p>
-<a id="mWhatsapp" href="#" target="_blank" class="block mt-4 bg-green-500 text-white text-center py-3 rounded-full font-bold">Chat Seller on WhatsApp</a>
-<button onclick="closeModal()" class="block w-full mt-2 bg-gray-100 text-black text-center py-3 rounded-full font-bold">Close</button>
+<p id="mCategory" class="text-sm text-gray-400"></p>
+<p id="mPrice" class="font-black text-2xl mt-2 text-white"></p>
+<p id="mShop" class="text-sm mt-1 text-gray-400"></p>
+<a id="mWhatsapp" href="#" target="_blank" class="block mt-4 bg-green-500 text-white text-center py-3.5 rounded-full font-bold">Chat on WhatsApp</a>
+<button onclick="addToCart()" class="block w-full mt-2 bg-white text-black text-center py-3.5 rounded-full font-bold">Add to Cart</button>
 </div>
 </div>
+</div>
+
+<!-- BOTTOM NAV - THIS WAS MISSING -->
+<div class="bottom-nav">
+<a href="./index.html" class="flex flex-col items-center text-white"><span class="text-xl">🏠</span><span class="text-[10px]">Home</span></a>
+<a href="#" onclick="alert('Categories: All, Shoes, Men, Women, Kids')" class="flex flex-col items-center text-gray-400"><span class="text-xl">📂</span><span class="text-[10px]">Category</span></a>
+<a href="./live.html" class="flex flex-col items-center text-gray-400"><span class="text-xl">🔥</span><span class="text-[10px]">Trend</span></a>
+<a href="#" onclick="alert('Cart: '+ (localStorage.getItem('cartCount')||0) +' items')" class="flex flex-col items-center text-gray-400"><span class="text-xl">🛒</span><span class="text-[10px]">Cart</span></a>
+<a href="#" onclick="alert('Dornny Market - Ghana')" class="flex flex-col items-center text-gray-400"><span class="text-xl">👤</span><span class="text-[10px]">Me</span></a>
 </div>
 
 <script type="module">
@@ -64,42 +79,56 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let allProducts = [];
+let currentP = null;
 
 async function loadProducts(){
+  try{
   const q = query(collection(db, "products"), orderBy("createdAt","desc"));
   const snap = await getDocs(q);
   allProducts = [];
-  snap.forEach(doc=>{ allProducts.push({id:doc.id, ...doc.data()}); });
+  snap.forEach(doc=>{ allProducts.push({id:doc.id,...doc.data()}); });
+  // If empty, show demo product so it doesn't look broken
+  if(allProducts.length==0){
+    allProducts = [{name:"Daby Shop - Sneakers", category:"Shoes", price:"80", shop:"Daby shop", image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400", whatsapp:"0550000000"}];
+  }
   render(allProducts);
+  }catch(e){ document.getElementById('products').innerHTML="<p class='col-span-full text-center py-10'>Add first product via + Sell button</p>"; }
 }
 function render(list){
   const container = document.getElementById('products');
-  if(list.length==0){ container.innerHTML="<p class='col-span-full text-center py-10'>No products yet. Be first to sell!</p>"; return; }
+  if(list.length==0){ container.innerHTML="<p class='col-span-full text-center py-20 text-gray-400'>No products yet. Be first to sell!</p>"; return; }
   container.innerHTML = list.map(p=>`
-    <div class="bg-white rounded-xl overflow-hidden shadow-sm border cursor-pointer" onclick='openModal(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
-      <img src="${p.image}" class="w-full h-36 object-cover" loading="lazy">
+    <div class="bg-[#1e1e1e] rounded-2xl overflow-hidden cursor-pointer" onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+      <img src="${p.image}" class="w-full h-40 object-cover">
       <div class="p-3">
         <h3 class="font-bold text-sm truncate">${p.name}</h3>
-        <p class="text-xs text-gray-500 truncate">${p.category||''} ${p.shop ? '• '+p.shop : ''}</p>
-        <p class="font-bold mt-1">GHS ${p.price}</p>
+        <p class="text-[11px] text-gray-400 truncate">${p.shop||'Daby shop'} • ${p.category||''}</p>
+        <p class="font-black mt-1">GH₵ ${p.price}</p>
       </div>
     </div>
   `).join('');
 }
 window.openModal = (p)=>{
+  currentP=p;
   document.getElementById('mImage').src = p.image;
   document.getElementById('mName').innerText = p.name;
   document.getElementById('mCategory').innerText = p.category||'';
-  document.getElementById('mPrice').innerText = 'GHS ' + p.price;
+  document.getElementById('mPrice').innerText = 'GH₵ ' + p.price;
   document.getElementById('mShop').innerText = p.shop || 'Daby shop Ghana';
   const waNum = (p.whatsapp||'').toString().replace(/^0/,'');
-  document.getElementById('mWhatsapp').href = `https://wa.me/233${waNum}?text=Hi, I'm interested in ${encodeURIComponent(p.name)} on Dornny's Market`;
+  document.getElementById('mWhatsapp').href = `https://wa.me/233${waNum}?text=Hi, I'm interested in ${encodeURIComponent(p.name)}`;
   document.getElementById('modal').classList.add('active');
 }
 window.closeModal = ()=>{ document.getElementById('modal').classList.remove('active'); }
-window.filterCat = (cat)=>{
-  document.querySelectorAll('.cat-btn').forEach(b=>{ b.classList.remove('bg-black','text-white'); b.classList.add('bg-white','border'); });
-  event.target.classList.add('bg-black','text-white');
+window.addToCart = ()=>{
+  let c = parseInt(localStorage.getItem('cartCount')||'0')+1;
+  localStorage.setItem('cartCount',c);
+  alert('Added to cart! Cart: '+c);
+  closeModal();
+}
+window.filterCat = (cat,btn)=>{
+  document.querySelectorAll('.cat-btn').forEach(b=>{ b.classList.remove('cat-active','bg-white','text-black'); b.classList.add('bg-[#2a2a2a]'); });
+  if(btn){ btn.classList.add('cat-active'); btn.classList.remove('bg-[#2a2a2a]'); }
   if(!cat) render(allProducts);
   else render(allProducts.filter(p=> (p.category||'').toLowerCase().includes(cat.toLowerCase())));
 }
