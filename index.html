@@ -1,53 +1,114 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dornny Market Gh</title>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dornny's Market - Ghana's Marketplace</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#f5f5f5;padding-bottom:70px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;position:sticky;top:0;z-index:10}
-.logo{font-weight:900;font-size:20px}.headerRight{display:flex;gap:8px}
-.sellBtn,.liveBtn{padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:800;font-size:13px}
-.sellBtn{background:black;color:white}.liveBtn{background:red;color:white}
-.searchBar{padding:10px;background:white} .searchBar input{width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;background:#f2f2f2}
-.filterBar{display:flex;gap:8px;padding:10px;overflow-x:auto;white-space:nowrap;background:white;scrollbar-width:none}
-.filterBar::-webkit-scrollbar{display:none}
-.filterBar button{padding:7px 14px;border-radius:20px;border:1px solid #ddd;background:white;font-size:12px;flex-shrink:0}
-.filterBar button.active{background:black;color:white}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.card{background:white;border-radius:15px;overflow:hidden;position:relative}
-.card img{width:100%;height:160px;object-fit:cover}
-.cardInfo{padding:8px}.cardTitle{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cardPrice{color:#00c853;font-weight:800}.cardLoc{font-size:11px;color:#888}
-.bottomNav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #eee;z-index:20}
-.bottomNav div{text-align:center;font-size:10px;color:#888} .bottomNav div.active{color:black;font-weight:800}
-.bottomNav span{font-size:20px;display:block}
-</style></head><body>
-<div class="header"><div class="logo">Dornny</div><div class="headerRight"><a href="live.html" class="liveBtn">🔴 LIVE</a><a href="sell.html" class="sellBtn">+ Sell</a></div></div>
-<div class="searchBar"><input id="search" placeholder="Search..." oninput="render()"></div>
-<div class="filterBar" id="filterBar">
-<button class="active" onclick="setCat('All',this)">All</button>
-<button onclick="setCat('Shoes',this)">Shoes</button>
-<button onclick="setCat('Men',this)">Men</button>
-<button onclick="setCat('Women',this)">Women</button>
-<button onclick="setCat('Kids',this)">Kids</button>
-<button onclick="setCat('Pets',this)">Pets</button>
-<button onclick="setCat('Food',this)">Food</button>
-<button onclick="setCat('Appliances',this)">Appliances</button>
-<button onclick="setCat('Jewelry',this)">Jewery&Accs</button>
-<button onclick="setCat('Sport',this)">Sport</button>
-<button onclick="setCat('Electronics',this)">Electronics</button>
-<button onclick="setCat('Toys',this)">Toys</button>
-<button onclick="setCat('Office',this)">Office</button>
+.product-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:50;display:none;align-items:center;justify-content:center;padding:1rem}
+.product-modal.active{display:flex}
+</style>
+</head>
+<body class="bg-gray-50">
+<header class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center">
+<h1 class="font-bold text-xl">DORNNY'S MARKET</h1>
+<div class="flex gap-2">
+<a href="./live.html" class="bg-red-600 text-white px-3 py-2 rounded-full text-xs font-bold">🔴 LIVE</a>
+<a href="./sell.html" class="bg-white text-black px-4 py-2 rounded-full text-sm font-bold">+ Sell</a>
 </div>
-<div class="grid" id="grid"></div>
-<div class="bottomNav">
-<div class="active" onclick="location.href='index.html'"><span>🏠</span>Home</div>
-<div onclick="document.getElementById('filterBar').scrollIntoView()"><span>📦</span>Category</div>
-<div onclick="setCat('All',document.querySelector('.filterBar button'))"><span>🔥</span>Trend</div>
-<div onclick="location.href='cart.html'"><span>🛒</span>Cart</div>
-<div onclick="location.href='me.html'"><span>👤</span>Me</div>
+</header>
+<div class="p-4">
+<input id="search" placeholder="Search shoes, phones, clothes..." class="w-full p-3 rounded-full border shadow-sm">
 </div>
-<script>
-let cat='All'; let products=[]; try{products=JSON.parse(localStorage.getItem('dornnyProducts')||'[]')}catch(e){}
-if(products.length===0){products=[{id:1,name:"Shoes GH200",price:200,category:"Shoes",location:"Accra",image:"https://via.placeholder.com/300"},{id:2,name:"Men Shirt",price:120,category:"Men",location:"Kumasi",image:"https://via.placeholder.com/300"},{id:3,name:"Women Dress",price:180,category:"Women",location:"Accra",image:"https://via.placeholder.com/300"}];}
-function setCat(c,el){cat=c;document.querySelectorAll('.filterBar button').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');render();}
-function render(){let q=document.getElementById('search').value.toLowerCase();let g=document.getElementById('grid');g.innerHTML='';products.filter(p=>(cat==='All'||(p.category||'').toLowerCase().includes(cat.toLowerCase()))&&(!q||(p.name||'').toLowerCase().includes(q))).forEach(p=>{let d=document.createElement('div');d.className='card';d.innerHTML=`<img src="${p.image||p.images?.[0]||'https://via.placeholder.com/300'}"><div class="cardInfo"><div class="cardTitle">${p.name||p.title}</div><div class="cardPrice">GH₵ ${p.price||0}</div><div class="cardLoc">${p.location||'Ghana'}</div></div>`;d.onclick=()=>{localStorage.setItem('selectedProduct',JSON.stringify(p));location.href='product.html'};g.appendChild(d);});}render();
-</script></body></html>
+<!-- Categories -->
+<div class="flex gap-2 px-4 overflow-x-auto pb-2 text-sm">
+<button onclick="filterCat('')" class="cat-btn bg-black text-white px-4 py-1.5 rounded-full whitespace-nowrap">All</button>
+<button onclick="filterCat('Shoes')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Shoes</button>
+<button onclick="filterCat('Men')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Men</button>
+<button onclick="filterCat('Women')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Women</button>
+<button onclick="filterCat('Kids')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Kids</button>
+<button onclick="filterCat('Phones')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Phones</button>
+<button onclick="filterCat('Food')" class="cat-btn bg-white border px-4 py-1.5 rounded-full whitespace-nowrap">Food</button>
+</div>
+
+<div id="products" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-3">
+<p class="col-span-full text-center py-10">Loading products...</p>
+</div>
+
+<!-- PRODUCT MODAL - This fixes 404, shows details on same page -->
+<div id="modal" class="product-modal" onclick="closeModal()">
+<div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden" onclick="event.stopPropagation()">
+<img id="mImage" src="" class="w-full h-72 object-cover">
+<div class="p-4">
+<h3 id="mName" class="font-bold text-lg"></h3>
+<p id="mCategory" class="text-sm text-gray-500"></p>
+<p id="mPrice" class="font-bold text-xl mt-2"></p>
+<p id="mShop" class="text-sm mt-1 text-gray-600"></p>
+<a id="mWhatsapp" href="#" target="_blank" class="block mt-4 bg-green-500 text-white text-center py-3 rounded-full font-bold">Chat Seller on WhatsApp</a>
+<button onclick="closeModal()" class="block w-full mt-2 bg-gray-100 text-black text-center py-3 rounded-full font-bold">Close</button>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
+  authDomain: "dornnysmarket.firebaseapp.com",
+  projectId: "dornnysmarket",
+  storageBucket: "dornnysmarket.firebasestorage.app",
+  messagingSenderId: "726307073658",
+  appId: "1:726307073658:web:957d1225916799d9fa95c3"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let allProducts = [];
+
+async function loadProducts(){
+  const q = query(collection(db, "products"), orderBy("createdAt","desc"));
+  const snap = await getDocs(q);
+  allProducts = [];
+  snap.forEach(doc=>{ allProducts.push({id:doc.id, ...doc.data()}); });
+  render(allProducts);
+}
+function render(list){
+  const container = document.getElementById('products');
+  if(list.length==0){ container.innerHTML="<p class='col-span-full text-center py-10'>No products yet. Be first to sell!</p>"; return; }
+  container.innerHTML = list.map(p=>`
+    <div class="bg-white rounded-xl overflow-hidden shadow-sm border cursor-pointer" onclick='openModal(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+      <img src="${p.image}" class="w-full h-36 object-cover" loading="lazy">
+      <div class="p-3">
+        <h3 class="font-bold text-sm truncate">${p.name}</h3>
+        <p class="text-xs text-gray-500 truncate">${p.category||''} ${p.shop ? '• '+p.shop : ''}</p>
+        <p class="font-bold mt-1">GHS ${p.price}</p>
+      </div>
+    </div>
+  `).join('');
+}
+window.openModal = (p)=>{
+  document.getElementById('mImage').src = p.image;
+  document.getElementById('mName').innerText = p.name;
+  document.getElementById('mCategory').innerText = p.category||'';
+  document.getElementById('mPrice').innerText = 'GHS ' + p.price;
+  document.getElementById('mShop').innerText = p.shop || 'Daby shop Ghana';
+  const waNum = (p.whatsapp||'').toString().replace(/^0/,'');
+  document.getElementById('mWhatsapp').href = `https://wa.me/233${waNum}?text=Hi, I'm interested in ${encodeURIComponent(p.name)} on Dornny's Market`;
+  document.getElementById('modal').classList.add('active');
+}
+window.closeModal = ()=>{ document.getElementById('modal').classList.remove('active'); }
+window.filterCat = (cat)=>{
+  document.querySelectorAll('.cat-btn').forEach(b=>{ b.classList.remove('bg-black','text-white'); b.classList.add('bg-white','border'); });
+  event.target.classList.add('bg-black','text-white');
+  if(!cat) render(allProducts);
+  else render(allProducts.filter(p=> (p.category||'').toLowerCase().includes(cat.toLowerCase())));
+}
+document.getElementById('search').addEventListener('input', e=>{
+  const val = e.target.value.toLowerCase();
+  const filtered = allProducts.filter(p=> p.name.toLowerCase().includes(val) || (p.category||'').toLowerCase().includes(val));
+  render(filtered);
+});
+loadProducts();
+</script>
+</body>
+</html>
