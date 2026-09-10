@@ -1,100 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sell - Dornny Market</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f5f5f5;padding:15px}
-header{background:black;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;border-radius:12px;margin-bottom:15px}
-header a{color:white;text-decoration:none;background:#333;padding:6px 12px;border-radius:20px;font-size:13px}
-.box{background:white;padding:15px;border-radius:15px;max-width:500px;margin:auto}
-h2{text-align:center;margin-bottom:5px}
-.lock{color:red;text-align:center;font-size:11px;margin-bottom:12px;font-weight:bold}
-label{font-size:12px;font-weight:bold;margin-top:10px;display:block;color:#333}
-input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;background:#f0f0f0;margin:5px 0 10px}
-textarea{height:70px}
-.imgBox{display:flex;gap:10px}
-.imgBox div{flex:1;border:2px dashed #ccc;border-radius:12px;padding:10px;text-align:center;background:#fafafa}
-.imgBox img{width:100%;height:90px;object-fit:cover;border-radius:8px;display:none;margin-top:5px}
-button.up{width:100%;padding:14px;border-radius:30px;border:none;background:#00b050;color:white;font-weight:bold;font-size:15px;margin-top:10px}
-.payBox{background:#fff8e1;border:1px solid #ffd54f;padding:10px;border-radius:12px;font-size:12px;margin-bottom:12px}
-</style>
-</head>
-<body>
-<header><span>Dornny Market</span><a href="index.html">← Back to Shop</a></header>
-<div class="box">
-<h2>Upload Product</h2>
-<p class="lock">🔒 Only verified sellers (GH₵50) can upload</p>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sell - Dornny's Market</title><script src="https://cdn.tailwindcss.com"></script></head><body class="bg-[#121212] text-white pb-10">
+<header class="bg-black p-4 flex justify-between sticky top-0 z-20"><a href="./index.html" class="font-black">← DORNNY'S MARKET</a><span class="text-xs bg-[#2a2a2a] px-3 py-1 rounded-full">Sell</span></header>
+<div class="max-w-md mx-auto p-4">
+<h2 class="font-black text-xl mt-2">Add Product - 3 Images Slide</h2><p class="text-xs text-gray-400 mt-1">Images will slide left/right on product page</p>
 
-<div id="authWarn" class="payBox" style="display:none">
-⚠️ You are not logged in. <a href="index.html" onclick="localStorage.setItem('goMe','1')" style="color:#00b050;font-weight:bold">Go to Me tab → Register GH₵50</a> first to upload.
+<div class="mt-5 bg-[#1e1e1e] p-4 rounded-2xl">
+<label class="text-xs font-bold">Product Name *</label><input id="name" class="w-full mt-1 p-3 rounded-xl bg-[#2a2a2a] border-0 text-sm" placeholder="e.g. Sneakers - Daby Shop">
+
+<label class="text-xs font-bold mt-4 block">Category *</label><select id="category" class="w-full mt-1 p-3 rounded-xl bg-[#2a2a2a] border-0 text-sm"><option value="">Select</option><option>Men</option><option>Women</option><option>Kids</option><option>Shoes</option><option>Pets</option><option>Jewelry</option><option>Furniture</option><option>Office</option><option>Bags</option><option>Food</option><option>Phones</option><option>Beauty</option><option>Other</option></select>
+
+<label class="text-xs font-bold mt-4 block">Price (GH₵) *</label><input id="price" type="number" class="w-full mt-1 p-3 rounded-xl bg-[#2a2a2a] border-0 text-sm" placeholder="80">
+
+<label class="text-xs font-bold mt-4 block">Shop Name</label><input id="shop" class="w-full mt-1 p-3 rounded-xl bg-[#2a2a2a] border-0 text-sm" placeholder="Daby shop">
+
+<label class="text-xs font-bold mt-4 block">WhatsApp (0xxxxxxxxx)</label><input id="wa" class="w-full mt-1 p-3 rounded-xl bg-[#2a2a2a] border-0 text-sm" placeholder="0550000000">
+
+<div class="mt-5 border-t border-[#333] pt-4">
+<p class="font-bold text-sm">📸 Product Images - 3 for Sliding</p><p class="text-[11px] text-gray-500">Upload 3 different angles - buyer can swipe left/right</p>
+
+<label class="text-xs mt-3 block">Image 1 * (Main)</label><input id="img1" type="file" accept="image/*" class="w-full mt-1 text-xs"><img id="prev1" class="w-full h-32 object-cover rounded-xl mt-2 hidden bg-[#2a2a2a]">
+
+<label class="text-xs mt-3 block">Image 2 (Swipe 2)</label><input id="img2" type="file" accept="image/*" class="w-full mt-1 text-xs"><img id="prev2" class="w-full h-32 object-cover rounded-xl mt-2 hidden bg-[#2a2a2a]">
+
+<label class="text-xs mt-3 block">Image 3 (Swipe 3)</label><input id="img3" type="file" accept="image/*" class="w-full mt-1 text-xs"><img id="prev3" class="w-full h-32 object-cover rounded-xl mt-2 hidden bg-[#2a2a2a]">
 </div>
 
-<div id="payInfo" class="payBox">
-<b>GH₵50 Registration:</b> Send to <b>0594221108</b> (Danny - MTN MoMo)<br>
-Enter Transaction ID in Me tab to become verified seller.
+<button id="postBtn" onclick="post()" class="w-full mt-6 bg-white text-black py-3.5 rounded-full font-black">Post Product with Slide</button>
+<p id="status" class="text-xs text-center mt-3 text-gray-400"></p>
+</div>
 </div>
 
-<label>Product Name *</label>
-<input id="name" placeholder="e.g. Ladies Bag">
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";import{getFirestore,collection,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",authDomain:"dornnysmarket.firebaseapp.com",projectId:"dornnysmarket",storageBucket:"dornnysmarket.firebasestorage.app",messagingSenderId:"726307073658",appId:"1:726307073658:web:957d1225916799d9fa95c3"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+let b64_1="",b64_2="",b64_3="";
 
-<label>Category * (15 categories)</label>
-<select id="cat">
-<option>Men</option><option>Women</option><option>Kids</option><option>Shoes</option><option>Bags</option><option>Jewelry & Accs</option><option>Home</option><option>Curve</option><option>Lingerie & Sleep</option><option>Sports</option><option>Electronics</option><option>Toys</option><option>Office</option><option>Pet</option><option>Appliances</option>
-</select>
+function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file);});}
 
-<label>Price GH₵ *</label>
-<input id="price" type="number" placeholder="e.g. 120">
+document.getElementById('img1').addEventListener('change',async e=>{if(!e.target.files[0])return;b64_1=await toB64(e.target.files[0]);document.getElementById('prev1').src=b64_1;document.getElementById('prev1').classList.remove('hidden');});
+document.getElementById('img2').addEventListener('change',async e=>{if(!e.target.files[0])return;b64_2=await toB64(e.target.files[0]);document.getElementById('prev2').src=b64_2;document.getElementById('prev2').classList.remove('hidden');});
+document.getElementById('img3').addEventListener('change',async e=>{if(!e.target.files[0])return;b64_3=await toB64(e.target.files[0]);document.getElementById('prev3').src=b64_3;document.getElementById('prev3').classList.remove('hidden');});
 
-<label>Description</label>
-<textarea id="desc" placeholder="Describe product..."></textarea>
-
-<label>2 Images (Slide will show both) *</label>
-<div class="imgBox">
-<div>Image 1<br><input type="file" id="file1" accept="image/*" onchange="prev(1)"><img id="p1"></div>
-<div>Image 2<br><input type="file" id="file2" accept="image/*" onchange="prev(2)"><img id="p2"></div>
-</div>
-
-<button class="up" onclick="up()">✅ Upload to Shop</button>
-<p style="text-align:center;font-size:11px;color:#888;margin-top:10px">WhatsApp orders will go to 0594221108</p>
-</div>
-
-<script>
-let img1="",img2="";
-function prev(n){let f=document.getElementById('file'+n).files[0];if(!f)return;let r=new FileReader();r.onload=e=>{if(n==1)img1=e.target.result;else img2=e.target.result;let im=document.getElementById('p'+n);im.src=e.target.result;im.style.display='block';};r.readAsDataURL(f);}
-
-function checkLogin(){
-let u=JSON.parse(localStorage.getItem('dornnyUser')||'null');
-if(!u){
-document.getElementById('authWarn').style.display='block';
-}else{
-document.getElementById('authWarn').style.display='none';
+window.post=async function(){
+const name=document.getElementById('name').value.trim();const cat=document.getElementById('category').value;const price=document.getElementById('price').value.trim();const shop=document.getElementById('shop').value.trim();const wa=document.getElementById('wa').value.trim();
+if(!name||!cat||!price||!b64_1){alert('Need Name, Category, Price and Image 1');return;}
+document.getElementById('postBtn').innerText='Posting...';document.getElementById('postBtn').disabled=true;document.getElementById('status').innerText='Uploading product...';
+try{
+let imgs=[b64_1];if(b64_2)imgs.push(b64_2);if(b64_3)imgs.push(b64_3);
+await addDoc(collection(db,"products"),{name,category:cat,price,shop:shop||'Dornny Shop',whatsapp:wa||'',image:b64_1,images:imgs,createdAt:serverTimestamp()});
+document.getElementById('status').innerText='✅ Posted! Images will slide on market';alert('Product posted! Go to market to see slide');window.location.href='./index.html';
+}catch(e){document.getElementById('status').innerText='Error: '+e.message;document.getElementById('postBtn').innerText='Post Product with Slide';document.getElementById('postBtn').disabled=false;}
 }
-}
-checkLogin();
-
-function up(){
-let u=JSON.parse(localStorage.getItem('dornnyUser')||'null');
-if(!u){alert('Please Register GH₵50 in Me tab first');location.href='index.html';return;}
-
-let n=document.getElementById('name').value.trim();
-let c=document.getElementById('cat').value;
-let pr=document.getElementById('price').value.trim();
-let d=document.getElementById('desc').value.trim()||n;
-
-if(!n||!pr||!img1){alert('Fill Name, Price, and at least Image 1');return;}
-
-let prods=JSON.parse(localStorage.getItem('dornnyProducts')||'[]');
-let imgs=[img1];
-if(img2) imgs.push(img2);
-
-prods.push({id:Date.now(),name:n,category:c,price:pr,desc:d,images:imgs,seller:u.name,phone:u.phone});
-
-localStorage.setItem('dornnyProducts',JSON.stringify(prods));
-alert('✅ Uploaded! Product live in '+c);
-location.href='index.html';
-}
-</script>
-</body>
-</html>
+</script></body></html>
