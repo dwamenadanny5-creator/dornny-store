@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DORNNY LIVE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#000;color:#fff;overflow:hidden}
+.top-bar{position:absolute;top:0;left:0;right:0;padding:12px;display:flex;justify-content:space-between;align-items:center;z-index:10;background:linear-gradient(to bottom,rgba(0,0,0,0.8),transparent)}
+.live-badge{background:#ff0050;color:#fff;padding:5px 12px;border-radius:20px;font-weight:800;font-size:12px}
+.viewers{background:rgba(0,0,0,0.5);padding:5px 10px;border-radius:20px;font-size:12px}
+.seller-info{position:absolute;bottom:100px;left:12px;z-index:10;display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.4);padding:8px 12px;border-radius:30px}
+.seller-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(45deg,#ff0050,#ff8a00);display:flex;align-items:center;justify-content:center;font-weight:bold}
+.follow-btn{background:#ff0050;border:none;color:#fff;padding:6px 14px;border-radius:20px;font-weight:700;font-size:12px;margin-left:8px}
+.right-actions{position:absolute;right:12px;bottom:150px;z-index:10;display:flex;flex-direction:column;gap:20px;align-items:center}
+.action{width:50px;height:50px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.comments{position:absolute;bottom:10px;left:0;right:70px;z-index:10;max-height:180px;overflow:hidden;padding:0 12px;display:flex;flex-direction:column;gap:6px}
+.comment{background:rgba(0,0,0,0.3);padding:6px 10px;border-radius:15px;font-size:13px;width:fit-content;max-width:80%}
+.input-bar{position:absolute;bottom:0;left:0;right:0;padding:10px;display:flex;gap:8px;z-index:11;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent)}
+.input-bar input{flex:1;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:25px;padding:10px 16px;color:#fff;outline:none}
+.input-bar button{background:#ff0050;border:none;width:44px;height:44px;border-radius:50%;color:#fff;font-size:18px}
+.products-scroll{position:absolute;bottom:60px;left:0;right:0;padding:8px 12px;display:flex;gap:10px;overflow-x:auto;z-index:10}
+.product-card{min-width:110px;background:rgba(255,255,255,0.95);border-radius:12px;padding:6px;color:#000}
+.product-card img{width:100%;height:60px;object-fit:cover;border-radius:8px;background:#eee}
+.product-card .price{color:#ff0050;font-weight:800;font-size:12px}
+.go-live-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:30px;text-align:center;background:linear-gradient(135deg,#000,#222)}
+.go-live-btn{background:#ff0050;color:#fff;border:none;padding:18px 40px;border-radius:30px;font-size:18px;font-weight:800;margin-top:20px}
+.live-list{background:#0f0f0f;min-height:100vh;padding:16px}
+.live-card{background:#1a1a1a;border-radius:16px;overflow:hidden;margin-bottom:14px;position:relative;cursor:pointer;border:1px solid #333}
+.live-card img{width:100%;height:200px;object-fit:cover}
+.live-card .info{padding:12px}
+.online-dot{position:absolute;top:10px;left:10px;background:#ff0050;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
+</style></head><body>
+<div id="listScreen" class="live-list">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+<h2 style="font-size:22px;">🔴 DORNNY LIVE</h2>
+<button onclick="showGoLive()" style="background:#ff0050;border:none;color:#fff;padding:8px 16px;border-radius:20px;font-weight:700;">+ GO LIVE</button>
+</div>
+<div id="liveGrid">
+<div class="live-card" onclick="joinLive('DORNNY-DEMO')"><div class="online-dot">🔴 LIVE • 128 watching</div><img src="https://picsum.photos/400/300?random=1"><div class="info"><div style="display:flex;align-items:center;gap:8px;"><div class="seller-avatar" style="width:30px;height:30px;font-size:12px;">A</div><b>Ama Fashion GH</b></div><p style="font-size:13px;color:#aaa;margin-top:4px;">Selling new dresses! Tap to join live shopping</p></div></div>
+</div>
+</div>
+<div id="watchScreen" style="display:none;position:relative;width:100vw;height:100vh;background:#000">
+<iframe id="jitsiFrame" style="width:100%;height:100%;border:none;display:none;"></iframe>
+<div class="top-bar"><div style="display:flex;gap:10px;align-items:center;"><div class="live-badge">LIVE</div><div class="viewers" id="viewerCount">👁 342</div></div><div style="background:rgba(0,0,0,0.5);padding:8px;border-radius:50%;cursor:pointer;" onclick="closeLive()">✕</div></div>
+<div class="seller-info"><div class="seller-avatar">D</div><div><div style="font-weight:700;font-size:14px;">DORNNY Official</div><div style="font-size:11px;color:#ccc;">Accra • Online</div></div><button class="follow-btn">Follow</button></div>
+<div class="right-actions"><div class="action" onclick="likeLive()">❤️<span id="likeCount">2.3k</span></div><div class="action">💬<span>89</span></div><div class="action">🛒<span>Shop</span></div><div class="action">↗️<span>Share</span></div></div>
+<div class="products-scroll" id="productsScroll"></div>
+<div class="comments" id="commentsList"><div class="comment"><b>@kwame:</b> How much is this?</div><div class="comment"><b>@afia:</b> I want the red one!</div></div>
+<div class="input-bar"><input type="text" id="commentInput" placeholder="Add comment..."><button onclick="sendComment()">➤</button><button onclick="buyFromLive()" style="background:#ffca00;color:#000;width:auto;padding:0 16px;border-radius:20px;font-weight:800;">BUY</button></div>
+</div>
+<div id="goLiveScreen" class="go-live-screen" style="display:none;">
+<h1 style="font-size:28px;">🔴 Go Live on DORNNY</h1><p style="color:#aaa;margin-top:10px;">Sell to customers LIVE like TikTok Shop</p>
+<video id="previewVideo" autoplay muted playsinline style="width:200px;height:300px;background:#222;border-radius:20px;margin:20px 0;object-fit:cover;"></video>
+<input type="text" id="liveTitle" placeholder="What are you selling today?" style="width:100%;max-width:300px;padding:12px;border-radius:12px;border:1px solid #333;background:#222;color:#fff;margin-bottom:10px;">
+<button class="go-live-btn" onclick="startMyLive()">START LIVE • GO 🔴</button>
+<button onclick="showList()" style="background:none;border:none;color:#888;margin-top:16px;">Cancel</button>
+</div>
+<script>
+let liveData=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
+function showGoLive(){document.getElementById('listScreen').style.display='none';document.getElementById('goLiveScreen').style.display='flex';navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{document.getElementById('previewVideo').srcObject=s;window.previewStream=s;}).catch(e=>alert('Allow camera'))}
+function showList(){document.getElementById('goLiveScreen').style.display='none';document.getElementById('watchScreen').style.display='none';document.getElementById('listScreen').style.display='block';if(window.previewStream) window.previewStream.getTracks().forEach(t=>t.stop());document.getElementById('jitsiFrame').style.display='none';document.getElementById('jitsiFrame').src='';}
+function startMyLive(){const title=document.getElementById('liveTitle').value||'Live shopping!';const roomId='DORNNY-'+Date.now().toString(36).toUpperCase();const myLive={id:roomId,title:title,name:'You',viewers:1,avatar:'Y',time:Date.now()};liveData.unshift(myLive);localStorage.setItem('dornny_lives',JSON.stringify(liveData));joinJitsi(roomId,true);}
+function joinLive(roomId){joinJitsi(roomId,false);}
+function joinJitsi(roomId,isHost){document.getElementById('listScreen').style.display='none';document.getElementById('goLiveScreen').style.display='none';document.getElementById('watchScreen').style.display='block';const jitsiUrl=`https://meet.jit.si/${roomId}#config.startWithAudioMuted=false&config.startWithVideoMuted=false`;const frame=document.getElementById('jitsiFrame');frame.src=jitsiUrl;frame.style.display='block';simulateComments();loadLiveProducts();if(!isHost){document.getElementById('viewerCount').textContent='👁 '+(Math.floor(Math.random()*300)+50);}}
+function closeLive(){showList();}
+function simulateComments(){const names=['@ama','@kwesi','@efua','@kofi','@adjoa'];const texts=['Price??','I want this!','🔥🔥🔥','Deliver to Kumasi?','How much last?','Nice one!'];setInterval(()=>{if(document.getElementById('watchScreen').style.display==='none') return;const c=document.createElement('div');c.className='comment';c.innerHTML=`<b>${names[Math.floor(Math.random()*names.length)]}:</b> ${texts[Math.floor(Math.random()*texts.length)]}`;const list=document.getElementById('commentsList');list.appendChild(c);if(list.children.length>8) list.removeChild(list.firstChild);},2500);}
+function loadLiveProducts(){const scroll=document.getElementById('productsScroll');scroll.innerHTML=`<div class="product-card"><img src="https://picsum.photos/100/100?random=2"><div style="font-size:11px;">Sneakers</div><div class="price">GH₵ 250</div></div><div class="product-card"><img src="https://picsum.photos/100/100?random=3"><div style="font-size:11px;">Dress</div><div class="price">GH₵ 180</div></div><div class="product-card"><img src="https://picsum.photos/100/100?random=4"><div style="font-size:11px;">Watch</div><div class="price">GH₵ 120</div></div>`;}
+function sendComment(){const input=document.getElementById('commentInput');if(!input.value) return;const c=document.createElement('div');c.className='comment';c.innerHTML=`<b>You:</b> ${input.value}`;c.style.background='#ff0050';document.getElementById('commentsList').appendChild(c);input.value='';}
+function likeLive(){const el=document.getElementById('likeCount');el.textContent=(parseFloat(el.textContent)+0.1).toFixed(1)+'k';}
+function buyFromLive(){alert('🛒 Added to cart! Seller will contact you on WhatsApp.');}
+</script></body></html>
