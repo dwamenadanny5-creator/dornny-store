@@ -1,37 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dornny Store</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;padding-bottom:80px}header{padding:15px;background:#111;display:flex;justify-content:space-between;position:sticky;top:0}#products{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}.prod{background:#1a1a1a;border-radius:12px;padding:10px}.prod img{width:100%;height:140px;object-fit:cover;border-radius:8px}.btn{background:#fff;color:#000;border:none;padding:8px;border-radius:8px;font-weight:bold;width:100%;margin-top:6px}#mePage{padding:20px}nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid #222}nav a{color:#888;text-decoration:none;font-size:13px;text-align:center}#cartModal{display:none;position:fixed;inset:0;background:#000;z-index:20;padding:15px;overflow:auto}#search{width:100%;padding:12px;border-radius:10px;border:none;background:#222;color:#fff;margin:10px 0}.cat-bar{display:flex;gap:8px;overflow:auto;padding:0 10px 10px}.cat-bar button{background:#222;color:#fff;border:none;padding:6px 12px;border-radius:20px}</style>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DORNNY LIVE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial;padding-bottom:90px}
+header{padding:12px;background:#111;display:flex;justify-content:space-between;position:sticky;top:0}
+button{cursor:pointer}
+.cat{display:flex;gap:6px;overflow:auto;padding:8px 10px}
+.cat button{background:#1a1a1a;color:#aaa;border:1px solid #222;padding:7px 12px;border-radius:20px;font-size:11px}
+.cat button.a{background:#fff;color:#000}
+#products{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+.p{background:#111;border-radius:12px;overflow:hidden;border:1px solid #1a1a1a}
+.p img{width:100%;height:150px;object-fit:cover}
+.badge{position:absolute;top:6px;left:6px;background:gold;color:#000;font-size:9px;padding:2px 5px;border-radius:4px}
+.live{position:absolute;top:6px;right:6px;background:red;color:#fff;font-size:9px;padding:2px 5px;border-radius:4px}
+.trend{background:#0a0a0a;padding:10px;margin:10px;border-radius:12px;display:flex;gap:10px;overflow:auto}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0f0f0f;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #222}
+nav a{color:#666;text-decoration:none;font-size:10px}
+nav a.a{color:#fff}
+.btn{background:#fff;color:#000;border:none;padding:8px;border-radius:8px;font-weight:bold;width:100%;margin-top:5px}
+#me,#live,#trendPage,#cartM{display:none;padding:12px}
+video{width:100%;height:220px;background:#000;border-radius:12px}
+</style>
 </head>
 <body>
-<header><b>DORNNY STORE</b><span id="cartCount" style="background:#fff;color:#000;padding:3px 8px;border-radius:50%">0</span></header>
-<input id="search" placeholder="Search..." oninput="filterSearch(this.value)">
-<div class="cat-bar"><button onclick="filterCat('all')">All</button><button onclick="filterCat('shoes')">Shoes</button><button onclick="filterCat('clothes')">Clothes</button></div>
-<section id="products"></section>
-<div id="cartModal"><h2>Cart <span style="float:right" onclick="document.getElementById('cartModal').style.display='none';document.getElementById('products').style.display='grid'">✕</span></h2><div id="cartItems"></div><div style="margin-top:20px"><b>Total: GHS <span id="cartTotal">0</span></b><button class="btn" style="background:#25D366;color:#fff;margin-top:10px" onclick="checkoutWhatsApp()">Checkout WhatsApp</button><button class="btn" style="background:#333;color:#fff;margin-top:8px" onclick="clearCart()">Clear</button></div></div>
-<div id="mePage" style="display:none"><h2>My Account</h2><div style="background:#111;padding:15px;border-radius:12px;margin-top:10px"><button id="googleLoginBtn" class="btn" style="padding:12px">Login with Google</button><div id="userInfo"></div></div></div>
-<nav><a href="#" onclick="showHome(event)">🏠<br>Home</a><a href="#" onclick="showCart(event)">🛒<br>Cart</a><a href="#" id="meTab" onclick="showMe(event)">👤<br>Me</a></nav>
+<header><b>DORNNY LIVE</b><span><span id="cc">0</span> <button onclick="show('live')" style="background:red;color:#fff;border:none;padding:5px 9px;border-radius:12px">LIVE</button></span></header>
+<input id="s" placeholder="Search..." oninput="search(this.value)" style="width:calc(100% - 20px);margin:8px 10px;padding:10px;border-radius:10px;border:none;background:#1a1a1a;color:#fff">
+<div class="cat" id="cat"></div>
+<div id="home"><div class="trend" id="tr"></div><div style="padding:10px"><b>LIVE Sellers</b><div id="lv"></div></div><section id="products"></section></div>
+<div id="live"><h3>LIVE Studio</h3><video id="v" autoplay muted playsinline></video><div style="display:flex;gap:6px;margin-top:8px"><button class="btn" style="background:red;color:#fff" onclick="goLive()">Start Live</button><button class="btn" style="background:#333;color:#fff" onclick="stopLive()">End</button></div><input id="lt" placeholder="Title" style="width:100%;padding:9px;margin-top:8px;background:#222;border:none;color:#fff;border-radius:8px"><div id="lc" style="background:#111;padding:8px;border-radius:8px;margin-top:8px;max-height:100px;overflow:auto"></div><div style="display:flex;gap:6px;margin-top:6px"><input id="ci" placeholder="Comment..." style="flex:1;padding:8px;background:#222;border:none;color:#fff;border-radius:8px"><button onclick="sendC()">Send</button></div></div>
+<div id="trendPage"><h3>TRENDING</h3><div id="tp"></div></div>
+<div id="cartM"><h3>Cart</h3><div id="cartI"></div><div><b>Total: GHS <span id="ct">0</span></b><button class="btn" style="background:#25D366;color:#fff" onclick="wa()">Checkout WhatsApp</button></div></div>
+<div id="me"><h3>My Account</h3><div style="background:#111;padding:12px;border-radius:12px"><button class="btn">Login</button><p>Follow: <span id="fc">0</span> Likes: <span id="lc2">0</span></p></div></div>
+<nav><a onclick="show('home')" class="a">Home</a><a onclick="show('live')">Live</a><a onclick="show('trendPage')">Trend</a><a onclick="show('cartM')">Cart</a><a onclick="show('me')">Me</a></nav>
 <script>
-const firebaseConfig={apiKey:"AIzaSyDummy",authDomain:"dornny-store.firebaseapp.com",projectId:"dornny-store"};if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
-let allProducts=[];let cart=JSON.parse(localStorage.getItem('cart')||'[]');
-function load(){db.collection('products').onSnapshot(snap=>{allProducts=[];snap.forEach(doc=>{allProducts.push({id:doc.id,...doc.data()})});renderProducts(allProducts);});}
-function renderProducts(list){const con=document.getElementById('products');con.innerHTML='';list.forEach(p=>{con.innerHTML+=`<div class="prod"><img src="${p.image||'https://via.placeholder.com/200'}"><p style="font-size:13px;margin-top:6px">${p.name}</p><b>GHS ${p.price}</b><button class="btn" onclick="addToCart('${p.id}')">Add to Cart</button></div>`;});}
-window.addToCart=function(id){let it=allProducts.find(p=>p.id==id);let f=cart.find(c=>c.id==id);if(f)f.qty++;else cart.push({...it,qty:1});localStorage.setItem('cart',JSON.stringify(cart));badge();alert('Added');}
-function badge(){document.getElementById('cartCount').textContent=cart.reduce((a,b)=>a+b.qty,0);}
-function renderCart(){const con=document.getElementById('cartItems');let total=0;con.innerHTML='';cart.forEach(it=>{total+=it.price*it.qty;con.innerHTML+=`<div style="display:flex;justify-content:space-between;background:#111;padding:10px;border-radius:10px;margin-bottom:8px"><span>${it.name} x${it.qty}</span><span>GHS ${it.price*it.qty} <button onclick="rem('${it.id}')" style="background:#333;color:#fff;border:none;padding:2px 6px;border-radius:4px">X</button></span></div>`});document.getElementById('cartTotal').textContent=total;}
-window.rem=function(id){cart=cart.filter(c=>c.id!=id);localStorage.setItem('cart',JSON.stringify(cart));renderCart();badge();}
-window.clearCart=function(){cart=[];localStorage.removeItem('cart');renderCart();badge();}
-window.checkoutWhatsApp=function(){if(!cart.length)return alert('Cart empty');let msg='Hello Dornny, I want to order:%0A';cart.forEach(it=>{msg+=`- ${it.name} x${it.qty}=GHS ${it.price*it.qty}%0A`});window.open(`https://wa.me/233000000000?text=${msg}`,'_blank');}
-window.filterCat=function(cat){if(cat=='all')renderProducts(allProducts);else renderProducts(allProducts.filter(p=>(p.category||'').toLowerCase().includes(cat)));}
-window.filterSearch=function(q){renderProducts(allProducts.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())));}
-window.showHome=function(e){if(e)e.preventDefault();document.getElementById('products').style.display='grid';document.getElementById('cartModal').style.display='none';document.getElementById('mePage').style.display='none';}
-window.showCart=function(e){if(e)e.preventDefault();document.getElementById('products').style.display='none';document.getElementById('cartModal').style.display='block';document.getElementById('mePage').style.display='none';renderCart();}
-load();badge();
-const mePage=document.getElementById('mePage');const prodSec=document.getElementById('products');const cartMod=document.getElementById('cartModal');
-window.showMe=function(e){if(e)e.preventDefault();if(prodSec)prodSec.style.display='none';if(cartMod)cartMod.style.display='none';if(mePage)mePage.style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
-document.getElementById('meTab')?.addEventListener('click',(e)=>{e.preventDefault();showMe();});
-document.getElementById('googleLoginBtn')?.addEventListener('click',async()=>{const btn=document.getElementById('googleLoginBtn');btn.textContent='Loading...';try{const auth=firebase.auth();const provider=new firebase.auth.GoogleAuthProvider();const result=await auth.signInWithPopup(provider);const user=result.user;document.getElementById('userInfo').innerHTML=`<div style="text-align:center;background:#222;padding:20px;border-radius:15px;margin-top:10px"><img src="${user.photoURL}" width="70" style="border-radius:50%"><p style="font-weight:bold;margin-top:10px">Hi, ${user.displayName}!</p><p>${user.email}</p><p style="color:#0f0;margin-top:10px">✓ Logged in</p></div>`;btn.style.display='none';}catch(err){alert(err.message);btn.textContent='Login with Google';}});
-</script></body></html>
+cats=["All","Men","Women","Kids","Pet","Office","Furnitures","Jewery & Acc","Shoes","Home Used","Cars","Appliances","Electronics","Bags","Toys","Lingeries & Sleep","Sport"];
+prods=[{id:1,n:"Men Sneakers",p:280,c:"Shoes",im:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"],l:120,vw:890,s:"Kwame Shoes"},{id:2,n:"Women Ankara Dress",p:150,c:"Women",im:["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"],l:200,vw:1200,s:"Ama Fashion",top:1},{id:3,n:"Kids Toy Car",p:90,c:"Toys",im:["https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=400"],l:80,vw:400,s:"Kids World"}];
+let cart=[],liked=[],followed=[],liveS=[{n:"Kwame Shoes",t:"Latest sneakers!",vw:45},{n:"Ama Fashion",t:"New Ankara!",vw:120}];
+function init(){let cb=document.getElementById('cat');cats.forEach((c,i)=>cb.innerHTML+=`<button onclick="fil('${c}',this)" class="${i==0?'a':''}">${c}</button>`);render(prods);trend();live();badge();}
+function render(list){let co=document.getElementById('products');co.innerHTML='';list.forEach(pr=>{co.innerHTML+=`<div class="p" style="position:relative"><div style="position:relative" onclick="nextImg(this)"><img src="${pr.im[0]}" data-im="${pr.im.join('|')}" data-i="0"><div class="badge" style="display:${pr.top?'block':'none'}">TOP</div><div class="live">LIVE</div></div><div class="i"><small>${pr.s}</small><p>${pr.n}</p><b>GHS ${pr.p}</b><button class="btn" onclick="add(${pr.id})">Add Cart</button><div><span onclick="like(${pr.id})">❤️ ${pr.l}</span> <span onclick="follow('${pr.s}')">Follow</span></div></div></div>`;});}
+function nextImg(d){let im=d.querySelector('img'),a=im.dataset.im.split('|'),i=(+im.dataset.i+1)%a.length;im.dataset.i=i;im.src=a[i];}
+function trend(){let so=[...prods].sort((a,b)=>b.vw-a.vw).slice(0,6),tr=document.getElementById('tr');tr.innerHTML='';so.forEach(p=>{tr.innerHTML+=`<div><img src="${p.im[0]}" style="width:60px;height:60px;border-radius:50%"><p>${p.n.slice(0,10)}</p></div>`;});}
+function live(){let lv=document.getElementById('lv');lv.innerHTML='';liveS.forEach(s=>{lv.innerHTML+=`<div style="background:#111;padding:10px;border-radius:12px;margin:6px 0"><b>${s.n}</b> - ${s.t} <button onclick="show('live')">Join</button></div>`;});}
+function fil(c,btn){if(btn){document.querySelectorAll('.cat button').forEach(b=>b.classList.remove('a'));btn.classList.add('a');}if(c=='All')render(prods);else render(prods.filter(p=>p.c==c));}
+function search(q){if(!q)return render(prods);render(prods.filter(p=>p.n.toLowerCase().includes(q.toLowerCase())));}
+function add(id){let pr=prods.find(p=>p.id==id),f=cart.find(c=>c.id==id);if(f)f.q++;else cart.push({...pr,q:1});badge();}
+function badge(){document.getElementById('cc').textContent=cart.reduce((a,b)=>a+b.q,0);let ci=document.getElementById('cartI'),tot=0;ci.innerHTML='';cart.forEach(it=>{tot+=it.p*it.q;ci.innerHTML+=`<div>${it.n} x${it.q} = ${it.p*it.q} <button onclick="rem(${it.id})">X</button></div>`;});document.getElementById('ct').textContent=tot;}
+function rem(id){cart=cart.filter(c=>c.id!=id);badge();}
+function like(id){liked.includes(id)?liked=liked.filter(x=>x!=id):liked.push(id);}
+function follow(n){followed.includes(n)?followed=followed.filter(x=>x!=n):followed.push(n);alert('Followed '+n);}
+function wa(){let m='Hello Dornny order:%0A';cart.forEach(i=>m+=`- ${i.n} x${i.q}=GHS ${i.p*i.q}%0A`);window.open('https://wa.me/233599789304?text='+m,'_blank');}
+function show(id){['home','live','trendPage','me','cartM'].forEach(x=>document.getElementById(x).style.display='none');document.getElementById(id).style.display='block';}
+let st=null;async function goLive(){try{st=await navigator.mediaDevices.getUserMedia({video:true,audio:true});document.getElementById('v').srcObject=st;}catch(e){alert(e.message);}}
+function stopLive(){if(st)st.getTracks().forEach(t=>t.stop());}
+function sendC(){let i=document.getElementById('ci'),b=document.getElementById('lc');if(!i.value)return;b.innerHTML+=`<div>You: ${i.value}</div>`;i.value='';}
+init();
+</script>
+</body>
+</html>
