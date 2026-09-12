@@ -6,6 +6,7 @@
 <title>DORNNY LIVE</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
 :root{--bg:#0f0f0f;--card:#1c1c1e;--accent:#ff3b30}
 body{background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding-bottom:80px;overflow-x:hidden}
@@ -43,7 +44,8 @@ body{background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFon
 <div class="p-3 grid grid-cols-2 gap-3" id="productGrid"></div>
 </div>
 <div id="livePage" class="hidden p-0">
-<div class="relative bg-black h-[75vh] overflow-hidden"><video id="liveVideo" class="w-full h-full object-cover" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"></video><div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80 pointer-events-none"></div><div class="absolute top-3 left-3 flex items-center gap-2"><span class="bg-red-600 px-3 py-1 rounded-full text-xs font-bold live-dot">● LIVE</span><span class="bg-black/60 px-2 py-1 rounded-full text-xs" id="liveViewers">1.2k watching</span></div><div class="absolute top-3 right-3"><button onclick="showPage('home')" class="w-8 h-8 bg-black/60 rounded-full"><i class="fa fa-times"></i></button></div><div class="absolute bottom-0 left-0 right-0 p-3"><div class="flex items-center gap-2 mb-2"><img src="https://i.pravatar.cc/40?img=5" class="w-8 h-8 rounded-full"><div class="flex-1"><p class="text-sm font-bold" id="liveSellerName">Ama Fashion Live</p><p class="text-xs text-gray-300">Selling now - buyers can like & comment</p></div><button onclick="addToCart(currentLiveProduct)" class="bg-white text-black px-4 py-2 rounded-full text-xs font-bold">Buy</button></div><div id="liveChat" class="h-28 overflow-y-auto space-y-1 mb-2 text-sm"></div><div class="flex gap-2"><button onclick="likeLive()" class="w-10 h-10 bg-white/10 rounded-full relative"><i class="fa fa-heart text-red-500"></i><span id="liveLikes" class="absolute -top-1 -right-1 bg-red-600 text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button><input id="liveInput" placeholder="Comment..." class="flex-1 bg-white/10 backdrop-blur border border-white/20 rounded-full px-4 py-2 text-sm"><button onclick="sendLiveComment()" class="w-10 h-10 bg-red-600 rounded-full"><i class="fa fa-paper-plane"></i></button><button onclick="switchLive()" class="w-10 h-10 bg-white/10 rounded-full"><i class="fa fa-random"></i></button></div></div></div>
+<div class="relative bg-black h-[75vh] overflow-hidden"><video id="liveVideo" class="w-full h-full object-cover" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"></video><div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80 pointer-events-none"></div><div id="joinBanner" class="absolute top-12 left-3 right-3 bg-green-600 rounded-full px-4 py-2 text-sm font-bold hidden flex items-center justify-between z-10"><span>🔴 <span id="joinSellerName">Seller</span> is LIVE - Tap to join</span><button onclick="buyerJoinLive()" class="bg-white text-green-600 px-3 py-1 rounded-full text-xs">JOIN</button></div><div class="absolute top-3 left-3 flex items-center gap-2"><span class="bg-red-600 px-3 py-1 rounded-full text-xs font-bold live-dot">● LIVE</span><span class="bg-black/60 px-2 py-1 rounded-full text-xs" id="liveViewers">1.2k watching</span></div><div class="absolute top-3 right-3"><button onclick="showPage('home')" class="w-8 h-8 bg-black/60 rounded-full"><i class="fa fa-times"></i></button></div><div class="absolute bottom-0 left-0 right-0 p-3"><div class="flex items-center gap-2 mb-2"><img src="https://i.pravatar.cc/40?img=5" class="w-8 h-8 rounded-full"><div class="flex-1"><p class="text-sm font-bold" id="liveSellerName">Ama Fashion Live</p><p class="text-xs text-gray-300">Buyers can join, like & comment</p></div><button onclick="addToCart(currentLiveProduct)" class="bg-white text-black px-4 py-2 rounded-full text-xs font-bold">Buy</button></div><div id="liveChat" class="h-28 overflow-y-auto space-y-1 mb-2 text-sm"></div><div class="flex gap-2"><button onclick="likeLive()" class="w-10 h-10 bg-white/10 rounded-full relative"><i class="fa fa-heart text-red-500"></i><span id="liveLikes" class="absolute -top-1 -right-1 bg-red-600 text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button><input id="liveInput" placeholder="Comment..." class="flex-1 bg-white/10 backdrop-blur border border-white/20 rounded-full px-4 py-2 text-sm"><button onclick="sendLiveComment()" class="w-10 h-10 bg-red-600 rounded-full"><i class="fa fa-paper-plane"></i></button><button onclick="switchLive()" class="w-10 h-10 bg-white/10 rounded-full"><i class="fa fa-random"></i></button></div></div></div>
+<div class="px-3 py-2"><button onclick="buyerJoinLive()" class="w-full bg-green-600 py-3 rounded-full font-bold text-sm"><i class="fa fa-users mr-1"></i> Buyer: Join Seller Live Now</button><p class="text-[11px] text-gray-400 text-center mt-1">If seller is live on another phone, you will see them here</p></div>
 <div class="p-3 grid grid-cols-2 gap-3" id="liveProducts"></div>
 </div>
 <div id="trendPage" class="hidden p-3"><h2 class="text-xl font-bold mb-3">🔥 Trending Now</h2><div id="trendGrid" class="grid grid-cols-2 gap-3"></div></div>
@@ -54,8 +56,8 @@ body{background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFon
 <div id="profileBox" class="hidden">
 <div class="bg-gradient-to-r from-red-600 to-red-500 rounded-2xl p-4 mb-4">
 <h3 class="font-bold mb-2">🔴 Seller Live Studio</h3>
-<div id="sellerLivePreviewBox" class="hidden"><video id="sellerCam" autoplay muted playsinline class="w-full h-48 rounded-xl bg-black object-cover mb-2"></video><div class="flex gap-2"><button onclick="stopSellerLive()" class="flex-1 bg-black py-2 rounded-full text-sm">Stop Live</button><span id="liveLikeCount2" class="bg-black/40 px-3 py-2 rounded-full text-xs">❤️ 0 likes</span></div></div>
-<div id="sellerLiveStartBox"><p class="text-xs mb-2 opacity-90">Go live with camera, buyers comment & like in real time</p><button onclick="startSellerLive()" class="w-full bg-white text-red-600 py-3 rounded-full font-bold text-sm"><i class="fa fa-video mr-1"></i> Start Live Video</button></div>
+<div id="sellerLivePreviewBox" class="hidden"><video id="sellerCam" autoplay muted playsinline class="w-full h-48 rounded-xl bg-black object-cover mb-2"></video><div class="flex gap-2"><button onclick="stopSellerLive()" class="flex-1 bg-black py-2 rounded-full text-sm">Stop Live</button><span id="liveLikeCount2" class="bg-black/40 px-3 py-2 rounded-full text-xs">❤️ 0 likes</span></div><p class="text-[11px] mt-2 opacity-80">Buyers on other phones: Go to Live tab -> Join Seller Live Now</p></div>
+<div id="sellerLiveStartBox"><p class="text-xs mb-2 opacity-90">Go live, buyers on other phones can JOIN and see you</p><button onclick="startSellerLive()" class="w-full bg-white text-red-600 py-3 rounded-full font-bold text-sm"><i class="fa fa-video mr-1"></i> Start Live Video - Buyers Can Join</button></div>
 </div>
 <div class="bg-gray-900 rounded-2xl p-5 flex items-center gap-3 mb-4"><div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center text-xl font-bold" id="avatar">D</div><div><p class="font-bold" id="profileName"></p><p class="text-xs text-gray-400">Seller Account</p></div><button onclick="doLogout()" class="ml-auto text-sm text-red-400">Logout</button></div>
 <div class="bg-gray-900 rounded-2xl p-5"><h3 class="font-bold mb-3"><i class="fa fa-plus mr-2"></i>Sell Product</h3><input id="pName" placeholder="Product name" class="w-full bg-black border border-gray-700 rounded-xl p-3 mb-3"><input id="pPrice" type="number" placeholder="Price GHS" class="w-full bg-black border border-gray-700 rounded-xl p-3 mb-3"><select id="pCat" class="w-full bg-black border border-gray-700 rounded-xl p-3 mb-3"><option>Men</option><option>Women</option><option>Kids</option><option>Pet</option><option>Office</option><option>Furniture</option><option>All</option></select><input id="pImages" type="file" accept="image/*" multiple class="w-full bg-black border border-gray-700 rounded-xl p-3 mb-3"><div id="preview" class="flex gap-2 overflow-x-auto mb-3"></div><button onclick="uploadProduct()" class="w-full bg-red-600 py-3 rounded-full font-bold">Upload Product</button></div><div class="mt-4"><h3 class="font-bold mb-2">My Products</h3><div id="myProducts" class="grid grid-cols-2 gap-3"></div></div></div></div>
@@ -102,31 +104,65 @@ function closeChat(){document.getElementById("msgList").classList.remove("hidden
 function sendMsg(){const txt=document.getElementById("chatInput").value.trim();if(!txt||!currentChatSeller)return;messages.push({seller:currentChatSeller.seller,phone:currentChatSeller.phone,product:currentChatSeller.product,text:txt,from:"me",time:Date.now()});localStorage.setItem("dornny_msgs",JSON.stringify(messages));document.getElementById("chatInput").value="";renderChat();renderMsgList();setTimeout(()=>{messages.push({seller:currentChatSeller.seller,phone:currentChatSeller.phone,product:currentChatSeller.product,text:"Thanks! Available now. WhatsApp me for fast reply",from:"seller",time:Date.now()});localStorage.setItem("dornny_msgs",JSON.stringify(messages));renderChat();renderMsgList();addNotif(`💬 New msg from ${currentChatSeller.seller}`)},1500)}
 function renderChat(){if(!currentChatSeller)return;const box=document.getElementById("chatMsgs");box.innerHTML="";messages.filter(m=>m.seller===currentChatSeller.seller).forEach(m=>{box.innerHTML+=`<div class="flex ${m.from==='me'?'justify-end':''}"><div class="${m.from==='me'?'bg-white text-black':'bg-gray-800'} px-3 py-2 rounded-2xl text-sm max-w-[80%]">${m.text}</div></div>`});box.scrollTop=box.scrollHeight}
 function renderMsgList(){document.getElementById("msgBadge").textContent=messages.length;document.getElementById("msgBadge").classList.toggle("hidden",messages.length===0);const list=document.getElementById("msgList");const sellers=[...new Set(messages.map(m=>m.seller))];if(sellers.length===0){list.innerHTML=`<p class="text-gray-500 text-center py-10">No messages yet<br><span class="text-xs">Tap Chat Seller on any product</span></p>`;return}list.innerHTML="";sellers.forEach(s=>{const last=messages.filter(m=>m.seller===s).slice(-1)[0];const info=messages.find(m=>m.seller===s);list.innerHTML+=`<div onclick="openChat('${s}','${info.phone}','${info.product}')" class="bg-gray-900 p-3 rounded-xl flex gap-3"><div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center font-bold">${s[0]}</div><div class="flex-1"><p class="font-bold text-sm">${s}</p><p class="text-xs text-gray-400 truncate">${last.text}</p></div><span class="text-xs text-gray-500">${new Date(last.time).toLocaleTimeString()}</span></div>`})}
-let sellerStream=null; let likes=0;
+let sellerStream=null; let likes=0; let peer=null; let buyerPeer=null; const LIVE_PEER_ID="dornny-global-live";
+function initPeerAsSeller(){
+  if(peer) try{peer.destroy()}catch(e){}
+  peer=new Peer(LIVE_PEER_ID);
+  peer.on("open",()=>{console.log("Seller peer ready",LIVE_PEER_ID); localStorage.setItem("dornny_live_active",JSON.stringify({seller:user?.name||"Seller",peerId:LIVE_PEER_ID,time:Date.now()}));});
+  peer.on("call",call=>{console.log("Buyer joining"); call.answer(sellerStream); addLiveMsg("System","👤 Buyer joined live");});
+  peer.on("error",e=>{console.log("Peer error",e); if(e.type==="unavailable-id-taken"){addNotif("⚠️ Another seller is live now");}});
+}
+function buyerJoinLive(){
+  const v=document.getElementById("liveVideo");
+  document.getElementById("joinBanner").classList.add("hidden");
+  addNotif("🔗 Joining live...");
+  if(buyerPeer) try{buyerPeer.destroy()}catch(e){}
+  buyerPeer=new Peer();
+  buyerPeer.on("open",()=>{
+    const call=buyerPeer.call(LIVE_PEER_ID, new MediaStream());
+    if(!call){addNotif("❌ Seller not live yet, try again in 10 sec"); return;}
+    call.on("stream",remoteStream=>{
+      v.srcObject=null; v.removeAttribute("src"); v.srcObject=remoteStream; v.play().catch(()=>{});
+      document.getElementById("liveSellerName").textContent=document.getElementById("joinSellerName").textContent+" 🔴 LIVE";
+      addLiveMsg("System","✅ You joined live!");
+      addNotif("✅ Joined live! You see seller now");
+    });
+    call.on("close",()=>{addNotif("Live ended"); loadLiveVideoFallback();});
+    call.on("error",()=>{addNotif("❌ Could not join, seller offline"); loadLiveVideoFallback();});
+  });
+  buyerPeer.on("error",e=>{console.log(e); addNotif("❌ Live not available - seller must start first"); loadLiveVideoFallback();});
+}
+function checkIfLive(){
+  const banner=document.getElementById("joinBanner");
+  if(sellerStream) return;
+  const active=localStorage.getItem("dornny_live_active");
+  if(active){ try{ const d=JSON.parse(active); if(Date.now()-d.time<600000){ document.getElementById("joinSellerName").textContent=d.seller; banner.classList.remove("hidden"); } }catch(e){} }
+}
+function loadLiveVideoFallback(){const v=document.getElementById("liveVideo"); if(v.srcObject){ try{v.srcObject.getTracks().forEach(t=>t.stop());}catch(e){} v.srcObject=null; } v.src=liveVideos[Math.floor(Math.random()*liveVideos.length)]; v.play().catch(()=>{}); }
 async function startSellerLive(){
- try{
+  if(!user){alert("Login as seller first in Me page"); showPage("me"); return;}
+  try{
    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});
    sellerStream=stream;
    document.getElementById("sellerCam").srcObject=stream;
    document.getElementById("sellerLivePreviewBox").classList.remove("hidden");
    document.getElementById("sellerLiveStartBox").classList.add("hidden");
-   document.getElementById("liveVideo").srcObject=stream;
-   document.getElementById("liveVideo").removeAttribute("loop");
-   document.getElementById("liveVideo").src="";
-   document.getElementById("liveVideo").srcObject=stream;
-   document.getElementById("liveVideo").play();
+   const v=document.getElementById("liveVideo");
+   v.srcObject=null; v.removeAttribute("src"); v.srcObject=stream; v.play().catch(()=>{});
    document.getElementById("liveSellerName").textContent=(user?.name||"You")+" 🔴 LIVE";
-   addNotif("🔴 You are LIVE! Buyers can see you now");
-   addLiveMsg("System","🔴 "+(user?.name||"Seller")+" started live!");
+   initPeerAsSeller();
+   addNotif("🔴 You are LIVE! Buyers can JOIN now from other phones");
+   addLiveMsg("System","🔴 "+(user?.name||"Seller")+" started live - buyers can join!");
    showPage('live');
  }catch(e){alert("Camera permission needed: "+e.message)}
 }
 function stopSellerLive(){
- if(sellerStream){sellerStream.getTracks().forEach(t=>t.stop());}
+ if(peer){ try{peer.destroy();}catch(e){} peer=null; } localStorage.removeItem("dornny_live_active");
+ if(sellerStream){sellerStream.getTracks().forEach(t=>t.stop()); sellerStream=null;}
  document.getElementById("sellerLivePreviewBox").classList.add("hidden");
  document.getElementById("sellerLiveStartBox").classList.remove("hidden");
  document.getElementById("liveSellerName").textContent="Ama Fashion Live";
- loadLiveVideo();
+ loadLiveVideoFallback();
  addNotif("⏹️ Live ended");
 }
 function likeLive(){
@@ -139,8 +175,8 @@ function likeLive(){
  setTimeout(()=>heart.remove(),2000);
  addLiveMsg("Buyer"+Math.floor(Math.random()*100),"❤️ liked!");
 }
-function loadLiveVideo(){const v=document.getElementById("liveVideo");if(v.srcObject) return; v.src=liveVideos[Math.floor(Math.random()*liveVideos.length)]; v.play().catch(()=>{}); currentLiveProduct=products[Math.floor(Math.random()*products.length)].id}
-function switchLive(){const v=document.getElementById("liveVideo"); if(v.srcObject){v.srcObject.getTracks().forEach(t=>t.stop()); v.srcObject=null;} loadLiveVideo(); addNotif("🔴 Switched live stream")}
+function loadLiveVideo(){checkIfLive(); const v=document.getElementById("liveVideo"); if(v.srcObject) return; v.src=liveVideos[Math.floor(Math.random()*liveVideos.length)]; v.play().catch(()=>{}); currentLiveProduct=products[Math.floor(Math.random()*products.length)].id}
+function switchLive(){const v=document.getElementById("liveVideo"); if(v.srcObject){ try{v.srcObject.getTracks().forEach(t=>t.stop());}catch(e){} v.srcObject=null;} if(buyerPeer){try{buyerPeer.destroy()}catch(e){}} loadLiveVideoFallback(); addNotif("🔴 Switched live stream")}
 function sendLiveComment(){const txt=document.getElementById("liveInput").value.trim();if(!txt)return;addLiveMsg(user?.name||"Guest",txt);document.getElementById("liveInput").value=""}
 function addLiveMsg(u,t){const box=document.getElementById("liveChat");box.innerHTML+=`<div><span class="font-bold text-yellow-400">${u}:</span> <span class="text-white">${t}</span></div>`;box.scrollTop=box.scrollHeight}
 function simulateLiveChat(){const msgs=[["AmaLover","How much?"],["Kwame","I want!"],["ShopGirl","Nice 🔥"],["User123","Size?"]];setInterval(()=>{if(document.getElementById("livePage").classList.contains("hidden"))return;const m=msgs[Math.floor(Math.random()*msgs.length)];addLiveMsg(m[0],m[1]);document.getElementById("liveViewers").textContent=`${(Math.random()*2+0.8).toFixed(1)}k watching`},4000)}
