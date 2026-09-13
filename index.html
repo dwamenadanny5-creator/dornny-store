@@ -154,30 +154,26 @@ document.getElementById('remoteContainer').classList.remove('hidden');
 document.getElementById('liveIdShow').innerText='WATCHING: '+id;
 });
 });
-}
+
 function showLiveChat(isBuyer=false){
-if(document.getElementById('liveChatBox'))return;
-let p=document.getElementById('localVideo').parentElement;
-p.style.position='relative';
+let inp=document.getElementById('liveRoomInput'); if(inp) inp.style.display='none';
+document.querySelectorAll('button').forEach(b=>{if(b.innerText.includes('GO LIVE')||b.innerText.includes('WATCH')) b.style.display='none';});
+let old=document.getElementById('liveChatBox'); if(old) old.remove();
+let p=document.getElementById('localVideo').parentElement; p.style.position='relative';
 let chat=document.createElement('div');chat.id='liveChatBox';
-chat.innerHTML=`<div id="liveComments" style="position:absolute;bottom:130px;left:10px;right:10px;max-height:180px;overflow-y:auto;color:white;font-size:14px;"></div><div style="position:absolute;bottom:80px;left:10px;right:70px;display:flex;gap:5px;"><input id="liveCommentInput" placeholder="${isBuyer?'Ask seller...':'Say something...'}" style="flex:1;padding:12px;border-radius:25px;border:none;outline:none;"><button onclick="sendLiveComment()" style="background:#ff0050;color:white;padding:12px 18px;border-radius:25px;border:none;font-weight:bold;">Send</button></div><div style="position:absolute;bottom:80px;right:10px;display:flex;flex-direction:column;align-items:center;gap:5px;"><button onclick="sendLiveLike()" style="font-size:28px;background:rgba(0,0,0,0.5);border-radius:50%;width:55px;height:55px;border:none;">❤️</button><span id="likeCount" style="color:white;font-weight:bold;text-shadow:1px 1px 2px black;">0</span></div>`;
+chat.innerHTML=`<div id="liveComments" style="position:absolute;bottom:110px;left:10px;right:80px;max-height:200px;overflow-y:auto;color:white;font-size:14px;z-index:9999;"></div><div style="position:absolute;bottom:12px;left:10px;right:75px;display:flex;gap:6px;z-index:9999;"><input id="liveCommentInput" placeholder="Say something..." style="flex:1;padding:14px;border-radius:25px;border:none;outline:none;"><button onclick="sendLiveComment()" style="background:#ff0050;color:white;padding:12px 18px;border-radius:25px;border:none;font-weight:bold;">Send</button></div><div style="position:absolute;bottom:12px;right:10px;display:flex;flex-direction:column;align-items:center;z-index:9999;"><button onclick="sendLiveLike()" style="font-size:30px;background:rgba(0,0,0,0.6);border-radius:50%;width:58px;height:58px;border:none;">❤️</button><span id="likeCount" style="color:white;font-weight:bold;">0</span></div>`;
 p.appendChild(chat);
 }
 function sendLiveComment(){
 let i=document.getElementById('liveCommentInput');let txt=i.value.trim();if(!txt)return;
-let c=document.getElementById('liveComments');
-c.innerHTML+=`<div style="background:rgba(255,0,80,0.8);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>You:</b> ${txt}</div>`;
-i.value='';c.scrollTop=c.scrollHeight;
+let c=document.getElementById('liveComments');c.innerHTML+=`<div style="background:rgba(255,0,80,0.8);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>You:</b> ${txt}</div>`;i.value='';c.scrollTop=c.scrollHeight;
 dataConns.forEach(conn=>conn.send({type:'comment',text:txt}));
 }
 function sendLiveLike(){
 liveLikes++;document.getElementById('likeCount').innerText=liveLikes;
-let c=document.getElementById('liveComments');
-c.innerHTML+=`<div>❤️ Liked!</div>`;
+let c=document.getElementById('liveComments');c.innerHTML+=`<div>❤️ Liked!</div>`;
 dataConns.forEach(conn=>conn.send({type:'like',count:liveLikes}));
-}
-
-function showPage(p){document.querySelectorAll('[id$="Page"]').forEach(e=>e.classList.add('hidden'));let x=document.getElementById(p+'Page');if(x)x.classList.remove('hidden')}
+} function showPage(p){document.querySelectorAll('[id$="Page"]').forEach(e=>e.classList.add('hidden'));let x=document.getElementById(p+'Page');if(x)x.classList.remove('hidden')}
 init();
 
     
