@@ -13,21 +13,19 @@
 .page.active { display:block; }
 .slider { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; }
 .slider::-webkit-scrollbar { display:none; }
-.slider img { scroll-snap-align:center; min-width:100%; height:280px; object-fit:cover; }
+.slider img { scroll-snap-align:center; min-width:100%; height:320px; object-fit:cover; }
 .cat-btn.active { background:#ff0050; color:white; }
 .no-scrollbar::-webkit-scrollbar{ display:none; }
 </style>
 </head>
 <body class="bg-gray-50">
 
-<!-- TOP BAR -->
 <div class="sticky top-0 z-50 bg-white p-3 flex gap-2 items-center shadow">
 <input id="searchInput" oninput="filterProducts()" placeholder="Search products..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 outline-none">
 <button onclick="showPage('cartPage')" class="relative"><i class="fa fa-shopping-cart text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span></button>
 <button onclick="showPage('messagePage')"><i class="fa fa-comment text-xl"></i></button>
 </div>
 
-<!-- CATEGORIES -->
 <div class="bg-white sticky top-[60px] z-40 p-2 overflow-x-auto no-scrollbar flex gap-2 whitespace-nowrap">
 <button onclick="filterCat('All')" class="cat-btn active px-4 py-1.5 rounded-full bg-gray-100 text-sm">All</button>
 <button onclick="filterCat('men')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Men</button>
@@ -45,22 +43,19 @@
 <button onclick="filterCat('food')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Food</button>
 </div>
 
-<!-- HOME PAGE -->
 <div id="homePage" class="page active p-2">
 <div id="productGrid" class="grid grid-cols-2 gap-2"></div>
 </div>
 
-<!-- PRODUCT DETAIL WITH IMAGE SLIDER -->
 <div id="detailPage" class="page bg-white">
 <button onclick="showPage('homePage')" class="p-3"><i class="fa fa-arrow-left"></i> Back</button>
 <div id="detailSlider" class="slider"></div>
 <div id="detailInfo" class="p-4"></div>
 </div>
 
-<!-- LIVE PAGE - TIKTOK STYLE -->
 <div id="livePage" class="page bg-black">
 <div class="relative w-full">
-<video id="localVideo" autoplay muted playsinline style="width:100%;height:65vh;object-fit:cover;background:#000;border-radius:0 0 20px 20px;"></video>
+<video id="localVideo" autoplay muted playsinline style="width:100%;height:60vh;object-fit:cover;background:#000;border-radius:0 0 20px 20px;"></video>
 <div class="p-3 flex gap-2">
 <button onclick="goLive()" class="flex-1 bg-red-600 text-white py-3 rounded-full font-bold"><i class="fa fa-video"></i> GO LIVE</button>
 <button onclick="watchLive()" class="flex-1 bg-white text-black py-3 rounded-full font-bold"><i class="fa fa-eye"></i> WATCH</button>
@@ -75,13 +70,11 @@
 </div>
 </div>
 
-<!-- TREND PAGE -->
 <div id="trendPage" class="page p-3">
 <h2 class="font-bold text-lg mb-2">🔥 Trending Now</h2>
 <div id="trendGrid" class="grid grid-cols-2 gap-2"></div>
 </div>
 
-<!-- CART PAGE -->
 <div id="cartPage" class="page p-3">
 <h2 class="font-bold text-lg">My Cart</h2>
 <div id="cartItems"></div>
@@ -93,7 +86,6 @@
 </div>
 </div>
 
-<!-- MESSAGE PAGE -->
 <div id="messagePage" class="page p-3">
 <h2 class="font-bold text-lg">Messages</h2>
 <div id="msgList" class="mt-3 space-y-2"></div>
@@ -103,7 +95,6 @@
 </div>
 </div>
 
-<!-- ME / LOGIN PAGE -->
 <div id="mePage" class="page p-4">
 <div id="loginBox" class="bg-white p-5 rounded-2xl">
 <h2 class="font-bold text-xl mb-3">Login / Register</h2>
@@ -118,9 +109,23 @@
 <button onclick="logout()" class="mt-4 border w-full py-2 rounded-full">Logout</button>
 <button onclick="Notification.requestPermission()" class="mt-2 w-full bg-blue-500 text-white py-2 rounded-full text-sm">Enable Live Notifications 🔔</button>
 </div>
+
+<!-- SELLER DASHBOARD - AUTO SHOWS WHEN SELLER LOGINS -->
+<div id="sellerDashboard" class="hidden mt-4 bg-white p-4 rounded-2xl border-2 border-dashed border-[#ff0050]">
+<h3 class="font-bold text-lg">📦 Seller Dashboard - Upload Goods</h3>
+<p class="text-xs text-gray-500 mb-3">Your products show AUTOMATICALLY on Home dashboard</p>
+<input id="pName" placeholder="Product Name (e.g. iPhone 15)" class="w-full border p-2 rounded-xl mb-2">
+<input id="pPrice" type="number" placeholder="Price GH₵" class="w-full border p-2 rounded-xl mb-2">
+<select id="pCat" class="w-full border p-2 rounded-xl mb-2"><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option><option value="pets">Pets</option><option value="jewelry">Jewelry & Accs</option><option value="cars">Cars</option><option value="home">Home Use</option><option value="electronics">Electronics</option><option value="shoes">Shoes</option><option value="office">Office</option><option value="furnitures">Furnitures</option><option value="toys">Toys</option><option value="food">Food</option></select>
+<input id="pImg1" placeholder="Image Link 1 (optional)" class="w-full border p-2 rounded-xl mb-2 text-sm">
+<input id="pImg2" placeholder="Image Link 2 (optional)" class="w-full border p-2 rounded-xl mb-2 text-sm">
+<div class="flex gap-2 items-center"><input type="file" id="pFile" accept="image/*" onchange="previewFile()" class="flex-1 text-sm"><img id="pPreview" class="w-16 h-16 rounded object-cover hidden"></div>
+<button onclick="uploadProduct()" class="w-full bg-[#ff0050] text-white py-3 rounded-full font-bold mt-3">+ Upload Product - Show on Dashboard Instantly</button>
+<div id="myProducts" class="mt-3"></div>
 </div>
 
-<!-- BOTTOM NAV -->
+</div>
+
 <div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-50">
 <button onclick="showPage('homePage')" class="flex flex-col items-center text-xs"><i class="fa fa-home text-lg"></i>Home</button>
 <button onclick="showPage('livePage')" class="flex flex-col items-center text-xs"><i class="fa fa-video text-lg text-red-500"></i>Live</button>
@@ -130,15 +135,15 @@
 </div>
 
 <script>
-let products=[
-{id:1,name:"Men's Casual Shirt",price:89,cat:"men",imgs:["https://picsum.photos/400/400?random=1","https://picsum.photos/400/400?random=11"],seller:"Kwame Shop",rating:4.5,likes:120,followers:340},
-{id:2,name:"Women's Dress",price:129,cat:"women",imgs:["https://picsum.photos/400/400?random=2","https://picsum.photos/400/400?random=12"],seller:"Ama Fashion",rating:4.8,likes:230,followers:512},
-{id:3,name:"Kids Sneakers",price:65,cat:"kids",imgs:["https://picsum.photos/400/400?random=3","https://picsum.photos/400/400?random=13"],seller:"Kids World",rating:4.6,likes:90,followers:210},
-{id:4,name:"Gold Necklace",price:199,cat:"jewelry",imgs:["https://picsum.photos/400/400?random=4","https://picsum.photos/400/400?random=14"],seller:"Jewelry GH",rating:4.9,likes:400,followers:900},
-{id:5,name:"Toyota Parts",price:599,cat:"cars",imgs:["https://picsum.photos/400/400?random=5","https://picsum.photos/400/400?random=15"],seller:"Auto GH",rating:4.7,likes:150,followers:300},
-{id:6,name:"Smart TV 55\"",price:899,cat:"electronics",imgs:["https://picsum.photos/400/400?random=6","https://picsum.photos/400/400?random=16"],seller:"Electro Mart",rating:4.8,likes:320,followers:650},
-{id:7,name:"Office Chair",price:250,cat:"office",imgs:["https://picsum.photos/400/400?random=7","https://picsum.photos/400/400?random=17"],seller:"Office GH",rating:4.4,likes:80,followers:180},
-{id:8,name:"Dog Food Premium",price:45,cat:"pets",imgs:["https://picsum.photos/400/400?random=8","https://picsum.photos/400/400?random=18"],seller:"Pet Lover",rating:4.5,likes:60,followers:140},
+let products=JSON.parse(localStorage.getItem('dw_products')||'null')||[
+{id:1,name:"Men's Cotton Shirt",price:89,cat:"men",imgs:["https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500","https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500"],seller:"Kwame Shop",rating:4.5,likes:120,followers:340},
+{id:2,name:"Women's Summer Dress",price:129,cat:"women",imgs:["https://images.unsplash.com/photo-1515372039744-b8f02a3c67ae?w=500","https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"],seller:"Ama Fashion",rating:4.8,likes:230,followers:512},
+{id:3,name:"Kids Nike Sneakers",price:65,cat:"kids",imgs:["https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=500","https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500"],seller:"Kids World",rating:4.6,likes:90,followers:210},
+{id:4,name:"Gold Necklace 18K",price:199,cat:"jewelry",imgs:["https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500","https://images.unsplash.com/photo-1601821765780-754fa98637c1?w=500"],seller:"Jewelry GH",rating:4.9,likes:400,followers:900},
+{id:5,name:"Car Engine Oil 5L",price:599,cat:"cars",imgs:["https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=500","https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500"],seller:"Auto GH",rating:4.7,likes:150,followers:300},
+{id:6,name:"Smart TV 55 inch UHD",price:899,cat:"electronics",imgs:["https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500","https://images.unsplash.com/photo-1588508065123-287b28e013da?w=500"],seller:"Electro Mart",rating:4.8,likes:320,followers:650},
+{id:7,name:"Office Leather Chair",price:250,cat:"office",imgs:["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500","https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=500"],seller:"Office GH",rating:4.4,likes:80,followers:180},
+{id:8,name:"Pet Dog Food 10kg",price:45,cat:"pets",imgs:["https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=500","https://images.unsplash.com/photo-1589924691995-c10eee878e60?w=500"],seller:"Pet Lover",rating:4.5,likes:60,followers:140},
 ];
 let cart=[]; let currentCat='All'; let following=new Set(JSON.parse(localStorage.getItem('following')||'[]')); let liked=new Set();
 let peer=null; let dataConns=[]; let liveLikes=0; let localStream=null;
@@ -178,23 +183,36 @@ function updateCart(){document.getElementById('cartCount').innerText=cart.length
 function likeProduct(id){if(liked.has(id)) liked.delete(id); else liked.add(id); renderProducts(currentCat==='All'?products:products.filter(p=>p.cat===currentCat));}
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);if(id==='mePage') checkLogin();}
 function login(){let name=document.getElementById('userName').value;let role=document.getElementById('userRole').value;let phone=document.getElementById('userPhone').value;if(!name)return alert('Enter name');localStorage.setItem('dw_user',JSON.stringify({name,role,phone}));Notification.requestPermission();alert('Logged in as '+role+' - Notifications ON 🔔');checkLogin();}
-function checkLogin(){let u=JSON.parse(localStorage.getItem('dw_user')||'null');if(u){document.getElementById('loginBox').classList.add('hidden');document.getElementById('profileBox').classList.remove('hidden');document.getElementById('profileName').innerText=u.name;document.getElementById('profileRole').innerText=u.role;document.getElementById('followCount').innerText=following.size;}else{document.getElementById('loginBox').classList.remove('hidden');document.getElementById('profileBox').classList.add('hidden');}}
+function checkLogin(){let u=JSON.parse(localStorage.getItem('dw_user')||'null');if(u){document.getElementById('loginBox').classList.add('hidden');document.getElementById('profileBox').classList.remove('hidden');document.getElementById('profileName').innerText=u.name;document.getElementById('profileRole').innerText=u.role;document.getElementById('followCount').innerText=following.size;if(u.role==='seller'){document.getElementById('sellerDashboard').classList.remove('hidden');showSellerProducts();}else{document.getElementById('sellerDashboard').classList.add('hidden');}}else{document.getElementById('loginBox').classList.remove('hidden');document.getElementById('profileBox').classList.add('hidden');document.getElementById('sellerDashboard').classList.add('hidden');}}
 function logout(){localStorage.removeItem('dw_user');checkLogin();}
-function followSeller(name){if(!name) name='Seller Official';if(following.has(name))following.delete(name);else{following.add(name);if(Notification.permission==='granted') new Notification('Following '+name+'! You will be notified when they go LIVE 🔴');}localStorage.setItem('following',JSON.stringify([...following]));document.getElementById('followBtn').innerText=following.has(name)?'Following ✓':'+ Follow';if(document.getElementById('followCount'))document.getElementById('followCount').innerText=following.size;}
+function followSeller(name){if(!name) name='Seller Official';if(following.has(name))following.delete(name);else{following.add(name);if(Notification.permission==='granted') new Notification('Following '+name+'! You will be notified when they go LIVE 🔴');}localStorage.setItem('following',JSON.stringify([...following]));let btn=document.getElementById('followBtn');if(btn)btn.innerText=following.has(name)?'Following ✓':'+ Follow';if(document.getElementById('followCount'))document.getElementById('followCount').innerText=following.size;}
 function addComment(id){let txt=document.getElementById('commentInput').value;if(!txt)return;let div=document.getElementById('commentList');div.innerHTML+=`<div class="bg-gray-100 p-2 rounded-xl text-sm"><b>You:</b> ${txt} ⭐⭐⭐⭐⭐</div>`;document.getElementById('commentInput').value='';}
 function getLocation(){navigator.geolocation.getCurrentPosition(pos=>{document.getElementById('userLocation').innerText=pos.coords.latitude.toFixed(3)+','+pos.coords.longitude.toFixed(3)+' - Accra';document.getElementById('liveLoc').innerText='Accra, GH (Live)';});}
 function checkout(){if(cart.length===0)return alert('Cart empty');alert('Order placed! Seller will be notified. You will get phone notification when shipped.');cart=[];updateCart();}
-function requestRefund(){let r=prompt('Reason for refund?');if(r){alert('Refund request sent! You will get notification within 24h. Order will be refunded if seller agrees.');}}
-function reportIssue(){let r=prompt('Report issue between buyer & seller:');if(r){alert('Report sent to admin! We will resolve in 24h. You will be notified.');}}
+function requestRefund(){let r=prompt('Reason for refund?');if(r){alert('Refund request sent! You will get notification within 24h.');}}
+function reportIssue(){let r=prompt('Report issue between buyer & seller:');if(r){alert('Report sent to admin! We will resolve in 24h.');}}
 function sendMsg(){let t=document.getElementById('msgInput').value;if(!t)return;document.getElementById('msgList').innerHTML+=`<div class="bg-[#ff0050] text-white p-2 rounded-xl self-end ml-10">You: ${t}</div>`;document.getElementById('msgInput').value='';setTimeout(()=>{document.getElementById('msgList').innerHTML+=`<div class="bg-white p-2 rounded-xl mr-10">Seller: Thanks! We will deliver soon 🚚</div>`},1000);}
 function buyNow(id){addToCart(id);showPage('cartPage');}
-function initPeer(){if(peer)return;peer=new Peer(null,{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});peer.on('open',id=>console.log(id));peer.on('connection',conn=>{dataConns.push(conn);conn.on('data',d=>{if(d.type==='comment'){document.getElementById('liveComments').innerHTML+=`<div style="background:rgba(0,0,0,0.7);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>Buyer:</b> ${d.text}</div>`;}else if(d.type==='like'){liveLikes=d.count;document.getElementById('likeCount').innerText=liveLikes;}});});peer.on('call',call=>{call.answer(localStream);});}
+function previewFile(){let f=document.getElementById('pFile').files[0];if(f){let r=new FileReader();r.onload=e=>{let img=document.getElementById('pPreview');img.src=e.target.result;img.classList.remove('hidden');img.dataset.base64=e.target.result;};r.readAsDataURL(f);}}
+function uploadProduct(){
+let name=document.getElementById('pName').value;let price=document.getElementById('pPrice').value;let cat=document.getElementById('pCat').value;let img1=document.getElementById('pImg1').value;let img2=document.getElementById('pImg2').value;let preview=document.getElementById('pPreview').dataset.base64;
+if(!name||!price)return alert('Enter name and price');
+let imgs=[];if(preview)imgs.push(preview);if(img1)imgs.push(img1);if(img2)imgs.push(img2);if(imgs.length===0)imgs.push(`https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500`);
+let u=JSON.parse(localStorage.getItem('dw_user')||'{}');
+let newP={id:Date.now(),name,price:parseInt(price),cat,imgs,seller:u.name||'My Shop',rating:5.0,likes:0,followers:0};
+products.unshift(newP);localStorage.setItem('dw_products',JSON.stringify(products));renderProducts(products);showSellerProducts();
+document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pImg1').value='';document.getElementById('pImg2').value='';
+alert('✅ Product uploaded! Now showing on Home dashboard AUTOMATICALLY!');
+if(Notification.permission==='granted') new Notification('New product: '+name+' live on dashboard!');
+}
+function showSellerProducts(){let u=JSON.parse(localStorage.getItem('dw_user')||'{}');let mine=products.filter(p=>p.seller===u.name);document.getElementById('myProducts').innerHTML='<p class="font-bold text-sm mt-2">My Products ('+mine.length+'):</p>'+mine.map(p=>`<div class="flex gap-2 p-2 border rounded-xl mt-1"><img src="${p.imgs[0]}" class="w-12 h-12 rounded object-cover"><div class="flex-1 text-sm"><p>${p.name}</p><p class="font-bold">GH₵ ${p.price}</p></div><button onclick="deleteProduct(${p.id})" class="text-red-500 text-xs">Delete</button></div>`).join('');}
+function deleteProduct(id){products=products.filter(p=>p.id!==id);localStorage.setItem('dw_products',JSON.stringify(products));renderProducts(products);showSellerProducts();}
+function initPeer(){if(peer)return;peer=new Peer(null,{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});peer.on('open',id=>console.log(id));peer.on('connection',conn=>{dataConns.push(conn);conn.on('data',d=>{if(d.type==='comment'){let el=document.getElementById('liveComments');if(el)el.innerHTML+=`<div style="background:rgba(0,0,0,0.7);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>Buyer:</b> ${d.text}</div>`;}else if(d.type==='like'){liveLikes=d.count;let lc=document.getElementById('likeCount');if(lc)lc.innerText=liveLikes;}});});peer.on('call',call=>{call.answer(localStream);});}
 async function goLive(){
 initPeer();let v=document.getElementById('localVideo');
 try{localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});v.srcObject=localStream;}catch(e){alert('Camera error: need HTTPS and allow camera');return;}
 showLiveChat(false);let id=peer.id;document.getElementById('liveRoomInput').value=id;document.getElementById('liveRoomInput').style.display='block';document.getElementById('liveRoomInput').type='text';
 if(Notification.permission==='granted'){new Notification('🔴 You are LIVE! Followers notified');}localStorage.setItem('live_now',id);
-let followers=[...following];if(followers.length>0 && Notification.permission==='granted'){new Notification('Followers will be notified you are LIVE now!');}
 }
 async function watchLive(){
 initPeer();let roomId=document.getElementById('liveRoomInput').value.trim();if(!roomId){roomId=localStorage.getItem('live_now'); if(!roomId)return alert('Enter Live ID');}
@@ -208,7 +226,7 @@ let chat=document.createElement('div');chat.id='liveChatBox';chat.innerHTML=`<di
 p.appendChild(chat);
 }
 function sendLiveComment(){let i=document.getElementById('liveCommentInput');let txt=i.value.trim();if(!txt)return;let c=document.getElementById('liveComments');c.innerHTML+=`<div style="background:rgba(255,0,80,0.85);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>You:</b> ${txt}</div>`;i.value='';c.scrollTop=c.scrollHeight;dataConns.forEach(conn=>{try{conn.send({type:'comment',text:txt});}catch(e){}});}
-function sendLiveLike(){liveLikes++;let lc=document.getElementById('likeCount');if(lc)lc.innerText=liveLikes;let c=document.getElementById('liveComments');c.innerHTML+=`<div>❤️ You liked!</div>`;dataConns.forEach(conn=>{try{conn.send({type:'like',count:liveLikes});}catch(e){}});}
+function sendLiveLike(){liveLikes++;let lc=document.getElementById('likeCount');if(lc)lc.innerText=liveLikes;let c=document.getElementById('liveComments');if(c)c.innerHTML+=`<div>❤️ You liked!</div>`;dataConns.forEach(conn=>{try{conn.send({type:'like',count:liveLikes});}catch(e){}});}
 
 renderProducts(products);checkLogin();getLocation();
 if('Notification' in window) Notification.requestPermission();
