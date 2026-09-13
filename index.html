@@ -103,83 +103,38 @@ function closeChat(){document.getElementById("msgList").classList.remove("hidden
 function sendMsg(){const txt=document.getElementById("chatInput").value.trim();if(!txt||!currentChatSeller)return;messages.push({seller:currentChatSeller.seller,phone:currentChatSeller.phone,product:currentChatSeller.product,text:txt,from:"me",time:Date.now()});localStorage.setItem("dornny_msgs",JSON.stringify(messages));document.getElementById("chatInput").value="";renderChat();renderMsgList();setTimeout(()=>{messages.push({seller:currentChatSeller.seller,phone:currentChatSeller.phone,product:currentChatSeller.product,text:"Thanks! Available now. WhatsApp me for fast reply",from:"seller",time:Date.now()});localStorage.setItem("dornny_msgs",JSON.stringify(messages));renderChat();renderMsgList();addNotif(`💬 New msg from ${currentChatSeller.seller}`)},1500)}
 function renderChat(){if(!currentChatSeller)return;const box=document.getElementById("chatMsgs");box.innerHTML="";messages.filter(m=>m.seller===currentChatSeller.seller).forEach(m=>{box.innerHTML+=`<div class="flex ${m.from==='me'?'justify-end':''}"><div class="${m.from==='me'?'bg-white text-black':'bg-gray-800'} px-3 py-2 rounded-2xl text-sm max-w-[80%]">${m.text}</div></div>`});box.scrollTop=box.scrollHeight}
 function renderMsgList(){document.getElementById("msgBadge").textContent=messages.length;document.getElementById("msgBadge").classList.toggle("hidden",messages.length===0);const list=document.getElementById("msgList");const sellers=[...new Set(messages.map(m=>m.seller))];if(sellers.length===0){list.innerHTML=`<p class="text-gray-500 text-center py-10">No messages yet<br><span class="text-xs">Tap Chat Seller on any product</span></p>`;return}list.innerHTML="";sellers.forEach(s=>{const last=messages.filter(m=>m.seller===s).slice(-1)[0];const info=messages.find(m=>m.seller===s);list.innerHTML+=`<div onclick="openChat('${s}','${info.phone}','${info.product}')" class="bg-gray-900 p-3 rounded-xl flex gap-3"><div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center font-bold">${s[0]}</div><div class="flex-1"><p class="font-bold text-sm">${s}</p><p class="text-xs text-gray-400 truncate">${last.text}</p></div><span class="text-xs text-gray-500">${new Date(last.time).toLocaleTimeString()}</span></div>`})}
-let sellerStream=null; let likes=0; let peer=null; let buyerPeer=null; const LIVE_PEER_ID="dornny-global-live";
-function initPeerAsSeller(){
-  if(peer) try{peer.destroy()}catch(e){}
-  peer=new Peer(LIVE_PEER_ID);
-  peer.on("open",()=>{console.log("Seller peer ready",LIVE_PEER_ID); localStorage.setItem("dornny_live_active",JSON.stringify({seller:user?.name||"Seller",peerId:LIVE_PEER_ID,time:Date.now()}));});
-  peer.on("call",call=>{console.log("Buyer joining"); call.answer(sellerStream); addLiveMsg("System","👤 Buyer joined live");});
-  peer.on("error",e=>{console.log("Peer error",e); if(e.type==="unavailable-id-taken"){addNotif("⚠️ Another seller is live now");}});
-}
-function buyerJoinLive(){
-  const v=document.getElementById("liveVideo");
-  document.getElementById("joinBanner").classList.add("hidden");
-  addNotif("🔗 Joining live...");
-  if(buyerPeer) try{buyerPeer.destroy()}catch(e){}
-  buyerPeer=new Peer();
-  buyerPeer.on("open",()=>{
-    const call=buyerPeer.call(LIVE_PEER_ID, new MediaStream());
-    if(!call){addNotif("❌ Seller not live yet, try again in 10 sec"); return;}
-    call.on("stream",remoteStream=>{
-      v.srcObject=null; v.removeAttribute("src"); v.srcObject=remoteStream; v.play().catch(()=>{});
-      document.getElementById("liveSellerName").textContent=document.getElementById("joinSellerName").textContent+" 🔴 LIVE";
-      addLiveMsg("System","✅ You joined live!");
-      addNotif("✅ Joined live! You see seller now");
-    });
-    call.on("close",()=>{addNotif("Live ended"); loadLiveVideoFallback();});
-    call.on("error",()=>{addNotif("❌ Could not join, seller offline"); loadLiveVideoFallback();});
-  });
-  buyerPeer.on("error",e=>{console.log(e); addNotif("❌ Live not available - seller must start first"); loadLiveVideoFallback();});
-}
-function checkIfLive(){
-  const banner=document.getElementById("joinBanner");
-  if(sellerStream) return;
-  const active=localStorage.getItem("dornny_live_active");
-  if(active){ try{ const d=JSON.parse(active); if(Date.now()-d.time<600000){ document.getElementById("joinSellerName").textContent=d.seller; banner.classList.remove("hidden"); } }catch(e){} }
-}
-function loadLiveVideoFallback(){const v=document.getElementById("liveVideo"); if(v.srcObject){ try{v.srcObject.getTracks().forEach(t=>t.stop());}catch(e){} v.srcObject=null; } v.src=liveVideos[Math.floor(Math.random()*liveVideos.length)]; v.play().catch(()=>{}); }
+let peer=null;let localStream=null;
 async function startSellerLive(){
-  if(!user){alert("Login as seller first in Me page"); showPage("me"); return;}
-  try{
-   const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});
-   sellerStream=stream;
-   document.getElementById("sellerCam").srcObject=stream;
-   document.getElementById("sellerLivePreviewBox").classList.remove("hidden");
-   document.getElementById("sellerLiveStartBox").classList.add("hidden");
-   const v=document.getElementById("liveVideo");
-   v.srcObject=null; v.removeAttribute("src"); v.srcObject=stream; v.play().catch(()=>{});
-   document.getElementById("liveSellerName").textContent=(user?.name||"You")+" 🔴 LIVE";
-   initPeerAsSeller();
-   addNotif("🔴 You are LIVE! Buyers can JOIN now from other phones");
-   addLiveMsg("System","🔴 "+(user?.name||"Seller")+" started live - buyers can join!");
-   showPage('live');
- }catch(e){alert("Camera permission needed: "+e.message)}
+let id=document.getElementById('liveRoomInput').value.trim()||'DORNNY-'+Math.floor(Math.random()*9000+1000);
+document.getElementById('liveIdShow').innerText='YOUR LIVE ID: '+id;
+try{
+localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+let v=document.getElementById('localVideo');v.srcObject=localStream;v.classList.remove('hidden');
+document.getElementById('remoteContainer').classList.add('hidden');
+peer=new Peer(id);
+peer.on('open',()=>alert('LIVE! Share ID: '+id));
+peer.on('call',c=>c.answer(localStream));
+}catch(e){alert('Camera error: '+e.message)}
 }
-function stopSellerLive(){
- if(peer){ try{peer.destroy();}catch(e){} peer=null; } localStorage.removeItem("dornny_live_active");
- if(sellerStream){sellerStream.getTracks().forEach(t=>t.stop()); sellerStream=null;}
- document.getElementById("sellerLivePreviewBox").classList.add("hidden");
- document.getElementById("sellerLiveStartBox").classList.remove("hidden");
- document.getElementById("liveSellerName").textContent="Ama Fashion Live";
- loadLiveVideoFallback();
- addNotif("⏹️ Live ended");
+async function joinSellerLive(){
+let id=document.getElementById('liveRoomInput').value.trim();
+if(!id){alert('Enter LIVE ID');return;}
+document.getElementById('liveIdShow').innerText='Connecting...';
+peer=new Peer();
+peer.on('open',async()=>{
+let s=await navigator.mediaDevices.getUserMedia({video:false,audio:true});
+let call=peer.call(id,s);
+call.on('stream',r=>{
+let v=document.getElementById('localVideo');v.srcObject=r;v.classList.remove('hidden');
+document.getElementById('remoteContainer').classList.add('hidden');
+document.getElementById('liveIdShow').innerText='✅ LIVE: '+id;
+});
+});
 }
-function likeLive(){
- likes++;
- document.getElementById("liveLikes").textContent=likes;
- if(document.getElementById("liveLikeCount2")) document.getElementById("liveLikeCount2").textContent="❤️ "+likes+" likes";
- const heart=document.createElement("div");
- heart.innerHTML="❤️"; heart.style.position="absolute"; heart.style.right="20px"; heart.style.bottom="120px"; heart.style.fontSize="30px"; heart.style.animation="floatUp 2s forwards"; heart.style.zIndex="20";
- document.getElementById("livePage").appendChild(heart);
- setTimeout(()=>heart.remove(),2000);
- addLiveMsg("Buyer"+Math.floor(Math.random()*100),"❤️ liked!");
-}
-function loadLiveVideo(){checkIfLive(); const v=document.getElementById("liveVideo"); if(v.srcObject) return; v.src=liveVideos[Math.floor(Math.random()*liveVideos.length)]; v.play().catch(()=>{}); currentLiveProduct=products[Math.floor(Math.random()*products.length)].id}
-function switchLive(){const v=document.getElementById("liveVideo"); if(v.srcObject){ try{v.srcObject.getTracks().forEach(t=>t.stop());}catch(e){} v.srcObject=null;} if(buyerPeer){try{buyerPeer.destroy()}catch(e){}} loadLiveVideoFallback(); addNotif("🔴 Switched live stream")}
-function sendLiveComment(){const txt=document.getElementById("liveInput").value.trim();if(!txt)return;addLiveMsg(user?.name||"Guest",txt);document.getElementById("liveInput").value=""}
-function addLiveMsg(u,t){const box=document.getElementById("liveChat");box.innerHTML+=`<div><span class="font-bold text-yellow-400">${u}:</span> <span class="text-white">${t}</span></div>`;box.scrollTop=box.scrollHeight}
-function simulateLiveChat(){const msgs=[["AmaLover","How much?"],["Kwame","I want!"],["ShopGirl","Nice 🔥"],["User123","Size?"]];setInterval(()=>{if(document.getElementById("livePage").classList.contains("hidden"))return;const m=msgs[Math.floor(Math.random()*msgs.length)];addLiveMsg(m[0],m[1]);document.getElementById("liveViewers").textContent=`${(Math.random()*2+0.8).toFixed(1)}k watching`},4000)}
+function showPage(p){document.querySelectorAll('[id$="Page"]').forEach(e=>e.classList.add('hidden'));let x=document.getElementById(p+'Page');if(x)x.classList.remove('hidden')}
 init();
+
+    
 </script>
 </body>
 </html>
