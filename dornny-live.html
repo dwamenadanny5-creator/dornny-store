@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DORNNY LIVE - No App Needed</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:sans-serif}
+#start{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.btn{background:#ff0050;color:#fff;border:none;padding:16px 32px;border-radius:30px;font-weight:800;font-size:16px;margin:8px}
+input{padding:14px;border-radius:12px;border:1px solid #333;background:#222;color:#fff;width:280px;margin:12px}
+#live{display:none;height:100vh}
+iframe{width:100%;height:100vh;border:none}
+.top{position:absolute;top:0;left:0;right:0;padding:12px;display:flex;justify-content:space-between;z-index:10;background:linear-gradient(#000,transparent)}
+.badge{background:#ff0050;padding:6px 14px;border-radius:20px;font-weight:800}
+</style>
+</head>
+<body>
+<div id="start">
+<h1>🔴 DORNNY LIVE</h1>
+<p style="color:#aaa;margin:10px">No app needed - like TikTok!</p>
+<input id="room" placeholder="Enter LIVE ID (or leave empty to create)">
+<div>
+<button class="btn" onclick="goLive()">🔴 GO LIVE</button>
+<button class="btn" style="background:#333" onclick="watchLive()">👁 WATCH</button>
+</div>
+<p style="color:#666;font-size:12px;margin-top:20px">Seller: Tap GO LIVE<br>Buyer: Enter same ID and tap WATCH</p>
+</div>
+<div id="live">
+<div class="top"><div class="badge">🔴 LIVE</div><button onclick="location.reload()" style="background:rgba(0,0,0,.6);color:#fff;border:none;padding:8px 16px;border-radius:20px">✕ Close</button></div>
+<iframe id="frame" allow="camera;microphone;autoplay;fullscreen;display-capture"></iframe>
+</div>
+<script>
+function goLive(){
+let r=document.getElementById('room').value||'DORNNY-'+Math.random().toString(36).substr(2,5).toUpperCase();
+document.getElementById('start').style.display='none';
+document.getElementById('live').style.display='block';
+document.getElementById('frame').src='https://vdo.ninja/?push='+r+'&webcam&autostart&cleanoutput&audience';
+alert('You are LIVE! Share this ID with buyers: '+r);
+}
+function watchLive(){
+let r=document.getElementById('room').value;
+if(!r)return alert('Enter LIVE ID from seller');
+document.getElementById('start').style.display='none';
+document.getElementById('live').style.display='block';
+document.getElementById('frame').src='https://vdo.ninja/?view='+r+'&cleanoutput&autoplay&codec=vp9';
+}
+</script>
+</body>
+</html>
