@@ -48,10 +48,18 @@ onSnapshot(query(collection(db,"products"), orderBy("created","desc")), (snap)=>
 <button onclick="showPage('cartPage')" class="relative"><i class="fa fa-shopping-cart text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span></button>
 <button onclick="showPage('messagePage')"><i class="fa fa-comment text-xl"></i></button>
 </div>
-  <div id="topSellerDashboard" class="hidden bg-white border-b-4 border-[#ff0050] p-3 sticky top-[60px] z-40 shadow-md">
-<div class="flex justify-between items-center"><span class="text-base font-black">📦 SELLER DASHBOARD TOP</span><div class="flex gap-2"><span class="text-[10px] bg-green-500 text-white px-2 py-1 rounded-full font-bold">● LIVE GLOBAL</span><button onclick="this.closest('#topSellerDashboard').classList.add('hidden')" class="bg-black text-white px-2 py-1 rounded-full text-[10px] font-black">✕ CLOSE</button></div></div>
-<div class="flex gap-2 mt-2"><input id="quickPName" placeholder="Product name" class="flex-1 border border-black p-2 rounded-lg text-sm font-bold"><input id="quickPPrice" type="number" placeholder="GH₵" class="w-20 border border-black p-2 rounded-lg text-sm font-bold"><label class="bg-black text-white px-3 py-2 rounded-lg text-xs font-black">📷<input type="file" id="quickPFile" accept="image/*" onchange="quickPrev()" class="hidden"></label></div>
-<div class="flex gap-2 mt-2 items-center"><img id="quickPPreview" class="w-12 h-12 rounded-lg hidden object-cover border-2 border-[#ff0050]"><button onclick="quickUp()" class="flex-1 bg-[#ff0050] text-white py-2 rounded-lg text-sm font-black">+ ADD - AUTO GLOBAL 🚀</button></div>
+<div id="topSellerDashboard" class="hidden mx-3 mt-3 rounded-[20px] bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#ff0050] p-4 shadow-xl sticky top-[70px] z-40">
+<div class="flex items-center gap-3">
+<div class="flex-1">
+<h2 class="text-white text-[22px] font-black leading-none">SELLER<br>DASHBOARD</h2>
+<p class="text-white/90 text-xs mt-1">Auto Global • Live</p>
+<input id="quickPName" placeholder="Product name..." class="w-full mt-2 px-3 py-2 rounded-full text-sm font-bold outline-none border-0">
+<div class="flex gap-2 mt-2"><input id="quickPPrice" type="number" placeholder="GH₵" class="w-20 px-3 py-2 rounded-full text-sm font-bold outline-none"><label class="bg-white text-black px-3 py-2 rounded-full text-xs font-black">📷<input type="file" id="quickPFile" accept="image/*" onchange="quickPrev()" class="hidden"></label><button onclick="this.closest('#topSellerDashboard').classList.add('hidden')" class="bg-black/30 text-white px-2 py-2 rounded-full text-xs">✕</button></div>
+<button onclick="quickUp()" class="mt-2 bg-white text-black px-5 py-2 rounded-full text-sm font-black">+ Add Now</button>
+</div>
+<div class="w-[140px] h-[120px] bg-white rounded-2xl overflow-hidden flex items-center justify-center relative"><img id="quickPPreview" class="w-full h-full object-cover hidden"><span id="quickPPlaceholder" class="text-4xl">📦</span></div>
+</div>
+<div class="flex justify-center gap-1.5 mt-3"><span class="w-2 h-2 bg-white rounded-full"></span><span class="w-2 h-2 bg-white/40 rounded-full"></span><span class="w-2 h-2 bg-white/40 rounded-full"></span></div>
 </div>
 <script>function quickPrev(){let f=document.getElementById('quickPFile').files[0];let r=new FileReader();r.onload=e=>{let i=document.getElementById('quickPPreview');i.src=e.target.result;i.classList.remove('hidden');i.dataset.b64=e.target.result};r.readAsDataURL(f)}async function quickUp(){let n=document.getElementById('quickPName').value;let p=document.getElementById('quickPPrice').value;let img=document.getElementById('quickPPreview')?.dataset?.b64||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';if(!n||!p)return alert('Enter name & price');let u=JSON.parse(localStorage.getItem('dw_user')||'{}');let d={name:n,price:parseInt(p),cat:'home',imgs:[img],seller:u.name||'Shop',rating:5,created:Date.now()};await window.fb.addDoc(window.fb.collection(window.db,"products"),d);alert('✅ LIVE AT TOP FOR ALL BUYERS!');}function checkTop(){let u=JSON.parse(localStorage.getItem('dw_user')||'null');if(u&&u.role==='seller')document.getElementById('topSellerDashboard').classList.remove('hidden');}setInterval(checkTop,1000);</script>
 <div class="bg-white sticky top-[60px] z-40 p-2 overflow-x-auto no-scrollbar flex gap-2 whitespace-nowrap">
