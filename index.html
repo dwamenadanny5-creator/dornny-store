@@ -103,34 +103,80 @@ function closeChat(){document.getElementById("msgList").classList.remove("hidden
 function sendMsg(){const txt=document.getElementById("chatInput").value.trim();if(!txt||!currentChatSeller)return;messages.push({seller:currentChatSeller.seller,phone:currentChatSeller.phone,product:currentChatSeller.product,text:txt,from:"me",time:Date.now()});localStorage.setItem("dornny_msgs",JSON.stringify(messages));document.getElementById("chatInput").value="";renderChat();renderMsgList();setTimeout(()=>{messages.push({seller:currentChatSeller.seller,phone:currentChatSeller.phone,product:currentChatSeller.product,text:"Thanks! Available now. WhatsApp me for fast reply",from:"seller",time:Date.now()});localStorage.setItem("dornny_msgs",JSON.stringify(messages));renderChat();renderMsgList();addNotif(`💬 New msg from ${currentChatSeller.seller}`)},1500)}
 function renderChat(){if(!currentChatSeller)return;const box=document.getElementById("chatMsgs");box.innerHTML="";messages.filter(m=>m.seller===currentChatSeller.seller).forEach(m=>{box.innerHTML+=`<div class="flex ${m.from==='me'?'justify-end':''}"><div class="${m.from==='me'?'bg-white text-black':'bg-gray-800'} px-3 py-2 rounded-2xl text-sm max-w-[80%]">${m.text}</div></div>`});box.scrollTop=box.scrollHeight}
 function renderMsgList(){document.getElementById("msgBadge").textContent=messages.length;document.getElementById("msgBadge").classList.toggle("hidden",messages.length===0);const list=document.getElementById("msgList");const sellers=[...new Set(messages.map(m=>m.seller))];if(sellers.length===0){list.innerHTML=`<p class="text-gray-500 text-center py-10">No messages yet<br><span class="text-xs">Tap Chat Seller on any product</span></p>`;return}list.innerHTML="";sellers.forEach(s=>{const last=messages.filter(m=>m.seller===s).slice(-1)[0];const info=messages.find(m=>m.seller===s);list.innerHTML+=`<div onclick="openChat('${s}','${info.phone}','${info.product}')" class="bg-gray-900 p-3 rounded-xl flex gap-3"><div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center font-bold">${s[0]}</div><div class="flex-1"><p class="font-bold text-sm">${s}</p><p class="text-xs text-gray-400 truncate">${last.text}</p></div><span class="text-xs text-gray-500">${new Date(last.time).toLocaleTimeString()}</span></div>`})}
-let peer=null;let localStream=null;
+let peer=null;let localStream=null;let dataConns=[];let liveLikes=0;
 async function startSellerLive(){
-let id=document.getElementById('liveRoomInput').value.trim()||'DORNNY-'+Math.floor(Math.random()*9000+1000);
+let id=document.getElementById('liveRoomInput').value.trim();
+if(!id){id='DORNNY-'+Math.floor(1000+Math.random()*9000);document.getElementById('liveRoomInput').value=id;}
 document.getElementById('liveIdShow').innerText='YOUR LIVE ID: '+id;
 try{
 localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
-let v=document.getElementById('localVideo');v.srcObject=localStream;v.classList.remove('hidden');
+let v=document.getElementById('localVideo');
+v.srcObject=localStream;v.classList.remove('hidden');
+v.style.cssText='width:100%!important;height:75vh!important;object-fit:cover!important;display:block;border-radius:12px;';
 document.getElementById('remoteContainer').classList.add('hidden');
 peer=new Peer(id);
-peer.on('open',()=>alert('LIVE! Share ID: '+id));
+peer.on('open',()=>{
+alert('LIVE! Share ID: '+id);
+let n=JSON.parse(localStorage.getItem('dornny_notifs')||'[]');
+n.unshift({text:'🔴 You are LIVE! ID: '+id,time:new Date().toLocaleString()});
+localStorage.setItem('dornny_notifs',JSON.stringify(n.slice(0,20)));
+});
 peer.on('call',c=>c.answer(localStream));
+peer.on('connection',conn=>{
+dataConns.push(conn);
+conn.on('data',d=>{
+if(d.type=='comment'){let e=document.getElementById('liveComments');if(e)e.innerHTML+=`<div style="background:rgba(0,0,0,0.6);padding:6px 10px;border-radius:12px;margin:4px 0;color:white;"><b>Buyer:</b> ${d.text}</div>`}
+if(d.type=='like'){liveLikes++;let l=document.getElementById('likeCount');if(l)l.innerText=liveLikes;}
+});
+});
+showLiveChat();
 }catch(e){alert('Camera error: '+e.message)}
 }
 async function joinSellerLive(){
 let id=document.getElementById('liveRoomInput').value.trim();
 if(!id){alert('Enter LIVE ID');return;}
-document.getElementById('liveIdShow').innerText='Connecting...';
+document.getElementById('liveIdShow').innerText='JOINING: '+id;
 peer=new Peer();
 peer.on('open',async()=>{
 let s=await navigator.mediaDevices.getUserMedia({video:false,audio:true});
 let call=peer.call(id,s);
+let conn=peer.connect(id);
+conn.on('open',()=>{dataConns.push(conn);showLiveChat(true);});
+conn.on('data',d=>{
+if(d.type=='comment'){let e=document.getElementById('liveComments');if(e)e.innerHTML+=`<div style="background:rgba(0,0,0,0.6);padding:6px 10px;border-radius:12px;margin:4px 0;color:white;"><b>Seller:</b> ${d.text}</div>`}
+if(d.type=='like'){liveLikes++;let l=document.getElementById('likeCount');if(l)l.innerText=liveLikes;}
+});
 call.on('stream',r=>{
-let v=document.getElementById('localVideo');v.srcObject=r;v.classList.remove('hidden');
-document.getElementById('remoteContainer').classList.add('hidden');
-document.getElementById('liveIdShow').innerText='✅ LIVE: '+id;
+let v=document.getElementById('localVideo');
+v.srcObject=r;v.classList.remove('hidden');
+v.style.cssText='width:100%!important;height:75vh!important;object-fit:cover!important;display:block;border-radius:12px;';
+document.getElementById('remoteContainer').classList.remove('hidden');
+document.getElementById('liveIdShow').innerText='WATCHING: '+id;
 });
 });
 }
+function showLiveChat(isBuyer=false){
+if(document.getElementById('liveChatBox'))return;
+let p=document.getElementById('localVideo').parentElement;
+p.style.position='relative';
+let chat=document.createElement('div');chat.id='liveChatBox';
+chat.innerHTML=`<div id="liveComments" style="position:absolute;bottom:130px;left:10px;right:10px;max-height:180px;overflow-y:auto;color:white;font-size:14px;"></div><div style="position:absolute;bottom:80px;left:10px;right:70px;display:flex;gap:5px;"><input id="liveCommentInput" placeholder="${isBuyer?'Ask seller...':'Say something...'}" style="flex:1;padding:12px;border-radius:25px;border:none;outline:none;"><button onclick="sendLiveComment()" style="background:#ff0050;color:white;padding:12px 18px;border-radius:25px;border:none;font-weight:bold;">Send</button></div><div style="position:absolute;bottom:80px;right:10px;display:flex;flex-direction:column;align-items:center;gap:5px;"><button onclick="sendLiveLike()" style="font-size:28px;background:rgba(0,0,0,0.5);border-radius:50%;width:55px;height:55px;border:none;">❤️</button><span id="likeCount" style="color:white;font-weight:bold;text-shadow:1px 1px 2px black;">0</span></div>`;
+p.appendChild(chat);
+}
+function sendLiveComment(){
+let i=document.getElementById('liveCommentInput');let txt=i.value.trim();if(!txt)return;
+let c=document.getElementById('liveComments');
+c.innerHTML+=`<div style="background:rgba(255,0,80,0.8);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>You:</b> ${txt}</div>`;
+i.value='';c.scrollTop=c.scrollHeight;
+dataConns.forEach(conn=>conn.send({type:'comment',text:txt}));
+}
+function sendLiveLike(){
+liveLikes++;document.getElementById('likeCount').innerText=liveLikes;
+let c=document.getElementById('liveComments');
+c.innerHTML+=`<div>❤️ Liked!</div>`;
+dataConns.forEach(conn=>conn.send({type:'like',count:liveLikes}));
+}
+
 function showPage(p){document.querySelectorAll('[id$="Page"]').forEach(e=>e.classList.add('hidden'));let x=document.getElementById(p+'Page');if(x)x.classList.remove('hidden')}
 init();
 
