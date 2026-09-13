@@ -30,6 +30,7 @@ body{background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFon
 <header class="sticky top-0 z-40 bg-black bg-opacity-95 backdrop-blur p-3 flex items-center justify-between">
 <div class="flex items-center gap-2"><div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center font-bold">D</div><span class="font-bold text-lg">DORNNY<span class="text-red-500"> LIVE</span></span></div>
 <div class="flex items-center gap-2">
+  <button onclick="showPage('live')" class="w-9 h-9 bg-red-600 rounded-full flex items-center justify-center font-bold text-xs" style="background:#ff0050">LIVE</button>
 <button onclick="showPage('notif')" class="w-9 h-9 bg-gray-800 rounded-full relative"><i class="fa fa-bell"></i><span id="notifBadge" class="badge hidden">0</span></button>
 <button onclick="showPage('messages')" class="w-9 h-9 bg-gray-800 rounded-full relative"><i class="fa fa-comment-dots"></i><span id="msgBadge" class="badge hidden">0</span></button>
 <button onclick="showPage('cart')" class="w-9 h-9 bg-gray-800 rounded-full relative"><i class="fa fa-shopping-bag"></i><span id="cartCount" class="badge hidden">0</span></button>
