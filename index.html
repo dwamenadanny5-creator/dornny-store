@@ -21,17 +21,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 window.db=db; window.fb={collection, addDoc, onSnapshot, query, orderBy};
-// AUTO DISPLAY TOP DASHBOARD GLOBAL
-onSnapshot(query(collection(db,"products"), orderBy("created","desc")), (snap)=>{
+// AUTO DISPLAY TOP DASHBOARD GLOBAL - HIDE ON LIVE
+onSnapshot(query(collection(db, "products")), (snap)=>{
  let cloud=[]; snap.forEach(d=> cloud.push(d.data()));
  if(cloud.length>0 && window.products){
-   window.products = [...cloud];
-   if(window.renderProducts) window.renderProducts(cloud);
+  window.products = [...cloud];
+  if(window.renderProducts) window.renderProducts();
  }
 });
-</script>
+// HIDE DASHBOARD ON LIVE TAB AUTOMATICALLY
+setInterval(()=>{
+ let dash = document.getElementById('topSellerDashboard');
+ let live = document.getElementById('livePage') || document.getElementById('liveView');
+ if(dash && live && !live.classList.contains('hidden')){
+   dash.classList.add('hidden');
+ }
+},500);
+    </script>
 <style>
-* { -webkit-tap-highlight-color: transparent; }
 .page { display:none; min-height:100vh; padding-bottom:90px; }
 .page.active { display:block; }
 .slider { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; }
