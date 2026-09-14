@@ -21,22 +21,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 window.db=db; window.fb={collection, addDoc, onSnapshot, query, orderBy};
-// AUTO DISPLAY TOP DASHBOARD GLOBAL - HIDE ON LIVE
-onSnapshot(query(collection(db, "products")), (snap)=>{
- let cloud=[]; snap.forEach(d=> cloud.push(d.data()));
- if(cloud.length>0 && window.products){
-  window.products = [...cloud];
-  if(window.renderProducts) window.renderProducts();
+// AUTO DISPLAY TOP DASHBOARD - HIDE ON LIVE
+onSnapshot(query(collection(db,"products")),(snap)=>{
+ let c=[]; snap.forEach(d=>c.push(d.data()));
+ if(c.length>0&&window.products){
+  window.products=[...c];
+  if(window.renderProducts)window.renderProducts();
  }
 });
-// HIDE DASHBOARD ON LIVE TAB AUTOMATICALLY
 setInterval(()=>{
- let dash = document.getElementById('topSellerDashboard');
- let live = document.getElementById('livePage') || document.getElementById('liveView');
- if(dash && live && !live.classList.contains('hidden')){
-   dash.classList.add('hidden');
+ let d=document.getElementById('topSellerDashboard');
+ let l=document.getElementById('livePage');
+ if(d&&l&&!l.classList.contains('hidden')){
+  d.classList.add('hidden');
+  d.style.setProperty('display','none','important');
+ }else if(d&&l&&l.classList.contains('hidden')){
+  d.style.removeProperty('display');
  }
-},500);
+},300);
     </script>
 <style>
 .page { display:none; min-height:100vh; padding-bottom:90px; }
