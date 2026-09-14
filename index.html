@@ -285,6 +285,24 @@ function sendLiveLike(){liveLikes++;let lc=document.getElementById('likeCount');
 
 renderProducts(products);checkLogin();getLocation();
 if('Notification' in window) Notification.requestPermission();
+function checkTop(){
+ try{
+  let u=JSON.parse(localStorage.getItem('dwamen_user')||'null');
+  let d=document.getElementById('sellerDashboard')||document.querySelector('[id*="seller" i]');
+  if(!d) return;
+  if(u && u.role==='seller'){
+    d.classList.remove('hidden');
+    d.style.display='block';
+    d.style.position='sticky';
+    d.style.top='0px';
+    d.style.zIndex='50';
+  }else{
+    d.classList.add('hidden');
+  }
+ }catch(e){}
+}
+setInterval(checkTop,1000);
+checkTop();
 </script>
 </body>
 </html>
