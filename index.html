@@ -70,17 +70,7 @@ setInterval(()=>{
 </div>
 <div class="flex justify-center gap-1.5 mt-3"><span class="w-2 h-2 bg-white rounded-full"></span><span class="w-2 h-2 bg-white/40 rounded-full"></span><span class="w-2 h-2 bg-white/40 rounded-full"></span></div>
 </div>
-<script>function quickPrev(){let f=document.getElementById('quickPFile').files[0];let r=new FileReader();r.onload=e=>{let i=document.getElementById('quickPPreview');i.src=e.target.result;i.classList.remove('hidden');i.dataset.b64=e.target.result};r.readAsDataURL(f)}async function quickUp(){let n=document.getElementById('quickPName').value;let p=document.getElementById('quickPPrice').value;let img=document.getElementById('quickPPreview')?.dataset?.b64||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';if(!n||!p)return alert('Enter name & price');let u=JSON.parse(localStorage.getItem('dw_user')||'{}');let d={name:n,price:parseInt(p),cat:'home',imgs:[img],seller:u.name||'Shop',rating:5,created:Date.now()};await window.fb.addDoc(window.fb.collection(window.db,"products"),d);alert('✅ LIVE AT TOP FOR ALL BUYERS!');}}function checkTop(){
- let u=JSON.parse(localStorage.getItem('dw_user')||'null');
- let d=document.getElementById('topSellerDashboard');
- let live=document.getElementById('livePage');
- let isLiveVisible=live&&!live.classList.contains('hidden')&&live.style.display!=='none';
- if(!d) return;
- if(u&&u.role==='seller'&&!isLiveVisible){
-   d.classList.remove('hidden');d.style.display='';
- }else if(isLiveVisible){d.classList.add('hidden');}
-}
-setInterval(checkTop,1000);
+<script>function quickPrev(){let f=document.getElementById('quickPFile').files[0];let r=new FileReader();r.onload=e=>{let i=document.getElementById('quickPPreview');i.src=e.target.result;i.classList.remove('hidden');i.dataset.b64=e.target.result};r.readAsDataURL(f)}async function quickUp(){let n=document.getElementById('quickPName').value;let p=document.getElementById('quickPPrice').value;let img=document.getElementById('quickPPreview')?.dataset?.b64||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';if(!n||!p)return alert('Enter name & price');let u=JSON.parse(localStorage.getItem('dw_user')||'{}');let d={name:n,price:parseInt(p),cat:'home',imgs:[img],seller:u.name||'Shop',rating:5,created:Date.now()};await window.fb.addDoc(window.fb.collection(window.db,"products"),d);alert('✅ LIVE AT TOP FOR ALL BUYERS!');}} function checkTop(){ return; }
 let sheinDot=0;
 setInterval(()=>{
  let dots=document.querySelectorAll('.flex.justify-center.gap-1\\.5 span');
@@ -90,6 +80,7 @@ setInterval(()=>{
  dots[sheinDot].className='w-2 h-2 bg-white rounded-full';
 },2500);
 </script>
+
 <div class="bg-white sticky top-[60px] z-40 p-2 overflow-x-auto no-scrollbar flex gap-2 whitespace-nowrap">
 <button onclick="filterCat('All')" class="cat-btn active px-4 py-1.5 rounded-full bg-gray-100 text-sm">All</button>
 <button onclick="filterCat('men')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Men</button>
