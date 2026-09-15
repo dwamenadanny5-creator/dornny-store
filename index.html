@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dornny Store - Shein Style</title>
+<title>Dornny Store - Live Camera Fixed</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>.scrollbar-hide::-webkit-scrollbar{display:none}.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}</style>
 </head>
@@ -12,14 +12,14 @@
 <h1 class="font-black text-xl">DORNNY<span class="text-pink-600">.STORE</span></h1>
 <div class="flex gap-2">
 <button onclick="showLogin()" id="loginBtn" class="bg-black text-white text-xs px-3 py-1.5 rounded-full">Login</button>
-<button onclick="goLive()" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full animate-pulse">● LIVE</button>
+<button onclick="showPage('livePage')" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full animate-pulse">● LIVE</button>
 </div>
 </div>
 <div id="homePage" class="page active p-2">
 <div id="buyerSlider" class="relative overflow-hidden rounded-[16px] h-[130px] mb-3">
 <div id="sliderTrack" style="display:flex; transition:transform 0.6s ease; height:100%;">
 <div style="min-width:100%; background:linear-gradient(90deg,#ff0055,#ff9900); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">🔥 TRENDING TODAY</h2><p class="text-xs">Up to 50% OFF</p></div><div class="ml-auto text-5xl">🛍️</div></div>
-<div style="min-width:100%; background:linear-gradient(90deg,#8a2be2,#00d4ff); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">NEW DROPS</h2><p class="text-xs">Men • Women • Kids • Shoes</p></div><div class="ml-auto text-5xl">✨</div></div>
+<div style="min-width:100%; background:linear-gradient(90deg,#8a2be2,#00d4ff); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">NEW DROPS</h2><p class="text-xs">Men • Women • Kids</p></div><div class="ml-auto text-5xl">✨</div></div>
 <div style="min-width:100%; background:linear-gradient(90deg,#00c851,#007E33); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">LIVE SELLING NOW</h2><p class="text-xs">Join & Get Discount</p></div><div class="ml-auto text-5xl">📹</div></div>
 </div>
 </div>
@@ -53,7 +53,20 @@
 <div id="productGrid" class="grid grid-cols-2 gap-2 mt-2"></div>
 </div>
 <div id="trendPage" class="page hidden p-4"><h2 class="font-black">🔥 Trending</h2><div id="trendGrid" class="grid grid-cols-2 gap-2 mt-3"></div></div>
-<div id="livePage" class="page hidden p-4"><h2 class="font-black">📹 Live Sellers</h2><div id="liveList" class="mt-3"></div><button onclick="goLive()" class="w-full mt-4 bg-red-500 text-white py-3 rounded-full font-bold">GO LIVE NOW</button></div>
+<div id="livePage" class="page hidden p-0 bg-black min-h-screen">
+<div class="p-3 bg-white flex justify-between items-center"><h2 class="font-black">📹 Live Sellers</h2><span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">● LIVE MODE</span></div>
+<div id="myLiveBox" style="display:none; background:black; position:relative;">
+<video id="liveVideo" autoplay muted playsinline style="width:100%; height:420px; object-fit:cover; background:#111;"></video>
+<div style="position:absolute; top:12px; left:12px; background:red; color:white; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:bold;">● LIVE - You</div>
+<button onclick="stopLive()" style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.6); color:white; border:none; width:32px; height:32px; border-radius:50%;">✕</button>
+<div style="position:absolute; bottom:12px; left:10px; right:10px; display:flex; gap:8px;"><input id="liveTitle" placeholder="What are you selling live?" style="flex:1; padding:10px; border-radius:20px; border:none; font-size:12px;"><button style="background:white; padding:8px 14px; border-radius:20px; font-size:12px;">💬</button></div>
+</div>
+<div class="p-4 bg-gray-50 min-h-[300px]">
+<button onclick="goLive()" id="goLiveBtn" class="w-full bg-red-500 text-white py-3.5 rounded-full font-bold shadow-lg">📷 GO LIVE NOW - Turn On Camera</button>
+<p class="text-[10px] text-gray-400 text-center mt-2">Allow camera permission when asked</p>
+<div id="liveList" class="mt-4"></div>
+</div>
+</div>
 <div id="categoryPage" class="page hidden p-4"><h2 class="font-black">📦 Categories</h2><div class="grid grid-cols-3 gap-3 mt-3" id="catGrid"></div></div>
 <div id="cartPage" class="page hidden p-4"><h2 class="font-black">🛒 Cart</h2><div id="cartList" class="mt-3"></div><div class="mt-4 bg-black text-white p-4 rounded-2xl"><div class="flex justify-between"><span>Total Pay:</span><span id="totalPay" class="font-black">GH₵0</span></div><button onclick="checkout()" class="w-full mt-3 bg-pink-600 py-3 rounded-full font-bold">CHECKOUT</button></div></div>
 <div id="mePage" class="page hidden p-4"><h2 class="font-black">👤 Me</h2><div id="meInfo" class="mt-3 bg-white p-4 rounded-xl"></div><button onclick="logout()" class="mt-4 text-red-500 text-sm">Logout</button></div>
@@ -65,7 +78,7 @@
 <button onclick="showPage('cartPage')" class="flex flex-col items-center text-[10px] relative"><span>🛒</span>Cart <span id="cartCount" class="absolute -top-1 -right-2 bg-pink-600 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
 <button onclick="showPage('mePage')" class="flex flex-col items-center text-[10px]"><span>👤</span>Me</button>
 </div>
-<div id="loginModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:60; align-items:center; justify-content:center; display:none;"><div style="background:white; width:90%; max-width:350px; border-radius:20px; padding:20px; margin:auto; margin-top:20%;"><h2 class="font-black text-lg">Login</h2><input id="loginName" placeholder="Your Name" class="w-full mt-3 p-3 border rounded-xl text-sm"><input id="loginEmail" placeholder="Email" class="w-full mt-2 p-3 border rounded-xl text-sm"><input id="loginWhatsapp" placeholder="WhatsApp 233..." class="w-full mt-2 p-3 border rounded-xl text-sm"><select id="loginRole" class="w-full mt-2 p-3 border rounded-xl text-sm"><option value="buyer">I am Buyer</option><option value="seller">I am Seller</option></select><button onclick="doLogin()" class="w-full mt-4 bg-black text-white py-3 rounded-full font-bold">Continue</button><button onclick="document.getElementById('loginModal').style.display='none'" class="w-full mt-2 text-sm text-gray-500">Cancel</button></div></div>
+<div id="loginModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:60;"><div style="background:white; width:90%; max-width:350px; border-radius:20px; padding:20px; margin:auto; margin-top:20%;"><h2 class="font-black text-lg">Login</h2><input id="loginName" placeholder="Your Name" class="w-full mt-3 p-3 border rounded-xl text-sm"><input id="loginEmail" placeholder="Email" class="w-full mt-2 p-3 border rounded-xl text-sm"><input id="loginWhatsapp" placeholder="WhatsApp 233..." class="w-full mt-2 p-3 border rounded-xl text-sm"><select id="loginRole" class="w-full mt-2 p-3 border rounded-xl text-sm"><option value="buyer">I am Buyer</option><option value="seller">I am Seller</option></select><button onclick="doLogin()" class="w-full mt-4 bg-black text-white py-3 rounded-full font-bold">Continue</button><button onclick="document.getElementById('loginModal').style.display='none'" class="w-full mt-2 text-sm text-gray-500">Cancel</button></div></div>
 <script>
 let products = JSON.parse(localStorage.getItem('dwamen_products')||'[]');
 if(products.length===0){products=[{id:1,name:'Men Classic Shirt',price:120,cat:'Men',img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400',imgs:['https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400'],seller:'Kwame',sellerId:'kwame@test.com',whatsapp:'233200000001',likes:12,rating:4.8,comments:[{text:'Nice quality!',user:'Ama'}],followers:[]},{id:2,name:'Women Dress Floral',price:180,cat:'Women',img:'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400',imgs:['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400'],seller:'Ama',sellerId:'ama@test.com',whatsapp:'233200000002',likes:34,rating:4.9,comments:[],followers:[]}];localStorage.setItem('dwamen_products',JSON.stringify(products));}
@@ -94,7 +107,36 @@ function renderMe(){let u=JSON.parse(localStorage.getItem('dwamen_user')||'null'
 function showLogin(){document.getElementById('loginModal').style.display='block';}
 function doLogin(){let name=document.getElementById('loginName').value.trim();let email=document.getElementById('loginEmail').value.trim();let wa=document.getElementById('loginWhatsapp').value.trim();let role=document.getElementById('loginRole').value;if(!name||!email)return alert('Add name & email');let u={name,email,whatsapp:wa||'233000000000',role};localStorage.setItem('dwamen_user',JSON.stringify(u));document.getElementById('loginModal').style.display='none';document.getElementById('loginBtn').textContent=name.split(' ')[0];checkTop();renderMe();alert('Welcome '+name+' as '+role);}
 function logout(){localStorage.removeItem('dwamen_user');document.getElementById('loginBtn').textContent='Login';renderMe();checkTop();}
-function goLive(){let u=JSON.parse(localStorage.getItem('dwamen_user')||'null');if(!u||u.role!=='seller')return alert('Login as Seller to go Live!');if(Notification&&Notification.permission!=='granted')Notification.requestPermission();alert('🔴 You are LIVE! Followers will be notified!');showPage('livePage');}
+let liveStream=null;
+async function goLive(){
+let u=JSON.parse(localStorage.getItem('dwamen_user')||'null');
+if(!u||u.role!=='seller') return alert('Login as Seller to go Live!');
+let box=document.getElementById('myLiveBox');
+let video=document.getElementById('liveVideo');
+let btn=document.getElementById('goLiveBtn');
+try{
+box.style.display='block';
+let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:true});
+liveStream=stream;
+video.srcObject=stream;
+btn.textContent='🔴 You are LIVE - Camera ON';
+btn.style.background='black';
+if(Notification&&Notification.permission==='granted'){new Notification('You are LIVE!',{body:'Buyers will see you'});}else if(Notification){Notification.requestPermission();}
+showPage('livePage');
+}catch(err){
+alert('Camera failed: '+err.message+'\nFix: Use https:// and tap Allow camera. On Chrome: Settings > Site settings > Camera > Allow');
+if(box) box.style.display='none';
+}
+}
+function stopLive(){
+let box=document.getElementById('myLiveBox');
+let video=document.getElementById('liveVideo');
+let btn=document.getElementById('goLiveBtn');
+if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;}
+if(video) video.srcObject=null;
+if(box) box.style.display='none';
+if(btn){btn.textContent='📷 GO LIVE NOW - Turn On Camera'; btn.style.background='#ef4444';}
+}
 function checkTop(){let d=document.getElementById('sellerDashboard');let slider=document.getElementById('buyerSlider');let u={};try{u=JSON.parse(localStorage.getItem('dwamen_user')||'{}')}catch(e){}let isSeller=(u.role||'').toLowerCase()==='seller';let home=document.getElementById('homePage');let isHome=home&&!home.classList.contains('hidden');if(slider)slider.style.display=isHome?'block':'none';if(!d)return;if(!isSeller||!isHome){d.style.display='none';return;}d.style.display=curFilter==='All'?'block':'none';}
 let slideIdx=0;setInterval(()=>{let track=document.getElementById('sliderTrack');let home=document.getElementById('homePage');if(!home||home.classList.contains('hidden')||!track)return;slideIdx=(slideIdx+1)%3;track.style.transform=`translateX(-${slideIdx*100}%)`;},3500);
 renderProducts('All');updateCartTotal();renderMe();checkTop();setInterval(checkTop,1000);
