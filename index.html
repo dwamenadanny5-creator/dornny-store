@@ -3,404 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dwamena - Shop Like Temu</title>
+<title>Dornny Store - Shein Style</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
-  authDomain: "dornnysmarket.firebaseapp.com",
-  projectId: "dornnysmarket",
-  storageBucket: "dornnysmarket.firebasestorage.app",
-  messagingSenderId: "726307073658",
-  appId: "1:726307073658:web:24c52654e92de69cfa95c3"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-window.db=db; window.fb={collection, addDoc, onSnapshot, query, orderBy};
- // === SELLER UPLOAD + TOP BANNER FOR BUYER ===
-window.uploadProduct = async () => {
-  const file = document.getElementById('prodImage')?.files[0];
-  const name = document.getElementById('prodName')?.value;
-  const price = document.getElementById('prodPrice')?.value;
-  const cat = document.getElementById('prodCat')?.value || 'Men';
-  if(!file ||!name ||!price){ alert('Select image from gallery, name, price!'); return; }
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    try{
-      await window.fb.addDoc(window.fb.collection(window.db, "products"), {
-        image: e.target.result,
-        name: name,
-        price: parseFloat(price),
-        cat: cat,
-        seller: JSON.parse(localStorage.getItem('dwamen_user')||'{}').username || 'Danny',
-        createdAt: Date.now()
-      });
-      alert('✅ LIVE! Buyer will see it at TOP!');
-      document.getElementById('prodName').value=''; document.getElementById('prodPrice').value='';
-      document.getElementById('prodImage').value='';
-    }catch(err){ alert('Error: '+err.message); }
-  };
-  reader.readAsDataURL(file);
-};
-
-setInterval(()=>{
-  let d = document.getElementById('sellerDashboard');
-  if(!d) return;
-  let u = {};
-  try{ u = JSON.parse(localStorage.getItem('dwamen_user')||'{}'); }catch(e){}
-  let isSeller = (u.role||'').toLowerCase()==='seller';
-  d.style.display = isSeller? 'block' : 'none';
-  d.style.position = 'sticky';
-  d.style.top = '0px';
-  d.style.zIndex = '9999';
-},1000);
-    </script>
-<style>
-.page { display:none; min-height:100vh; padding-bottom:90px; }
-.page.active { display:block; }
-.slider { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; }
-.slider::-webkit-scrollbar { display:none; }
-.slider img { scroll-snap-align:center; min-width:100%; height:320px; object-fit:cover; }
-.cat-btn.active { background:#ff0050; color:white; }
-.no-scrollbar::-webkit-scrollbar{ display:none; }
-</style>
+<style>.scrollbar-hide::-webkit-scrollbar{display:none}.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}</style>
 </head>
-<body class="bg-gray-50">
-
-<div class="sticky top-0 z-50 bg-white p-3 flex gap-2 items-center shadow">
-<input id="searchInput" oninput="filterProducts()" placeholder="Search products..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 outline-none">
-<button onclick="showPage('cartPage')" class="relative"><i class="fa fa-shopping-cart text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span></button>
-<button onclick="showPage('messagePage')"><i class="fa fa-comment text-xl"></i></button>
+<body class="bg-gray-50 pb-[70px]">
+<div class="bg-white sticky top-0 z-30 p-3 flex justify-between items-center shadow-sm">
+<h1 class="font-black text-xl">DORNNY<span class="text-pink-600">.STORE</span></h1>
+<div class="flex gap-2">
+<button onclick="showLogin()" id="loginBtn" class="bg-black text-white text-xs px-3 py-1.5 rounded-full">Login</button>
+<button onclick="goLive()" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full animate-pulse">● LIVE</button>
 </div>
-<div id="topSellerDashboard" class="mx-3 mt-3 rounded-[20px] bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#ff0050] p-4 shadow-xl sticky top-[70px] z-40">
-<div class="flex items-center gap-3">
-<div class="flex-1">
-<h2 class="text-white text-[22px] font-black leading-none">SELLER<br>DASHBOARD</h2>
-<p class="text-white/90 text-xs mt-1">Auto Global • Live</p>
-<input id="quickPName" placeholder="Product name..." class="w-full mt-2 px-3 py-2 rounded-full text-sm font-bold outline-none border-0">
-<div class="flex gap-2 mt-2"><input id="quickPPrice" type="number" placeholder="GH₵" class="w-20 px-3 py-2 rounded-full text-sm font-bold outline-none"><label class="bg-white text-black px-3 py-2 rounded-full text-xs font-black">📷<input type="file" id="quickPFile" accept="image/*" onchange="quickPrev()" class="hidden"></label><button onclick="this.closest('#topSellerDashboard').classList.add('hidden')" class="bg-black/30 text-white px-2 py-2 rounded-full text-xs">✕</button></div>
-<button onclick="quickUp()" class="mt-2 bg-white text-black px-5 py-2 rounded-full text-sm font-black">+ Add Now</button>
 </div>
-<div class="w-[140px] h-[120px] bg-white rounded-2xl overflow-hidden flex items-center justify-center relative"><img id="quickPPreview" class="w-full h-full object-cover hidden"><span id="quickPPlaceholder" class="text-4xl">📦</span></div>
-</div>
-<div class="flex justify-center gap-1.5 mt-3"><span class="w-2 h-2 bg-white rounded-full"></span><span class="w-2 h-2 bg-white/40 rounded-full"></span><span class="w-2 h-2 bg-white/40 rounded-full"></span></div>
-</div>
-<script>function quickPrev(){let f=document.getElementById('quickPFile').files[0];let r=new FileReader();r.onload=e=>{let i=document.getElementById('quickPPreview');i.src=e.target.result;i.classList.remove('hidden');i.dataset.b64=e.target.result};r.readAsDataURL(f)}async function quickUp(){let n=document.getElementById('quickPName').value;let p=document.getElementById('quickPPrice').value;let img=document.getElementById('quickPPreview')?.dataset?.b64||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';if(!n||!p)return alert('Enter name & price');let u=JSON.parse(localStorage.getItem('dw_user')||'{}');let d={name:n,price:parseInt(p),cat:'home',imgs:[img],seller:u.name||'Shop',rating:5,created:Date.now()};await window.fb.addDoc(window.fb.collection(window.db,"products"),d);alert('✅ LIVE AT TOP FOR ALL BUYERS!');}}  
-let sheinDot=0;
-setInterval(()=>{
- let dots=document.querySelectorAll('.flex.justify-center.gap-1\\.5 span');
- if(!dots.length) return;
- dots.forEach(x=>x.className='w-2 h-2 bg-white/40 rounded-full');
- sheinDot=(sheinDot+1)%dots.length;
- dots[sheinDot].className='w-2 h-2 bg-white rounded-full';
-},2500);
-</script>
-
-<div class="bg-white sticky top-[60px] z-40 p-2 overflow-x-auto no-scrollbar flex gap-2 whitespace-nowrap">
-<button onclick="filterCat('All')" class="cat-btn active px-4 py-1.5 rounded-full bg-gray-100 text-sm">All</button>
-<button onclick="filterCat('men')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Men</button>
-<button onclick="filterCat('women')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Women</button>
-<button onclick="filterCat('kids')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Kids</button>
-<button onclick="filterCat('pets')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Pets</button>
-<button onclick="filterCat('jewelry')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Jewelry & Accs</button>
-<button onclick="filterCat('cars')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Cars</button>
-<button onclick="filterCat('home')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Home Use</button>
-<button onclick="filterCat('electronics')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Electronics</button>
-<button onclick="filterCat('shoes')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Shoes</button>
-<button onclick="filterCat('office')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Office</button>
-<button onclick="filterCat('furnitures')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Furnitures</button>
-<button onclick="filterCat('toys')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Toys</button>
-<button onclick="filterCat('food')" class="cat-btn px-4 py-1.5 rounded-full bg-gray-100 text-sm">Food</button>
-</div>
-
 <div id="homePage" class="page active p-2">
-<div id="sellerDashboard" style="display:none;background:linear-gradient(90deg,#ff0055,#8a2be2);padding:8px 10px;margin:6px;border-radius:20px;">
-  <div style="display:flex;align-items:center;gap:8px;">
-    <div style="flex:1;color:white;font-weight:bold;font-size:13px;">🏪 Seller Upload</div>
-    <button onclick="document.getElementById('sellerUploadBox').style.display=document.getElementById('sellerUploadBox').style.display=='none'?'block':'none'" style="background:white;border:none;border-radius:15px;padding:4px 10px;font-size:11px;font-weight:bold;">▼</button>
-    <button onclick="this.parentElement.parentElement.style.display='none'" style="background:rgba(0,0,0,0.2);color:white;border:none;border-radius:50%;width:22px;height:22px;">✕</button>
-  </div>
-  <div id="sellerUploadBox" style="display:none;background:white;border-radius:12px;padding:8px;margin-top:8px;">
-    <input type="file" id="prodImage" accept="image/*" style="width:100%;font-size:11px;margin-bottom:5px;">
-    <div style="display:flex;gap:5px;">
-      <input type="text" id="prodName" placeholder="Name" style="flex:1;padding:6px;border:1px solid #ddd;border-radius:8px;font-size:12px;">
-      <input type="number" id="prodPrice" placeholder="GH₵" style="width:70px;padding:6px;border:1px solid #ddd;border-radius:8px;font-size:12px;">
-      <select id="prodCat" style="padding:6px;border-radius:8px;font-size:11px;"><option>Men</option><option>Women</option><option>Kids</option><option>Pets</option><option>Jewelry</option></select>
-    </div>
-    <button onclick="uploadProduct()" style="width:100%;margin-top:6px;background:#ff0055;color:white;padding:7px;border:none;border-radius:15px;font-weight:bold;font-size:12px;">+ Add Now - Show at Top</button>
-  </div>
-</div>
-<div id="productGrid" class="grid grid-cols
-  <div id="homePage" class="page active p-2">
-<div id="productGrid" class="grid grid-cols-2 gap-2"></div>
-</div>
-
-<div id="detailPage" class="page bg-white">
-<button onclick="showPage('homePage')" class="p-3"><i class="fa fa-arrow-left"></i> Back</button>
-<div id="detailSlider" class="slider"></div>
-<div id="detailInfo" class="p-4"></div>
-</div>
-
-<div id="livePage" class="page bg-black">
-<div class="relative w-full">
-<video id="localVideo" autoplay muted playsinline style="width:100%;height:60vh;object-fit:cover;background:#000;border-radius:0 0 20px 20px;"></video>
-<div class="p-3 flex gap-2">
-<button onclick="goLive()" class="flex-1 bg-red-600 text-white py-3 rounded-full font-bold"><i class="fa fa-video"></i> GO LIVE</button>
-<button onclick="watchLive()" class="flex-1 bg-white text-black py-3 rounded-full font-bold"><i class="fa fa-eye"></i> WATCH</button>
-<input id="liveRoomInput" placeholder="Enter Live ID to watch" class="flex-1 bg-white rounded-full px-3 py-2 text-sm hidden">
-</div>
-<div id="liveSellerInfo" class="p-3 text-white flex items-center justify-between">
-<div class="flex items-center gap-2">
-<img src="https://i.pravatar.cc/40" class="rounded-full"><div><p class="font-bold text-sm">Seller Official</p><p class="text-xs text-gray-300"><i class="fa fa-location-dot"></i> <span id="liveLoc">Accra, GH</span></p></div>
-</div>
-<button onclick="followSeller()" id="followBtn" class="bg-[#ff0050] px-4 py-1 rounded-full text-sm">+ Follow</button>
+<div id="buyerSlider" class="relative overflow-hidden rounded-[16px] h-[130px] mb-3">
+<div id="sliderTrack" style="display:flex; transition:transform 0.6s ease; height:100%;">
+<div style="min-width:100%; background:linear-gradient(90deg,#ff0055,#ff9900); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">🔥 TRENDING TODAY</h2><p class="text-xs">Up to 50% OFF</p></div><div class="ml-auto text-5xl">🛍️</div></div>
+<div style="min-width:100%; background:linear-gradient(90deg,#8a2be2,#00d4ff); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">NEW DROPS</h2><p class="text-xs">Men • Women • Kids • Shoes</p></div><div class="ml-auto text-5xl">✨</div></div>
+<div style="min-width:100%; background:linear-gradient(90deg,#00c851,#007E33); display:flex; align-items:center; padding:16px; color:white;"><div><h2 class="font-black text-[20px]">LIVE SELLING NOW</h2><p class="text-xs">Join & Get Discount</p></div><div class="ml-auto text-5xl">📹</div></div>
 </div>
 </div>
+<div id="sellerDashboard" style="display:none; margin-bottom:10px;">
+<div style="background:#111; border-radius:30px; padding:8px 12px; display:flex; align-items:center; justify-content:space-between;">
+<div style="display:flex; align-items:center; gap:8px;"><span style="background:linear-gradient(90deg,#ff0055,#8a2be2); width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white;">🏪</span><div><div style="color:white; font-weight:800; font-size:12px;">SELLER CENTER</div><div style="color:#00ff88; font-size:9px;">● Live Upload</div></div></div>
+<div style="display:flex; gap:6px;"><button onclick="document.getElementById('sellerUploadBox').style.display=document.getElementById('sellerUploadBox').style.display==='none'?'block':'none'" style="background:white; color:black; border:none; border-radius:20px; padding:6px 14px; font-weight:800; font-size:11px;">+ NEW</button><button onclick="document.getElementById('sellerDashboard').style.display='none'" style="background:#333; color:white; border:none; width:26px; height:26px; border-radius:50%;">✕</button></div>
 </div>
-
-<div id="trendPage" class="page p-3">
-<h2 class="font-bold text-lg mb-2">🔥 Trending Now</h2>
-<div id="trendGrid" class="grid grid-cols-2 gap-2"></div>
-</div>
-
-<div id="cartPage" class="page p-3">
-<h2 class="font-bold text-lg">My Cart</h2>
-<div id="cartItems"></div>
-<div class="mt-4 p-3 bg-white rounded-xl">
-<p>Location: <span id="userLocation">Detecting...</span> <button onclick="getLocation()" class="text-blue-500 text-sm">Allow Location</button></p>
-<button onclick="checkout()" class="w-full bg-[#ff0050] text-white py-3 rounded-full mt-3 font-bold">Checkout & Pay</button>
-<button onclick="requestRefund()" class="w-full border py-2 rounded-full mt-2 text-sm">Request Refund</button>
-<button onclick="reportIssue()" class="w-full border py-2 rounded-full mt-2 text-sm">Report Issue</button>
+<div id="sellerUploadBox" style="display:none; background:white; border-radius:16px; padding:12px; margin-top:8px; border:1px solid #eee;">
+<div style="display:flex; gap:8px; margin-bottom:8px;"><label style="flex:1; background:#f5f5f5; border-radius:10px; padding:10px; text-align:center; border:1px dashed #ccc; font-size:11px;">📷 Add Photo<input type="file" id="prodImage" accept="image/*" multiple style="display:none;"></label><select id="prodCat" style="padding:10px; border-radius:10px; border:1px solid #ddd; font-size:12px; background:#f5f5f5;"><option>Men</option><option>Women</option><option>Kids</option><option>Toys</option><option>Sport</option><option>Cars</option><option>Food</option><option>Home Used</option><option>Jewelry</option><option>Home Deco</option><option>Phone</option><option>Shoes</option></select></div>
+<input type="text" id="prodName" placeholder="Product name" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:10px; font-size:13px; margin-bottom:8px;">
+<div style="display:flex; gap:8px;"><input type="number" id="prodPrice" placeholder="Price GH₵" style="flex:1; padding:10px; border:1px solid #ddd; border-radius:10px;"><button onclick="uploadProduct()" style="flex:1; background:linear-gradient(90deg,#ff0055,#8a2be2); color:white; border:none; border-radius:10px; font-weight:800;">🚀 PUBLISH</button></div>
+<input type="text" id="prodWhatsapp" placeholder="Your WhatsApp 233..." style="width:100%; padding:8px; border:1px solid #eee; border-radius:10px; font-size:11px; margin-top:8px;">
 </div>
 </div>
-
-<div id="messagePage" class="page p-3">
-<h2 class="font-bold text-lg">Messages</h2>
-<div id="msgList" class="mt-3 space-y-2"></div>
-<div class="fixed bottom-[85px] left-2 right-2 flex gap-2">
-<input id="msgInput" placeholder="Message seller..." class="flex-1 bg-white rounded-full px-4 py-3 border">
-<button onclick="sendMsg()" class="bg-[#ff0050] text-white px-5 rounded-full">Send</button>
+<div class="bg-white sticky top-[56px] z-20 py-2 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+<button onclick="filterCat('All')" class="catBtn bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold">All</button>
+<button onclick="filterCat('Men')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Men</button>
+<button onclick="filterCat('Women')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Women</button>
+<button onclick="filterCat('Kids')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Kids</button>
+<button onclick="filterCat('Toys')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Toys</button>
+<button onclick="filterCat('Sport')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Sport</button>
+<button onclick="filterCat('Cars')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Cars</button>
+<button onclick="filterCat('Food')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Food</button>
+<button onclick="filterCat('Home Used')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Home Used</button>
+<button onclick="filterCat('Jewelry')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Jewelry</button>
+<button onclick="filterCat('Home Deco')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Home Deco</button>
+<button onclick="filterCat('Phone')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Phone</button>
+<button onclick="filterCat('Shoes')" class="catBtn bg-gray-100 px-4 py-1.5 rounded-full text-xs">Shoes</button>
 </div>
+<div id="productGrid" class="grid grid-cols-2 gap-2 mt-2"></div>
 </div>
-
-<div id="mePage" class="page p-4">
-<div id="loginBox" class="bg-white p-5 rounded-2xl">
-<h2 class="font-bold text-xl mb-3">Login / Register</h2>
-<input id="userName" placeholder="Your Name" class="w-full border p-3 rounded-xl mb-2">
-<select id="userRole" class="w-full border p-3 rounded-xl mb-2"><option value="buyer">I am Buyer</option><option value="seller">I am Seller</option></select>
-<input id="userPhone" placeholder="Phone number for notifications" class="w-full border p-3 rounded-xl mb-3">
-<button onclick="login()" class="w-full bg-black text-white py-3 rounded-full font-bold">Login & Enable Notifications</button>
+<div id="trendPage" class="page hidden p-4"><h2 class="font-black">🔥 Trending</h2><div id="trendGrid" class="grid grid-cols-2 gap-2 mt-3"></div></div>
+<div id="livePage" class="page hidden p-4"><h2 class="font-black">📹 Live Sellers</h2><div id="liveList" class="mt-3"></div><button onclick="goLive()" class="w-full mt-4 bg-red-500 text-white py-3 rounded-full font-bold">GO LIVE NOW</button></div>
+<div id="categoryPage" class="page hidden p-4"><h2 class="font-black">📦 Categories</h2><div class="grid grid-cols-3 gap-3 mt-3" id="catGrid"></div></div>
+<div id="cartPage" class="page hidden p-4"><h2 class="font-black">🛒 Cart</h2><div id="cartList" class="mt-3"></div><div class="mt-4 bg-black text-white p-4 rounded-2xl"><div class="flex justify-between"><span>Total Pay:</span><span id="totalPay" class="font-black">GH₵0</span></div><button onclick="checkout()" class="w-full mt-3 bg-pink-600 py-3 rounded-full font-bold">CHECKOUT</button></div></div>
+<div id="mePage" class="page hidden p-4"><h2 class="font-black">👤 Me</h2><div id="meInfo" class="mt-3 bg-white p-4 rounded-xl"></div><button onclick="logout()" class="mt-4 text-red-500 text-sm">Logout</button></div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-30">
+<button onclick="showPage('homePage')" class="flex flex-col items-center text-[10px]"><span>🏠</span>Home</button>
+<button onclick="showPage('trendPage')" class="flex flex-col items-center text-[10px]"><span>🔥</span>Trend</button>
+<button onclick="showPage('livePage')" class="flex flex-col items-center text-[10px]"><span style="color:red;">●</span>Live</button>
+<button onclick="showPage('categoryPage')" class="flex flex-col items-center text-[10px]"><span>📦</span>Category</button>
+<button onclick="showPage('cartPage')" class="flex flex-col items-center text-[10px] relative"><span>🛒</span>Cart <span id="cartCount" class="absolute -top-1 -right-2 bg-pink-600 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+<button onclick="showPage('mePage')" class="flex flex-col items-center text-[10px]"><span>👤</span>Me</button>
 </div>
-<div id="profileBox" class="hidden bg-white p-5 rounded-2xl">
-<p class="font-bold text-lg" id="profileName"></p><p id="profileRole" class="text-sm text-gray-500"></p>
-<p class="mt-2">Following: <span id="followCount">0</span> | Likes: <span id="totalLikes">0</span></p>
-<button onclick="logout()" class="mt-4 border w-full py-2 rounded-full">Logout</button>
-<button onclick="Notification.requestPermission()" class="mt-2 w-full bg-blue-500 text-white py-2 rounded-full text-sm">Enable Live Notifications 🔔</button>
-</div>
-
-<!-- SELLER DASHBOARD - AUTO SHOWS WHEN SELLER LOGINS -->
-<div id="sellerDashboard" class="hidden mt-4 bg-white p-4 rounded-2xl border-2 border-dashed border-[#ff0050]">
-<h3 class="font-bold text-lg">📦 Seller Dashboard - Upload Goods</h3>
-<p class="text-xs text-gray-500 mb-3">Your products show AUTOMATICALLY on Home dashboard</p>
-<input id="pName" placeholder="Product Name (e.g. iPhone 15)" class="w-full border p-2 rounded-xl mb-2">
-<input id="pPrice" type="number" placeholder="Price GH₵" class="w-full border p-2 rounded-xl mb-2">
-<select id="pCat" class="w-full border p-2 rounded-xl mb-2"><option value="men">Men</option><option value="women">Women</option><option value="kids">Kids</option><option value="pets">Pets</option><option value="jewelry">Jewelry & Accs</option><option value="cars">Cars</option><option value="home">Home Use</option><option value="electronics">Electronics</option><option value="shoes">Shoes</option><option value="office">Office</option><option value="furnitures">Furnitures</option><option value="toys">Toys</option><option value="food">Food</option></select>
-<input id="pImg1" placeholder="Image Link 1 (optional)" class="w-full border p-2 rounded-xl mb-2 text-sm">
-<input id="pImg2" placeholder="Image Link 2 (optional)" class="w-full border p-2 rounded-xl mb-2 text-sm">
-<div class="flex gap-2 items-center"><input type="file" id="pFile" accept="image/*" onchange="previewFile()" class="flex-1 text-sm"><img id="pPreview" class="w-16 h-16 rounded object-cover hidden"></div>
-<button onclick="uploadProduct()" class="w-full bg-[#ff0050] text-white py-3 rounded-full font-bold mt-3">+ Upload Product - Show on Dashboard Instantly</button>
-<div id="myProducts" class="mt-3"></div>
-</div>
-
-</div>
-
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-50">
-<button onclick="showPage('homePage')" class="flex flex-col items-center text-xs"><i class="fa fa-home text-lg"></i>Home</button>
-<button onclick="showPage('livePage')" class="flex flex-col items-center text-xs"><i class="fa fa-video text-lg text-red-500"></i>Live</button>
-<button onclick="showPage('trendPage')" class="flex flex-col items-center text-xs"><i class="fa fa-fire text-lg"></i>Trend</button>
-<button onclick="showPage('cartPage')" class="flex flex-col items-center text-xs"><i class="fa fa-bag-shopping text-lg"></i>Cart</button>
-<button onclick="showPage('mePage')" class="flex flex-col items-center text-xs"><i class="fa fa-user text-lg"></i>Me</button>
-</div>
-
+<div id="loginModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:60; align-items:center; justify-content:center; display:none;"><div style="background:white; width:90%; max-width:350px; border-radius:20px; padding:20px; margin:auto; margin-top:20%;"><h2 class="font-black text-lg">Login</h2><input id="loginName" placeholder="Your Name" class="w-full mt-3 p-3 border rounded-xl text-sm"><input id="loginEmail" placeholder="Email" class="w-full mt-2 p-3 border rounded-xl text-sm"><input id="loginWhatsapp" placeholder="WhatsApp 233..." class="w-full mt-2 p-3 border rounded-xl text-sm"><select id="loginRole" class="w-full mt-2 p-3 border rounded-xl text-sm"><option value="buyer">I am Buyer</option><option value="seller">I am Seller</option></select><button onclick="doLogin()" class="w-full mt-4 bg-black text-white py-3 rounded-full font-bold">Continue</button><button onclick="document.getElementById('loginModal').style.display='none'" class="w-full mt-2 text-sm text-gray-500">Cancel</button></div></div>
 <script>
-let products=JSON.parse(localStorage.getItem('dw_products')||'null')||[
-{id:1,name:"Men's Cotton Shirt",price:89,cat:"men",imgs:["https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500","https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500"],seller:"Kwame Shop",rating:4.5,likes:120,followers:340},
-{id:2,name:"Women's Summer Dress",price:129,cat:"women",imgs:["https://images.unsplash.com/photo-1515372039744-b8f02a3c67ae?w=500","https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"],seller:"Ama Fashion",rating:4.8,likes:230,followers:512},
-{id:3,name:"Kids Nike Sneakers",price:65,cat:"kids",imgs:["https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=500","https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500"],seller:"Kids World",rating:4.6,likes:90,followers:210},
-{id:4,name:"Gold Necklace 18K",price:199,cat:"jewelry",imgs:["https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500","https://images.unsplash.com/photo-1601821765780-754fa98637c1?w=500"],seller:"Jewelry GH",rating:4.9,likes:400,followers:900},
-{id:5,name:"Car Engine Oil 5L",price:599,cat:"cars",imgs:["https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=500","https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500"],seller:"Auto GH",rating:4.7,likes:150,followers:300},
-{id:6,name:"Smart TV 55 inch UHD",price:899,cat:"electronics",imgs:["https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500","https://images.unsplash.com/photo-1588508065123-287b28e013da?w=500"],seller:"Electro Mart",rating:4.8,likes:320,followers:650},
-{id:7,name:"Office Leather Chair",price:250,cat:"office",imgs:["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500","https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=500"],seller:"Office GH",rating:4.4,likes:80,followers:180},
-{id:8,name:"Pet Dog Food 10kg",price:45,cat:"pets",imgs:["https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=500","https://images.unsplash.com/photo-1589924691995-c10eee878e60?w=500"],seller:"Pet Lover",rating:4.5,likes:60,followers:140},
-];
-let cart=[]; let currentCat='All'; let following=new Set(JSON.parse(localStorage.getItem('following')||'[]')); let liked=new Set();
-let peer=null; let dataConns=[]; let liveLikes=0; let localStream=null;
-
-function renderProducts(list){
-let grid=document.getElementById('productGrid');
-grid.innerHTML=list.map(p=>`
-<div class="bg-white rounded-xl overflow-hidden shadow-sm" onclick="openDetail(${p.id})">
-<div class="relative"><img src="${p.imgs[0]}" class="w-full h-40 object-cover"><button onclick="event.stopPropagation();likeProduct(${p.id})" class="absolute top-2 right-2 bg-white rounded-full w-7 h-7"><i class="fa fa-heart ${liked.has(p.id)?'text-red-500':''}"></i></button></div>
-<div class="p-2"><p class="text-sm font-medium truncate">${p.name}</p><p class="font-bold">GH₵ ${p.price}</p><p class="text-xs text-gray-500">${p.seller} ⭐${p.rating}</p></div>
-</div>`).join('');
-document.getElementById('trendGrid').innerHTML=grid.innerHTML;
-}
-function filterCat(c){
-currentCat=c; document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); event.target.classList.add('active');
-if(c==='All') renderProducts(products); else renderProducts(products.filter(p=>p.cat===c));
-}
-function filterProducts(){
-let q=document.getElementById('searchInput').value.toLowerCase();
-renderProducts(products.filter(p=>p.name.toLowerCase().includes(q)));
-}
-function openDetail(id){
-let p=products.find(x=>x.id===id);
-document.getElementById('detailSlider').innerHTML=p.imgs.map(i=>`<img src="${i}">`).join('');
-document.getElementById('detailInfo').innerHTML=`
-<h2 class="font-bold text-lg">${p.name}</h2><p class="text-red-500 font-bold text-xl">GH₵ ${p.price}</p>
-<p class="text-sm mt-1">Seller: ${p.seller} <button onclick="followSeller('${p.seller}')" class="ml-2 bg-black text-white px-3 py-1 rounded-full text-xs">${following.has(p.seller)?'Following':'Follow'}</button></p>
-<div class="flex gap-1 mt-2">${[1,2,3,4,5].map(s=>`<i class="fa fa-star ${s<=p.rating?'text-yellow-400':''}"></i>`).join('')} <span class="text-xs">(${p.likes})</span></div>
-<div class="mt-3 flex gap-2"><button onclick="addToCart(${p.id})" class="flex-1 bg-[#ff0050] text-white py-3 rounded-full font-bold">Add to Cart</button><button onclick="buyNow(${p.id})" class="flex-1 bg-black text-white py-3 rounded-full font-bold">Buy Now</button></div>
-<div class="mt-4"><h3 class="font-bold">Comments & Ratings</h3><div id="commentList" class="mt-2 space-y-2"></div><div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Add comment & rate seller..." class="flex-1 border rounded-full px-3 py-2"><button onclick="addComment(${p.id})" class="bg-black text-white px-4 rounded-full">Post</button></div></div>
-<div class="mt-4 flex gap-2"><button onclick="requestRefund()" class="flex-1 border py-2 rounded-full text-sm">Refund</button><button onclick="reportIssue()" class="flex-1 border py-2 rounded-full text-sm">Report Seller</button></div>
-`;
-showPage('detailPage');
-}
-function addToCart(id){let p=products.find(x=>x.id===id);cart.push(p);updateCart();}
-function updateCart(){document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartItems').innerHTML=cart.map((p,i)=>`<div class="bg-white p-2 rounded-xl flex gap-2 mb-2"><img src="${p.imgs[0]}" class="w-16 h-16 rounded"><div class="flex-1"><p class="text-sm">${p.name}</p><p class="font-bold">GH₵ ${p.price}</p></div><button onclick="cart.splice(${i},1);updateCart()" class="text-red-500"><i class="fa fa-trash"></i></button></div>`).join('')+`<p class="font-bold mt-2">Total: GH₵ ${cart.reduce((s,p)=>s+p.price,0)}</p>`;}
-function likeProduct(id){if(liked.has(id)) liked.delete(id); else liked.add(id); renderProducts(currentCat==='All'?products:products.filter(p=>p.cat===currentCat));}
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);if(id==='mePage') checkLogin();}
-function login(){let name=document.getElementById('userName').value;let role=document.getElementById('userRole').value;let phone=document.getElementById('userPhone').value;if(!name)return alert('Enter name');localStorage.setItem('dw_user',JSON.stringify({name,role,phone}));Notification.requestPermission();alert('Logged in as '+role+' - Notifications ON 🔔');checkLogin();}
-function checkLogin(){let u=JSON.parse(localStorage.getItem('dw_user')||'null');if(u){document.getElementById('loginBox').classList.add('hidden');document.getElementById('profileBox').classList.remove('hidden');document.getElementById('profileName').innerText=u.name;document.getElementById('profileRole').innerText=u.role;document.getElementById('followCount').innerText=following.size;if(u.role==='seller'){document.getElementById('sellerDashboard').classList.remove('hidden');showSellerProducts();}else{document.getElementById('sellerDashboard').classList.add('hidden');}}else{document.getElementById('loginBox').classList.remove('hidden');document.getElementById('profileBox').classList.add('hidden');document.getElementById('sellerDashboard').classList.add('hidden');}}
-function logout(){localStorage.removeItem('dw_user');checkLogin();}
-function followSeller(name){if(!name) name='Seller Official';if(following.has(name))following.delete(name);else{following.add(name);if(Notification.permission==='granted') new Notification('Following '+name+'! You will be notified when they go LIVE 🔴');}localStorage.setItem('following',JSON.stringify([...following]));let btn=document.getElementById('followBtn');if(btn)btn.innerText=following.has(name)?'Following ✓':'+ Follow';if(document.getElementById('followCount'))document.getElementById('followCount').innerText=following.size;}
-function addComment(id){let txt=document.getElementById('commentInput').value;if(!txt)return;let div=document.getElementById('commentList');div.innerHTML+=`<div class="bg-gray-100 p-2 rounded-xl text-sm"><b>You:</b> ${txt} ⭐⭐⭐⭐⭐</div>`;document.getElementById('commentInput').value='';}
-function getLocation(){navigator.geolocation.getCurrentPosition(pos=>{document.getElementById('userLocation').innerText=pos.coords.latitude.toFixed(3)+','+pos.coords.longitude.toFixed(3)+' - Accra';document.getElementById('liveLoc').innerText='Accra, GH (Live)';});}
-function checkout(){if(cart.length===0)return alert('Cart empty');alert('Order placed! Seller will be notified. You will get phone notification when shipped.');cart=[];updateCart();}
-function requestRefund(){let r=prompt('Reason for refund?');if(r){alert('Refund request sent! You will get notification within 24h.');}}
-function reportIssue(){let r=prompt('Report issue between buyer & seller:');if(r){alert('Report sent to admin! We will resolve in 24h.');}}
-function sendMsg(){let t=document.getElementById('msgInput').value;if(!t)return;document.getElementById('msgList').innerHTML+=`<div class="bg-[#ff0050] text-white p-2 rounded-xl self-end ml-10">You: ${t}</div>`;document.getElementById('msgInput').value='';setTimeout(()=>{document.getElementById('msgList').innerHTML+=`<div class="bg-white p-2 rounded-xl mr-10">Seller: Thanks! We will deliver soon 🚚</div>`},1000);}
-function buyNow(id){addToCart(id);showPage('cartPage');}
-function previewFile(){let f=document.getElementById('pFile').files[0];if(f){let r=new FileReader();r.onload=e=>{let img=document.getElementById('pPreview');img.src=e.target.result;img.classList.remove('hidden');img.dataset.base64=e.target.result;};r.readAsDataURL(f);}}
-function uploadProduct(){
-let name=document.getElementById('pName').value;let price=document.getElementById('pPrice').value;let cat=document.getElementById('pCat').value;let img1=document.getElementById('pImg1').value;let img2=document.getElementById('pImg2').value;let preview=document.getElementById('pPreview').dataset.base64;
-if(!name||!price)return alert('Enter name and price');
-let imgs=[];if(preview)imgs.push(preview);if(img1)imgs.push(img1);if(img2)imgs.push(img2);if(imgs.length===0)imgs.push(`https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500`);
-let u=JSON.parse(localStorage.getItem('dw_user')||'{}');
-let newP={id:Date.now(),name,price:parseInt(price),cat,imgs,seller:u.name||'My Shop',rating:5.0,likes:0,followers:0};
-products.unshift(newP);localStorage.setItem('dw_products',JSON.stringify(products));renderProducts(products);showSellerProducts();
-document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pImg1').value='';document.getElementById('pImg2').value='';
-alert('✅ Product uploaded! Now showing on Home dashboard AUTOMATICALLY!');
-if(Notification.permission==='granted') new Notification('New product: '+name+' live on dashboard!');
-}
-function showSellerProducts(){let u=JSON.parse(localStorage.getItem('dw_user')||'{}');let mine=products.filter(p=>p.seller===u.name);document.getElementById('myProducts').innerHTML='<p class="font-bold text-sm mt-2">My Products ('+mine.length+'):</p>'+mine.map(p=>`<div class="flex gap-2 p-2 border rounded-xl mt-1"><img src="${p.imgs[0]}" class="w-12 h-12 rounded object-cover"><div class="flex-1 text-sm"><p>${p.name}</p><p class="font-bold">GH₵ ${p.price}</p></div><button onclick="deleteProduct(${p.id})" class="text-red-500 text-xs">Delete</button></div>`).join('');}
-function deleteProduct(id){products=products.filter(p=>p.id!==id);localStorage.setItem('dw_products',JSON.stringify(products));renderProducts(products);showSellerProducts();}
-function initPeer(){if(peer)return;peer=new Peer(null,{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});peer.on('open',id=>console.log(id));peer.on('connection',conn=>{dataConns.push(conn);conn.on('data',d=>{if(d.type==='comment'){let el=document.getElementById('liveComments');if(el)el.innerHTML+=`<div style="background:rgba(0,0,0,0.7);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>Buyer:</b> ${d.text}</div>`;}else if(d.type==='like'){liveLikes=d.count;let lc=document.getElementById('likeCount');if(lc)lc.innerText=liveLikes;}});});peer.on('call',call=>{call.answer(localStream);});}
-async function goLive(){
-initPeer();let v=document.getElementById('localVideo');
-try{localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});v.srcObject=localStream;}catch(e){alert('Camera error: need HTTPS and allow camera');return;}
-showLiveChat(false);let id=peer.id;document.getElementById('liveRoomInput').value=id;document.getElementById('liveRoomInput').style.display='block';document.getElementById('liveRoomInput').type='text';
-if(Notification.permission==='granted'){new Notification('🔴 You are LIVE! Followers notified');}localStorage.setItem('live_now',id);
-}
-async function watchLive(){
-initPeer();let roomId=document.getElementById('liveRoomInput').value.trim();if(!roomId){roomId=localStorage.getItem('live_now'); if(!roomId)return alert('Enter Live ID');}
-let conn=peer.connect(roomId);conn.on('open',()=>{dataConns.push(conn);showLiveChat(true);let call=peer.call(roomId,localStream||new MediaStream());call.on('stream',s=>{document.getElementById('localVideo').srcObject=s;});});
-}
-function showLiveChat(isBuyer){
-let inp=document.getElementById('liveRoomInput');if(!isBuyer&&inp)inp.style.display='none';
-document.querySelectorAll('button').forEach(b=>{let t=b.innerText;if(t.includes('GO LIVE')||t.includes('WATCH')) b.style.display='none';});
-let old=document.getElementById('liveChatBox');if(old)old.remove();let p=document.getElementById('localVideo').parentElement;p.style.position='relative';
-let chat=document.createElement('div');chat.id='liveChatBox';chat.innerHTML=`<div id="liveComments" style="position:absolute;bottom:110px;left:10px;right:80px;max-height:180px;overflow-y:auto;color:white;font-size:14px;z-index:9999;"></div><div style="position:absolute;bottom:12px;left:10px;right:75px;display:flex;gap:6px;z-index:9999;"><input id="liveCommentInput" placeholder="Say something..." style="flex:1;padding:14px;border-radius:25px;border:none;outline:none;"><button onclick="sendLiveComment()" style="background:#ff0050;color:white;padding:12px 18px;border-radius:25px;border:none;font-weight:bold;">Send</button></div><div style="position:absolute;bottom:12px;right:10px;display:flex;flex-direction:column;align-items:center;z-index:9999;"><button onclick="sendLiveLike()" style="font-size:28px;background:rgba(0,0,0,0.6);border-radius:50%;width:56px;height:56px;border:none;">❤️</button><span id="likeCount" style="color:white;font-weight:bold;">0</span></div>`;
-p.appendChild(chat);
-}
-function sendLiveComment(){let i=document.getElementById('liveCommentInput');let txt=i.value.trim();if(!txt)return;let c=document.getElementById('liveComments');c.innerHTML+=`<div style="background:rgba(255,0,80,0.85);padding:6px 10px;border-radius:12px;margin:4px 0;"><b>You:</b> ${txt}</div>`;i.value='';c.scrollTop=c.scrollHeight;dataConns.forEach(conn=>{try{conn.send({type:'comment',text:txt});}catch(e){}});}
-function sendLiveLike(){liveLikes++;let lc=document.getElementById('likeCount');if(lc)lc.innerText=liveLikes;let c=document.getElementById('liveComments');if(c)c.innerHTML+=`<div>❤️ You liked!</div>`;dataConns.forEach(conn=>{try{conn.send({type:'like',count:liveLikes});}catch(e){}});}
-renderProducts(products);checkLogin();getLocation();
-if('Notification' in window) Notification.requestPermission();
-// === DWAMEN SELLER + BUYER DASHBOARD AUTO ===
-function getUser(){ try{return JSON.parse(localStorage.getItem('dwamen_user')||'{}')}catch(e){return {}} }
-function getProducts(){ try{return JSON.parse(localStorage.getItem('dwamen_products')||'[]')}catch(e){return []} }
-
-function checkTop(){
-  let u=getUser();
-  let isSeller=(u.role||'').toLowerCase()==='seller';
-  let d=document.getElementById('sellerDashboard');
-
-  // CREATE SELLER DASHBOARD IF NOT EXIST
-  if(!d){
-    d=document.createElement('div');
-    d.id='sellerDashboard';
-    d.innerHTML=`
-      <div style="background:#fff;padding:14px;margin:10px;border-radius:12px;border:2px solid #ff0055;box-shadow:0 3px 10px rgba(0,0,0,0.1)">
-        <div style="font-weight:bold;font-size:17px;margin-bottom:10px;">🏪 Seller Dashboard - ${u.username||'Danny'} <span style="font-size:12px;color:green;">● LIVE</span></div>
-
-        <input type="file" id="prodImage" accept="image/*" style="width:100%;padding:8px;border:1px dashed #ff0055;border-radius:8px;margin-bottom:8px;">
-        <input type="text" id="prodName" placeholder="Product name (e.g. Men's Shirt)" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin-bottom:8px;">
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <input type="number" id="prodPrice" placeholder="Price GHS" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
-          <select id="prodCat" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;"><option>All</option><option>Men</option><option>Women</option><option>Kids</option><option>Pets</option><option>Jewelry</option></select>
-        </div>
-        <button onclick="uploadProduct()" style="width:100%;background:#ff0055;color:#fff;padding:12px;border:none;border-radius:25px;font-weight:bold;">📤 Upload From Gallery - LIVE AT TOP</button>
-        <div id="myProductsList" style="margin-top:10px;font-size:13px;color:#666;"></div>
-      </div>`;
-    // Add at very top of page
-    document.body.prepend(d);
-  }
-
-  // SHOW/HIDE BASED ON ROLE
-  if(d){
-    d.style.display=isSeller?'block':'none';
-    d.style.position='sticky';
-    d.style.top='0px';
-    d.style.zIndex='9999';
-    d.style.background='#fff';
-  }
-
-  // BUYER SEES SELLER GOODS AT TOP - make filter sticky
-  let filterDiv=null;
-  document.querySelectorAll('div').forEach(div=>{
-    if(div.textContent.includes('All') && div.textContent.includes('Men') && div.textContent.includes('Women')){
-      if(div.children.length>=3) filterDiv=div;
-    }
-  });
-  if(filterDiv){
-    filterDiv.style.position='sticky';
-    filterDiv.style.top=isSeller?'210px':'0px';
-    filterDiv.style.zIndex='9998';
-    filterDiv.style.background='#fff';
-    filterDiv.style.padding='10px 0';
-  }
-}
-
-// UPLOAD FROM GALLERY
-function uploadProduct(){
-  let file=document.getElementById('prodImage').files[0];
-  let name=document.getElementById('prodName').value;
-  let price=document.getElementById('prodPrice').value;
-  let cat=document.getElementById('prodCat').value;
-  if(!file||!name||!price){ alert('Please select image from gallery, name and price!'); return; }
-
-  let reader=new FileReader();
-  reader.onload=function(e){
-    let products=getProducts();
-    products.unshift({id:Date.now(), image:e.target.result, name:name, price:price, cat:cat, seller:getUser().username||'Danny', likes:0});
-    localStorage.setItem('dwamen_products', JSON.stringify(products));
-    alert('✅ Product LIVE AT TOP FOR ALL BUYERS!');
-    document.getElementById('prodName').value='';
-    document.getElementById('prodPrice').value='';
-    document.getElementById('prodImage').value='';
-    location.reload();
-  };
-  reader.readAsDataURL(file);
-}
-
-// RUN AUTO
-setInterval(checkTop,1000);
-checkTop();
+let products = JSON.parse(localStorage.getItem('dwamen_products')||'[]');
+if(products.length===0){products=[{id:1,name:'Men Classic Shirt',price:120,cat:'Men',img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400',imgs:['https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400'],seller:'Kwame',sellerId:'kwame@test.com',whatsapp:'233200000001',likes:12,rating:4.8,comments:[{text:'Nice quality!',user:'Ama'}],followers:[]},{id:2,name:'Women Dress Floral',price:180,cat:'Women',img:'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400',imgs:['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400'],seller:'Ama',sellerId:'ama@test.com',whatsapp:'233200000002',likes:34,rating:4.9,comments:[],followers:[]}];localStorage.setItem('dwamen_products',JSON.stringify(products));}
+let curFilter='All';
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.getElementById(id).classList.add('active');if(id==='homePage')checkTop();if(id==='cartPage')renderCart();if(id==='mePage')renderMe();if(id==='trendPage')renderTrend();if(id==='livePage')renderLive();if(id==='categoryPage')renderCats();window.scrollTo(0,0);}
+function filterCat(cat){curFilter=cat;document.querySelectorAll('.catBtn').forEach(b=>{b.classList.remove('bg-black','text-white');b.classList.add('bg-gray-100');if(b.textContent===cat){b.classList.add('bg-black','text-white');b.classList.remove('bg-gray-100');}});renderProducts(cat);checkTop();}
+function renderProducts(filter='All'){let grid=document.getElementById('productGrid');let list=filter==='All'?products:products.filter(p=>p.cat===filter);grid.innerHTML=list.map(p=>`<div onclick="openProduct(${p.id})" class="bg-white rounded-xl overflow-hidden shadow-sm"><div class="relative"><img src="${p.imgs[0]}" class="w-full h-[170px] object-cover"><button onclick="event.stopPropagation();likeProduct(${p.id})" class="absolute top-2 right-2 bg-white rounded-full px-2 py-0.5 text-[10px] font-bold">❤️ ${p.likes||0}</button></div><div class="p-2"><div class="text-xs font-bold truncate">${p.name}</div><div class="flex justify-between"><span class="text-pink-600 font-black text-sm">GH₵${p.price}</span><span class="text-[9px] bg-yellow-100 px-1 rounded">★ ${p.rating||5}</span></div><div class="text-[9px] text-gray-500">${p.seller} • ${p.followers?.length||0} followers</div></div></div>`).join('')||'<div class="col-span-2 text-center py-10 text-gray-400">No products in '+filter+'</div>';}
+function uploadProduct(){let name=document.getElementById('prodName').value.trim();let price=document.getElementById('prodPrice').value;let cat=document.getElementById('prodCat').value;let wa=document.getElementById('prodWhatsapp').value||JSON.parse(localStorage.getItem('dwamen_user')||'{}').whatsapp||'233000000000';let fileInput=document.getElementById('prodImage');let u=JSON.parse(localStorage.getItem('dwamen_user')||'{}');if(!name||!price)return alert('Add name & price');let files=fileInput.files;let imgs=[];if(files.length>0){let loaded=0;for(let i=0;i<files.length;i++){let r=new FileReader();r.onload=e=>{imgs.push(e.target.result);loaded++;if(loaded===files.length){saveProd(name,price,cat,wa,imgs,u);}};r.readAsDataURL(files[i]);}}else{saveProd(name,price,cat,wa,['https://via.placeholder.com/400?text='+encodeURIComponent(name)],u);}}
+function saveProd(name,price,cat,wa,imgs,u){let p={id:Date.now(),name,price,cat,img:imgs[0],imgs,seller:u.name||'Seller',sellerId:u.email||'seller@test.com',whatsapp:wa,likes:0,rating:5,comments:[],followers:[],reports:0};products.unshift(p);localStorage.setItem('dwamen_products',JSON.stringify(products));renderProducts(curFilter);document.getElementById('prodName').value='';document.getElementById('prodPrice').value='';alert('Published!');}
+function openProduct(id){let p=products.find(x=>x.id===id);let modal=document.createElement('div');modal.id='productModal';modal.style="position:fixed; inset:0; background:white; z-index:50; overflow-y:auto; padding-bottom:80px;";modal.innerHTML=`<div style="position:relative;"><div style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory;" id="imgSlider">${p.imgs.map(img=>`<img src="${img}" style="min-width:100%; height:360px; object-fit:cover; scroll-snap-align:start;">`).join('')}</div><button onclick="this.closest('#productModal').remove()" style="position:absolute; top:12px; right:12px; background:black; color:white; border-radius:50%; width:32px; height:32px;">✕</button><div style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.6); color:white; font-size:10px; padding:4px 10px; border-radius:20px;">← Slide → ${p.imgs.length} images</div></div><div style="padding:14px;"><h2 style="font-weight:900; font-size:18px;">${p.name}</h2><div style="display:flex; gap:8px; margin-top:6px;"><span style="font-weight:900; font-size:18px; color:#ff0055;">GH₵${p.price}</span><span style="background:#fff3cd; font-size:10px; padding:2px 6px; border-radius:6px;">★ ${p.rating} • ${p.likes} likes</span></div><div style="display:flex; gap:8px; margin:14px 0; flex-wrap:wrap;"><button onclick="likeProduct(${p.id}); openProduct(${p.id});" style="background:#ffe6e6; padding:8px 14px; border-radius:20px; font-size:12px; font-weight:bold; border:none;">❤️ Like ${p.likes}</button><button onclick="followSeller('${p.sellerId}')" style="background:black; color:white; padding:8px 14px; border-radius:20px; font-size:12px; border:none;">+ Follow ${p.seller}</button><a href="https://wa.me/${p.whatsapp}?text=Hi ${p.seller}, interested in ${p.name}" target="_blank" style="background:#25D366; color:white; padding:8px 14px; border-radius:20px; font-size:12px; text-decoration:none; font-weight:bold;">WhatsApp</a></div><div style="background:#f9f9f9; border-radius:12px; padding:10px;"><div style="font-weight:bold; font-size:13px;">Rate: <span onclick="rateProduct(${p.id},5)" style="cursor:pointer;">★★★★★</span></div><div style="display:flex; gap:6px; margin-top:10px;"><input id="commentInput" placeholder="Add comment..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:10px;"><button onclick="commentProduct(${p.id})" style="background:black; color:white; padding:10px 14px; border-radius:10px;">Post</button></div><div style="margin-top:10px;">${(p.comments||[]).map(c=>`<div style="font-size:12px; padding:6px 0; border-bottom:1px solid #eee;"><b>${c.user}:</b> ${c.text}</div>`).join('')||'<div style="font-size:11px; color:gray;">No comments yet</div>'}</div></div><div style="display:flex; gap:12px; margin-top:14px;"><button onclick="reportProduct(${p.id})" style="font-size:11px; color:red; border:none; background:none;">🚩 Report</button><button onclick="refundProduct(${p.id})" style="font-size:11px; border:none; background:none;">↩️ Refund</button></div><button onclick="addToCart(${p.id}); this.textContent='✅ Added!'; setTimeout(()=>{document.getElementById('productModal')?.remove(); showPage('cartPage')},800);" style="width:100%; margin-top:16px; background:linear-gradient(90deg,#ff0055,#8a2be2); color:white; padding:14px; border:none; border-radius:30px; font-weight:900;">🛒 ADD TO CART - GH₵${p.price}</button></div>`;document.body.appendChild(modal);}
+function likeProduct(id){let p=products.find(x=>x.id==id);p.likes=(p.likes||0)+1;localStorage.setItem('dwamen_products',JSON.stringify(products));renderProducts(curFilter);}
+function rateProduct(id,s){let p=products.find(x=>x.id==id);p.rating=s;localStorage.setItem('dwamen_products',JSON.stringify(products));alert('Rated '+s+' stars!');}
+function commentProduct(id){let inp=document.getElementById('commentInput');let txt=inp.value.trim();if(!txt)return;let p=products.find(x=>x.id==id);let u=JSON.parse(localStorage.getItem('dwamen_user')||'{}');p.comments.push({text:txt,user:u.name||'Buyer'});localStorage.setItem('dwamen_products',JSON.stringify(products));openProduct(id);}
+function followSeller(sellerId){alert('✅ Following! You will get notification when LIVE!');if(Notification&&Notification.permission!=='granted'){Notification.requestPermission();}localStorage.setItem('follow_'+sellerId,'1');}
+function reportProduct(id){let r=prompt('Why reporting?');if(!r)return;alert('Reported. Admin will review.');}
+function refundProduct(id){let r=prompt('Reason for refund?');if(!r)return;alert('Refund request sent to seller WhatsApp.');}
+function addToCart(id){let cart=JSON.parse(localStorage.getItem('dwamen_cart')||'[]');cart.push(products.find(x=>x.id==id));localStorage.setItem('dwamen_cart',JSON.stringify(cart));updateCartTotal();}
+function renderCart(){let cart=JSON.parse(localStorage.getItem('dwamen_cart')||'[]');document.getElementById('cartList').innerHTML=cart.map((p,i)=>`<div class="bg-white p-3 rounded-xl flex gap-3 mb-2"><img src="${p.img}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><div class="text-sm font-bold">${p.name}</div><div class="text-pink-600 font-bold">GH₵${p.price}</div></div><button onclick="removeCart(${i})" class="text-red-500 text-xs">Remove</button></div>`).join('')||'<div class="text-center py-10 text-gray-400">Cart empty</div>';updateCartTotal();}
+function removeCart(i){let cart=JSON.parse(localStorage.getItem('dwamen_cart')||'[]');cart.splice(i,1);localStorage.setItem('dwamen_cart',JSON.stringify(cart));renderCart();}
+function updateCartTotal(){let cart=JSON.parse(localStorage.getItem('dwamen_cart')||'[]');let total=cart.reduce((s,p)=>s+Number(p.price),0);document.getElementById('totalPay').textContent='GH₵'+total;document.getElementById('cartCount').textContent=cart.length;}
+function checkout(){let cart=JSON.parse(localStorage.getItem('dwamen_cart')||'[]');if(cart.length===0)return alert('Cart empty');let total=cart.reduce((s,p)=>s+Number(p.price),0);alert('Order placed! Total GH₵'+total);localStorage.setItem('dwamen_cart','[]');renderCart();}
+function renderTrend(){document.getElementById('trendGrid').innerHTML=products.slice().sort((a,b)=>b.likes-a.likes).map(p=>`<div onclick="openProduct(${p.id})" class="bg-white rounded-xl overflow-hidden"><img src="${p.img}" class="w-full h-32 object-cover"><div class="p-2 text-xs font-bold">${p.name}</div><div class="px-2 pb-2 text-xs text-pink-600">GH₵${p.price} • ❤️ ${p.likes}</div></div>`).join('');}
+function renderLive(){document.getElementById('liveList').innerHTML=products.slice(0,5).map(p=>`<div class="bg-white p-3 rounded-xl flex gap-3 mb-2 items-center"><div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">📹</div><div class="flex-1"><div class="font-bold text-sm">${p.seller} is LIVE</div><div class="text-xs text-gray-500">${p.name}</div></div><button onclick="alert('Joining ${p.seller} LIVE!')" class="bg-red-500 text-white px-4 py-1.5 rounded-full text-xs">JOIN</button></div>`).join('');}
+function renderCats(){let cats=['Men','Women','Kids','Toys','Sport','Cars','Food','Home Used','Jewelry','Home Deco','Phone','Shoes'];document.getElementById('catGrid').innerHTML=cats.map(c=>`<button onclick="showPage('homePage'); filterCat('${c}')" class="bg-white p-4 rounded-xl text-sm font-bold">${c}</button>`).join('');}
+function renderMe(){let u=JSON.parse(localStorage.getItem('dwamen_user')||'null');let el=document.getElementById('meInfo');if(!u)el.innerHTML='Not logged in. <button onclick="showLogin()" class="bg-black text-white px-3 py-1 rounded-full text-xs">Login</button>';else el.innerHTML=`<div class="font-bold">${u.name}</div><div class="text-xs">${u.email} • ${u.role}</div><div class="text-xs mt-2">WhatsApp: ${u.whatsapp}</div>`;}
+function showLogin(){document.getElementById('loginModal').style.display='block';}
+function doLogin(){let name=document.getElementById('loginName').value.trim();let email=document.getElementById('loginEmail').value.trim();let wa=document.getElementById('loginWhatsapp').value.trim();let role=document.getElementById('loginRole').value;if(!name||!email)return alert('Add name & email');let u={name,email,whatsapp:wa||'233000000000',role};localStorage.setItem('dwamen_user',JSON.stringify(u));document.getElementById('loginModal').style.display='none';document.getElementById('loginBtn').textContent=name.split(' ')[0];checkTop();renderMe();alert('Welcome '+name+' as '+role);}
+function logout(){localStorage.removeItem('dwamen_user');document.getElementById('loginBtn').textContent='Login';renderMe();checkTop();}
+function goLive(){let u=JSON.parse(localStorage.getItem('dwamen_user')||'null');if(!u||u.role!=='seller')return alert('Login as Seller to go Live!');if(Notification&&Notification.permission!=='granted')Notification.requestPermission();alert('🔴 You are LIVE! Followers will be notified!');showPage('livePage');}
+function checkTop(){let d=document.getElementById('sellerDashboard');let slider=document.getElementById('buyerSlider');let u={};try{u=JSON.parse(localStorage.getItem('dwamen_user')||'{}')}catch(e){}let isSeller=(u.role||'').toLowerCase()==='seller';let home=document.getElementById('homePage');let isHome=home&&!home.classList.contains('hidden');if(slider)slider.style.display=isHome?'block':'none';if(!d)return;if(!isSeller||!isHome){d.style.display='none';return;}d.style.display=curFilter==='All'?'block':'none';}
+let slideIdx=0;setInterval(()=>{let track=document.getElementById('sliderTrack');let home=document.getElementById('homePage');if(!home||home.classList.contains('hidden')||!track)return;slideIdx=(slideIdx+1)%3;track.style.transform=`translateX(-${slideIdx*100}%)`;},3500);
+renderProducts('All');updateCartTotal();renderMe();checkTop();setInterval(checkTop,1000);
 </script>
 </body>
 </html>
