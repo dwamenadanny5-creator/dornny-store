@@ -118,6 +118,24 @@ setInterval(()=>{
 </div>
 
 <div id="homePage" class="page active p-2">
+<div id="sellerDashboard" style="display:none;background:linear-gradient(90deg,#ff0055,#8a2be2);padding:8px 10px;margin:6px;border-radius:20px;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div style="flex:1;color:white;font-weight:bold;font-size:13px;">🏪 Seller Upload</div>
+    <button onclick="document.getElementById('sellerUploadBox').style.display=document.getElementById('sellerUploadBox').style.display=='none'?'block':'none'" style="background:white;border:none;border-radius:15px;padding:4px 10px;font-size:11px;font-weight:bold;">▼</button>
+    <button onclick="this.parentElement.parentElement.style.display='none'" style="background:rgba(0,0,0,0.2);color:white;border:none;border-radius:50%;width:22px;height:22px;">✕</button>
+  </div>
+  <div id="sellerUploadBox" style="display:none;background:white;border-radius:12px;padding:8px;margin-top:8px;">
+    <input type="file" id="prodImage" accept="image/*" style="width:100%;font-size:11px;margin-bottom:5px;">
+    <div style="display:flex;gap:5px;">
+      <input type="text" id="prodName" placeholder="Name" style="flex:1;padding:6px;border:1px solid #ddd;border-radius:8px;font-size:12px;">
+      <input type="number" id="prodPrice" placeholder="GH₵" style="width:70px;padding:6px;border:1px solid #ddd;border-radius:8px;font-size:12px;">
+      <select id="prodCat" style="padding:6px;border-radius:8px;font-size:11px;"><option>Men</option><option>Women</option><option>Kids</option><option>Pets</option><option>Jewelry</option></select>
+    </div>
+    <button onclick="uploadProduct()" style="width:100%;margin-top:6px;background:#ff0055;color:white;padding:7px;border:none;border-radius:15px;font-weight:bold;font-size:12px;">+ Add Now - Show at Top</button>
+  </div>
+</div>
+<div id="productGrid" class="grid grid-cols
+  <div id="homePage" class="page active p-2">
 <div id="productGrid" class="grid grid-cols-2 gap-2"></div>
 </div>
 
