@@ -121,7 +121,6 @@ liveStream=stream;
 video.srcObject=stream;
 btn.textContent='🔴 You are LIVE - Camera ON';
 btn.style.background='black';
-if(Notification&&Notification.permission==='granted'){new Notification('You are LIVE!',{body:'Buyers will see you'});}else if(Notification){Notification.requestPermission();}
 showPage('livePage');
 }catch(err){
 alert('Camera failed: '+err.message+'\nFix: Use https:// and tap Allow camera. On Chrome: Settings > Site settings > Camera > Allow');
