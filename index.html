@@ -21,24 +21,43 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 window.db=db; window.fb={collection, addDoc, onSnapshot, query, orderBy};
-// AUTO DISPLAY TOP DASHBOARD - HIDE ON LIVE
-onSnapshot(query(collection(db,"products")),(snap)=>{
- let c=[]; snap.forEach(d=>c.push(d.data()));
- if(c.length>0&&window.products){
-  window.products=[...c];
-  if(window.renderProducts)window.renderProducts();
- }
-});
+ // === SELLER UPLOAD + TOP BANNER FOR BUYER ===
+window.uploadProduct = async () => {
+  const file = document.getElementById('prodImage')?.files[0];
+  const name = document.getElementById('prodName')?.value;
+  const price = document.getElementById('prodPrice')?.value;
+  const cat = document.getElementById('prodCat')?.value || 'Men';
+  if(!file ||!name ||!price){ alert('Select image from gallery, name, price!'); return; }
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try{
+      await window.fb.addDoc(window.fb.collection(window.db, "products"), {
+        image: e.target.result,
+        name: name,
+        price: parseFloat(price),
+        cat: cat,
+        seller: JSON.parse(localStorage.getItem('dwamen_user')||'{}').username || 'Danny',
+        createdAt: Date.now()
+      });
+      alert('✅ LIVE! Buyer will see it at TOP!');
+      document.getElementById('prodName').value=''; document.getElementById('prodPrice').value='';
+      document.getElementById('prodImage').value='';
+    }catch(err){ alert('Error: '+err.message); }
+  };
+  reader.readAsDataURL(file);
+};
+
 setInterval(()=>{
- let d=document.getElementById('topSellerDashboard');
- let l=document.getElementById('livePage');
- if(d&&l&&!l.classList.contains('hidden')){
-  d.classList.add('hidden');
-  d.style.setProperty('display','none','important');
- }else if(d&&l&&l.classList.contains('hidden')){
-  d.style.removeProperty('display');
- }
-},300);
+  let d = document.getElementById('sellerDashboard');
+  if(!d) return;
+  let u = {};
+  try{ u = JSON.parse(localStorage.getItem('dwamen_user')||'{}'); }catch(e){}
+  let isSeller = (u.role||'').toLowerCase()==='seller';
+  d.style.display = isSeller? 'block' : 'none';
+  d.style.position = 'sticky';
+  d.style.top = '0px';
+  d.style.zIndex = '9999';
+},1000);
     </script>
 <style>
 .page { display:none; min-height:100vh; padding-bottom:90px; }
