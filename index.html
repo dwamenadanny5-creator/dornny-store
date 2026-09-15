@@ -141,5 +141,57 @@ function checkTop(){let d=document.getElementById('sellerDashboard');let slider=
 let slideIdx=0;setInterval(()=>{let track=document.getElementById('sliderTrack');let home=document.getElementById('homePage');if(!home||home.classList.contains('hidden')||!track)return;slideIdx=(slideIdx+1)%3;track.style.transform=`translateX(-${slideIdx*100}%)`;},3500);
 renderProducts('All');updateCartTotal();renderMe();checkTop();setInterval(checkTop,1000);
 </script>
+  <div id="livePage" class="hidden min-h-screen bg-black relative">
+  <div id="liveVideos" class="w-full h-[85vh] flex flex-col">
+    <div id="sellerVideo" class="flex-1 bg-black relative"></div>
+    <div id="buyerVideo" class="flex-1 bg-gray-900 relative hidden"></div>
+  </div>
+  <div class="absolute top-2 left-2 bg-red-600 text-white px-3 py-1 rounded-full text-sm animate-pulse">🔴 LIVE <span id="viewerCount">1</span></div>
+  <div id="liveControls" class="absolute bottom-20 left-0 right-0 p-4 flex gap-2 justify-center">
+    <button id="goLiveBtn" class="bg-red-600 text-white px-6 py-3 rounded-full font-bold">Go Live as Seller</button>
+    <button id="joinLiveBtn" class="bg-white text-black px-6 py-3 rounded-full font-bold hidden">Join as Buyer</button>
+    <button id="requestJoinBtn" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-bold hidden">Request to Join Camera</button>
+    <button id="endLiveBtn" class="bg-gray-700 text-white px-4 py-3 rounded-full hidden">End</button>
+  </div>
+  <div id="joinRequestPopup" class="hidden absolute top-20 left-1/2 -translate-x-1/2 bg-white p-4 rounded-xl shadow-2xl z-50 w-64 text-center">
+    <p class="font-bold mb-2">A buyer wants to join!</p>
+    <div class="flex gap-2"><button id="acceptJoin" class="flex-1 bg-green-600 text-white py-2 rounded">Accept</button><button id="rejectJoin" class="flex-1 bg-gray-300 py-2 rounded">Reject</button></div>
+  </div>
+</div>
+<script>
+const AGORA_APP_ID = "bdd57024b92d4cc69087ac15f2ee75c1";
+const CHANNEL = "dornny-main-live";
+let client, localTrack, isSeller=false;
+async function initLive(){
+ client = AgoraRTC.createClient({mode:"live", codec:"vp8"});
+ await client.setClientRole("audience");
+ client.on("user-published", async (user, media)=>{
+   await client.subscribe(user, media);
+   if(media==="video"){
+     const remoteDiv = document.createElement("div"); remoteDiv.id="remote-"+user.uid; remoteDiv.style.width="100%"; remoteDiv.style.height="100%";
+     if(isSeller){ document.getElementById("buyerVideo").classList.remove("hidden"); document.getElementById("buyerVideo").appendChild(remoteDiv); document.getElementById("joinRequestPopup").classList.remove("hidden"); }
+     else { document.getElementById("sellerVideo").appendChild(remoteDiv); }
+     user.videoTrack.play(remoteDiv);
+   }
+   if(media==="audio") user.audioTrack.play();
+ });
+}
+initLive();
+document.getElementById("goLiveBtn").onclick=async()=>{
+ isSeller=true; await client.setClientRole("host"); await client.join(AGORA_APP_ID, CHANNEL, null, Date.now());
+ localTrack = await AgoraRTC.createCameraVideoTrack(); const div=document.createElement("div"); div.style.width="100%"; div.style.height="100%"; document.getElementById("sellerVideo").appendChild(div); localTrack.play(div); await client.publish(localTrack);
+ document.getElementById("goLiveBtn").classList.add("hidden"); document.getElementById("endLiveBtn").classList.remove("hidden"); document.getElementById("liveVideos").classList.add("h-[85vh]");
+};
+document.getElementById("joinLiveBtn").onclick=async()=>{
+ await client.join(AGORA_APP_ID, CHANNEL, null, Date.now()+1); document.getElementById("joinLiveBtn").classList.add("hidden"); document.getElementById("requestJoinBtn").classList.remove("hidden");
+};
+document.getElementById("requestJoinBtn").onclick=async()=>{
+ await client.setClientRole("host"); localTrack = await AgoraRTC.createCameraVideoTrack(); const div=document.createElement("div"); div.style.width="100%"; div.style.height="100%"; document.getElementById("buyerVideo").classList.remove("hidden"); document.getElementById("buyerVideo").appendChild(div); localTrack.play(div); await client.publish(localTrack); document.getElementById("requestJoinBtn").classList.add("hidden");
+};
+document.getElementById("acceptJoin").onclick=()=>{ document.getElementById("joinRequestPopup").classList.add("hidden"); };
+document.getElementById("endLiveBtn").onclick=()=>{ localTrack?.close(); client?.leave(); location.reload(); };
+// Show Join button for buyers if seller is live
+setTimeout(async()=>{ try{ const tempClient = AgoraRTC.createClient({mode:"live", codec:"vp8"}); await tempClient.join(AGORA_APP_ID, CHANNEL, null, 99999); tempClient.on("user-published",()=>{ document.getElementById("joinLiveBtn")?.classList.remove("hidden"); const banner=document.getElementById("liveBanner"); if(banner) banner.classList.remove("hidden"); }); setTimeout(()=>tempClient.leave(), 5000); }catch(e){} }, 2000);
+</script>
 </body>
 </html>
