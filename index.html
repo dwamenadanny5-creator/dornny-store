@@ -284,6 +284,86 @@ function sendLiveComment(){let i=document.getElementById('liveCommentInput');let
 function sendLiveLike(){liveLikes++;let lc=document.getElementById('likeCount');if(lc)lc.innerText=liveLikes;let c=document.getElementById('liveComments');if(c)c.innerHTML+=`<div>❤️ You liked!</div>`;dataConns.forEach(conn=>{try{conn.send({type:'like',count:liveLikes});}catch(e){}});}
 renderProducts(products);checkLogin();getLocation();
 if('Notification' in window) Notification.requestPermission();
+// === DWAMEN SELLER + BUYER DASHBOARD AUTO ===
+function getUser(){ try{return JSON.parse(localStorage.getItem('dwamen_user')||'{}')}catch(e){return {}} }
+function getProducts(){ try{return JSON.parse(localStorage.getItem('dwamen_products')||'[]')}catch(e){return []} }
+
+function checkTop(){
+  let u=getUser();
+  let isSeller=(u.role||'').toLowerCase()==='seller';
+  let d=document.getElementById('sellerDashboard');
+
+  // CREATE SELLER DASHBOARD IF NOT EXIST
+  if(!d){
+    d=document.createElement('div');
+    d.id='sellerDashboard';
+    d.innerHTML=`
+      <div style="background:#fff;padding:14px;margin:10px;border-radius:12px;border:2px solid #ff0055;box-shadow:0 3px 10px rgba(0,0,0,0.1)">
+        <div style="font-weight:bold;font-size:17px;margin-bottom:10px;">🏪 Seller Dashboard - ${u.username||'Danny'} <span style="font-size:12px;color:green;">● LIVE</span></div>
+
+        <input type="file" id="prodImage" accept="image/*" style="width:100%;padding:8px;border:1px dashed #ff0055;border-radius:8px;margin-bottom:8px;">
+        <input type="text" id="prodName" placeholder="Product name (e.g. Men's Shirt)" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin-bottom:8px;">
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <input type="number" id="prodPrice" placeholder="Price GHS" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+          <select id="prodCat" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;"><option>All</option><option>Men</option><option>Women</option><option>Kids</option><option>Pets</option><option>Jewelry</option></select>
+        </div>
+        <button onclick="uploadProduct()" style="width:100%;background:#ff0055;color:#fff;padding:12px;border:none;border-radius:25px;font-weight:bold;">📤 Upload From Gallery - LIVE AT TOP</button>
+        <div id="myProductsList" style="margin-top:10px;font-size:13px;color:#666;"></div>
+      </div>`;
+    // Add at very top of page
+    document.body.prepend(d);
+  }
+
+  // SHOW/HIDE BASED ON ROLE
+  if(d){
+    d.style.display=isSeller?'block':'none';
+    d.style.position='sticky';
+    d.style.top='0px';
+    d.style.zIndex='9999';
+    d.style.background='#fff';
+  }
+
+  // BUYER SEES SELLER GOODS AT TOP - make filter sticky
+  let filterDiv=null;
+  document.querySelectorAll('div').forEach(div=>{
+    if(div.textContent.includes('All') && div.textContent.includes('Men') && div.textContent.includes('Women')){
+      if(div.children.length>=3) filterDiv=div;
+    }
+  });
+  if(filterDiv){
+    filterDiv.style.position='sticky';
+    filterDiv.style.top=isSeller?'210px':'0px';
+    filterDiv.style.zIndex='9998';
+    filterDiv.style.background='#fff';
+    filterDiv.style.padding='10px 0';
+  }
+}
+
+// UPLOAD FROM GALLERY
+function uploadProduct(){
+  let file=document.getElementById('prodImage').files[0];
+  let name=document.getElementById('prodName').value;
+  let price=document.getElementById('prodPrice').value;
+  let cat=document.getElementById('prodCat').value;
+  if(!file||!name||!price){ alert('Please select image from gallery, name and price!'); return; }
+
+  let reader=new FileReader();
+  reader.onload=function(e){
+    let products=getProducts();
+    products.unshift({id:Date.now(), image:e.target.result, name:name, price:price, cat:cat, seller:getUser().username||'Danny', likes:0});
+    localStorage.setItem('dwamen_products', JSON.stringify(products));
+    alert('✅ Product LIVE AT TOP FOR ALL BUYERS!');
+    document.getElementById('prodName').value='';
+    document.getElementById('prodPrice').value='';
+    document.getElementById('prodImage').value='';
+    location.reload();
+  };
+  reader.readAsDataURL(file);
+}
+
+// RUN AUTO
+setInterval(checkTop,1000);
+checkTop();
 </script>
 </body>
 </html>
