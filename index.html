@@ -111,11 +111,9 @@ function logout(){localStorage.removeItem('dwamen_user');document.getElementById
 let liveStream=null;
 let agoraClient=null;
 let agoraLocalTracks=[];
-
 const AGORA_APP_ID = "03607d3765b1493a82b6b702da4fcfdc";
-const AGORA_CHANNEL = "dornny-main-live";
-const AGORA_TOKEN = "007eJxTYFiQNGe13F436+t/H0tvPsK7VmxnqOIJM9e45cdaD3+95OShwGBgbGZgnmJsbmaaZGhiaZxoYZRklmRuYJSSaJGWnJaSbFK4KqshkJGhPOgSIyMDBIL4Agwp+UV5eZW6uYmZebo5mWWpDAwAMEgk5A==";
-
+const AGORA_CHANNEL = "dornny-market";
+const AGORA_TOKEN = "007eJxTYFBNq/86vfldjVHEzmfHc3wXtbxlENqlJxHJ8+nI0rmuMssUGAyMzQzMU4zNzUyTDE0sjRMtjJLMkswNjFISTdKS01KSzy1eldUQyMhgcT6LiZEBAkF8AYaU/KK8vErd3MTMPN2czLJUBgYAB8skqA==";
 async function goLive(){
  let u=JSON.parse(localStorage.getItem('dwamen_user')||'{}');
  if(!u||(u.role||'').toLowerCase()!=='seller') return alert('Login as seller first!');
