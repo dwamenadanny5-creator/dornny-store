@@ -1,37 +1,105 @@
-<!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DORNNY SELLER LIVE FULL</title><script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;overflow:hidden}
-#videoWrap{position:fixed;inset:0} #liveVideo{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.topBar{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;gap:8px;padding:12px;background:linear-gradient(to bottom,rgba(0,0,0,.85),transparent)}
-.inputSell{flex:1;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);color:#fff;padding:12px 15px;border-radius:25px}
+<html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+#videoWrap{position:fixed;inset:0;background:#000}
+#liveVideo{width:100%;height:100%;object-fit:cover}
+.topBar{position:fixed;top:0;left:0;right:0;display:flex;padding:12px;gap:8px;z-index:10}
+.inputSell{flex:1;background:rgba(255,255,255,0.9);border:none;padding:10px;border-radius:20px}
 .liveBtn{background:#ff0000;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:bold}
-.bottomBar{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:12px;display:flex;flex-direction:column;gap:8px;background:linear-gradient(to top,rgba(0,0,0,.9),transparent)}
-.controls{display:flex;gap:8px}.commentInput{flex:1;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;padding:12px;border-radius:25px}
-.sendBtn{background:#ff0050;color:#fff;border:none;padding:12px 20px;border-radius:25px;font-weight:bold}
-.comments{max-height:28vh;overflow-y:auto;display:flex;flex-direction:column;gap:6px}.comment{background:rgba(0,0,0,.6);padding:8px 12px;border-radius:18px;font-size:13px;max-width:85%}
-.flip{position:fixed;top:70px;left:10px;z-index:10;background:rgba(0,0,0,.6);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px}
-.viewers{position:fixed;top:70px;right:10px;z-index:10;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:15px;font-size:12px}
-#startScreen{position:fixed;inset:0;background:#000;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:20px;text-align:center}
-.startBtn{background:red;color:#fff;border:none;padding:18px 40px;border-radius:30px;font-size:18px;font-weight:bold}
-</style></head><body>
-<div id="startScreen"><h1>🔴 DORNNY LIVE</h1><p>Full Screen + Buyers See You LIVE!</p><p id="peerStatus">Connecting...</p><button class="startBtn" onclick="startLive()">Start Live Camera</button></div>
-<div id="videoWrap"><video id="liveVideo" autoplay muted playsinline></video></div>
-<button class="flip" onclick="flipCamera()">🔄</button>
-<div class="viewers">👁️ <span id="viewCount">0</span> watching</div>
-<div class="topBar"><input id="sellInput" class="inputSell" placeholder="What are you selling? e.g. Bags GH¢120"><button class="liveBtn">LIVE</button><button style="background:rgba(255,255,255,.2);color:#fff;border:none;padding:10px 15px;border-radius:20px" onclick="location.href='index.html'">← Market</button></div>
-<div class="bottomBar"><div>🔴 <span id="statusText">Ready</span> | <span id="buyerCount">0 buyers</span></div><div id="comments" class="comments"></div><div class="controls"><input id="chatInput" class="commentInput" placeholder="Say something to buyers..."><button class="sendBtn" onclick="sendComment()">Send</button></div></div>
-<script>
-let stream,peer,facingMode='user',connections=[],buyerCount=0;
-const ROOM_ID='dornny-store-live-danny-2026';
-peer=new Peer(ROOM_ID);
-peer.on('open',id=>{document.getElementById('peerStatus').textContent='✅ Ready!'}); 
-peer.on('connection',conn=>{connections.push(conn);buyerCount++;updateCount();conn.on('data',d=>{if(d.type==='chat')addComment(d.user,d.text,false)});conn.on('close',()=>{buyerCount--;updateCount()})});
-async function startLive(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode,width:{ideal:1280},height:{ideal:720}},audio:true});document.getElementById('liveVideo').srcObject=stream;document.getElementById('startScreen').style.display='none';document.getElementById('statusText').textContent='LIVE! Buyers can see you!';localStorage.setItem('dornny_live_active','true')}catch(e){alert(e.message)}}
-function flipCamera(){facingMode=facingMode==='user'?'environment':'user';if(stream)stream.getTracks().forEach(t=>t.stop());startLive();document.getElementById('liveVideo').style.transform=facingMode==='user'?'scaleX(-1)':'scaleX(1)'}
-function addComment(u,t,m=false){const b=document.getElementById('comments'),d=document.createElement('div');d.className='comment';if(m)d.style.background='rgba(255,0,80,.8)';d.innerHTML='<b>'+u+':</b> '+t;b.appendChild(d);b.scrollTop=b.scrollHeight;connections.forEach(c=>{try{c.send({type:'chat',user:u,text:t})}catch{}})}
-function sendComment(){const i=document.getElementById('chatInput');if(!i.value.trim())return;addComment('Seller',i.value,true);i.value=''}
-function updateCount(){document.getElementById('viewCount').textContent=buyerCount;document.getElementById('buyerCount').textContent=buyerCount+' buyers'}
-setInterval(()=>{if(!stream)return;connections.forEach(c=>{if(!c._hasCalled){peer.call(c.peer,stream);c._hasCalled=true}})},2000);
-window.addEventListener('beforeunload',()=>{localStorage.setItem('dornny_live_active','false')});
-document.getElementById('chatInput').addEventListener('keypress',e=>{if(e.key==='Enter')sendComment()});
-</script></body></html>
+.bottomBar{position:fixed;bottom:0;left:0;right:0;padding:12px;z-index:10;background:linear-gradient(transparent,rgba(0,0,0,0.8))}
+.controls{display:flex;gap:8px}
+.commentInp{flex:1;padding:10px;border-radius:20px;border:none}
+.sendBtn{background:#ff0050;color:#fff;border:none;padding:10px 16px;border-radius:20px}
+.comments{max-height:28vh;overflow-y:auto;color:#fff;padding:8px}
+.flip{position:fixed;top:70px;left:10px;z-index:10;padding:8px 12px;border-radius:20px;border:none;background:rgba(0,0,0,0.5);color:#fff}
+.viewers{position:fixed;top:70px;right:10px;z-index:10;background:rgba(0,0,0,0.5);color:#fff;padding:6px 12px;border-radius:20px}
+#startScreen{position:fixed;inset:0;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;color:#fff;gap:20px}
+.startBtn{background:red;color:#fff;border:none;padding:16px 32px;border-radius:30px;font-size:18px;font-weight:bold}
+</style>
+</head><body>
+
+<div id="startScreen">
+<h1>🔴 DORNNY LIVE</h1>
+<p>Click to start your live shopping</p>
+<button class="startBtn" onclick="startLive()">GO LIVE 🔴</button>
+<p id="status" style="font-size:12px"></p>
+</div>
+
+<div id="videoWrap"><video id="liveVideo" autoplay playsinline muted></video></div>
+<button class="flip" onclick="flipCamera()">🔄 Flip</button>
+<div class="viewers">👁 <span id="viewCount">0</span> viewers</div>
+<div class="topBar"><input id="sellInput" class="inputSell" placeholder="What are you selling?"><button class="liveBtn" id="liveBadge">🔴 LIVE</button></div>
+<div class="bottomBar"><div class="controls"><input id="commentInput" class="commentInp" placeholder="Comment..."><button class="sendBtn" onclick="sendComment()">Send</button></div><div class="comments" id="commentsBox"></div></div>
+
+<script type="module">
+import AgoraRTC from "https://esm.sh/agora-rtc-sdk-ng@4.20.0";
+
+// YOUR NEW DORNNY CREDENTIALS - FIXED!
+const APP_ID = "03607d3765b1493a82b6b702da4fcfdc";
+const CHANNEL = "dornny-main-live";
+const TOKEN = "007eJxTYFiQNGe13F436+t/H0tvPsK7VmxnqOIJM9e45cdaD3+95OShwGBgbGZgnmJsbmaaZGhiaZxoYZRklmRuYJSSaJKWnJaSbFK4KqshkJGhPOgSIyMDBIL4Agwp+UV5eZW6uYmZebo5mWWpDAwAMEgk5A==";
+
+const client = AgoraRTC.createClient({mode:"live", codec:"vp8"});
+let localVideoTrack, localAudioTrack;
+let facingMode = 'user';
+
+window.startLive = async function(){
+  try{
+    document.getElementById('status').innerText = "Connecting...";
+    await client.setClientRole("host");
+    // JOIN WITH TOKEN - NO MORE GATEWAY ERROR!
+    await client.join(APP_ID, CHANNEL, TOKEN, 0);
+    
+    localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+    localVideoTrack = await AgoraRTC.createCameraVideoTrack({facingMode: facingMode});
+    
+    await client.publish([localVideoTrack, localAudioTrack]);
+    localVideoTrack.play("liveVideo");
+    
+    document.getElementById('startScreen').style.display='none';
+    document.getElementById('status').innerText = "";
+    console.log("✅ DORNNY LIVE STARTED!");
+    addComment("System", "🔴 Live started!", true);
+  }catch(e){
+    console.error(e);
+    document.getElementById('status').innerText = "Error: " + e.message;
+    alert("Live failed: " + e.message);
+  }
+}
+
+window.flipCamera = async function(){
+  facingMode = facingMode === 'user' ? 'environment' : 'user';
+  if(localVideoTrack){
+    localVideoTrack.setDevice(facingMode);
+    // For Agora need to recreate
+    localVideoTrack.close();
+    localVideoTrack = await AgoraRTC.createCameraVideoTrack({facingMode: facingMode});
+    await client.unpublish();
+    await client.publish([localVideoTrack, localAudioTrack]);
+    localVideoTrack.play("liveVideo");
+  }
+}
+
+window.addComment = function(u,m){
+  const b = document.getElementById('commentsBox');
+  const d = document.createElement('div');
+  d.innerHTML = `<b>${u}:</b> ${m}`;
+  b.appendChild(d);
+  b.scrollTop = b.scrollHeight;
+}
+
+window.sendComment = function(){
+  const i = document.getElementById('commentInput');
+  if(!i.value) return;
+  addComment("You", i.value);
+  i.value = "";
+}
+
+window.addEventListener('beforeunload', ()=>{
+  if(localVideoTrack) localVideoTrack.close();
+  if(localAudioTrack) localAudioTrack.close();
+  client.leave();
+});
+</script>
+</body></html>
