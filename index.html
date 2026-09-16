@@ -109,33 +109,44 @@ function showLogin(){document.getElementById('loginModal').style.display='block'
 function doLogin(){let name=document.getElementById('loginName').value.trim();let email=document.getElementById('loginEmail').value.trim();let wa=document.getElementById('loginWhatsapp').value.trim();let role=document.getElementById('loginRole').value;if(!name||!email)return alert('Add name & email');let u={name,email,whatsapp:wa||'233000000000',role};localStorage.setItem('dwamen_user',JSON.stringify(u));document.getElementById('loginModal').style.display='none';document.getElementById('loginBtn').textContent=name.split(' ')[0];checkTop();renderMe();alert('Welcome '+name+' as '+role);}
 function logout(){localStorage.removeItem('dwamen_user');document.getElementById('loginBtn').textContent='Login';renderMe();checkTop();}
 let liveStream=null;
+let agoraClient=null;
+let agoraLocalTracks=[];
+
+const AGORA_APP_ID = "03607d3765b1493a82b6b702da4fcfdc";
+const AGORA_CHANNEL = "dornny-main-live";
+const AGORA_TOKEN = "007eJxTYFiQNGe13F436+t/H0tvPsK7VmxnqOIJM9e45cdaD3+95OShwGBgbGZgnmJsbmaaZGhiaZxoYZRklmRuYJSSaJGWnJaSbFK4KqshkJGhPOgSIyMDBIL4Agwp+UV5eZW6uYmZebo5mWWpDAwAMEgk5A==";
+
 async function goLive(){
-let u=JSON.parse(localStorage.getItem('dwamen_user')||'null');
-if(!u||u.role!=='seller') return alert('Login as Seller to go Live!');
-let box=document.getElementById('myLiveBox');
-let video=document.getElementById('liveVideo');
-let btn=document.getElementById('goLiveBtn');
-try{
-box.style.display='block';
-let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:true});
-liveStream=stream;
-video.srcObject=stream;
-btn.textContent='🔴 You are LIVE - Camera ON';
-btn.style.background='black';
-showPage('livePage');
-}catch(err){
-alert('Camera failed: '+err.message+'\nFix: Use https:// and tap Allow camera. On Chrome: Settings > Site settings > Camera > Allow');
-if(box) box.style.display='none';
+ let u=JSON.parse(localStorage.getItem('dwamen_user')||'{}');
+ if(!u||(u.role||'').toLowerCase()!=='seller') return alert('Login as seller first!');
+ let box=document.getElementById('myLiveBox');
+ let video=document.getElementById('liveVideo');
+ let btn=document.getElementById('goLiveBtn');
+ try{
+  box.style.display='block';
+  btn.textContent='⏳ Starting...';
+  agoraClient = AgoraRTC.createClient({mode:'live', codec:'vp8'});
+  await agoraClient.setClientRole('host');
+  await agoraClient.join(AGORA_APP_ID, AGORA_CHANNEL, AGORA_TOKEN, 0);
+  let tracks = await AgoraRTC.createMicrophoneAndCameraTracks();
+  agoraLocalTracks = tracks;
+  tracks[1].play(video);
+  await agoraClient.publish(tracks);
+  btn.textContent='🔴 You are LIVE';
+  btn.style.background='black';
+  showPage('livePage');
+ }catch(err){ alert('Live failed: '+err.message); box.style.display='none'; }
 }
-}
+
 function stopLive(){
-let box=document.getElementById('myLiveBox');
-let video=document.getElementById('liveVideo');
-let btn=document.getElementById('goLiveBtn');
-if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;}
-if(video) video.srcObject=null;
-if(box) box.style.display='none';
-if(btn){btn.textContent='📷 GO LIVE NOW - Turn On Camera'; btn.style.background='#ef4444';}
+ let box=document.getElementById('myLiveBox');
+ let video=document.getElementById('liveVideo');
+ let btn=document.getElementById('goLiveBtn');
+ if(agoraLocalTracks){ agoraLocalTracks.forEach(t=>{t.stop(); t.close();}); agoraLocalTracks=[]; }
+ if(agoraClient){ agoraClient.leave(); agoraClient=null; }
+ if(video) video.srcObject=null;
+ if(box) box.style.display='none';
+ if(btn){btn.textContent='📷 GO LIVE NOW';}
 }
 function checkTop(){let d=document.getElementById('sellerDashboard');let slider=document.getElementById('buyerSlider');let u={};try{u=JSON.parse(localStorage.getItem('dwamen_user')||'{}')}catch(e){}let isSeller=(u.role||'').toLowerCase()==='seller';let home=document.getElementById('homePage');let isHome=home&&!home.classList.contains('hidden');if(slider)slider.style.display=isHome?'block':'none';if(!d)return;if(!isSeller||!isHome){d.style.display='none';return;}d.style.display=curFilter==='All'?'block':'none';}
 let slideIdx=0;setInterval(()=>{let track=document.getElementById('sliderTrack');let home=document.getElementById('homePage');if(!home||home.classList.contains('hidden')||!track)return;slideIdx=(slideIdx+1)%3;track.style.transform=`translateX(-${slideIdx*100}%)`;},3500);
