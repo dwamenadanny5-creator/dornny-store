@@ -157,41 +157,71 @@ renderProducts('All');updateCartTotal();renderMe();checkTop();setInterval(checkT
     <p class="font-bold mb-2">A buyer wants to join!</p>
     <div class="flex gap-2"><button id="acceptJoin" class="flex-1 bg-green-600 text-white py-2 rounded">Accept</button><button id="rejectJoin" class="flex-1 bg-gray-300 py-2 rounded">Reject</button></div>
   </div>
-</div>
+  </div>
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.22.0.js"></script>
 <script>
 const AGORA_APP_ID = "bdd57024b92d4cc69087ac15f2ee75c1";
 const CHANNEL = "dornny-main-live";
-let client, localTrack, isSeller=false;
+let client = null, localTrack = null, isSeller=false, hasJoined=false;
+
 async function initLive(){
- client = AgoraRTC.createClient({mode:"live", codec:"vp8"});
- await client.setClientRole("audience");
- client.on("user-published", async (user, media)=>{
-   await client.subscribe(user, media);
-   if(media==="video"){
-     const remoteDiv = document.createElement("div"); remoteDiv.id="remote-"+user.uid; remoteDiv.style.width="100%"; remoteDiv.style.height="100%";
-     if(isSeller){ document.getElementById("buyerVideo").classList.remove("hidden"); document.getElementById("buyerVideo").appendChild(remoteDiv); document.getElementById("joinRequestPopup").classList.remove("hidden"); }
-     else { document.getElementById("sellerVideo").appendChild(remoteDiv); }
-     user.videoTrack.play(remoteDiv);
-   }
-   if(media==="audio") user.audioTrack.play();
- });
+  client = AgoraRTC.createClient({mode:"live", codec:"vp8"});
+  await client.setClientRole("audience");
+  client.on("user-published", async (user, media)=>{
+    await client.subscribe(user, media);
+    if(media==="video"){
+      const remoteDiv = document.createElement("div");
+      remoteDiv.id="remote-"+user.uid;
+      remoteDiv.style="width:100%; height:100%; background:#000; border-radius:15px;";
+      if(isSeller){
+        const box=document.getElementById("buyerVideo");
+        if(box){ box.classList.remove("hidden"); box.innerHTML=""; box.appendChild(remoteDiv); }
+        document.getElementById("joinRequestPopup")?.classList.remove("hidden");
+      }else{
+        const sBox=document.getElementById("sellerVideo");
+        if(sBox){ sBox.innerHTML=""; sBox.appendChild(remoteDiv); }
+      }
+      user.videoTrack.play(remoteDiv);
+    }
+    if(media==="audio") user.audioTrack.play();
+  });
 }
 initLive();
-document.getElementById("goLiveBtn").onclick=async()=>{
- isSeller=true; await client.setClientRole("host"); await client.join(AGORA_APP_ID, CHANNEL, null, Date.now());
- localTrack = await AgoraRTC.createCameraVideoTrack(); const div=document.createElement("div"); div.style.width="100%"; div.style.height="100%"; document.getElementById("sellerVideo").appendChild(div); localTrack.play(div); await client.publish(localTrack);
- document.getElementById("goLiveBtn").classList.add("hidden"); document.getElementById("endLiveBtn").classList.remove("hidden"); document.getElementById("liveVideos").classList.add("h-[85vh]");
+
+document.getElementById("goLiveBtn").onclick = async()=>{
+  try{
+    isSeller=true;
+    const btn=document.getElementById("goLiveBtn");
+    btn.innerText="⏳ Connecting...";
+    if(!hasJoined){ await client.join(AGORA_APP_ID, CHANNEL, null, null); hasJoined=true; }
+    await client.setClientRole("host");
+    localTrack = await AgoraRTC.createCameraVideoTrack();
+    let div=document.getElementById("myVideo");
+    if(!div){ div=document.createElement("div"); div.id="myVideo"; div.style="width:100%; height:420px; border-radius:20px; background:#111;"; document.getElementById("livePage").prepend(div); }
+    localTrack.play(div);
+    await client.publish(localTrack);
+    btn.innerText="🔴 YOU ARE LIVE"; btn.style.background="green";
+  }catch(e){ alert("Error: "+e.message); }
 };
-document.getElementById("joinLiveBtn").onclick=async()=>{
- await client.join(AGORA_APP_ID, CHANNEL, null, Date.now()+1); document.getElementById("joinLiveBtn").classList.add("hidden"); document.getElementById("requestJoinBtn").classList.remove("hidden");
+
+document.getElementById("joinLiveBtn").onclick = async()=>{
+  if(!hasJoined){ await client.join(AGORA_APP_ID, CHANNEL, null, null); hasJoined=true; }
+  document.getElementById("joinLiveBtn").classList.add("hidden");
+  document.getElementById("requestJoinBtn")?.classList.remove("hidden");
 };
-document.getElementById("requestJoinBtn").onclick=async()=>{
- await client.setClientRole("host"); localTrack = await AgoraRTC.createCameraVideoTrack(); const div=document.createElement("div"); div.style.width="100%"; div.style.height="100%"; document.getElementById("buyerVideo").classList.remove("hidden"); document.getElementById("buyerVideo").appendChild(div); localTrack.play(div); await client.publish(localTrack); document.getElementById("requestJoinBtn").classList.add("hidden");
+
+document.getElementById("requestJoinBtn").onclick = async()=>{
+  await client.setClientRole("host");
+  localTrack = await AgoraRTC.createCameraVideoTrack();
+  let d=document.createElement("div"); d.style="width:100%; height:100%;";
+  let box=document.getElementById("buyerVideo"); box.classList.remove("hidden"); box.innerHTML=""; box.appendChild(d);
+  localTrack.play(d); await client.publish(localTrack);
+  document.getElementById("requestJoinBtn").classList.add("hidden");
 };
-document.getElementById("acceptJoin").onclick=()=>{ document.getElementById("joinRequestPopup").classList.add("hidden"); };
-document.getElementById("endLiveBtn").onclick=()=>{ localTrack?.close(); client?.leave(); location.reload(); };
-// Show Join button for buyers if seller is live
-setTimeout(async()=>{ try{ const tempClient = AgoraRTC.createClient({mode:"live", codec:"vp8"}); await tempClient.join(AGORA_APP_ID, CHANNEL, null, 99999); tempClient.on("user-published",()=>{ document.getElementById("joinLiveBtn")?.classList.remove("hidden"); const banner=document.getElementById("liveBanner"); if(banner) banner.classList.remove("hidden"); }); setTimeout(()=>tempClient.leave(), 5000); }catch(e){} }, 2000);
+
+document.getElementById("acceptJoin").onclick = ()=>{ document.getElementById("joinRequestPopup")?.classList.add("hidden"); };
+document.getElementById("rejectJoin").onclick = ()=>{ document.getElementById("joinRequestPopup")?.classList.add("hidden"); };
+document.getElementById("endLiveBtn").onclick = ()=>{ localTrack?.close(); client?.leave(); location.reload(); };
 </script>
 </body>
 </html>
