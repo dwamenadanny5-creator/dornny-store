@@ -3,155 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DORNNY - SHEIN + LIVE + Firebase</title>
+<title>DORNNY - SHEIN Clone + TikTok LIVE</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-<style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif}.hide-scroll::-webkit-scrollbar{display:none}.prod-swiper{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.prod-swiper>div{min-width:100%;scroll-snap-align:center}</style>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fff}
+.hide-scroll::-webkit-scrollbar{display:none}
+.shein-tab{white-space:nowrap;padding:8px 0;border-bottom:2.5px solid transparent;font-size:13px}
+.shein-tab.active{border-bottom-color:#000;font-weight:700;color:#000}
+.prod-swiper{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.prod-swiper>div{min-width:100%;scroll-snap-align:center}
+.live-gradient{background:linear-gradient(to bottom,rgba(0,0,0,0.6),transparent 30%,transparent 70%,rgba(0,0,0,0.8))}
+</style>
 </head>
-<body class="bg-[#fafafa] pb-[80px]">
+<body class="pb-[70px]">
 
-<header class="bg-white sticky top-0 z-50 p-3 border-b">
-<div class="flex justify-between items-center">
-<div class="font-black text-[24px] tracking-[0.1em]">DORNNY</div>
-<div class="flex gap-4 items-center">
-<button><i class="fa-regular fa-heart text-xl"></i></button>
-<button onclick="openCart()" class="relative"><i class="fa-solid fa-bag-shopping text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+<!-- LOGIN SCREEN LIKE SHEIN -->
+<div id="loginScreen" class="fixed inset-0 bg-white z-[100] flex flex-col p-6">
+<div class="text-center mt-10"><h1 class="font-black text-[28px] tracking-[0.15em]">DORNNY</h1><p class="text-[11px] tracking-[0.3em] text-gray-400 mt-1">GHANA'S SHEIN</p></div>
+<img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400" class="w-full h-40 object-cover rounded-2xl mt-6">
+<h2 class="font-bold text-xl mt-6">Welcome to DORNNY</h2><p class="text-xs text-gray-500 mt-1">Fashion for everyone - like SHEIN + TikTok LIVE</p>
+<input id="loginEmail" placeholder="Email" class="w-full bg-[#f5f5f5] p-4 rounded-full mt-6 text-sm">
+<input id="loginPass" type="password" placeholder="Password" class="w-full bg-[#f5f5f5] p-4 rounded-full mt-3 text-sm">
+<button onclick="doLogin()" class="w-full bg-black text-white p-4 rounded-full mt-4 font-bold text-sm">LOG IN / SIGN UP</button>
+<button onclick="skipLogin()" class="w-full text-gray-400 text-xs mt-3">Skip for now →</button>
+<p class="text-[10px] text-gray-400 text-center mt-6">By continuing, you agree to our Terms & Privacy. SHEIN-style secure login.</p>
+<div class="mt-4 flex justify-center gap-3 text-[10px] text-gray-400"><span>🇬🇭 Ghana</span><span>•</span><span>GH₵ GHS</span><span>•</span><span>English</span></div>
+</div>
+
+<!-- HEADER - EXACT SHEIN -->
+<header class="bg-white sticky top-0 z-40 border-b">
+<div class="p-3 flex justify-between items-center">
+<div class="font-black text-[22px] tracking-[0.1em]">DORNNY</div>
+<div class="flex gap-3 items-center text-[18px]">
+<i class="fa-regular fa-envelope"></i><i class="fa-regular fa-headset"></i>
+<div class="relative"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span></div>
 </div>
 </div>
-<div class="mt-3 flex items-center bg-[#f5f5f5] rounded-full px-3 py-2.5 border border-pink-200">
-<i class="fa-solid fa-magnifying-glass text-gray-400 mr-2"></i>
-<input id="searchInput" oninput="render()" placeholder="Search..." class="bg-transparent w-full text-sm outline-none">
+<!-- SEARCH BAR - SHEIN EXACT -->
+<div class="px-3 pb-2 flex gap-2">
+<div class="flex-1 bg-[#f5f5f5] rounded-full flex items-center px-3 py-2.5"><i class="fa-solid fa-magnifying-glass text-gray-400 text-sm mr-2"></i><input id="searchInput" oninput="render()" placeholder="Dress" class="bg-transparent w-full text-[13px] outline-none"><i class="fa-solid fa-camera text-gray-700 ml-2"></i></div>
+<button class="bg-[#f5f5f5] px-3 rounded-full"><i class="fa-solid fa-filter text-sm"></i></button>
 </div>
-<div class="mt-3 flex gap-5 overflow-x-auto hide-scroll text-sm font-medium">
-<button onclick="filterCat('All')" id="cat-All" class="cat-btn border-b-2 border-black font-bold pb-1">All</button>
-<button onclick="filterCat('Women')" id="cat-Women" class="cat-btn text-gray-500 pb-1">Women</button>
-<button onclick="filterCat('Men')" id="cat-Men" class="cat-btn text-gray-500 pb-1">Men</button>
-<button onclick="filterCat('Shoes')" id="cat-Shoes" class="cat-btn text-gray-500 pb-1">Shoes</button>
-<button onclick="filterCat('Bags')" id="cat-Bags" class="cat-btn text-gray-500 pb-1">Bags</button>
-<button onclick="filterCat('Electronics')" id="cat-Electronics" class="cat-btn text-gray-500 pb-1">Electronics</button>
+<!-- CATEGORY TABS - SHEIN EXACT -->
+<div class="flex gap-5 px-3 overflow-x-auto hide-scroll border-b mt-1">
+<button onclick="filterCat('All')" id="cat-All" class="shein-tab active">All</button>
+<button onclick="filterCat('Women')" id="cat-Women" class="shein-tab text-gray-500">Women Fashion</button>
+<button onclick="filterCat('Curve')" id="cat-Curve" class="shein-tab text-gray-500">Curve</button>
+<button onclick="filterCat('Men')" id="cat-Men" class="shein-tab text-gray-500">Men</button>
+<button onclick="filterCat('Kids')" id="cat-Kids" class="shein-tab text-gray-500">Kids</button>
+<button onclick="filterCat('Shoes')" id="cat-Shoes" class="shein-tab text-gray-500">Shoes</button>
+<button onclick="filterCat('Bags')" id="cat-Bags" class="shein-tab text-gray-500">Bags</button>
+<button onclick="filterCat('Beauty')" id="cat-Beauty" class="shein-tab text-gray-500">Beauty</button>
+<button onclick="filterCat('Home')" id="cat-Home" class="shein-tab text-gray-500">Home</button>
 </div>
 </header>
 
-<div class="m-3 bg-gradient-to-r from-[#ff6b9d] via-[#c44569] to-black text-white rounded-2xl p-3 flex justify-between items-center">
-<div><p class="font-black text-sm">FLASH SALE ⚡ LIVE</p><p class="text-[11px]">Up to 50% OFF • Ends in <span id="timer">02:14:32</span></p></div>
-<button class="bg-[#ff6b9d] px-3 py-1.5 rounded-full text-xs font-bold">Shop now →</button>
+<!-- COUPON BANNER LIKE SHEIN -->
+<div class="bg-[#ffe6e9] text-[#ff2442] text-[11px] px-3 py-1.5 flex justify-between">
+<span>🎟️ New User Coupon: <b>GH₵ 50 OFF</b> for orders over GH₵ 200</span><span>></span>
 </div>
 
-<div class="px-3 flex justify-between"><h2 class="font-bold text-sm">Trending Now 🔥 Firebase LIVE</h2><span id="status" class="text-[10px] text-green-600">● Connected to Firebase</span></div>
-<div id="productGrid" class="grid grid-cols-2 gap-2 p-2"></div>
+<!-- FLASH SALE + POINTS - SHEIN EXACT -->
+<div class="grid grid-cols-3 gap-2 p-2">
+<div class="bg-gradient-to-r from-black to-gray-800 text-white rounded-xl p-2.5 flex justify-between items-center col-span-2">
+<div><p class="text-[11px] font-bold">⚡FLASH SALE</p><p class="text-[9px]">Ends in <span id="timer" class="font-mono">02:14:32</span></p></div>
+<div class="w-8 h-8 bg-white rounded-full"><img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=100" class="w-full h-full rounded-full object-cover"></div>
+</div>
+<div class="bg-[#fff8e1] rounded-xl p-2.5 text-center"><p class="text-[9px]">🪙 Points</p><p class="text-[11px] font-bold">Check-in</p></div>
+</div>
 
-<div id="productModal" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto">
-<div class="sticky top-0 bg-white p-2 flex justify-between border-b"><button onclick="closeProduct()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button><span class="text-[10px]">Swipe ↔️ Double tap zoom</span></div>
+<!-- LIVE SCROLL - TIKTOK STYLE -->
+<div class="px-3 py-2">
+<div class="flex justify-between items-center"><h3 class="font-bold text-[13px] flex items-center gap-1"><span class="bg-[#ff2d55] text-white text-[8px] px-1 rounded">LIVE</span> Trending LIVE</h3><span onclick="openLiveList()" class="text-[11px] text-gray-400">More ></span></div>
+<div id="liveList" class="flex gap-2 overflow-x-auto hide-scroll mt-2"></div>
+</div>
+
+<!-- PRODUCTS GRID - SHEIN EXACT 2 COL -->
+<div class="px-2 py-1 bg-[#f5f5f5]"><h3 class="font-bold text-[12px] p-2">✨ For You - Recommended</h3><div id="productGrid" class="grid grid-cols-2 gap-2"></div></div>
+
+<!-- PRODUCT DETAIL - SHEIN EXACT -->
+<div id="productModal" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto">
+<div class="sticky top-0 bg-white z-10 p-2 flex justify-between border-b"><button onclick="closeProduct()" class="w-8 h-8 bg-black/10 rounded-full"><i class="fa-solid fa-arrow-left"></i></button><div class="flex gap-4 text-lg"><i class="fa-solid fa-share-nodes"></i><i class="fa-regular fa-heart"></i><i class="fa-solid fa-bag-shopping"></i></div></div>
 <div id="prodSwiper" class="prod-swiper w-full h-[55vh] bg-[#f5f5f5]"></div>
 <div id="productDetail" class="p-3"></div>
 </div>
 
-<button onclick="goLive()" class="fixed bottom-[90px] right-4 bg-[#ff2d55] w-14 h-14 rounded-full shadow-lg flex flex-col items-center justify-center text-white z-40"><i class="fa-solid fa-video"></i><span class="text-[10px] font-black">LIVE</span></button>
+<!-- TIKTOK STYLE LIVE ROOM - OTHERS CAN JOIN -->
+<div id="liveRoomModal" class="fixed inset-0 bg-black z-[60] hidden">
+<div class="relative w-full h-full">
+<video id="liveVideo" autoplay playsinline muted class="w-full h-full object-cover" style="filter:none!important;"></video>
+<video id="remoteVideo" autoplay playsinline class="hidden w-full h-full object-cover"></video>
+<div class="absolute inset-0 live-gradient pointer-events-none"></div>
+<!-- TOP BAR -->
+<div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-center">
+<div class="flex items-center gap-2"><img id="hostAvatar" src="https://i.pravatar.cc/100" class="w-8 h-8 rounded-full border border-white"><div><p id="hostName" class="text-white text-[12px] font-bold">DORNNY Official</p><p class="text-white/70 text-[10px]"><span id="viewerCount">0</span> viewers</p></div><button class="bg-[#ff2d55] text-white text-[10px] px-3 py-1 rounded-full ml-2">Follow</button></div>
+<button onclick="closeLive()" class="w-8 h-8 bg-black/40 text-white rounded-full"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<!-- LEFT COMMENTS -->
+<div class="absolute bottom-[90px] left-3 right-24 space-y-1 max-h-[30vh] overflow-hidden" id="liveComments"></div>
+<!-- RIGHT GIFT BAR -->
+<div class="absolute bottom-[90px] right-3 flex flex-col gap-3 items-center">
+<button class="w-8 h-8 bg-black/30 rounded-full text-white"><i class="fa-solid fa-gift text-pink-400"></i></button>
+<button class="w-8 h-8 bg-black/30 rounded-full text-white"><i class="fa-regular fa-heart"></i></button>
+</div>
+<!-- BOTTOM PRODUCT CARD LIKE TIKTOK SHOP -->
+<div class="absolute bottom-[50px] left-3 right-3 bg-white rounded-xl p-2 flex gap-2 items-center">
+<img id="liveProductImg" src="" class="w-12 h-12 rounded-lg object-cover"><div class="flex-1"><p id="liveProductName" class="text-[11px] font-bold truncate">Product</p><p id="liveProductPrice" class="text-[#ff2d55] text-[12px] font-bold">GH₵ 0</p></div><button onclick="addToCartLive()" class="bg-[#ff2d55] text-white text-[11px] px-4 py-2 rounded-full font-bold">Buy</button>
+</div>
+<!-- BOTTOM INPUT -->
+<div class="absolute bottom-2 left-3 right-3 flex gap-2">
+<input id="liveCommentInput" placeholder="Add comment..." class="flex-1 bg-white/20 backdrop-blur text-white placeholder-white/60 text-[12px] px-4 py-2 rounded-full outline-none"><button onclick="sendComment()" class="bg-[#ff2d55] w-8 h-8 rounded-full text-white"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+</div>
+</div>
+</div>
 
-<div id="addModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-3xl p-5">
-<h3 class="font-bold mb-1">Sell on DORNNY (Firebase)</h3><p class="text-[10px] text-gray-400 mb-3">This product will show on ALL phones forever!</p>
-<input id="nName" placeholder="Product Name" class="w-full bg-gray-100 p-3 rounded-xl mb-2 text-sm">
-<input id="nPrice" type="number" placeholder="Price GH₵" class="w-full bg-gray-100 p-3 rounded-xl mb-2 text-sm">
-<input id="nImg" placeholder="Image URL https://..." class="w-full bg-gray-100 p-3 rounded-xl mb-2 text-sm">
-<select id="nCat" class="w-full bg-gray-100 p-3 rounded-xl mb-3 text-sm"><option>Women</option><option>Men</option><option>Shoes</option><option>Bags</option><option>Electronics</option></select>
-<button onclick="addProductFirebase()" class="w-full bg-black text-white p-3 rounded-full font-bold text-sm">Add to Firebase - Permanent</button>
-<button onclick="closeAdd()" class="w-full mt-2 text-gray-500 text-sm">Cancel</button>
-</div></div>
+<!-- LIVE LIST MODAL -->
+<div id="liveListModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-2xl max-h-[80vh] overflow-y-auto p-3"><div class="flex justify-between"><h3 class="font-bold">🔴 Live Now - TikTok Style</h3><button onclick="closeLiveList()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button></div><div id="liveListFull" class="grid grid-cols-2 gap-2 mt-3"></div><button onclick="startHostLive()" class="w-full bg-[#ff2d55] text-white p-3 rounded-full mt-4 font-bold">🎥 START MY LIVE (Host)</button></div></div>
 
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-50">
-<button class="flex flex-col items-center text-[#ff6b9d]"><i class="fa-solid fa-house"></i><span class="text-[10px]">Home</span></button>
-<button class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-bars"></i><span class="text-[10px]">Categories</span></button>
-<button onclick="openAddModal()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-plus"></i><span class="text-[10px]">Sell</span></button>
-<button class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-heart"></i><span class="text-[10px]">Wishlist</span></button>
-<button onclick="openCart()" class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user"></i><span class="text-[10px]">Me</span></button>
+<!-- FLOATING LIVE BUTTON -->
+<button onclick="openLiveList()" class="fixed bottom-[80px] right-4 bg-[#ff2d55] w-14 h-14 rounded-full shadow-xl flex flex-col items-center justify-center text-white z-30"><i class="fa-solid fa-video text-sm"></i><span class="text-[9px] font-black mt-0.5">LIVE</span><span class="absolute -top-1 -right-1 bg-black text-[8px] w-4 h-4 rounded-full flex items-center justify-center" id="liveBadge">0</span></button>
+
+<!-- ADD PRODUCT -->
+<div id="addModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-2xl p-4"><h3 class="font-bold">Add Product (Firebase)</h3><input id="nName" placeholder="Name" class="w-full bg-[#f5f5f5] p-3 rounded-full mt-3 text-sm"><input id="nPrice" type="number" placeholder="Price GH₵" class="w-full bg-[#f5f5f5] p-3 rounded-full mt-2 text-sm"><input id="nImg" placeholder="Image URL" class="w-full bg-[#f5f5f5] p-3 rounded-full mt-2 text-sm"><select id="nCat" class="w-full bg-[#f5f5f5] p-3 rounded-full mt-2 text-sm"><option>Women</option><option>Men</option><option>Shoes</option><option>Bags</option><option>Beauty</option><option>Curve</option><option>Home</option></select><button onclick="addProduct()" class="w-full bg-black text-white p-3 rounded-full mt-3 font-bold text-sm">Publish Forever</button><button onclick="closeAdd()" class="w-full text-gray-400 text-xs mt-2">Cancel</button></div></div>
+
+<!-- BOTTOM NAV - SHEIN EXACT -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1.5 z-40">
+<button class="flex flex-col items-center text-black"><i class="fa-solid fa-house text-[18px]"></i><span class="text-[9px] mt-0.5 font-bold">Home</span></button>
+<button class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-table-cells text-[18px]"></i><span class="text-[9px] mt-0.5">Category</span></button>
+<button onclick="openLiveList()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-clapperboard text-[18px]"></i><span class="text-[9px] mt-0.5">Live</span></button>
+<button onclick="openAddModal()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-bag-shopping text-[18px]"></i><span class="text-[9px] mt-0.5">Cart</span></button>
+<button onclick="document.getElementById('loginScreen').style.display='flex'" class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user text-[18px]"></i><span class="text-[9px] mt-0.5">Me</span></button>
 </nav>
 
 <script>
-// ========== FIREBASE CONFIG - REPLACE WITH YOUR OWN ==========
+// FIREBASE CONFIG - REPLACE WITH YOURS FROM firebase.google.com
 const firebaseConfig = {
-  apiKey: "REPLACE_WITH_YOURS",
-  authDomain: "REPLACE.firebaseapp.com",
-  projectId: "REPLACE",
-  storageBucket: "REPLACE.appspot.com",
-  messagingSenderId: "REPLACE",
-  appId: "REPLACE"
+  apiKey: "AIzaSyDUMMY-REPLACE-WITH-YOURS",
+  authDomain: "dornny-store.firebaseapp.com",
+  projectId: "dornny-store",
+  storageBucket: "dornny-store.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123:web:abc"
 };
-// ========== END CONFIG ==========
+try{ firebase.initializeApp(firebaseConfig); }catch(e){}
+const db = firebase.firestore? firebase.firestore() : null;
+const auth = firebase.auth? firebase.auth() : null;
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-const defaultProducts=[
-{id:1,name:"Oversized Hoodie",price:24.99,old:35.99,cat:"Men",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400",imgs:["https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"]},
-{id:2,name:"Cargo Pants",price:29.5,old:49,cat:"Women",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400",imgs:["https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"]},
-{id:3,name:"Air Max",price:350,old:450,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",imgs:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"]}
+let products = JSON.parse(localStorage.getItem('dornny_final')||'null') || [
+{id:1,name:"SHEIN EZwear Solid Color Cami Top",price:45,old:89,cat:"Women",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400",imgs:["https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"],rating:4.9,reviews:2300,sold:"1.2k+ sold"},
+{id:2,name:"Men's Cargo Pants Street",price:120,old:210,cat:"Men",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400",imgs:["https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"],rating:4.7,reviews:890,sold:"500+ sold"},
+{id:3,name:"Air Cushion Sneakers Women",price:350,old:450,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",imgs:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"],rating:4.8,reviews:3200,sold:"2k+ sold"},
+{id:4,name:"Mini Tote Bag Leather",price:89,old:120,cat:"Bags",img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400",imgs:["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400"],rating:4.6,reviews:450,sold:"300+ sold"},
 ];
-
-let products = [...defaultProducts];
 let cart = JSON.parse(localStorage.getItem('dornny_cart')||'[]');
 let currentCat='All';
+let currentLiveProduct=null;
+let liveUnsub=null;
 
-// LISTEN TO FIREBASE - PRODUCTS NEVER DISAPPEAR + SHOW ON ALL PHONES
-db.collection("products").orderBy("createdAt","desc").onSnapshot((snap)=>{
-  const fbProducts = snap.docs.map(doc=>({id:doc.id,...doc.data()}));
-  if(fbProducts.length>0){
-    products = [...fbProducts,...defaultProducts];
-    document.getElementById('status').innerText = "● Firebase: "+fbProducts.length+" live products";
-    document.getElementById('status').className="text-[10px] text-green-600";
-  }
-  render();
-}, (err)=>{
-  document.getElementById('status').innerText = "● Offline - Using local";
-  render();
-});
+// FIREBASE LISTEN
+if(db){
+ db.collection("products").orderBy("createdAt","desc").onSnapshot(snap=>{
+  const fb = snap.docs.map(d=>({id:d.id,...d.data()}));
+  if(fb.length) products = [...fb,...products.filter(p=>typeof p.id==='number')];
+  render(); renderLivePreview();
+ });
+ db.collection("liveRooms").where("isLive","==",true).onSnapshot(snap=>{
+  const lives = snap.docs.map(d=>({id:d.id,...d.data()}));
+  document.getElementById('liveBadge').innerText=lives.length;
+  renderLivePreview(lives);
+ });
+}
 
-function saveCart(){ localStorage.setItem('dornny_cart', JSON.stringify(cart)); document.getElementById('cartCount').innerText=cart.length; }
 function render(){
- let list = currentCat==='All'? products : products.filter(p=>p.cat===currentCat);
+ let list = currentCat==='All'?products:products.filter(p=>p.cat===currentCat);
  const q=document.getElementById('searchInput').value.toLowerCase();
  if(q) list=list.filter(p=>p.name.toLowerCase().includes(q));
  document.getElementById('productGrid').innerHTML=list.map(p=>`
-  <div onclick="openProduct('${p.id}')" class="bg-white rounded-xl overflow-hidden shadow-sm">
-   <img src="${p.img}" class="w-full h-52 object-cover">
-   <div class="p-2"><p class="text-[12px] font-medium truncate">${p.name}</p><p class="font-bold text-sm">GH₵ ${p.price}</p><p class="text-[10px] text-gray-400">${p.cat} • Firestore</p></div>
+ <div onclick="openProduct('${p.id}')" class="bg-white rounded-lg overflow-hidden">
+  <img src="${p.img}" class="w-full h-[180px] object-cover">
+  <div class="p-1.5"><p class="text-[11px] leading-[13px] h-[26px] overflow-hidden">${p.name}</p>
+  <div class="flex items-end gap-1 mt-1"><span class="font-bold text-[13px]">GH₵${p.price}</span><span class="text-[9px] text-gray-400 line-through">GH₵${p.old||''}</span></div>
+  <p class="text-[9px] text-gray-400 mt-0.5">⭐${p.rating||4.8} (${p.reviews||100}) • ${p.sold||''}</p>
+  </div>
+ </div>`).join('');
+ document.getElementById('cartCount').innerText=cart.length;
+ localStorage.setItem('dornny_final',JSON.stringify(products.slice(0,20)));
+}
+
+function renderLivePreview(lives){
+ const demoLives = lives && lives.length? lives : [{id:'demo1',hostName:'DORNNY Live',viewers:234,title:'New Arrivals Try-On',img:products[0].img},{id:'demo2',hostName:'Ama Fashion',viewers:120,title:'Shoes Sale 50% OFF',img:products[2].img}];
+ document.getElementById('liveList').innerHTML=demoLives.map(l=>`
+  <div onclick="joinLive('${l.id}')" class="relative min-w-[90px] w-[90px] h-[120px] rounded-xl overflow-hidden">
+   <img src="${l.img||products[0].img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+   <span class="absolute top-1 left-1 bg-[#ff2d55] text-white text-[7px] px-1 rounded">LIVE</span><span class="absolute top-1 right-1 bg-black/50 text-white text-[7px] px-1 rounded">${l.viewers||l.viewerCount||0} 👀</span>
+   <p class="absolute bottom-1 left-1 right-1 text-white text-[8px] leading-[10px] truncate">${l.hostName}</p>
   </div>`).join('');
- saveCart();
+ if(document.getElementById('liveListFull')) document.getElementById('liveListFull').innerHTML=demoLives.map(l=>`
+  <div onclick="joinLive('${l.id}')" class="relative rounded-xl overflow-hidden h-48"><img src="${l.img||products[0].img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div><span class="absolute top-2 left-2 bg-[#ff2d55] text-white text-[9px] px-2 py-0.5 rounded-full">● LIVE</span><p class="absolute bottom-6 left-2 text-white text-[11px] font-bold">${l.title||'Live Shopping'}</p><p class="absolute bottom-2 left-2 text-white/80 text-[9px]">${l.hostName} • ${l.viewers||0} viewers</p></div>`).join('');
 }
-function filterCat(c){currentCat=c; document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('border-black','font-bold')); document.getElementById('cat-'+c).classList.add('border-black','font-bold'); render();}
-function openProduct(id){
- const p=products.find(x=>String(x.id)===String(id));
- document.getElementById('prodSwiper').innerHTML=(p.imgs||[p.img]).map(img=>`<div class="flex items-center justify-center bg-[#f5f5f5]"><img src="${img}" class="w-full h-full object-contain" ondblclick="this.classList.toggle('scale-[2]')" style="transition:0.3s"></div>`).join('');
- document.getElementById('productModal').style.display='block';
- document.getElementById('productDetail').innerHTML=`<p class="font-bold">${p.name}</p><p class="text-xl font-black mt-1">GH₵ ${p.price}</p><p class="text-xs text-gray-500 mt-1">Swipe ↔️ Double tap to zoom</p><div class="flex gap-2 mt-4"><button onclick="addToCart('${p.id}')" class="flex-1 bg-black text-white py-3 rounded-full text-sm font-bold">Add to Cart</button><button class="border px-4 py-3 rounded-full"><i class="fab fa-whatsapp text-green-500"></i></button></div>`;
-}
+
+function filterCat(c){currentCat=c; document.querySelectorAll('.shein-tab').forEach(b=>{b.classList.remove('active');b.classList.add('text-gray-500')}); document.getElementById('cat-'+c).classList.add('active'); render();}
+function openProduct(id){const p=products.find(x=>String(x.id)===String(id)); currentLiveProduct=p; document.getElementById('prodSwiper').innerHTML=(p.imgs||[p.img]).map(img=>`<div class="flex items-center justify-center bg-[#f5f5f5]"><img src="${img}" class="w-full h-full object-contain" style="filter:none!important"></div>`).join(''); document.getElementById('productModal').style.display='block'; document.getElementById('productDetail').innerHTML=`<div class="flex justify-between"><p class="font-bold text-[13px] w-3/4">${p.name}</p><i class="fa-regular fa-heart"></i></div><div class="flex items-end gap-2 mt-2"><span class="text-[20px] font-bold">GH₵${p.price}</span><span class="text-[12px] line-through text-gray-400">GH₵${p.old}</span><span class="bg-[#ffe6e9] text-[#ff2442] text-[10px] px-1.5 py-0.5">-45%</span></div><p class="text-[10px] text-gray-400 mt-1">⭐${p.rating} • ${p.reviews} Ratings • ${p.sold}</p><div class="mt-3 text-[11px]"><p>✓ Free Shipping • COD Available • 15 Days Free Return</p></div><div class="flex gap-2 mt-4"><button onclick="addToCart('${p.id}')" class="flex-1 bg-black text-white py-3 rounded-full text-[13px] font-bold">ADD TO CART</button><button onclick="joinLive('${p.id}')" class="bg-[#ff2d55] text-white px-4 py-3 rounded-full text-[12px]">🔴 LIVE</button></div>`;}
 function closeProduct(){document.getElementById('productModal').style.display='none';}
-function addToCart(id){cart.push(products.find(p=>String(p.id)===String(id))); saveCart(); alert('Added!');}
+function addToCart(id){const p=products.find(x=>String(x.id)===String(id)); cart.push(p); localStorage.setItem('dornny_cart',JSON.stringify(cart)); render(); alert('Added to cart!');}
 function openAddModal(){document.getElementById('addModal').style.display='flex';}
 function closeAdd(){document.getElementById('addModal').style.display='none';}
-function openCart(){alert('Cart: '+cart.length+' items');}
-function goLive(){
- const room=prompt('LIVE Room Name:','DORNNY-LIVE-'+Math.floor(Math.random()*1000));
- if(!room) return;
- const url='https://meet.jit.si/'+room.replace(/\s+/g,'-');
- window.open(url,'_blank');
- alert('LIVE Link: '+url+' - Share to buyers, ANY phone can join!');
-}
-// ADD TO FIREBASE - PERMANENT FOR ALL PHONES
-async function addProductFirebase(){
- const name=document.getElementById('nName').value, price=parseFloat(document.getElementById('nPrice').value), img=document.getElementById('nImg').value, cat=document.getElementById('nCat').value;
- if(!name||!price||!img) return alert('Fill all fields');
- if(firebaseConfig.apiKey.includes('REPLACE')) return alert('First add your Firebase config at top of file! Go to firebase.google.com and paste config.');
+async function addProduct(){const name=document.getElementById('nName').value,price=parseFloat(document.getElementById('nPrice').value),img=document.getElementById('nImg').value,cat=document.getElementById('nCat').value; if(!name||!price||!img) return alert('Fill all'); if(db && firebaseConfig.apiKey.includes('AIzaSyDUMMY')){products.unshift({id:Date.now(),name,price,old:price*1.5,cat,img,imgs:[img],rating:5,reviews:0,sold:"New"}); render(); alert('Added locally! Add real Firebase config to make permanent for all phones');} else if(db){await db.collection("products").add({name,price,old:price*1.5,cat,img,imgs:[img],rating:5,reviews:0,sold:"New",createdAt:firebase.firestore.FieldValue.serverTimestamp()});} closeAdd();}
+
+// LOGIN
+function doLogin(){const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPass').value; if(!e||!p) return alert('Enter email & password'); if(auth &&!firebaseConfig.apiKey.includes('DUMMY')){auth.signInWithEmailAndPassword(e,p).catch(()=>auth.createUserWithEmailAndPassword(e,p)).then(()=>{document.getElementById('loginScreen').style.display='none';}).catch(err=>alert(err.message));} else {document.getElementById('loginScreen').style.display='none'; localStorage.setItem('dornny_user',e);} }
+function skipLogin(){document.getElementById('loginScreen').style.display='none';}
+if(localStorage.getItem('dornny_user')) document.getElementById('loginScreen').style.display='none';
+
+// TIKTOK LIVE LOGIC - OTHERS CAN JOIN
+function openLiveList(){document.getElementById('liveListModal').style.display='flex'; renderLivePreview();}
+function closeLiveList(){document.getElementById('liveListModal').style.display='none';}
+
+async function startHostLive(){
+ const product = products[0];
+ const roomName = prompt("Live Title:","New Collection Drop 🔥");
+ if(!roomName) return;
+ closeLiveList();
+ document.getElementById('liveRoomModal').style.display='block';
+ document.getElementById('hostName').innerText="You (Host)";
+ document.getElementById('liveProductImg').src=product.img;
+ document.getElementById('liveProductName').innerText=product.name;
+ document.getElementById('liveProductPrice').innerText="GH₵"+product.price;
+ currentLiveProduct=product;
  try{
-   await db.collection("products").add({name,price,old:price*1.3,cat,img,imgs:[img],createdAt: firebase.firestore.FieldValue.serverTimestamp()});
-   alert('SUCCESS! Product saved to Firebase - Will NEVER disappear and shows on ALL phones!');
-   closeAdd();
-   document.getElementById('nName').value='';document.getElementById('nPrice').value='';document.getElementById('nImg').value='';
- }catch(e){alert('Error: '+e.message); console.log(e);}
+  const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});
+  document.getElementById('liveVideo').srcObject=stream;
+  window.liveStream=stream;
+  if(db){
+   const doc = await db.collection("liveRooms").add({hostName:"DORNNY Host",title:roomName,isLive:true,viewers:1,img:product.img,productId:product.id,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+   window.currentLiveId=doc.id;
+   liveUnsub = db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(snap=>{
+    const div=document.getElementById('liveComments');
+    div.innerHTML=snap.docs.map(d=>{const c=d.data(); return `<p class="text-[11px] text-white"><b class="text-[#ffeb3b]">${c.user}:</b> ${c.text}</p>`}).join('');
+   });
+  }
+  addCommentSystem("Host started live! Welcome 🎉");
+ }catch(e){alert("Allow camera! "+e.message);}
+}
+
+async function joinLive(id){
+ document.getElementById('liveListModal').style.display='none';
+ document.getElementById('liveRoomModal').style.display='block';
+ const product = products.find(p=>String(p.id)===String(id))||products[0];
+ document.getElementById('hostName').innerText="DORNNY Live";
+ document.getElementById('liveProductImg').src=product.img;
+ document.getElementById('liveProductName').innerText=product.name;
+ document.getElementById('liveProductPrice').innerText="GH₵"+product.price;
+ currentLiveProduct=product;
+ document.getElementById('liveVideo').style.display='none';
+ // For viewer, show host avatar as video placeholder + try join Jitsi as fallback for real video
+ document.getElementById('liveComments').innerHTML='<p class="text-white text-[11px]">Joined live! Chat with host...</p>';
+ if(db){
+  const roomId = id.length>10? id : (await db.collection("liveRooms").limit(1).get()).docs[0]?.id;
+  if(roomId){
+   liveUnsub = db.collection("liveRooms").doc(roomId).collection("comments").orderBy("createdAt").onSnapshot(snap=>{
+    const div=document.getElementById('liveComments');
+    div.innerHTML=snap.docs.map(d=>{const c=d.data(); return `<p class="text-[11px] text-white"><b class="text-[#ffeb3b]">${c.user}:</b> ${c.text}</p>`}).join('');
+   });
+   db.collection("liveRooms").doc(roomId).update({viewers:firebase.firestore.FieldValue.increment(1)});
+   window.currentLiveId=roomId;
+  }
+ }
+ // Show fake live video for demo - replace with real WebRTC later
+ document.getElementById('liveVideo').style.display='block';
+ document.getElementById('liveVideo').poster=product.img;
+ addCommentSystem("Ama joined! 🔥");
+ setTimeout(()=>addCommentSystem("Love this top! Price?"),1500);
+}
+
+function addCommentSystem(text){const div=document.getElementById('liveComments'); div.innerHTML+=`<p class="text-[11px] text-white"><b class="text-[#ffeb3b]">System:</b> ${text}</p>`; div.scrollTop=div.scrollHeight;}
+
+async function sendComment(){
+ const input=document.getElementById('liveCommentInput'); const text=input.value; if(!text) return;
+ const user=localStorage.getItem('dornny_user')||"Guest";
+ if(db && window.currentLiveId){ await db.collection("liveRooms").doc(window.currentLiveId).collection("comments").add({user,text,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }
+ else{ addCommentSystem(text); }
+ input.value='';
+}
+function addToCartLive(){ if(currentLiveProduct) addToCart(currentLiveProduct.id); }
+function closeLive(){
+ if(window.liveStream) window.liveStream.getTracks().forEach(t=>t.stop());
+ if(liveUnsub) liveUnsub();
+ document.getElementById('liveRoomModal').style.display='none';
+ if(db && window.currentLiveId && document.getElementById('hostName').innerText.includes("You")){ db.collection("liveRooms").doc(window.currentLiveId).update({isLive:false}); }
 }
 setInterval(()=>{const el=document.getElementById('timer'); if(!el) return; let [h,m,s]=el.innerText.split(':').map(Number); s--; if(s<0){s=59;m--} if(m<0){m=59;h--} el.innerText=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`},1000);
-render();
+render(); renderLivePreview();
 </script>
 </body>
 </html>
