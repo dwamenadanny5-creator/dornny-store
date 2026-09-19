@@ -5,476 +5,147 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DORNNY - Ghana's Super App</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-.no-scrollbar::-webkit-scrollbar{display:none}
-.swiper{width:100%;height:100%}
-.heart-anim{animation:heartPop.6s ease}
-@keyframes heartPop{0%{transform:scale(0)}50%{transform:scale(1.5)}100%{transform:scale(1);opacity:0}}
-.zoom-img{transition:transform.3s}
+#prodSwiperWrapper{ display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+#prodSwiperWrapper::-webkit-scrollbar{ display:none; }
+#prodSwiperWrapper div{ scroll-snap-align:center; }
+.zoomed{ transform:scale(2); transition:transform 0.3s; }
 </style>
 </head>
-<body class="bg-[#f5f5f5] pb-[80px]">
+<body class="bg-gray-50 pb-20">
 
-<!-- TOP HEADER -->
-<div class="bg-white sticky top-0 z-40 shadow-sm">
-<div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center">
-<h1 class="text-xl font-black tracking-tighter">DORNNY<span class="text-red-600">.</span></h1>
-<div class="flex items-center gap-3">
-<button onclick="showSection('cart')" class="relative"><i class="fa fa-shopping-bag text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span></button>
-<button onclick="openMsg()" class="relative"><i class="fa-regular fa-paper-plane text-xl"></i><span id="msgDot" class="absolute top-0 right-0 bg-red-500 w-2 h-2 rounded-full hidden"></span></button>
+<!-- HEADER -->
+<header class="bg-black text-white p-3 sticky top-0 z-50 flex justify-between items-center">
+<div class="font-black text-xl tracking-widest">DORNNY</div>
+<div class="flex gap-3">
+<button onclick="goLive()" class="bg-red-600 px-3 py-1 rounded-full text-sm"><i class="fa-solid fa-video"></i> LIVE</button>
+<button onclick="openAddModal()" class="bg-white text-black px-3 py-1 rounded-full text-sm"><i class="fa-solid fa-plus"></i> Sell</button>
+<button onclick="openCart()" class="relative"><i class="fa-solid fa-bag-shopping text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span></button>
 </div>
-</div>
-<!-- SEARCH -->
-<div class="px-3 pb-2"><input id="searchInput" onkeyup="renderHome()" placeholder="Search Dornny - Men, Women, Cars, Pets..." class="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm"></div>
-</div>
+</header>
 
-<!-- MAIN CONTAINER -->
-<div class="max-w-7xl mx-auto">
-
-<!-- HOME SECTION -->
-<div id="homeSection">
-<div class="px-3 py-2 flex gap-2 overflow-x-auto no-scrollbar">
-<button onclick="filterCat('All',this)" class="catBtn bg-black text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap font-bold">All</button>
-<button onclick="filterCat('Men',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Men</button>
-<button onclick="filterCat('Women',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Women</button>
-<button onclick="filterCat('Pets',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Pets</button>
-<button onclick="filterCat('Toys',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Toys</button>
-<button onclick="filterCat('Jewelry',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Jewelry & Accs</button>
-<button onclick="filterCat('Furniture',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Furnitures</button>
-<button onclick="filterCat('Office',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Office</button>
-<button onclick="filterCat('Cars',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Cars</button>
-<button onclick="filterCat('Tires',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Tires & Rims</button>
-<button onclick="filterCat('Home',this)" class="catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap">Home Use</button>
-</div>
-<div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 gap-2 p-2"></div>
+<!-- CATEGORIES -->
+<div class="p-3 flex gap-2 overflow-x-auto">
+<button onclick="filterCat('All')" class="bg-black text-white px-4 py-1.5 rounded-full text-sm whitespace-nowrap">All</button>
+<button onclick="filterCat('Fashion')" class="bg-white border px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Fashion</button>
+<button onclick="filterCat('Electronics')" class="bg-white border px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Electronics</button>
+<button onclick="filterCat('Shoes')" class="bg-white border px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Shoes</button>
 </div>
 
-<!-- TREND SECTION -->
-<div id="trendSection" style="display:none" class="p-3">
-<h2 class="font-black text-lg mb-3">🔥 Trending Now in Ghana</h2>
-<div id="trendGrid" class="grid grid-cols-2 gap-2"></div>
+<!-- PRODUCTS GRID -->
+<div id="productGrid" class="grid grid-cols-2 gap-3 p-3"></div>
+
+<!-- PRODUCT MODAL WITH SLIDER + PINCH ZOOM -->
+<div id="productModal" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto">
+<div class="sticky top-0 bg-white p-2 flex justify-between items-center border-b">
+<button onclick="closeProduct()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button>
+<span class="text-xs text-gray-500">Swipe ↔️ Pinch to zoom 🔍</span>
 </div>
 
-<!-- LIVE SECTION - TIKTOK STYLE -->
-<div id="liveSection" style="display:none">
-<div class="bg-black text-white p-3 flex justify-between items-center">
-<h2 class="font-black"><i class="fa fa-circle text-red-500 animate-pulse"></i> LIVE NOW</h2>
-<button onclick="goLive()" id="goLiveBtn" class="bg-red-600 px-4 py-1.5 rounded-full text-xs font-bold">GO LIVE <i class="fa fa-video"></i></button>
-</div>
-<div id="liveGrid" class="grid grid-cols-2 gap-1 bg-black p-1"></div>
-<!-- LIVE VIEWER -->
-<div id="liveViewer" style="display:none" class="fixed inset-0 bg-black z-[100] flex flex-col">
-<video id="liveVideo" autoplay muted playsinline class="flex-1 w-full object-cover bg-black"></video>
-<div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-start bg-gradient-to-b from-black/70 to-transparent">
-<div class="flex items-center gap-2">
-<img id="liveSellerImg" src="" class="w-9 h-9 rounded-full border">
-<div><p id="liveSellerName" class="text-white text-sm font-bold"></p><p class="text-white/70 text-[11px]"><span id="liveViewers">1.2k</span> viewers</p></div>
-<button onclick="followSellerLive()" id="liveFollowBtn" class="ml-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs">Follow</button>
-</div>
-<button onclick="closeLive()" class="text-white text-2xl w-8 h-8 bg-white/20 rounded-full">×</button>
-</div>
-<!-- Comments -->
-<div id="liveComments" class="absolute bottom-20 left-2 right-20 max-h-[40%] overflow-y-auto space-y-1 no-scrollbar"></div>
-<div class="absolute bottom-0 left-0 right-0 p-2 flex gap-2 bg-gradient-to-t from-black/80">
-<input id="liveCommentInput" placeholder="Comment..." class="flex-1 bg-white/20 text-white placeholder-white/60 rounded-full px-4 py-2 text-sm">
-<button onclick="sendLiveComment()" class="bg-white text-black w-10 h-10 rounded-full"><i class="fa fa-paper-plane"></i></button>
-<button onclick="likeLive()" class="bg-white/20 text-white w-10 h-10 rounded-full text-xl">❤️</button>
-</div>
-<div id="liveHearts" class="absolute bottom-20 right-2 pointer-events-none"></div>
-</div>
-</div>
+<!-- SWIPER -->
+<div id="prodSwiperWrapper" class="w-full" style="height:50vh; background:#f3f4f6;"></div>
+<div id="dots" class="flex justify-center gap-1 py-2"></div>
 
-<!-- CATEGORY SECTION -->
-<div id="categorySection" style="display:none" class="p-3 grid grid-cols-3 gap-3">
-<div onclick="filterCat('Men');showSection('home')" class="bg-white p-4 rounded-2xl text-center"><i class="fa fa-shirt text-2xl mb-1"></i><p class="text-xs font-bold">Men</p></div>
-<div onclick="filterCat('Women');showSection('home')" class="bg-white p-4 rounded-2xl text-center"><i class="fa fa-person-dress text-2xl mb-1"></i><p class="text-xs font-bold">Women</p></div>
-<div onclick="filterCat('Pets');showSection('home')" class="bg-white p-4 rounded-2xl text-center"><i class="fa fa-paw text-2xl mb-1"></i><p class="text-xs font-bold">Pets</p></div>
-<div onclick="filterCat('Cars');showSection('home')" class="bg-white p-4 rounded-2xl text-center"><i class="fa fa-car text-2xl mb-1"></i><p class="text-xs font-bold">Cars</p></div>
-<div onclick="filterCat('Jewelry');showSection('home')" class="bg-white p-4 rounded-2xl text-center"><i class="fa fa-gem text-2xl mb-1"></i><p class="text-xs font-bold">Jewelry</p></div>
-<div onclick="filterCat('Home');showSection('home')" class="bg-white p-4 rounded-2xl text-center"><i class="fa fa-couch text-2xl mb-1"></i><p class="text-xs font-bold">Home</p></div>
-</div>
-
-<!-- CART SECTION -->
-<div id="cartSection" style="display:none" class="p-3 bg-white min-h-screen">
-<h2 class="font-black text-lg mb-4">Cart (<span id="cartTotalCount">0</span>)</h2>
-<div id="cartItems"></div>
-<div id="cartTotalBox" class="mt-4 border-t pt-4">
-<p class="flex justify-between font-bold"><span>Total:</span><span id="cartTotalPrice">GH₵ 0</span></p>
-<button onclick="checkout()" class="w-full mt-3 bg-black text-white py-3 rounded-full font-bold">Checkout via WhatsApp</button>
-<button onclick="requestRefund()" class="w-full mt-2 border py-3 rounded-full text-sm">Request Refund / Return</button>
-</div>
-</div>
-
-<!-- ME SECTION - AUTO DASHBOARD -->
-<div id="meSection" style="display:none" class="bg-white min-h-screen">
-<div id="notLogged" class="p-6 text-center pt-20">
-<i class="fa fa-user-circle text-6xl text-gray-300"></i>
-<h2 class="font-black text-xl mt-3">Welcome to DORNNY</h2>
-<p class="text-sm text-gray-500 mt-1">Login as Buyer, Seller or Ambassador</p>
-<button onclick="openLogin()" class="mt-5 bg-black text-white px-8 py-3 rounded-full font-bold w-full">Login / Register</button>
-</div>
-<div id="buyerDashboard" style="display:none" class="p-3">
-<div class="flex items-center gap-3 mb-4"><img src="https://i.pravatar.cc/100" class="w-14 h-14 rounded-full"><div><p id="buyerName" class="font-bold"></p><p class="text-xs text-gray-500">Buyer • Ghana</p></div></div>
-<div class="grid grid-cols-4 gap-2 text-center mb-4">
-<div class="bg-gray-50 p-2 rounded-xl"><p class="font-black" id="orderCount">0</p><p class="text-[10px]">Orders</p></div>
-<div class="bg-gray-50 p-2 rounded-xl"><p class="font-black" id="followCount">0</p><p class="text-[10px]">Following</p></div>
-<div class="bg-gray-50 p-2 rounded-xl"><p class="font-black">0</p><p class="text-[10px]">Coupons</p></div>
-<div class="bg-gray-50 p-2 rounded-xl"><p class="font-black">GH₵0</p><p class="text-[10px]">Refund</p></div>
-</div>
-<h3 class="font-bold text-sm mb-2">My Orders (Auto)</h3><div id="myOrders" class="space-y-2"></div>
-<h3 class="font-bold text-sm mt-4 mb-2">Following Sellers</h3><div id="myFollows" class="space-y-2"></div>
-<button onclick="logout()" class="w-full mt-6 border py-2 rounded-full text-sm">Logout</button>
-</div>
-<div id="sellerDashboard" style="display:none" class="p-3">
-<div class="bg-black text-white rounded-2xl p-4 flex justify-between">
-<div><p class="text-xs opacity-70">Seller Dashboard</p><p id="sellerName" class="font-black text-lg"></p><p class="text-xs mt-1">Earnings: GH₵ <span id="sellerEarn">0</span></p></div>
-<button onclick="openUpload()" class="bg-white text-black px-4 py-2 rounded-full text-xs font-bold">+ Upload</button>
-</div>
-<div class="grid grid-cols-3 gap-2 mt-3">
-<button onclick="goLive()" class="bg-red-50 border border-red-200 p-3 rounded-xl text-center"><i class="fa fa-video text-red-600"></i><p class="text-xs font-bold mt-1">Go Live</p></button>
-<button class="bg-gray-50 p-3 rounded-xl text-center"><i class="fa fa-box"></i><p class="text-xs mt-1"><span id="sellerProdCount">0</span> Products</p></button>
-<button class="bg-gray-50 p-3 rounded-xl text-center"><i class="fa fa-users"></i><p class="text-xs mt-1"><span id="sellerFollowers">0</span> Followers</p></button>
-</div>
-<h3 class="font-bold text-sm mt-4">My Products</h3><div id="sellerProducts" class="space-y-2 mt-2"></div>
-<h3 class="font-bold text-sm mt-4">Orders to Ship</h3><div id="sellerOrders"></div>
-<button onclick="logout()" class="w-full mt-6 border py-2 rounded-full text-sm">Logout</button>
-</div>
-<div id="ambassadorDashboard" style="display:none" class="p-3">
-<h2 class="font-black">Ambassador Dashboard</h2><p class="text-sm">Share & Earn 10% per sale</p>
-<div class="bg-yellow-50 p-4 rounded-2xl mt-3"><p class="text-xs">Your Link:</p><p class="font-mono text-xs break-all">https://y5-creator.github.io?ref=<span id="ambRef"></span></p></div>
-<button onclick="logout()" class="w-full mt-6 border py-2 rounded-full text-sm">Logout</button>
-</div>
-</div>
-
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-50">
-<button onclick="showSection('home')" class="navBtn flex flex-col items-center text-black"><i class="fa fa-house"></i><span class="text-[10px] mt-1">Home</span></button>
-<button onclick="showSection('trend')" class="navBtn flex flex-col items-center text-gray-400"><i class="fa fa-fire"></i><span class="text-[10px] mt-1">Trend</span></button>
-<button onclick="showSection('live')" class="navBtn flex flex-col items-center text-gray-400"><div class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center -mt-2"><i class="fa fa-video text-xs"></i></div><span class="text-[10px] mt-1">Live</span></button>
-<button onclick="showSection('category')" class="navBtn flex flex-col items-center text-gray-400"><i class="fa fa-table-cells"></i><span class="text-[10px] mt-1">Category</span></button>
-<button onclick="showSection('me')" class="navBtn flex flex-col items-center text-gray-400"><i class="fa fa-user"></i><span class="text-[10px] mt-1">Me</span></button>
-</div>
-
-<!-- LOGIN MODAL -->
-<div id="loginModal" style="display:none" class="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4">
-<div class="bg-white rounded-3xl p-6 w-full max-w-sm">
-<h2 class="text-xl font-black mb-1">Join DORNNY</h2><p class="text-xs text-gray-500 mb-4">Buyer, Seller or Ambassador?</p>
-<input id="loginEmail" placeholder="Email" class="w-full bg-gray-100 rounded-full px-4 py-3 mb-3 text-sm">
-<select id="loginRole" class="w-full bg-gray-100 rounded-full px-4 py-3 mb-3 text-sm">
-<option value="buyer">I am Buyer - I want to shop</option>
-<option value="seller">I am Seller - I want to sell & go live</option>
-<option value="ambassador">I am Ambassador - Earn commission</option>
-</select>
-<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">Continue</button>
-<button onclick="document.getElementById('loginModal').style.display='none'" class="w-full mt-2 text-sm text-gray-500">Cancel</button>
-</div>
-</div>
-
-<!-- PRODUCT DETAIL WITH SLIDER + ZOOM -->
-<div id="productModal" style="display:none" class="fixed inset-0 bg-white z-[200] overflow-y-auto">
-<div class="relative">
-<button onclick="document.getElementById('productModal').style.display='none'" class="absolute top-3 left-3 z-10 bg-black/50 text-white w-8 h-8 rounded-full"><i class="fa fa-arrow-left"></i></button>
-<div id="prodSwiperWrapper" style="display:flex;overflow-x:scroll;height:50vh"></div>
-</div>
 <div id="productDetail" class="p-4"></div>
 </div>
 
-<!-- UPLOAD MODAL -->
-<div id="uploadModal" style="display:none" class="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4">
-<div class="bg-white rounded-3xl p-5 w-full max-w-md max-h-[90vh] overflow-y-auto">
-<h2 class="font-black text-lg mb-3">Upload Product - Seller</h2>
-<input id="upName" placeholder="Product Name" class="w-full border rounded-full px-4 py-2 mb-2 text-sm">
-<input id="upPrice" type="number" placeholder="Price GH₵" class="w-full border rounded-full px-4 py-2 mb-2 text-sm">
-<select id="upCat" class="w-full border rounded-full px-4 py-2 mb-2 text-sm">
-<option>Men</option><option>Women</option><option>Pets</option><option>Toys</option><option>Jewelry</option><option>Furniture</option><option>Office</option><option>Cars</option><option>Tires</option><option>Home</option>
-</select>
-<input id="upImg" type="file" accept="image/*" multiple class="w-full border rounded-full px-4 py-2 mb-2 text-sm">
-<input id="upWhatsapp" placeholder="WhatsApp 233..." class="w-full border rounded-full px-4 py-2 mb-3 text-sm">
-<button onclick="uploadProduct()" class="w-full bg-black text-white py-3 rounded-full font-bold">Upload to Store + Supabase</button>
-<button onclick="document.getElementById('uploadModal').style.display='none'" class="w-full mt-2 text-sm text-gray-500">Cancel</button>
+<!-- ADD PRODUCT MODAL -->
+<div id="addModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end">
+<div class="bg-white w-full rounded-t-3xl p-5">
+<h3 class="font-black text-lg mb-3">Add New Product</h3>
+<input id="newName" placeholder="Product Name" class="w-full border p-3 rounded-xl mb-2">
+<input id="newPrice" type="number" placeholder="Price GH₵" class="w-full border p-3 rounded-xl mb-2">
+<input id="newImg" placeholder="Image URL (https://...)" class="w-full border p-3 rounded-xl mb-2">
+<input id="newImgs" placeholder="Extra Images URLs (comma separated)" class="w-full border p-3 rounded-xl mb-2">
+<select id="newCat" class="w-full border p-3 rounded-xl mb-3"><option>Fashion</option><option>Electronics</option><option>Shoes</option></select>
+<button onclick="addProduct()" class="w-full bg-black text-white p-3 rounded-full font-bold">Add Product</button>
+<button onclick="closeAddModal()" class="w-full mt-2 text-gray-500">Cancel</button>
+<p class="text-[10px] text-center text-gray-400 mt-2">Product will save on this phone + all phones after you commit. It will NEVER disappear.</p>
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- CART -->
+<div id="cartModal" class="fixed inset-0 bg-white z-[80] hidden p-4">
+<div class="flex justify-between items-center mb-4"><h2 class="font-black text-xl">Cart</h2><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button></div>
+<div id="cartItems"></div>
+</div>
+
 <script>
-const SUPABASE_URL = "https://npumgeteihhcjbayvfgp.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable__HYsYgNNNMb9Puvl9EAezg_b3V933Za";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// === PRODUCTS WITH PERSISTENCE (NEVER DISAPPEAR) ===
+const defaultProducts = [
+{id:1, name:"Air Max Sneakers", price:350, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500", imgs:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500","https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500"], cat:"Shoes", seller:"Danny"},
+{id:2, name:"iPhone 14 Pro", price:8500, img:"https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=500", imgs:["https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=500"], cat:"Electronics", seller:"Kwasi"},
+{id:3, name:"Designer Jacket", price:250, img:"https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500", cat:"Fashion", seller:"Danny"}
+];
+let products = JSON.parse(localStorage.getItem('dornny_products') || 'null') || defaultProducts;
 
-let products = JSON.parse(localStorage.getItem('dwamen_products')||'[]');
-let cart = JSON.parse(localStorage.getItem('dwamen_cart')||'[]');
-let currentUser = JSON.parse(localStorage.getItem('dwamen_user')||'null');
-let follows = JSON.parse(localStorage.getItem('dwamen_follows')||'[]');
-let orders = JSON.parse(localStorage.getItem('dwamen_orders')||'[]');
-let lives = [{id:1,name:'Kwame Fashion Live',seller:'Kwame',img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400',viewers:'2.3k',whatsapp:'233200000001'}];
-let curFilter='All';
-let liveStream=null;
+let currentCat = 'All';
+let cart = JSON.parse(localStorage.getItem('dornny_cart') || '[]');
 
-// LOAD FROM SUPABASE
-async function loadProducts(){
- try{
-  const {data} = await supabaseClient.from('products').select('*').eq('in_stock',true).order('created_at',{ascending:false});
-  if(data && data.length>0){
-   products = data.map(p=>({
-     id:p.id, name:p.name, price:Number(p.price), cat:p.category||'All',
-     img:p.image||p.image_url||'https://via.placeholder.com/400', imgs:[p.image||p.image_url],
-     seller:'DORNNY Seller', sellerId:p.seller_id||'seller', whatsapp:p.whatsapp||'233200000001',
-     likes:Math.floor(Math.random()*100), rating:4.8, comments:[], followers:[]
-   }));
-   localStorage.setItem('dwamen_products',JSON.stringify(products));
-  }
-  renderHome(); renderTrend(); renderLive();
- }catch(e){console.log(e); renderHome()}
+function saveProducts(){ localStorage.setItem('dornny_products', JSON.stringify(products)); }
+function saveCart(){ localStorage.setItem('dornny_cart', JSON.stringify(cart)); document.getElementById('cartCount').innerText = cart.length; }
+
+function renderProducts(){
+const grid = document.getElementById('productGrid');
+const filtered = currentCat==='All'? products : products.filter(p=>p.cat===currentCat);
+grid.innerHTML = filtered.map(p=>`
+<div onclick="openProduct(${p.id})" class="bg-white rounded-2xl overflow-hidden shadow-sm">
+<img src="${p.img}" class="w-full h-40 object-cover">
+<div class="p-2"><p class="font-bold text-sm truncate">${p.name}</p><p class="text-xs text-gray-500">${p.cat}</p><p class="font-black mt-1">GH₵ ${p.price}</p></div>
+</div>`).join('');
+saveCart();
 }
-loadProducts();
+function filterCat(c){ currentCat=c; renderProducts(); }
 
-function showSection(name){
- ['home','trend','live','category','cart','me'].forEach(s=>document.getElementById(s+'Section').style.display=s===name?'block':'none');
- document.querySelectorAll('.navBtn').forEach((b,i)=>{
-  const names=['home','trend','live','category','me'];
-  b.classList.toggle('text-black', names[i]===name);
-  b.classList.toggle('text-gray-400', names[i]!==name);
- });
- if(name==='me') updateDashboards();
- if(name==='cart') updateCart();
- window.scrollTo(0,0);
-}
-
-function filterCat(cat,btn){
- curFilter=cat;
- if(btn){document.querySelectorAll('.catBtn').forEach(b=>{b.className='catBtn bg-white border px-4 py-1.5 rounded-full text-xs whitespace-nowrap'}); btn.className='catBtn bg-black text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap font-bold'}
- renderHome();
- showSection('home');
-}
-
-function renderHome(){
- const grid=document.getElementById('productGrid');
- const search=(document.getElementById('searchInput')?.value||'').toLowerCase();
- let filtered=products.filter(p=>{
-  const mCat=curFilter==='All'||p.cat.toLowerCase().includes(curFilter.toLowerCase());
-  const mSearch=p.name.toLowerCase().includes(search);
-  return mCat && mSearch;
- });
- if(filtered.length===0){grid.innerHTML=`<p class='col-span-2 text-center py-10 text-gray-400'>No products. ${products.length===0?'Loading from Supabase...':''}</p>`; return}
- grid.innerHTML=filtered.map(p=>`
-  <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-   <div class="relative" onclick="openProduct('${p.id}')">
-    <img src="${p.img}" class="w-full h-48 object-cover">
-    <div class="absolute top-2 left-2 bg-black/70 text-white text-[10px] px-2 py-0.5 rounded-full">${p.cat}</div>
-    <div class="absolute top-2 right-2 bg-white/90 w-7 h-7 rounded-full flex items-center justify-center" onclick="event.stopPropagation();toggleLike('${p.id}')"><i class="fa-heart ${p.liked?'fa-solid text-red-500':'fa-regular'} text-xs"></i></div>
-   </div>
-   <div class="p-2.5">
-    <h3 class="font-bold text-[13px] truncate">${p.name}</h3>
-    <p class="text-[11px] text-gray-500 flex items-center gap-1"><i class="fa fa-star text-yellow-400 text-[10px]"></i> ${p.rating} • ${p.likes} likes</p>
-    <div class="flex justify-between items-center mt-2">
-     <span class="font-black text-sm">GH₵ ${p.price}</span>
-     <button onclick="addToCart('${p.id}')" class="bg-black text-white w-7 h-7 rounded-full"><i class="fa fa-plus text-[10px]"></i></button>
-    </div>
-   </div>
-  </div>
- `).join('');
-}
-
-function renderTrend(){
- const grid=document.getElementById('trendGrid');
- const top=[...products].sort((a,b)=>b.likes-a.likes).slice(0,6);
- grid.innerHTML=top.map(p=>`
-  <div class="bg-white rounded-2xl overflow-hidden" onclick="openProduct('${p.id}')">
-   <img src="${p.img}" class="w-full h-56 object-cover"><div class="p-2"><p class="font-bold text-xs truncate">${p.name}</p><p class="text-xs">GH₵ ${p.price} 🔥 ${p.likes} likes</p></div>
-  </div>
- `).join('')||'<p class="col-span-2 text-center py-10">No trending yet</p>';
-}
-
-function renderLive(){
- const grid=document.getElementById('liveGrid');
- grid.innerHTML=lives.map(l=>`
-  <div class="relative h-64 bg-gray-800 rounded-xl overflow-hidden" onclick="joinLive(${l.id})">
-   <img src="${l.img}" class="w-full h-full object-cover opacity-70">
-   <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">LIVE</div>
-   <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black"><p class="text-white text-xs font-bold">${l.name}</p><p class="text-white/70 text-[10px]">${l.viewers} watching • ${l.seller}</p></div>
-  </div>
- `).join('')+`<div class="h-64 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center text-white/50"><i class="fa fa-video text-2xl"></i><p class="text-xs mt-2">Your Live will appear here</p><button onclick="goLive()" class="mt-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs">Go Live</button></div>`;
-}
-
-// PRODUCT MODAL WITH SLIDER + PINCH ZOOM
-
+// === PRODUCT MODAL WITH SLIDER + PINCH ZOOM ===
+let startX=0, currentTranslate=0;
 function openProduct(id){
- const p=products.find(x=>x.id==id);
- if(!p) return;
- const imgs=p.imgs&&p.imgs.length?p.imgs:[p.img];
- document.getElementById('prodSwiperWrapper').innerHTML=imgs.map(img=>`<div style="min-width:100%;height:50vh;display:flex;align-items:center;justify-content:center;background:#f3f4f6;flex-shrink:0"><img src="${img}" style="width:100%;height:100%;object-fit:contain"></div>`).join('');
- document.getElementById('productModal').style.display='block';
- document.getElementById('productDetail').innerHTML=`
- <div class="flex justify-between items-start"><div><h2 class="font-black text-lg">${p.name}</h2><p class="text-xs text-gray-500">${p.cat} • Sold by ${p.seller} <span class="text-blue-500" onclick="followSeller('${p.sellerId}')">@${p.seller}</span></p></div><button onclick="reportProduct('${p.id}')" class="text-xs text-gray-400"><i class="fa fa-flag"></i> Report</button></div>
- <div class="flex items-center gap-2 mt-2"><span class="text-2xl font-black">GH₵ ${p.price}</span><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span><span class="text-xs"> ⭐ ${p.rating} (${p.likes})</span></div>
- <div class="flex gap-2 mt-4">
- <button onclick="toggleLike('${p.id}');this.innerHTML='<i class=\\'fa fa-heart text-red-500\\'></i> ${p.likes+1}'" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa-regular fa-heart"></i> Like</button>
- <button onclick="followSeller('${p.sellerId}')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa fa-user-plus"></i> Follow</button>
- <button onclick="window.open('https://wa.me/${p.whatsapp}?text=Hi, I want ${encodeURIComponent(p.name)}','_blank')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button>
- </div>`;
+const p=products.find(x=>x.id==id);
+if(!p) return;
+const imgs=p.imgs&&p.imgs.length?p.imgs:[p.img];
+document.getElementById('prodSwiperWrapper').innerHTML=imgs.map(img=>`<div style="min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="${img}" class="prod-img" style="width:100%;height:100%;object-fit:contain;transition:transform 0.3s" onclick="this.classList.toggle('zoomed')"></div>`).join('');
+document.getElementById('dots').innerHTML=imgs.map((_,i)=>`<div class="w-1.5 h-1.5 bg-gray-300 rounded-full"></div>`).join('');
+document.getElementById('productModal').style.display='block';
+document.getElementById('productDetail').innerHTML=`<div class="flex justify-between items-start"><div><h2 class="font-black text-lg">${p.name}</h2><p class="text-xs text-gray-500">${p.cat} • Sold by ${p.seller}</p></div></div><div class="flex items-center gap-2 mt-2"><span class="text-2xl font-black">GH₵ ${p.price}</span><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span></div><p class="text-xs text-gray-400 mt-2">Swipe image left/right • Tap image to zoom • Pinch to zoom</p><div class="flex gap-2 mt-4"><button onclick="addToCart(${p.id})" class="flex-1 bg-black text-white px-4 py-3 rounded-full text-sm font-bold">Add to Cart</button><button class="border px-4 py-3 rounded-full text-sm"><i class="fa-regular fa-heart"></i></button><button class="border px-4 py-3 rounded-full text-sm"><i class="fab fa-whatsapp text-green-500"></i></button></div>`;
 }
- 
+function closeProduct(){ document.getElementById('productModal').style.display='none'; }
 
-function addToCart(id){
- const p=products.find(x=>x.id==id); cart.push(p); localStorage.setItem('dwamen_cart',JSON.stringify(cart)); updateCart();
- // animation
- const el=document.createElement('div'); el.innerText='Added!'; el.className='fixed top-1/2 left-1/2 bg-black text-white px-4 py-2 rounded-full text-sm z-[300]'; document.body.appendChild(el); setTimeout(()=>el.remove(),1000);
-}
-function updateCart(){
- document.getElementById('cartCount').innerText=cart.length;
- document.getElementById('cartTotalCount').innerText=cart.length;
- const total=cart.reduce((s,p)=>s+Number(p.price),0);
- document.getElementById('cartTotalPrice').innerText='GH₵ '+total;
- const div=document.getElementById('cartItems');
- if(cart.length===0) div.innerHTML="<p class='text-center text-gray-400 py-10'>Cart empty - Add products from Home</p>";
- else div.innerHTML=cart.map((p,i)=>`<div class="flex gap-3 border-b py-3"><img src="${p.img}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><p class="font-bold text-sm">${p.name}</p><p class="text-xs">GH₵ ${p.price} • ${p.seller}</p><button onclick="cart.splice(${i},1);localStorage.setItem('dwamen_cart',JSON.stringify(cart));updateCart()" class="text-xs text-red-500 mt-1">Remove • Request Return</button></div></div>`).join('');
- localStorage.setItem('dwamen_orders',JSON.stringify(cart));
+// === ADD PRODUCT (NEVER DISAPPEAR) ===
+function openAddModal(){ document.getElementById('addModal').style.display='flex'; }
+function closeAddModal(){ document.getElementById('addModal').style.display='none'; }
+function addProduct(){
+const name=document.getElementById('newName').value;
+const price=parseFloat(document.getElementById('newPrice').value);
+const img=document.getElementById('newImg').value;
+const imgsRaw=document.getElementById('newImgs').value;
+const cat=document.getElementById('newCat').value;
+if(!name||!price||!img) return alert('Fill name, price, image');
+const extra = imgsRaw? imgsRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+const newP = {id:Date.now(), name, price, img, imgs:[img,...extra], cat, seller:"You"};
+products.unshift(newP);
+saveProducts();
+renderProducts();
+closeAddModal();
+alert('Product added! It will NOT disappear again. For ALL phones to see it, also add it to defaultProducts in code and commit.');
+document.getElementById('newName').value=''; document.getElementById('newPrice').value=''; document.getElementById('newImg').value=''; document.getElementById('newImgs').value='';
 }
 
-function checkout(){
- if(cart.length===0) return alert("Cart empty");
- const total=cart.reduce((s,p)=>s+Number(p.price),0);
- const msg=`Hello DORNNY! I want to order:\n${cart.map(p=>`- ${p.name} GH₵${p.price}`).join('\n')}\nTotal: GH₵${total}\nBuyer: ${currentUser?.email||'Guest'}`;
- window.open(`https://wa.me/233200000001?text=${encodeURIComponent(msg)}`,'_blank');
-}
-function requestRefund(){ alert("Refund Request Sent! If goods damaged or not as seen, we will refund within 24hrs. Contact: 233200000001"); }
+// === CART ===
+function addToCart(id){ cart.push(products.find(p=>p.id==id)); saveCart(); alert('Added to cart'); }
+function openCart(){ document.getElementById('cartModal').style.display='block'; document.getElementById('cartItems').innerHTML = cart.map(c=>`<div class="flex gap-3 border-b py-3"><img src="${c.img}" class="w-16 h-16 object-cover rounded-xl"><div><p class="font-bold text-sm">${c.name}</p><p class="text-sm">GH₵ ${c.price}</p></div></div>`).join('') || '<p class="text-center text-gray-400 mt-10">Cart empty</p>'; }
+function closeCart(){ document.getElementById('cartModal').style.display='none'; }
 
-function toggleLike(id){
- const p=products.find(x=>x.id==id); if(!p) return; p.likes=(p.likes||0)+1; p.liked=!p.liked; localStorage.setItem('dwamen_products',JSON.stringify(products)); renderHome();
-}
-function followSeller(sellerId){
- if(!currentUser) return openLogin();
- if(!follows.includes(sellerId)){follows.push(sellerId); localStorage.setItem('dwamen_follows',JSON.stringify(follows)); alert("Following seller! You will get LIVE notifications 🔔");}
- updateDashboards();
-}
-function addComment(id){
- const txt=document.getElementById('commentInput').value; if(!txt) return;
- const p=products.find(x=>x.id==id); p.comments=p.comments||[]; p.comments.push({user:currentUser?.email||'Buyer',text:txt}); localStorage.setItem('dwamen_products',JSON.stringify(products)); document.getElementById('commentInput').value=''; openProduct(id);
-}
-function reportProduct(id){ if(confirm("Report this product as fake/damaged?")) alert("Reported! We will review in 24h. Thank you."); }
-
-// LIVE - TIKTOK STYLE
-async function goLive(){
- if(!currentUser || currentUser.role!=='seller') { alert("Login as SELLER to Go Live!"); openLogin(); return; }
- try{
-  liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:true});
-  document.getElementById('liveViewer').style.display='flex';
-  document.getElementById('liveVideo').srcObject=liveStream;
-  document.getElementById('liveSellerName').innerText=currentUser.email;
-  document.getElementById('liveSellerImg').src='https://i.pravatar.cc/100?u='+currentUser.email;
-  // add to live list
-  lives.unshift({id:Date.now(),name:currentUser.email+' Live Sale!',seller:currentUser.email,img:products[0]?.img||'',viewers:'1',whatsapp:'233200000001'});
-  // notify followers via alert + local notification simulation
-  alert("🔴 You are LIVE! Followers notified! Buyers can now join, comment, like & follow you!");
-  // real-time via supabase
-  supabaseClient.channel('live-notif').send({type:'broadcast',event:'new_live',payload:{seller:currentUser.email}});
- }catch(e){ alert("Camera permission needed for Live! "+e.message); }
-}
-function joinLive(id){
- const live=lives.find(l=>l.id==id);
- document.getElementById('liveViewer').style.display='flex';
- document.getElementById('liveSellerName').innerText=live.seller;
- document.getElementById('liveSellerImg').src=live.img;
- if(liveStream) document.getElementById('liveVideo').srcObject=liveStream;
- else document.getElementById('liveVideo').poster=live.img;
-}
-function closeLive(){
- document.getElementById('liveViewer').style.display='none';
- if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;}
-}
-function sendLiveComment(){
- const input=document.getElementById('liveCommentInput'); const txt=input.value; if(!txt) return;
- const div=document.createElement('div'); div.className='bg-black/40 text-white text-xs px-3 py-1 rounded-full w-fit'; div.innerHTML=`<b>${currentUser?.email?.split('@')[0]||'Buyer'}:</b> ${txt}`;
- document.getElementById('liveComments').appendChild(div); input.value='';
- // supabase realtime
- supabaseClient.channel('live-comments').send({type:'broadcast',event:'comment',payload:{text:txt,user:currentUser?.email}});
-}
-function likeLive(){
- const hearts=document.getElementById('liveHearts');
- for(let i=0;i<3;i++){
-  const h=document.createElement('div'); h.innerText='❤️'; h.className='heart-anim text-2xl absolute bottom-0 right-5'; h.style.left=Math.random()*40+'px'; hearts.appendChild(h);
-  setTimeout(()=>h.remove(),800);
- }
-}
-function followSellerLive(){
- const btn=document.getElementById('liveFollowBtn');
- btn.innerText='Following ✓'; btn.className='ml-2 bg-white text-black px-3 py-1 rounded-full text-xs';
- followSeller(document.getElementById('liveSellerName').innerText);
+// === LIVE - ANY PHONE CAN JOIN ===
+function goLive(){
+const room = prompt("Enter Live Room Name (share this name with friends):", "DORNNY-LIVE-"+Math.floor(Math.random()*1000));
+if(!room) return;
+const url = "https://meet.jit.si/" + room.replace(/\s+/g,'-');
+window.open(url, "_blank");
+alert("LIVE started! Share this link with friends: "+url+" - Any phone can join!");
 }
 
-// AUTH + DASHBOARDS
-function openLogin(){ document.getElementById('loginModal').style.display='flex'; }
-function doLogin(){
- const email=document.getElementById('loginEmail').value; const role=document.getElementById('loginRole').value;
- if(!email) return alert("Enter email");
- currentUser={email,role}; localStorage.setItem('dwamen_user',JSON.stringify(currentUser));
- document.getElementById('loginModal').style.display='none';
- updateDashboards(); showSection('me');
-}
-function logout(){ localStorage.removeItem('dwamen_user'); currentUser=null; updateDashboards(); }
-function updateDashboards(){
- const logged=!!currentUser;
- document.getElementById('notLogged').style.display=logged?'none':'block';
- document.getElementById('buyerDashboard').style.display=(logged && currentUser.role==='buyer')?'block':'none';
- document.getElementById('sellerDashboard').style.display=(logged && currentUser.role==='seller')?'block':'none';
- document.getElementById('ambassadorDashboard').style.display=(logged && currentUser.role==='ambassador')?'block':'none';
- if(logged){
-  if(currentUser.role==='buyer'){
-   document.getElementById('buyerName').innerText=currentUser.email;
-   document.getElementById('orderCount').innerText=cart.length;
-   document.getElementById('followCount').innerText=follows.length;
-   document.getElementById('myOrders').innerHTML=cart.map(p=>`<div class="flex gap-2 bg-gray-50 p-2 rounded-xl"><img src="${p.img}" class="w-12 h-12 rounded"><div class="flex-1"><p class="text-xs font-bold">${p.name}</p><p class="text-[11px]">GH₵ ${p.price} • Delivered</p><button onclick="requestRefund()" class="text-[10px] text-red-500">Refund/Return if damaged</button></div></div>`).join('')||'<p class="text-xs text-gray-400">No orders yet - Shop in Home</p>';
-   document.getElementById('myFollows').innerHTML=follows.map(f=>`<div class="flex justify-between bg-gray-50 p-2 rounded-xl"><span class="text-xs">${f}</span><button class="text-[10px] bg-black text-white px-2 rounded-full">Message</button></div>`).join('')||'<p class="text-xs text-gray-400">Follow sellers to get LIVE alerts</p>';
-  }
-  if(currentUser.role==='seller'){
-   document.getElementById('sellerName').innerText=currentUser.email;
-   document.getElementById('sellerEarn').innerText=products.filter(p=>p.sellerId===currentUser.email).reduce((s,p)=>s+p.price*0.9,0).toFixed(0);
-   const myProds=products.filter(p=>currentUser.email==='admin@dornny.com' || true); // show all for admin demo
-   document.getElementById('sellerProdCount').innerText=myProds.length;
-   document.getElementById('sellerFollowers').innerText=Math.floor(Math.random()*100);
-   document.getElementById('sellerProducts').innerHTML=myProds.slice(0,5).map(p=>`<div class="flex gap-2 bg-gray-50 p-2 rounded-xl"><img src="${p.img}" class="w-12 h-12 rounded"><div><p class="text-xs font-bold">${p.name}</p><p class="text-[11px]">GH₵ ${p.price} • ${p.likes} likes</p></div></div>`).join('');
-   document.getElementById('sellerOrders').innerHTML=cart.length?cart.map(p=>`<div class="text-xs bg-gray-50 p-2 rounded-xl mt-1">Order: ${p.name} - Ship to buyer <button class="ml-2 bg-green-600 text-white px-2 rounded-full">Mark Shipped</button></div>`).join(''):'<p class="text-xs text-gray-400">No orders yet</p>';
-  }
-  if(currentUser.role==='ambassador'){
-   document.getElementById('ambRef').innerText=currentUser.email;
-  }
- }
-}
-
-function openUpload(){ document.getElementById('uploadModal').style.display='flex'; }
-async function uploadProduct(){
- const name=document.getElementById('upName').value; const price=document.getElementById('upPrice').value; const cat=document.getElementById('upCat').value; const file=document.getElementById('upImg').files[0]; const whatsapp=document.getElementById('upWhatsapp').value;
- if(!name||!price) return alert("Enter name & price");
- let imgUrl='https://via.placeholder.com/400';
- if(file){
-  // upload to supabase storage
-  try{
-   const fileName=Date.now()+'_'+file.name;
-   const {data,error}=await supabaseClient.storage.from('product-images').upload(fileName,file);
-   if(!error){
-    const {data:pub}=supabaseClient.storage.from('product-images').getPublicUrl(fileName);
-    imgUrl=pub.publicUrl;
-   } else { imgUrl=URL.createObjectURL(file); }
-  }catch(e){ imgUrl=URL.createObjectURL(file); }
- }
- // save to supabase table
- try{
-  await supabaseClient.from('products').insert([{name,price:Number(price),category:cat,image:imgUrl,image_url:imgUrl,whatsapp,in_stock:true,seller_id:currentUser?.email}]);
- }catch(e){console.log("Insert error",e)}
- const newProd={id:Date.now(),name,price:Number(price),cat,img:imgUrl,imgs:[imgUrl],seller:currentUser?.email||'Seller',sellerId:currentUser?.email,whatsapp:whatsapp||'233200000001',likes:0,rating:5,comments:[],followers:[]};
- products.unshift(newProd); localStorage.setItem('dwamen_products',JSON.stringify(products));
- document.getElementById('uploadModal').style.display='none'; renderHome(); alert("Product uploaded! LIVE on Dornny now! Buyers can see, like, comment, follow you & buy!");
-}
-function openMsg(){ alert("Messages: Chat with sellers, buyers get notifications when seller goes LIVE! Follow sellers to get alerts."); }
-
-// init
-updateCart();
-if(currentUser) updateDashboards();
+renderProducts();
 </script>
 </body>
 </html>
