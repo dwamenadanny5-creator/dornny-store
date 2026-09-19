@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DORNNY - Ghana's SHEIN</title>
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -48,7 +47,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fff}
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1.5 z-40"><button class="flex flex-col items-center text-black"><i class="fa-solid fa-house"></i><span class="text-[9px]">Home</span></button><button onclick="openLiveList()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-clapperboard"></i><span class="text-[9px]">Live</span></button><button class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user"></i><span class="text-[9px]">Me</span></button></nav>
 
 <script>
-// YOUR REAL FIREBASE - FRIEND CAN JOIN NOW!
 const firebaseConfig = {
   apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
   authDomain: "dornnysmarket.firebaseapp.com",
@@ -69,7 +67,7 @@ db.collection("liveRooms").where("isLive","==",true).onSnapshot(snap=>{const liv
 function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);const q=document.getElementById('searchInput').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('productGrid').innerHTML=list.map(p=>`<div onclick="openProduct('${p.id}')" class="bg-white rounded-lg overflow-hidden"><img src="${p.img}" class="w-full h-[180px] object-cover"><div class="p-1.5"><p class="text-[11px]">${p.name}</p><span class="font-bold text-[13px]">GH₵${p.price}</span></div></div>`).join('');document.getElementById('cartCount').innerText=cart.length;}
 function renderLivePreview(lives){const demo=lives&&lives.length?lives:[{id:'demo1',hostName:'DORNNY Live',viewers:234,img:products[0].img}];document.getElementById('liveList').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="relative min-w-[90px] w-[90px] h-[120px] rounded-xl overflow-hidden"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-1 left-1 bg-[#ff2d55] text-white text-[7px] px-1 rounded">LIVE</span><p class="absolute bottom-1 left-1 text-white text-[8px]">${l.hostName}</p></div>`).join('');document.getElementById('liveListFull').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="relative rounded-xl h-48 overflow-hidden"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-[#ff2d55] text-white text-[9px] px-2 rounded">● LIVE</span><p class="absolute bottom-2 left-2 text-white text-[11px]">${l.hostName}</p></div>`).join('');}
 function filterCat(c){currentCat=c;document.querySelectorAll('.shein-tab').forEach(b=>{b.classList.remove('active');b.classList.add('text-gray-500')});document.getElementById('cat-'+c).classList.add('active');render();}
-function openProduct(id){const p=products.find(x=>String(x.id)===String(id));currentLiveProduct=p;document.getElementById('liveRoomModal').style.display='none';showToast('Added');}
+function openProduct(id){const p=products.find(x=>String(x.id)===String(id));currentLiveProduct=p;showToast('Added 🛍️');}
 function doLogin(){const e=document.getElementById('loginEmail').value;if(!e){showToast('Enter email');return;}document.getElementById('loginScreen').style.display='none';localStorage.setItem('dornny_user',e);showToast('Welcome 🛍️');}
 function skipLogin(){document.getElementById('loginScreen').style.display='none';}
 if(localStorage.getItem('dornny_user'))document.getElementById('loginScreen').style.display='none';
@@ -85,10 +83,10 @@ async function toggleTorch(){
   const track=window.liveStream?.getVideoTracks()[0];
   if(!track){showToast('Start live first');return;}
   const cap=track.getCapabilities();
-  if(!cap.torch){showToast('Torch not supported on this phone');return;}
+  if(!cap.torch){showToast('Torch not supported');return;}
   torchOn=!torchOn;
   await track.applyConstraints({advanced:[{torch:torchOn}]});
-  showToast(torchOn?'🔦 Torch ON - room bright!':'🔦 Torch OFF');
+  showToast(torchOn?'🔦 Torch ON - bright!':'🔦 Torch OFF');
  }catch(e){showToast(e.message);}
 }
 async function actuallyStartLive(roomName){
