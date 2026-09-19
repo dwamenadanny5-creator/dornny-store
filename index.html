@@ -3,149 +3,155 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DORNNY - Ghana's Super App</title>
+<title>DORNNY - SHEIN + LIVE + Firebase</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-#prodSwiperWrapper{ display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-#prodSwiperWrapper::-webkit-scrollbar{ display:none; }
-#prodSwiperWrapper div{ scroll-snap-align:center; }
-.zoomed{ transform:scale(2); transition:transform 0.3s; }
-</style>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif}.hide-scroll::-webkit-scrollbar{display:none}.prod-swiper{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.prod-swiper>div{min-width:100%;scroll-snap-align:center}</style>
 </head>
-<body class="bg-gray-50 pb-20">
+<body class="bg-[#fafafa] pb-[80px]">
 
-<!-- HEADER -->
-<header class="bg-black text-white p-3 sticky top-0 z-50 flex justify-between items-center">
-<div class="font-black text-xl tracking-widest">DORNNY</div>
-<div class="flex gap-3">
-<button onclick="goLive()" class="bg-red-600 px-3 py-1 rounded-full text-sm"><i class="fa-solid fa-video"></i> LIVE</button>
-<button onclick="openAddModal()" class="bg-white text-black px-3 py-1 rounded-full text-sm"><i class="fa-solid fa-plus"></i> Sell</button>
-<button onclick="openCart()" class="relative"><i class="fa-solid fa-bag-shopping text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span></button>
+<header class="bg-white sticky top-0 z-50 p-3 border-b">
+<div class="flex justify-between items-center">
+<div class="font-black text-[24px] tracking-[0.1em]">DORNNY</div>
+<div class="flex gap-4 items-center">
+<button><i class="fa-regular fa-heart text-xl"></i></button>
+<button onclick="openCart()" class="relative"><i class="fa-solid fa-bag-shopping text-xl"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+</div>
+</div>
+<div class="mt-3 flex items-center bg-[#f5f5f5] rounded-full px-3 py-2.5 border border-pink-200">
+<i class="fa-solid fa-magnifying-glass text-gray-400 mr-2"></i>
+<input id="searchInput" oninput="render()" placeholder="Search..." class="bg-transparent w-full text-sm outline-none">
+</div>
+<div class="mt-3 flex gap-5 overflow-x-auto hide-scroll text-sm font-medium">
+<button onclick="filterCat('All')" id="cat-All" class="cat-btn border-b-2 border-black font-bold pb-1">All</button>
+<button onclick="filterCat('Women')" id="cat-Women" class="cat-btn text-gray-500 pb-1">Women</button>
+<button onclick="filterCat('Men')" id="cat-Men" class="cat-btn text-gray-500 pb-1">Men</button>
+<button onclick="filterCat('Shoes')" id="cat-Shoes" class="cat-btn text-gray-500 pb-1">Shoes</button>
+<button onclick="filterCat('Bags')" id="cat-Bags" class="cat-btn text-gray-500 pb-1">Bags</button>
+<button onclick="filterCat('Electronics')" id="cat-Electronics" class="cat-btn text-gray-500 pb-1">Electronics</button>
 </div>
 </header>
 
-<!-- CATEGORIES -->
-<div class="p-3 flex gap-2 overflow-x-auto">
-<button onclick="filterCat('All')" class="bg-black text-white px-4 py-1.5 rounded-full text-sm whitespace-nowrap">All</button>
-<button onclick="filterCat('Fashion')" class="bg-white border px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Fashion</button>
-<button onclick="filterCat('Electronics')" class="bg-white border px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Electronics</button>
-<button onclick="filterCat('Shoes')" class="bg-white border px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Shoes</button>
+<div class="m-3 bg-gradient-to-r from-[#ff6b9d] via-[#c44569] to-black text-white rounded-2xl p-3 flex justify-between items-center">
+<div><p class="font-black text-sm">FLASH SALE ⚡ LIVE</p><p class="text-[11px]">Up to 50% OFF • Ends in <span id="timer">02:14:32</span></p></div>
+<button class="bg-[#ff6b9d] px-3 py-1.5 rounded-full text-xs font-bold">Shop now →</button>
 </div>
 
-<!-- PRODUCTS GRID -->
-<div id="productGrid" class="grid grid-cols-2 gap-3 p-3"></div>
+<div class="px-3 flex justify-between"><h2 class="font-bold text-sm">Trending Now 🔥 Firebase LIVE</h2><span id="status" class="text-[10px] text-green-600">● Connected to Firebase</span></div>
+<div id="productGrid" class="grid grid-cols-2 gap-2 p-2"></div>
 
-<!-- PRODUCT MODAL WITH SLIDER + PINCH ZOOM -->
 <div id="productModal" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto">
-<div class="sticky top-0 bg-white p-2 flex justify-between items-center border-b">
-<button onclick="closeProduct()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button>
-<span class="text-xs text-gray-500">Swipe ↔️ Pinch to zoom 🔍</span>
+<div class="sticky top-0 bg-white p-2 flex justify-between border-b"><button onclick="closeProduct()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button><span class="text-[10px]">Swipe ↔️ Double tap zoom</span></div>
+<div id="prodSwiper" class="prod-swiper w-full h-[55vh] bg-[#f5f5f5]"></div>
+<div id="productDetail" class="p-3"></div>
 </div>
 
-<!-- SWIPER -->
-<div id="prodSwiperWrapper" class="w-full" style="height:50vh; background:#f3f4f6;"></div>
-<div id="dots" class="flex justify-center gap-1 py-2"></div>
+<button onclick="goLive()" class="fixed bottom-[90px] right-4 bg-[#ff2d55] w-14 h-14 rounded-full shadow-lg flex flex-col items-center justify-center text-white z-40"><i class="fa-solid fa-video"></i><span class="text-[10px] font-black">LIVE</span></button>
 
-<div id="productDetail" class="p-4"></div>
-</div>
+<div id="addModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-3xl p-5">
+<h3 class="font-bold mb-1">Sell on DORNNY (Firebase)</h3><p class="text-[10px] text-gray-400 mb-3">This product will show on ALL phones forever!</p>
+<input id="nName" placeholder="Product Name" class="w-full bg-gray-100 p-3 rounded-xl mb-2 text-sm">
+<input id="nPrice" type="number" placeholder="Price GH₵" class="w-full bg-gray-100 p-3 rounded-xl mb-2 text-sm">
+<input id="nImg" placeholder="Image URL https://..." class="w-full bg-gray-100 p-3 rounded-xl mb-2 text-sm">
+<select id="nCat" class="w-full bg-gray-100 p-3 rounded-xl mb-3 text-sm"><option>Women</option><option>Men</option><option>Shoes</option><option>Bags</option><option>Electronics</option></select>
+<button onclick="addProductFirebase()" class="w-full bg-black text-white p-3 rounded-full font-bold text-sm">Add to Firebase - Permanent</button>
+<button onclick="closeAdd()" class="w-full mt-2 text-gray-500 text-sm">Cancel</button>
+</div></div>
 
-<!-- ADD PRODUCT MODAL -->
-<div id="addModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end">
-<div class="bg-white w-full rounded-t-3xl p-5">
-<h3 class="font-black text-lg mb-3">Add New Product</h3>
-<input id="newName" placeholder="Product Name" class="w-full border p-3 rounded-xl mb-2">
-<input id="newPrice" type="number" placeholder="Price GH₵" class="w-full border p-3 rounded-xl mb-2">
-<input id="newImg" placeholder="Image URL (https://...)" class="w-full border p-3 rounded-xl mb-2">
-<input id="newImgs" placeholder="Extra Images URLs (comma separated)" class="w-full border p-3 rounded-xl mb-2">
-<select id="newCat" class="w-full border p-3 rounded-xl mb-3"><option>Fashion</option><option>Electronics</option><option>Shoes</option></select>
-<button onclick="addProduct()" class="w-full bg-black text-white p-3 rounded-full font-bold">Add Product</button>
-<button onclick="closeAddModal()" class="w-full mt-2 text-gray-500">Cancel</button>
-<p class="text-[10px] text-center text-gray-400 mt-2">Product will save on this phone + all phones after you commit. It will NEVER disappear.</p>
-</div>
-</div>
-
-<!-- CART -->
-<div id="cartModal" class="fixed inset-0 bg-white z-[80] hidden p-4">
-<div class="flex justify-between items-center mb-4"><h2 class="font-black text-xl">Cart</h2><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full"><i class="fa-solid fa-xmark"></i></button></div>
-<div id="cartItems"></div>
-</div>
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-50">
+<button class="flex flex-col items-center text-[#ff6b9d]"><i class="fa-solid fa-house"></i><span class="text-[10px]">Home</span></button>
+<button class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-bars"></i><span class="text-[10px]">Categories</span></button>
+<button onclick="openAddModal()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-plus"></i><span class="text-[10px]">Sell</span></button>
+<button class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-heart"></i><span class="text-[10px]">Wishlist</span></button>
+<button onclick="openCart()" class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user"></i><span class="text-[10px]">Me</span></button>
+</nav>
 
 <script>
-// === PRODUCTS WITH PERSISTENCE (NEVER DISAPPEAR) ===
-const defaultProducts = [
-{id:1, name:"Air Max Sneakers", price:350, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500", imgs:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500","https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500"], cat:"Shoes", seller:"Danny"},
-{id:2, name:"iPhone 14 Pro", price:8500, img:"https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=500", imgs:["https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=500"], cat:"Electronics", seller:"Kwasi"},
-{id:3, name:"Designer Jacket", price:250, img:"https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500", cat:"Fashion", seller:"Danny"}
+// ========== FIREBASE CONFIG - REPLACE WITH YOUR OWN ==========
+const firebaseConfig = {
+  apiKey: "REPLACE_WITH_YOURS",
+  authDomain: "REPLACE.firebaseapp.com",
+  projectId: "REPLACE",
+  storageBucket: "REPLACE.appspot.com",
+  messagingSenderId: "REPLACE",
+  appId: "REPLACE"
+};
+// ========== END CONFIG ==========
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const defaultProducts=[
+{id:1,name:"Oversized Hoodie",price:24.99,old:35.99,cat:"Men",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400",imgs:["https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"]},
+{id:2,name:"Cargo Pants",price:29.5,old:49,cat:"Women",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400",imgs:["https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"]},
+{id:3,name:"Air Max",price:350,old:450,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",imgs:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"]}
 ];
-let products = JSON.parse(localStorage.getItem('dornny_products') || 'null') || defaultProducts;
 
-let currentCat = 'All';
-let cart = JSON.parse(localStorage.getItem('dornny_cart') || '[]');
+let products = [...defaultProducts];
+let cart = JSON.parse(localStorage.getItem('dornny_cart')||'[]');
+let currentCat='All';
 
-function saveProducts(){ localStorage.setItem('dornny_products', JSON.stringify(products)); }
-function saveCart(){ localStorage.setItem('dornny_cart', JSON.stringify(cart)); document.getElementById('cartCount').innerText = cart.length; }
+// LISTEN TO FIREBASE - PRODUCTS NEVER DISAPPEAR + SHOW ON ALL PHONES
+db.collection("products").orderBy("createdAt","desc").onSnapshot((snap)=>{
+  const fbProducts = snap.docs.map(doc=>({id:doc.id,...doc.data()}));
+  if(fbProducts.length>0){
+    products = [...fbProducts,...defaultProducts];
+    document.getElementById('status').innerText = "● Firebase: "+fbProducts.length+" live products";
+    document.getElementById('status').className="text-[10px] text-green-600";
+  }
+  render();
+}, (err)=>{
+  document.getElementById('status').innerText = "● Offline - Using local";
+  render();
+});
 
-function renderProducts(){
-const grid = document.getElementById('productGrid');
-const filtered = currentCat==='All'? products : products.filter(p=>p.cat===currentCat);
-grid.innerHTML = filtered.map(p=>`
-<div onclick="openProduct(${p.id})" class="bg-white rounded-2xl overflow-hidden shadow-sm">
-<img src="${p.img}" class="w-full h-40 object-cover">
-<div class="p-2"><p class="font-bold text-sm truncate">${p.name}</p><p class="text-xs text-gray-500">${p.cat}</p><p class="font-black mt-1">GH₵ ${p.price}</p></div>
-</div>`).join('');
-saveCart();
+function saveCart(){ localStorage.setItem('dornny_cart', JSON.stringify(cart)); document.getElementById('cartCount').innerText=cart.length; }
+function render(){
+ let list = currentCat==='All'? products : products.filter(p=>p.cat===currentCat);
+ const q=document.getElementById('searchInput').value.toLowerCase();
+ if(q) list=list.filter(p=>p.name.toLowerCase().includes(q));
+ document.getElementById('productGrid').innerHTML=list.map(p=>`
+  <div onclick="openProduct('${p.id}')" class="bg-white rounded-xl overflow-hidden shadow-sm">
+   <img src="${p.img}" class="w-full h-52 object-cover">
+   <div class="p-2"><p class="text-[12px] font-medium truncate">${p.name}</p><p class="font-bold text-sm">GH₵ ${p.price}</p><p class="text-[10px] text-gray-400">${p.cat} • Firestore</p></div>
+  </div>`).join('');
+ saveCart();
 }
-function filterCat(c){ currentCat=c; renderProducts(); }
-
-// === PRODUCT MODAL WITH SLIDER + PINCH ZOOM ===
-let startX=0, currentTranslate=0;
+function filterCat(c){currentCat=c; document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('border-black','font-bold')); document.getElementById('cat-'+c).classList.add('border-black','font-bold'); render();}
 function openProduct(id){
-const p=products.find(x=>x.id==id);
-if(!p) return;
-const imgs=p.imgs&&p.imgs.length?p.imgs:[p.img];
-document.getElementById('prodSwiperWrapper').innerHTML=imgs.map(img=>`<div style="min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="${img}" class="prod-img" style="width:100%;height:100%;object-fit:contain;transition:transform 0.3s" onclick="this.classList.toggle('zoomed')"></div>`).join('');
-document.getElementById('dots').innerHTML=imgs.map((_,i)=>`<div class="w-1.5 h-1.5 bg-gray-300 rounded-full"></div>`).join('');
-document.getElementById('productModal').style.display='block';
-document.getElementById('productDetail').innerHTML=`<div class="flex justify-between items-start"><div><h2 class="font-black text-lg">${p.name}</h2><p class="text-xs text-gray-500">${p.cat} • Sold by ${p.seller}</p></div></div><div class="flex items-center gap-2 mt-2"><span class="text-2xl font-black">GH₵ ${p.price}</span><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span></div><p class="text-xs text-gray-400 mt-2">Swipe image left/right • Tap image to zoom • Pinch to zoom</p><div class="flex gap-2 mt-4"><button onclick="addToCart(${p.id})" class="flex-1 bg-black text-white px-4 py-3 rounded-full text-sm font-bold">Add to Cart</button><button class="border px-4 py-3 rounded-full text-sm"><i class="fa-regular fa-heart"></i></button><button class="border px-4 py-3 rounded-full text-sm"><i class="fab fa-whatsapp text-green-500"></i></button></div>`;
+ const p=products.find(x=>String(x.id)===String(id));
+ document.getElementById('prodSwiper').innerHTML=(p.imgs||[p.img]).map(img=>`<div class="flex items-center justify-center bg-[#f5f5f5]"><img src="${img}" class="w-full h-full object-contain" ondblclick="this.classList.toggle('scale-[2]')" style="transition:0.3s"></div>`).join('');
+ document.getElementById('productModal').style.display='block';
+ document.getElementById('productDetail').innerHTML=`<p class="font-bold">${p.name}</p><p class="text-xl font-black mt-1">GH₵ ${p.price}</p><p class="text-xs text-gray-500 mt-1">Swipe ↔️ Double tap to zoom</p><div class="flex gap-2 mt-4"><button onclick="addToCart('${p.id}')" class="flex-1 bg-black text-white py-3 rounded-full text-sm font-bold">Add to Cart</button><button class="border px-4 py-3 rounded-full"><i class="fab fa-whatsapp text-green-500"></i></button></div>`;
 }
-function closeProduct(){ document.getElementById('productModal').style.display='none'; }
-
-// === ADD PRODUCT (NEVER DISAPPEAR) ===
-function openAddModal(){ document.getElementById('addModal').style.display='flex'; }
-function closeAddModal(){ document.getElementById('addModal').style.display='none'; }
-function addProduct(){
-const name=document.getElementById('newName').value;
-const price=parseFloat(document.getElementById('newPrice').value);
-const img=document.getElementById('newImg').value;
-const imgsRaw=document.getElementById('newImgs').value;
-const cat=document.getElementById('newCat').value;
-if(!name||!price||!img) return alert('Fill name, price, image');
-const extra = imgsRaw? imgsRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
-const newP = {id:Date.now(), name, price, img, imgs:[img,...extra], cat, seller:"You"};
-products.unshift(newP);
-saveProducts();
-renderProducts();
-closeAddModal();
-alert('Product added! It will NOT disappear again. For ALL phones to see it, also add it to defaultProducts in code and commit.');
-document.getElementById('newName').value=''; document.getElementById('newPrice').value=''; document.getElementById('newImg').value=''; document.getElementById('newImgs').value='';
-}
-
-// === CART ===
-function addToCart(id){ cart.push(products.find(p=>p.id==id)); saveCart(); alert('Added to cart'); }
-function openCart(){ document.getElementById('cartModal').style.display='block'; document.getElementById('cartItems').innerHTML = cart.map(c=>`<div class="flex gap-3 border-b py-3"><img src="${c.img}" class="w-16 h-16 object-cover rounded-xl"><div><p class="font-bold text-sm">${c.name}</p><p class="text-sm">GH₵ ${c.price}</p></div></div>`).join('') || '<p class="text-center text-gray-400 mt-10">Cart empty</p>'; }
-function closeCart(){ document.getElementById('cartModal').style.display='none'; }
-
-// === LIVE - ANY PHONE CAN JOIN ===
+function closeProduct(){document.getElementById('productModal').style.display='none';}
+function addToCart(id){cart.push(products.find(p=>String(p.id)===String(id))); saveCart(); alert('Added!');}
+function openAddModal(){document.getElementById('addModal').style.display='flex';}
+function closeAdd(){document.getElementById('addModal').style.display='none';}
+function openCart(){alert('Cart: '+cart.length+' items');}
 function goLive(){
-const room = prompt("Enter Live Room Name (share this name with friends):", "DORNNY-LIVE-"+Math.floor(Math.random()*1000));
-if(!room) return;
-const url = "https://meet.jit.si/" + room.replace(/\s+/g,'-');
-window.open(url, "_blank");
-alert("LIVE started! Share this link with friends: "+url+" - Any phone can join!");
+ const room=prompt('LIVE Room Name:','DORNNY-LIVE-'+Math.floor(Math.random()*1000));
+ if(!room) return;
+ const url='https://meet.jit.si/'+room.replace(/\s+/g,'-');
+ window.open(url,'_blank');
+ alert('LIVE Link: '+url+' - Share to buyers, ANY phone can join!');
 }
-
-renderProducts();
+// ADD TO FIREBASE - PERMANENT FOR ALL PHONES
+async function addProductFirebase(){
+ const name=document.getElementById('nName').value, price=parseFloat(document.getElementById('nPrice').value), img=document.getElementById('nImg').value, cat=document.getElementById('nCat').value;
+ if(!name||!price||!img) return alert('Fill all fields');
+ if(firebaseConfig.apiKey.includes('REPLACE')) return alert('First add your Firebase config at top of file! Go to firebase.google.com and paste config.');
+ try{
+   await db.collection("products").add({name,price,old:price*1.3,cat,img,imgs:[img],createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+   alert('SUCCESS! Product saved to Firebase - Will NEVER disappear and shows on ALL phones!');
+   closeAdd();
+   document.getElementById('nName').value='';document.getElementById('nPrice').value='';document.getElementById('nImg').value='';
+ }catch(e){alert('Error: '+e.message); console.log(e);}
+}
+setInterval(()=>{const el=document.getElementById('timer'); if(!el) return; let [h,m,s]=el.innerText.split(':').map(Number); s--; if(s<0){s=59;m--} if(m<0){m=59;h--} el.innerText=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`},1000);
+render();
 </script>
 </body>
 </html>
