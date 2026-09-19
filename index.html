@@ -318,15 +318,7 @@ function openProduct(id){
  <button onclick="window.open('https://wa.me/${p.whatsapp}?text=Hi, I want ${encodeURIComponent(p.name)}','_blank')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button>
  </div>`;
 }
-  <div class="flex gap-2 mt-4">
-   <button onclick="toggleLike('${p.id}');this.innerHTML='<i class=\\'fa fa-heart text-red-500\\'></i> ${p.likes+1}'" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa-regular fa-heart"></i> Like</button>
-   <button onclick="followSeller('${p.sellerId}')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa fa-user-plus"></i> Follow</button>
-   <button onclick="window.open('https://wa.me/${p.whatsapp}?text=Hi, I want ${encodeURIComponent(p.name)}','_blank')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fab fa-whatsapp text-green-600"></i> WhatsApp</button>
-  </div>
-  <div class="mt-4 flex gap-2"><button onclick="addToCart('${p.id}')" class="flex-1 bg-black text-white py-3 rounded-full font-bold">Add to Cart</button><button onclick="addToCart('${p.id}');showSection('cart');document.getElementById('productModal').style.display='none'" class="flex-1 bg-yellow-400 text-black py-3 rounded-full font-bold">Buy Now</button></div>
-  <div class="mt-5"><h3 class="font-bold text-sm">Reviews & Ratings</h3><div class="flex gap-1 mt-1 text-yellow-400 text-xs"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i><span class="text-gray-500 ml-1">${p.rating}/5</span></div><input id="commentInput" placeholder="Add comment..." class="w-full border rounded-full px-4 py-2 mt-3 text-sm"><button onclick="addComment('${p.id}')" class="mt-2 bg-gray-100 px-4 py-1 rounded-full text-xs">Post Comment</button><div id="commentsList" class="mt-3 space-y-2 text-sm">${(p.comments||[]).map(c=>`<p><b>${c.user}:</b> ${c.text}</p>`).join('')}</div></div>
- `;
-}
+ 
 
 function addToCart(id){
  const p=products.find(x=>x.id==id); cart.push(p); localStorage.setItem('dwamen_cart',JSON.stringify(cart)); updateCart();
