@@ -302,16 +302,22 @@ function renderLive(){
 }
 
 // PRODUCT MODAL WITH SLIDER + PINCH ZOOM
+
 function openProduct(id){
  const p=products.find(x=>x.id==id);
  if(!p) return;
- const imgs=p.imgs&&p.imgs.length?p.imgs:[p.img];document.getElementById('prodSwiperWrapper').innerHTML=imgs.map(img=>`<div style="min-width:100%;height:50vh;display:flex;align-items:center;justify-content:center;background:#f3f4f6;flex-shrink:0"><img src="${img}" style="width:100%;height:100%;object-fit:contain" onclick="this.style.transform=this.style.transform==='scale(2)'?'scale(1)':'scale(2)'"></div>`).join('');document.getElementById('productModal').style.display='block';
-document.getElementById('productDetail').innerHTML=`
-<div class="flex justify-between items-start"><div><h2 class="font-black text-lg">${p.name}</h2><p class="text-xs text-gray-500">${p.cat} • Sold by ${p.seller} <span class="text-blue-500" onclick="followSeller('${p.sellerId}')">@${p.seller}</span></p></div><button onclick="reportProduct('${p.id}')" class="text-xs text-gray-400"><i class="fa fa-flag"></i> Report</button></div>
-<div class="flex items-center gap-2 mt-2"><span class="text-2xl font-black">GH₵ ${p.price}</span><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span><span class="text-xs"> ⭐ ${p.rating} (${p.likes})</span></div>
+ const imgs=p.imgs&&p.imgs.length?p.imgs:[p.img];
+ document.getElementById('prodSwiperWrapper').innerHTML=imgs.map(img=>`<div style="min-width:100%;height:50vh;display:flex;align-items:center;justify-content:center;background:#f3f4f6;flex-shrink:0"><img src="${img}" style="width:100%;height:100%;object-fit:contain"></div>`).join('');
+ document.getElementById('productModal').style.display='block';
  document.getElementById('productDetail').innerHTML=`
-  <div class="flex justify-between items-start"><div><h2 class="font-black text-lg">${p.name}</h2><p class="text-xs text-gray-500">${p.cat} • Sold by ${p.seller} <span class="text-blue-500" onclick="followSeller('${p.sellerId}')">@${p.seller}</span></p></div><button onclick="reportProduct('${p.id}')" class="text-xs text-gray-400"><i class="fa fa-flag"></i> Report</button></div>
-  <div class="flex items-center gap-2 mt-2"><span class="text-2xl font-black">GH₵ ${p.price}</span><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span><span class="text-xs">⭐ ${p.rating} (${p.likes})</span></div>
+ <div class="flex justify-between items-start"><div><h2 class="font-black text-lg">${p.name}</h2><p class="text-xs text-gray-500">${p.cat} • Sold by ${p.seller} <span class="text-blue-500" onclick="followSeller('${p.sellerId}')">@${p.seller}</span></p></div><button onclick="reportProduct('${p.id}')" class="text-xs text-gray-400"><i class="fa fa-flag"></i> Report</button></div>
+ <div class="flex items-center gap-2 mt-2"><span class="text-2xl font-black">GH₵ ${p.price}</span><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">In Stock</span><span class="text-xs"> ⭐ ${p.rating} (${p.likes})</span></div>
+ <div class="flex gap-2 mt-4">
+ <button onclick="toggleLike('${p.id}');this.innerHTML='<i class=\\'fa fa-heart text-red-500\\'></i> ${p.likes+1}'" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa-regular fa-heart"></i> Like</button>
+ <button onclick="followSeller('${p.sellerId}')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa fa-user-plus"></i> Follow</button>
+ <button onclick="window.open('https://wa.me/${p.whatsapp}?text=Hi, I want ${encodeURIComponent(p.name)}','_blank')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button>
+ </div>`;
+}
   <div class="flex gap-2 mt-4">
    <button onclick="toggleLike('${p.id}');this.innerHTML='<i class=\\'fa fa-heart text-red-500\\'></i> ${p.likes+1}'" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa-regular fa-heart"></i> Like</button>
    <button onclick="followSeller('${p.sellerId}')" class="border px-4 py-2.5 rounded-full text-sm"><i class="fa fa-user-plus"></i> Follow</button>
