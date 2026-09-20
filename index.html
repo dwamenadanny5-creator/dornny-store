@@ -2,130 +2,129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DORNNY - Ghana's SHEIN</title>
-<meta name="theme-color" content="#000000">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DORNNY | Ghana's SHEIN</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fff}
-.hide-scroll::-webkit-scrollbar{display:none}
-.shein-tab{white-space:nowrap;padding:8px 0;border-bottom:2.5px solid transparent;font-size:13px}
-.shein-tab.active{border-bottom-color:#000;font-weight:700;color:#000}
-.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:12px 20px;border-radius:30px;font-size:12px;z-index:9999;display:none;max-width:90%;text-align:center}
-#liveVideo{background:#000;object-fit:cover}
+body{font-family: -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial;background:#fff;color:#222}
+.hide::-webkit-scrollbar{display:none}
+.shein-tab{font-size:13px;padding:10px 0;border-bottom:2px solid transparent;white-space:nowrap;color:#666}
+.shein-tab.active{color:#000;border-color:#000;font-weight:700}
+.product-card{line-height:1.2}
+.badge-sale{background:#fff3f3;color:#fa2a2a;font-size:9px;padding:1px 4px;border-radius:2px;border:1px solid #ffd0d0}
+.toast{position:fixed;top:75px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:20px;font-size:11px;z-index:9999;display:none}
 </style>
 </head>
-<body class="pb-[70px]">
+<body class="pb-[60px]">
 <div id="toast" class="toast"></div>
-<div id="customPrompt" class="fixed inset-0 bg-black/70 z-[200] hidden flex items-center justify-center p-6"><div class="bg-white w-full rounded-2xl p-5 max-w-sm"><h3 class="font-bold">Start Live</h3><input id="promptInput" value="New Collection Drop 🔥" class="w-full bg-[#f5f5f5] p-3 rounded-full mt-3 text-sm outline-none border"><div class="flex gap-2 mt-4"><button onclick="closePrompt()" class="flex-1 bg-gray-100 py-3 rounded-full text-sm">Cancel</button><button onclick="confirmPrompt()" class="flex-1 bg-[#ff2d55] text-white py-3 rounded-full text-sm font-bold">Go Live 🔴</button></div></div></div>
 
-<div id="loginScreen" class="fixed inset-0 bg-white z-[100] flex flex-col p-6"><div class="text-center mt-10"><h1 class="font-black text-[28px] tracking-[0.15em]">DORNNY</h1><p class="text-[11px] tracking-[0.3em] text-gray-400 mt-1">GHANA'S SHEIN</p></div><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400" class="w-full h-40 object-cover rounded-2xl mt-6"><h2 class="font-bold text-xl mt-6">Welcome</h2><input id="loginEmail" placeholder="Email" class="w-full bg-[#f5f5f5] p-4 rounded-full mt-6 text-sm"><input id="loginPass" type="password" placeholder="Password" class="w-full bg-[#f5f5f5] p-4 rounded-full mt-3 text-sm"><button onclick="doLogin()" class="w-full bg-black text-white p-4 rounded-full mt-4 font-bold text-sm">LOG IN</button><button onclick="skipLogin()" class="w-full text-gray-400 text-xs mt-3">Skip →</button></div>
+<!-- SHEIN HEADER LIKE REAL -->
+<header class="sticky top-0 z-40 bg-white">
+<div class="flex items-center gap-2 px-3 py-2.5">
+<div class="font-black text-[20px] tracking-[0.2em]">DORNNY</div>
+<div class="flex-1 bg-[#f6f6f6] rounded-full h-[34px] flex items-center px-3 ml-2">
+<i class="fa-solid fa-magnifying-glass text-[13px] text-[#999]"></i>
+<input id="searchInput" oninput="render()" placeholder="dress" class="bg-transparent ml-2 w-full text-[13px] outline-none">
+<i class="fa-solid fa-camera text-[#999] ml-2"></i>
+</div>
+<div class="flex gap-3 ml-2 text-[18px]"><i class="fa-regular fa-heart"></i><div class="relative"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-black text-white text-[8px] w-[15px] h-[15px] rounded-full flex items-center justify-center">0</span></div></div>
+</div>
+<!-- CATEGORY TABS LIKE SHEIN -->
+<div class="flex gap-5 px-3 overflow-x-auto hide border-b">
+<button id="cat-All" onclick="setCat('All')" class="shein-tab active">All</button>
+<button id="cat-Women" onclick="setCat('Women')" class="shein-tab">Women</button>
+<button id="cat-Curve" onclick="setCat('Curve')" class="shein-tab">Curve</button>
+<button id="cat-Men" onclick="setCat('Men')" class="shein-tab">Men</button>
+<button id="cat-Kids" onclick="setCat('Kids')" class="shein-tab">Kids</button>
+<button id="cat-Shoes" onclick="setCat('Shoes')" class="shein-tab">Shoes</button>
+<button id="cat-Bags" onclick="setCat('Bags')" class="shein-tab">Bags</button>
+<button id="cat-Beauty" onclick="setCat('Beauty')" class="shein-tab">Beauty</button>
+<button id="cat-Home" onclick="setCat('Home')" class="shein-tab">Home</button>
+</div>
+</header>
 
-<header class="bg-white sticky top-0 z-40 border-b"><div class="p-3 flex justify-between items-center"><div class="font-black text-[22px]">DORNNY</div><div class="flex gap-3 items-center text-[18px]"><div class="relative"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span></div></div></div><div class="px-3 pb-2 flex gap-2"><div class="flex-1 bg-[#f5f5f5] rounded-full flex items-center px-3 py-2.5"><i class="fa-solid fa-magnifying-glass text-gray-400 text-sm mr-2"></i><input id="searchInput" oninput="render()" placeholder="Dress" class="bg-transparent w-full text-[13px] outline-none"></div></div><div class="flex gap-5 px-3 overflow-x-auto hide-scroll border-b mt-1"><button onclick="filterCat('All')" id="cat-All" class="shein-tab active">All</button><button onclick="filterCat('Women')" id="cat-Women" class="shein-tab text-gray-500">Women</button><button onclick="filterCat('Men')" id="cat-Men" class="shein-tab text-gray-500">Men</button><button onclick="filterCat('Shoes')" id="cat-Shoes" class="shein-tab text-gray-500">Shoes</button><button onclick="filterCat('Bags')" id="cat-Bags" class="shein-tab text-gray-500">Bags</button></div></header>
-<div class="bg-[#ffe6e9] text-[#ff2442] text-[11px] px-3 py-1.5">🎟️ New User: <b>GH₵ 50 OFF</b></div>
-<div class="px-3 py-2"><div class="flex justify-between items-center"><h3 class="font-bold text-[13px]">🔴 Trending LIVE</h3><span onclick="openLiveList()" class="text-[11px] text-gray-400">More ></span></div><div id="liveList" class="flex gap-2 overflow-x-auto hide-scroll mt-2"></div></div>
-<div class="px-2 py-1 bg-[#f5f5f5]"><div id="productGrid" class="grid grid-cols-2 gap-2"></div></div>
+<!-- SHEIN COUPON STRIP -->
+<div class="bg-[#fff1f1] text-[#ff2442] text-[11px] px-3 py-2 flex justify-between">
+<span>🎟️ New User <b>GH₵50 OFF</b> over GH₵200</span><span class="border border-[#ff2442] px-2 rounded text-[10px]">Claim</span>
+</div>
 
-<div id="liveRoomModal" class="fixed inset-0 bg-black z-[60] hidden"><div class="relative w-full h-full">
-<video id="liveVideo" autoplay playsinline muted class="absolute inset-0 w-full h-full"></video>
-<div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-center z-[20]" style="background:linear-gradient(to bottom,rgba(0,0,0,0.85),transparent)">
-<div class="flex items-center gap-2"><img src="https://i.pravatar.cc/100" class="w-9 h-9 rounded-full border-2 border-white"><div><p id="hostName" class="text-white text-[12px] font-bold">DORNNY</p><p class="text-white text-[10px]"><span id="viewerCount">1</span> viewers • 🔴 LIVE</p></div>
-<button onclick="shareLive()" class="bg-white text-black text-[10px] px-3 py-1.5 rounded-full ml-2 font-bold">Invite</button>
-<button onclick="toggleTorch()" id="torchBtn" class="bg-white/20 text-white text-[10px] px-2 py-1.5 rounded-full ml-1">🔦</button>
-</div><button onclick="closeLive()" class="w-9 h-9 bg-white/20 text-white rounded-full">✕</button></div>
-<div class="absolute left-3 right-20 bottom-[135px] max-h-[30vh] overflow-y-auto hide-scroll space-y-2 z-[20]" id="liveComments"></div>
-<div class="absolute left-3 right-3 bottom-[80px] bg-white rounded-xl p-2 flex gap-2 items-center z-[20]"><img id="liveProductImg" src="" class="w-12 h-12 rounded-lg"><div class="flex-1"><p id="liveProductName" class="text-[11px] font-bold truncate">Product</p><p id="liveProductPrice" class="text-[#ff2d55] text-[12px] font-bold">GH₵ 0</p></div><button onclick="addToCartLive()" class="bg-[#ff2d55] text-white text-[11px] px-4 py-2 rounded-full font-bold">Buy</button></div>
-<div class="absolute left-3 right-3 bottom-4 flex gap-2 z-[30]"><input id="liveCommentInput" placeholder="Add comment..." class="flex-1 bg-white text-black text-[14px] px-4 py-3 rounded-full outline-none shadow-2xl"><button onclick="sendComment()" class="bg-[#ff2d55] w-12 h-12 rounded-full text-white shadow-2xl"><i class="fa-solid fa-paper-plane"></i></button></div>
+<!-- FLASH SALE BAR -->
+<div class="bg-black text-white text-[11px] px-3 py-2 flex justify-between items-center">
+<span>⚡ FLASH SALE <b class="ml-2">02:18:45</b></span><span onclick="openLiveList()" class="text-[#ffd2d2]">🔴 LIVE NOW ></span>
+</div>
+
+<!-- LIVE PREVIEW LIKE SHEIN LIVE -->
+<div class="px-2 py-2 border-b"><div id="liveList" class="flex gap-2 overflow-x-auto hide"></div></div>
+
+<!-- FILTER BAR LIKE SHEIN -->
+<div class="flex gap-4 px-3 py-2 text-[11px] text-[#666] border-b sticky top-[85px] bg-white z-30">
+<span><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</span><span><i class="fa-solid fa-sliders"></i> Filter</span><span>Category</span><span>Style</span>
+</div>
+
+<!-- TRUE SHEIN PRODUCT GRID -->
+<div class="p-1.5 bg-[#f6f6f6]"><div id="grid" class="grid grid-cols-2 gap-1.5"></div></div>
+
+<!-- PRODUCT SHEET LIKE SHEIN -->
+<div id="sheet" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end"><div class="bg-white w-full rounded-t-[16px] max-h-[90vh] overflow-y-auto">
+<div class="relative"><img id="sImg" class="w-full h-[420px] object-cover"><button onclick="closeSheet()" class="absolute top-3 right-3 w-8 h-8 bg-black/50 text-white rounded-full">✕</button>
+<button class="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] px-2 py-1 rounded-full"><i class="fa-solid fa-images"></i> 12</button></div>
+<div class="p-3"><div class="flex gap-2"><span class="badge-sale">-42% OFF</span><span class="text-[10px] text-[#666]">🔥 1.2k+ sold recently</span></div>
+<h3 id="sName" class="font-bold text-[13px] mt-2"></h3>
+<div class="flex items-end gap-2 mt-1"><span id="sPrice" class="text-[18px] font-bold">GH₵0</span><span id="sOld" class="text-[12px] line-through text-[#999]"></span><span class="badge-sale">SHEIN CLUB: -10%</span></div>
+<div class="mt-3"><p class="text-[11px] font-bold">Color</p><div class="flex gap-2 mt-1"><span class="w-8 h-8 rounded-full border-2 border-black bg-black"></span><span class="w-8 h-8 rounded-full bg-[#c9a87a]"></span><span class="w-8 h-8 rounded-full bg-[#e5e5e5]"></span></div></div>
+<div class="mt-3"><p class="text-[11px] font-bold">Size</p><div class="flex gap-2 mt-1 text-[11px]"><span class="border px-3 py-1.5 rounded">XS</span><span class="border px-3 py-1.5 rounded bg-black text-white">S</span><span class="border px-3 py-1.5 rounded">M</span><span class="border px-3 py-1.5 rounded">L</span></div></div>
+<div class="flex gap-2 mt-4"><button onclick="addCart()" class="flex-1 border border-black py-3 rounded-full text-[12px] font-bold">ADD TO CART</button><button onclick="shareLive()" class="flex-1 bg-black text-white py-3 rounded-full text-[12px] font-bold">BUY NOW</button></div></div>
 </div></div>
 
-<div id="liveListModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-2xl max-h-[80vh] overflow-y-auto p-3"><div class="flex justify-between"><h3 class="font-bold">🔴 Live Now</h3><button onclick="closeLiveList()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="liveListFull" class="grid grid-cols-2 gap-2 mt-3"></div><button onclick="startHostLive()" class="w-full bg-[#ff2d55] text-white p-3 rounded-full mt-4 font-bold">🎥 START MY LIVE</button></div></div>
-<button onclick="openLiveList()" class="fixed bottom-[80px] right-4 bg-[#ff2d55] w-14 h-14 rounded-full shadow-xl flex flex-col items-center justify-center text-white z-30"><i class="fa-solid fa-video text-sm"></i><span class="text-[9px] font-black">LIVE</span><span class="absolute -top-1 -right-1 bg-black text-[8px] w-4 h-4 rounded-full flex items-center justify-center" id="liveBadge">0</span></button>
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1.5 z-40"><button class="flex flex-col items-center text-black"><i class="fa-solid fa-house"></i><span class="text-[9px]">Home</span></button><button onclick="openLiveList()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-clapperboard"></i><span class="text-[9px]">Live</span></button><button class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user"></i><span class="text-[9px]">Me</span></button></nav>
+<!-- LIVE ROOM - SAME AS BEFORE BUT CLEAN -->
+<div id="liveRoom" class="fixed inset-0 bg-black z-[60] hidden"><div class="relative w-full h-full">
+<video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover bg-black"></video>
+<div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-center" style="background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent)">
+<div class="flex items-center gap-2"><img src="https://i.pravatar.cc/100" class="w-8 h-8 rounded-full border border-white"><div><p id="host" class="text-white text-[11px] font-bold">DORNNY</p><p class="text-white text-[9px]"><span id="viewC">1</span> watching</p></div><button onclick="shareLive()" class="bg-white text-black text-[10px] px-3 py-1 rounded-full ml-2 font-bold">Invite</button><button onclick="toggleTorch()" class="bg-white/20 text-white text-[10px] px-2 py-1 rounded-full">🔦</button></div><button onclick="closeLive()" class="w-8 h-8 bg-white/20 text-white rounded-full">✕</button></div>
+<div id="liveComments" class="absolute left-2 right-20 bottom-[90px] max-h-[30vh] overflow-y-auto hide space-y-1"></div>
+<div class="absolute left-2 right-2 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment..." class="flex-1 bg-white/90 rounded-full px-4 text-[13px] h-[40px] outline-none"><button onclick="sendComment()" class="bg-white w-10 h-10 rounded-full"><i class="fa-solid fa-paper-plane text-black text-[12px]"></i></button></div>
+</div></div>
+
+<div id="liveListModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-2xl p-3 max-h-[80vh] overflow-y-auto"><div class="flex justify-between"><b class="text-[13px]">SHEIN LIVE</b><button onclick="closeLiveList()" class="w-7 h-7 bg-[#f6f6f6] rounded-full">✕</button></div><div id="liveListFull" class="grid grid-cols-2 gap-2 mt-3"></div><button onclick="startLive()" class="w-full bg-[#ff2442] text-white py-3 rounded-full mt-4 font-bold text-[13px]">START LIVE</button></div></div>
+
+<!-- SHEIN BOTTOM NAV 5 TABS -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1 z-40">
+<button class="flex flex-col items-center text-black"><i class="fa-solid fa-house text-[16px]"></i><span class="text-[9px] mt-0.5">Shop</span></button>
+<button class="flex flex-col items-center text-[#999]"><i class="fa-solid fa-border-all text-[16px]"></i><span class="text-[9px] mt-0.5">Category</span></button>
+<button onclick="openLiveList()" class="flex flex-col items-center text-[#999]"><i class="fa-solid fa-clapperboard text-[16px]"></i><span class="text-[9px] mt-0.5">Live</span></button>
+<button class="flex flex-col items-center text-[#999]"><i class="fa-regular fa-heart text-[16px]"></i><span class="text-[9px] mt-0.5">Wishlist</span></button>
+<button class="flex flex-col items-center text-[#999]"><i class="fa-regular fa-user text-[16px]"></i><span class="text-[9px] mt-0.5">Me</span></button>
+</nav>
+<button onclick="openLiveList()" class="fixed bottom-[70px] right-3 bg-black w-12 h-12 rounded-full shadow-xl flex items-center justify-center text-white z-30"><i class="fa-solid fa-video text-[14px]"></i></button>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
-  authDomain: "dornnysmarket.firebaseapp.com",
-  projectId: "dornnysmarket",
-  storageBucket: "dornnysmarket.firebasestorage.app",
-  messagingSenderId: "726307073658",
-  appId: "1:726307073658:web:24c52654e92de69cfa95c3",
-  measurementId: "G-ZBJJHPN01T"
-};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore(); const auth=firebase.auth();
-let products=[{id:1,name:"SHEIN EZwear Cami Top",price:45,old:89,cat:"Women",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"},{id:2,name:"Cargo Pants",price:120,cat:"Men",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"},{id:3,name:"Sneakers",price:350,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"}];
-let cart=[];let currentCat='All';let currentLiveProduct=null;let liveUnsub=null;let torchOn=false;
-function showToast(m){const t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
-function closePrompt(){document.getElementById('customPrompt').style.display='none';}
-function confirmPrompt(){const v=document.getElementById('promptInput').value.trim();if(!v){showToast('Enter title');return;}closePrompt();actuallyStartLive(v);}
-db.collection("liveRooms").where("isLive","==",true).onSnapshot(snap=>{const lives=snap.docs.map(d=>({id:d.id,...d.data()}));document.getElementById('liveBadge').innerText=lives.length;renderLivePreview(lives);});
-function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);const q=document.getElementById('searchInput').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('productGrid').innerHTML=list.map(p=>`<div onclick="openProduct('${p.id}')" class="bg-white rounded-lg overflow-hidden"><img src="${p.img}" class="w-full h-[180px] object-cover"><div class="p-1.5"><p class="text-[11px]">${p.name}</p><span class="font-bold text-[13px]">GH₵${p.price}</span></div></div>`).join('');document.getElementById('cartCount').innerText=cart.length;}
-function renderLivePreview(lives){const demo=lives&&lives.length?lives:[{id:'demo1',hostName:'DORNNY Live',viewers:234,img:products[0].img}];document.getElementById('liveList').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="relative min-w-[90px] w-[90px] h-[120px] rounded-xl overflow-hidden"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-1 left-1 bg-[#ff2d55] text-white text-[7px] px-1 rounded">LIVE</span><p class="absolute bottom-1 left-1 text-white text-[8px]">${l.hostName}</p></div>`).join('');document.getElementById('liveListFull').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="relative rounded-xl h-48 overflow-hidden"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-[#ff2d55] text-white text-[9px] px-2 rounded">● LIVE</span><p class="absolute bottom-2 left-2 text-white text-[11px]">${l.hostName}</p></div>`).join('');}
-function filterCat(c){currentCat=c;document.querySelectorAll('.shein-tab').forEach(b=>{b.classList.remove('active');b.classList.add('text-gray-500')});document.getElementById('cat-'+c).classList.add('active');render();}
-function openProduct(id){const p=products.find(x=>String(x.id)===String(id));currentLiveProduct=p;showToast('Added 🛍️');}
-function doLogin(){const e=document.getElementById('loginEmail').value;if(!e){showToast('Enter email');return;}document.getElementById('loginScreen').style.display='none';localStorage.setItem('dornny_user',e);showToast('Welcome 🛍️');}
-function skipLogin(){document.getElementById('loginScreen').style.display='none';}
-if(localStorage.getItem('dornny_user'))document.getElementById('loginScreen').style.display='none';
+const firebaseConfig={apiKey:"AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",authDomain:"dornnysmarket.firebaseapp.com",projectId:"dornnysmarket",storageBucket:"dornnysmarket.firebasestorage.app",messagingSenderId:"726307073658",appId:"1:726307073658:web:24c52654e92de69cfa95c3"};firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+let products=[{id:1,name:"DAZY Cami Top Solid Color",price:45,old:89,cat:"Women",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500",sold:"1.2k+"},{id:2,name:"Men Solid Cargo Pants",price:120,old:210,cat:"Men",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",sold:"800+"},{id:3,name:"Chunky Sneakers Street",price:350,old:499,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",sold:"2.3k+"},{id:4,name:"SHEIN PETITE Dress",price:95,old:159,cat:"Curve",img:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500",sold:"500+"},{id:5,name:"Mini City Bag",price:65,old:120,cat:"Bags",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500",sold:"3k+"},{id:6,name:"Kids Cartoon Tee",price:35,old:60,cat:"Kids",img:"https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500",sold:"900+"}];
+let cart=[],currentCat='All',currentP=null,currentLiveId=null,unsub=null,stream=null,torchOn=false;
+function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+function setCat(c){currentCat=c;document.querySelectorAll('.shein-tab').forEach(b=>b.classList.remove('active'));document.getElementById('cat-'+c).classList.add('active');render();}
+function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);let q=document.getElementById('searchInput').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('grid').innerHTML=list.map(p=>{let off=Math.round((1-p.price/p.old)*100);return `<div onclick="openSheet(${p.id})" class="product-card bg-white rounded-[6px] overflow-hidden relative">
+<img src="${p.img}" class="w-full h-[220px] object-cover"><div class="absolute top-1 right-1 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center"><i class="fa-regular fa-heart text-[11px]"></i></div>
+<div class="p-1.5"><p class="text-[11px] truncate">${p.name}</p>
+<div class="flex items-center gap-1 mt-1"><span class="font-bold text-[13px]">GH₵${p.price}</span><span class="text-[10px] line-through text-[#999]">GH₵${p.old}</span><span class="badge-sale">-${off}%</span></div>
+<div class="flex items-center gap-1 mt-1 text-[9px] text-[#999]"><span class="text-[#ff9500]">★ 4.8</span><span>(${p.sold} sold)</span></div>
+</div></div>`}).join('');document.getElementById('cartCount').innerText=cart.length;}
+function openSheet(id){let p=products.find(x=>x.id===id);currentP=p;document.getElementById('sImg').src=p.img;document.getElementById('sName').innerText=p.name;document.getElementById('sPrice').innerText='GH₵'+p.price;document.getElementById('sOld').innerText='GH₵'+p.old;document.getElementById('sheet').style.display='flex';}
+function closeSheet(){document.getElementById('sheet').style.display='none';}
+function addCart(){cart.push(currentP);toast('Added to bag 🛍️');render();closeSheet();}
+db.collection("liveRooms").where("isLive","==",true).onSnapshot(s=>{let lives=s.docs.map(d=>({id:d.id,...d.data()}));let demo=lives.length?lives:[{id:'demo',hostName:'DORNNY Studio',viewers:342,img:products[0].img}];document.getElementById('liveList').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="min-w-[86px] w-[86px] h-[110px] rounded-[8px] overflow-hidden relative"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-1 left-1 bg-[#ff2442] text-white text-[7px] px-1 rounded">LIVE</span><p class="absolute bottom-1 left-1 right-1 text-white text-[8px] truncate">${l.hostName}</p></div>`).join('');document.getElementById('liveListFull').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="relative h-44 rounded-xl overflow-hidden"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-[#ff2442] text-white text-[8px] px-2 py-0.5 rounded">● LIVE ${l.viewers}</span></div>`).join('');});
 function openLiveList(){document.getElementById('liveListModal').style.display='flex';}function closeLiveList(){document.getElementById('liveListModal').style.display='none';}
-function startHostLive(){document.getElementById('customPrompt').style.display='flex';}
-function shareLive(){
- if(!window.currentLiveId){showToast('Start live first');return;}
- const link = location.origin + location.pathname + "?live=" + window.currentLiveId;
- navigator.clipboard.writeText(link).then(()=>showToast('✅ Invite link copied! Send to friend on WhatsApp: '+link)).catch(()=>{showToast(link); prompt('Copy link for friend:', link);});
-}
-async function toggleTorch(){
- try{
-  const track=window.liveStream?.getVideoTracks()[0];
-  if(!track){showToast('Start live first');return;}
-  const cap=track.getCapabilities();
-  if(!cap.torch){showToast('Torch not supported');return;}
-  torchOn=!torchOn;
-  await track.applyConstraints({advanced:[{torch:torchOn}]});
-  showToast(torchOn?'🔦 Torch ON - bright!':'🔦 Torch OFF');
- }catch(e){showToast(e.message);}
-}
-async function actuallyStartLive(roomName){
- const product=products[0];closeLiveList();document.getElementById('liveRoomModal').style.display='block';
- document.getElementById('hostName').innerText="You (Host)";document.getElementById('liveProductImg').src=product.img;document.getElementById('liveProductName').innerText=product.name;document.getElementById('liveProductPrice').innerText="GH₵"+product.price;currentLiveProduct=product;
- if(window.liveStream)window.liveStream.getTracks().forEach(t=>t.stop());
- try{
-  let stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:640},height:{ideal:480},facingMode:"user"},audio:true});
-  const v=document.getElementById('liveVideo');v.srcObject=stream;await v.play();window.liveStream=stream;
-  document.getElementById('liveComments').innerHTML='<p class="text-white bg-black/50 rounded-full px-3 py-1 text-[11px]">🔴 LIVE! Tap Invite to add friend</p>';
-  const doc=await db.collection("liveRooms").add({hostName:localStorage.getItem('dornny_user')||"Host",title:roomName,isLive:true,viewers:1,img:product.img,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-  window.currentLiveId=doc.id;
-  shareLive();
-  liveUnsub=db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(snap=>{
-   const div=document.getElementById('liveComments');div.innerHTML=snap.docs.map(d=>{const c=d.data();return `<p class="text-[11px] text-white bg-black/40 rounded-full px-2 py-1 inline-block"><b class="text-yellow-300">${c.user}:</b> ${c.text}</p>`}).join('');div.scrollTop=div.scrollHeight;
-  });
-  db.collection("liveRooms").doc(doc.id).onSnapshot(s=>{if(s.data()) document.getElementById('viewerCount').innerText=s.data().viewers;});
- }catch(e){showToast("Camera: "+e.message);}
-}
-async function joinLive(id){
- document.getElementById('liveListModal').style.display='none';
- document.getElementById('liveRoomModal').style.display='block';
- const product=products[0];
- document.getElementById('hostName').innerText="DORNNY Live";document.getElementById('liveProductImg').src=product.img;
- document.getElementById('liveProductName').innerText=product.name;document.getElementById('liveProductPrice').innerText="GH₵"+product.price;currentLiveProduct=product;
- document.getElementById('liveComments').innerHTML='<p class="text-white bg-black/50 rounded px-3 py-1 text-[11px]">Joined 👋</p>';
- window.currentLiveId=id;
- try{
-  liveUnsub=db.collection("liveRooms").doc(id).collection("comments").orderBy("createdAt").onSnapshot(snap=>{
-   const div=document.getElementById('liveComments');div.innerHTML=snap.docs.map(d=>{const c=d.data();return `<p class="text-[11px] text-white bg-black/40 rounded-full px-2 py-1 inline-block"><b class="text-yellow-300">${c.user}:</b> ${c.text}</p>`}).join('');
-  });
-  db.collection("liveRooms").doc(id).update({viewers:firebase.firestore.FieldValue.increment(1)});
-  db.collection("liveRooms").doc(id).onSnapshot(s=>{if(s.data()) document.getElementById('viewerCount').innerText=s.data().viewers;});
- }catch(e){showToast('Live ended');}
-}
-async function sendComment(){const i=document.getElementById('liveCommentInput');const text=i.value.trim();if(!text)return;const user=localStorage.getItem('dornny_user')||"Guest";if(window.currentLiveId){await db.collection("liveRooms").doc(window.currentLiveId).collection("comments").add({user,text,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}i.value='';}
-function addToCartLive(){showToast('Added to bag 🛍️');}
-function closeLive(){if(window.liveStream)window.liveStream.getTracks().forEach(t=>t.stop());if(liveUnsub)liveUnsub();document.getElementById('liveRoomModal').style.display='none';if(window.currentLiveId && document.getElementById('hostName').innerText.includes("You")){db.collection("liveRooms").doc(window.currentLiveId).update({isLive:false});}history.replaceState(null,'',location.pathname);}
-const urlParams=new URLSearchParams(window.location.search);const liveId=urlParams.get('live');if(liveId){setTimeout(()=>joinLive(liveId),1000);}
+function startLive(){closeLiveList();actuallyStart('DORNNY Drop 🔥');}
+async function actuallyStart(title){document.getElementById('liveRoom').style.display='block';document.getElementById('host').innerText='You';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById('v').srcObject=stream;await document.getElementById('v').play();let doc=await db.collection("liveRooms").add({hostName:"DORNNY Host",title,isLive:true,viewers:1,img:products[0].img,createdAt:firebase.firestore.FieldValue.serverTimestamp()});currentLiveId=doc.id;shareLive();unsub=db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(s=>{let d=document.getElementById('liveComments');d.innerHTML=s.docs.map(x=>{let c=x.data();return `<span class="bg-black/40 text-white text-[11px] px-2 py-1 rounded-full inline-block mr-1 mb-1"><b class="text-yellow-300">${c.user}:</b> ${c.text}</span>`}).join('');});db.collection("liveRooms").doc(doc.id).onSnapshot(s=>{if(s.data())document.getElementById('viewC').innerText=s.data().viewers;});}catch(e){toast(e.message);}}
+async function joinLive(id){document.getElementById('liveListModal').style.display='none';document.getElementById('liveRoom').style.display='block';document.getElementById('host').innerText='DORNNY Live';currentLiveId=id;try{db.collection("liveRooms").doc(id).update({viewers:firebase.firestore.FieldValue.increment(1)});unsub=db.collection("liveRooms").doc(id).collection("comments").orderBy("createdAt").onSnapshot(s=>{let d=document.getElementById('liveComments');d.innerHTML=s.docs.map(x=>{let c=x.data();return `<span class="bg-black/40 text-white text-[11px] px-2 py-1 rounded-full inline-block mr-1 mb-1"><b class="text-yellow-300">${c.user}:</b> ${c.text}</span>`}).join('');});db.collection("liveRooms").doc(id).onSnapshot(s=>{if(s.data())document.getElementById('viewC').innerText=s.data().viewers;});}catch(e){}}
+function shareLive(){if(!currentLiveId)return;let link=location.origin+location.pathname+"?live="+currentLiveId;navigator.clipboard.writeText(link).then(()=>toast('Invite link copied! '+link)).catch(()=>prompt('Copy:',link));}
+async function sendComment(){let i=document.getElementById('cInput');let t=i.value.trim();if(!t)return;if(currentLiveId)await db.collection("liveRooms").doc(currentLiveId).collection("comments").add({user:"Guest",text:t,createdAt:firebase.firestore.FieldValue.serverTimestamp()});i.value='';}
+function closeLive(){if(stream)stream.getTracks().forEach(t=>t.stop());if(unsub)unsub();document.getElementById('liveRoom').style.display='none';if(currentLiveId)db.collection("liveRooms").doc(currentLiveId).update({isLive:false});}
+async function toggleTorch(){try{let tr=stream?.getVideoTracks()[0];let cap=tr.getCapabilities();if(!cap.torch){toast('Torch not supported');return;}torchOn=!torchOn;await tr.applyConstraints({advanced:[{torch:torchOn}]});toast(torchOn?'🔦 Bright ON':'🔦 OFF');}catch(e){toast(e.message);}}
+let lp=new URLSearchParams(location.search).get('live');if(lp)setTimeout(()=>joinLive(lp),800);
 render();
 </script>
 </body>
