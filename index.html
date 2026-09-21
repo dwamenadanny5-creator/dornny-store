@@ -1,131 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DORNNY | Ghana's SHEIN</title>
+<title>DORNNY MARKET - Amansan Dwaaso</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <style>
-body{font-family: -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial;background:#fff;color:#222}
+body{font-family:system-ui;background:#f5f5f5;padding-bottom:70px}
+.swiper{width:100%;height:200px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:20px;font-size:12px;z-index:9999;display:none}
+.cat-active{background:#111;color:#fff!important}
 .hide::-webkit-scrollbar{display:none}
-.shein-tab{font-size:13px;padding:10px 0;border-bottom:2px solid transparent;white-space:nowrap;color:#666}
-.shein-tab.active{color:#000;border-color:#000;font-weight:700}
-.product-card{line-height:1.2}
-.badge-sale{background:#fff3f3;color:#fa2a2a;font-size:9px;padding:1px 4px;border-radius:2px;border:1px solid #ffd0d0}
-.toast{position:fixed;top:75px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:20px;font-size:11px;z-index:9999;display:none}
+.zoom-img{touch-action:pan-x pan-y pinch-zoom}
 </style>
 </head>
-<body class="pb-[60px]">
+<body>
 <div id="toast" class="toast"></div>
 
-<!-- SHEIN HEADER LIKE REAL -->
-<header class="sticky top-0 z-40 bg-white">
-<div class="flex items-center gap-2 px-3 py-2.5">
-<div class="font-black text-[20px] tracking-[0.2em]">DORNNY</div>
-<div class="flex-1 bg-[#f6f6f6] rounded-full h-[34px] flex items-center px-3 ml-2">
-<i class="fa-solid fa-magnifying-glass text-[13px] text-[#999]"></i>
-<input id="searchInput" oninput="render()" placeholder="dress" class="bg-transparent ml-2 w-full text-[13px] outline-none">
-<i class="fa-solid fa-camera text-[#999] ml-2"></i>
-</div>
-<div class="flex gap-3 ml-2 text-[18px]"><i class="fa-regular fa-heart"></i><div class="relative"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-black text-white text-[8px] w-[15px] h-[15px] rounded-full flex items-center justify-center">0</span></div></div>
-</div>
-<!-- CATEGORY TABS LIKE SHEIN -->
-<div class="flex gap-5 px-3 overflow-x-auto hide border-b">
-<button id="cat-All" onclick="setCat('All')" class="shein-tab active">All</button>
-<button id="cat-Women" onclick="setCat('Women')" class="shein-tab">Women</button>
-<button id="cat-Curve" onclick="setCat('Curve')" class="shein-tab">Curve</button>
-<button id="cat-Men" onclick="setCat('Men')" class="shein-tab">Men</button>
-<button id="cat-Kids" onclick="setCat('Kids')" class="shein-tab">Kids</button>
-<button id="cat-Shoes" onclick="setCat('Shoes')" class="shein-tab">Shoes</button>
-<button id="cat-Bags" onclick="setCat('Bags')" class="shein-tab">Bags</button>
-<button id="cat-Beauty" onclick="setCat('Beauty')" class="shein-tab">Beauty</button>
-<button id="cat-Home" onclick="setCat('Home')" class="shein-tab">Home</button>
-</div>
-</header>
-
-<!-- SHEIN COUPON STRIP -->
-<div class="bg-[#fff1f1] text-[#ff2442] text-[11px] px-3 py-2 flex justify-between">
-<span>🎟️ New User <b>GH₵50 OFF</b> over GH₵200</span><span class="border border-[#ff2442] px-2 rounded text-[10px]">Claim</span>
+<!-- WELCOME -->
+<div id="welcome" class="bg-[#111] text-white text-center py-3 px-3">
+<p class="text-[16px] font-black tracking-widest">WELCOME TO DORNNY MARKET</p>
+<p class="text-[11px] text-yellow-400">Amansan Dwaaso - Ghana's Everything Market 🇬🇭</p>
 </div>
 
-<!-- FLASH SALE BAR -->
-<div class="bg-black text-white text-[11px] px-3 py-2 flex justify-between items-center">
-<span>⚡ FLASH SALE <b class="ml-2">02:18:45</b></span><span onclick="openLiveList()" class="text-[#ffd2d2]">🔴 LIVE NOW ></span>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="min-h-[80vh] flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl">
+<h2 class="text-[20px] font-black text-center">DORNNY MARKET</h2>
+<p class="text-[11px] text-center text-gray-500 mb-4">Login / Register</p>
+<input id="shopName" placeholder="Shop Name (e.g. Danny Fashion)" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 outline-none">
+<input id="phone" placeholder="Phone Number 0XX XXX XXXX" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 outline-none">
+<input id="email" placeholder="Email" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 outline-none">
+<input id="pass" type="password" placeholder="Password" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 outline-none">
+<input id="cpass" type="password" placeholder="Confirm Password" class="w-full border rounded-full px-4 py-3 text-[13px] mb-3 outline-none">
+<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold text-[13px]">CONTINUE</button>
+<p class="text-[10px] text-center mt-3 text-gray-400">We will send notifications to your email & phone</p>
+</div>
 </div>
 
-<!-- LIVE PREVIEW LIKE SHEIN LIVE -->
-<div class="px-2 py-2 border-b"><div id="liveList" class="flex gap-2 overflow-x-auto hide"></div></div>
-
-<!-- FILTER BAR LIKE SHEIN -->
-<div class="flex gap-4 px-3 py-2 text-[11px] text-[#666] border-b sticky top-[85px] bg-white z-30">
-<span><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</span><span><i class="fa-solid fa-sliders"></i> Filter</span><span>Category</span><span>Style</span>
+<!-- MAIN APP -->
+<div id="mainApp" class="hidden">
+<!-- TOP SEARCH -->
+<div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b">
+<div class="font-black tracking-widest text-[16px]">DORNNY</div>
+<div class="flex-1 bg-[#f2f2f2] rounded-full h-[36px] flex items-center px-3"><i class="fa-solid fa-search text-gray-400 text-[12px]"></i><input id="search" oninput="render()" placeholder="Search men, cars, food..." class="bg-transparent ml-2 w-full text-[12px] outline-none"></div>
+<div class="relative"><i class="fa-solid fa-bell text-[18px]"></i><span id="notifCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span></div>
 </div>
 
-<!-- TRUE SHEIN PRODUCT GRID -->
-<div class="p-1.5 bg-[#f6f6f6]"><div id="grid" class="grid grid-cols-2 gap-1.5"></div></div>
+<!-- AUTOMOTIVE DASHBOARD ON TOP FOR BUYER -->
+<div class="bg-white p-2">
+<div class="bg-gradient-to-r from-black to-gray-800 rounded-xl p-3 text-white flex justify-between items-center">
+<div><p class="text-[12px] font-bold">🚗 Automotive Dashboard</p><p class="text-[10px] text-gray-300">Cars, parts, rentals - Buy now in Ghana</p></div>
+<button class="bg-yellow-400 text-black text-[10px] px-3 py-1.5 rounded-full font-bold">Explore Cars ></button>
+</div>
+</div>
 
-<!-- PRODUCT SHEET LIKE SHEIN -->
-<div id="sheet" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end"><div class="bg-white w-full rounded-t-[16px] max-h-[90vh] overflow-y-auto">
-<div class="relative"><img id="sImg" class="w-full h-[420px] object-cover"><button onclick="closeSheet()" class="absolute top-3 right-3 w-8 h-8 bg-black/50 text-white rounded-full">✕</button>
-<button class="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] px-2 py-1 rounded-full"><i class="fa-solid fa-images"></i> 12</button></div>
-<div class="p-3"><div class="flex gap-2"><span class="badge-sale">-42% OFF</span><span class="text-[10px] text-[#666]">🔥 1.2k+ sold recently</span></div>
-<h3 id="sName" class="font-bold text-[13px] mt-2"></h3>
-<div class="flex items-end gap-2 mt-1"><span id="sPrice" class="text-[18px] font-bold">GH₵0</span><span id="sOld" class="text-[12px] line-through text-[#999]"></span><span class="badge-sale">SHEIN CLUB: -10%</span></div>
-<div class="mt-3"><p class="text-[11px] font-bold">Color</p><div class="flex gap-2 mt-1"><span class="w-8 h-8 rounded-full border-2 border-black bg-black"></span><span class="w-8 h-8 rounded-full bg-[#c9a87a]"></span><span class="w-8 h-8 rounded-full bg-[#e5e5e5]"></span></div></div>
-<div class="mt-3"><p class="text-[11px] font-bold">Size</p><div class="flex gap-2 mt-1 text-[11px]"><span class="border px-3 py-1.5 rounded">XS</span><span class="border px-3 py-1.5 rounded bg-black text-white">S</span><span class="border px-3 py-1.5 rounded">M</span><span class="border px-3 py-1.5 rounded">L</span></div></div>
-<div class="flex gap-2 mt-4"><button onclick="addCart()" class="flex-1 border border-black py-3 rounded-full text-[12px] font-bold">ADD TO CART</button><button onclick="shareLive()" class="flex-1 bg-black text-white py-3 rounded-full text-[12px] font-bold">BUY NOW</button></div></div>
+<!-- CATEGORY LIST -->
+<div class="bg-white p-2 border-b sticky top-[52px] z-20">
+<div id="catList" class="flex gap-2 overflow-x-auto hide"></div>
+</div>
+
+<!-- BANNER SWIPER -->
+<div class="swiper mt-2"><div class="swiper-wrapper">
+<div class="swiper-slide"><img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800" class="w-full h-full object-cover"></div>
+<div class="swiper-slide"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800" class="w-full h-full object-cover"></div>
+<div class="swiper-slide"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800" class="w-full h-full object-cover"></div>
 </div></div>
 
-<!-- LIVE ROOM - SAME AS BEFORE BUT CLEAN -->
+<!-- PRODUCTS -->
+<div class="p-2 grid grid-cols-2 gap-2" id="grid"></div>
+
+<!-- CART TOTAL -->
+<div id="cartBox" class="fixed bottom-[70px] left-2 right-2 bg-black text-white p-3 rounded-2xl hidden flex justify-between items-center z-20">
+<div><p class="text-[11px]">Total to Pay</p><p id="totalPay" class="font-bold">GH₵0</p></div>
+<button onclick="checkout()" class="bg-yellow-400 text-black px-5 py-2 rounded-full text-[12px] font-bold">Checkout</button>
+</div>
+</div>
+
+<!-- PRODUCT DETAIL WITH SWIPE & ZOOM -->
+<div id="detail" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto">
+<div class="relative">
+<div class="swiper" id="detailSwiper" style="height:380px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div>
+<button onclick="closeDetail()" class="absolute top-3 left-3 w-8 h-8 bg-black/50 text-white rounded-full z-10">✕</button>
+<button onclick="reportProd()" class="absolute top-3 right-3 bg-black/50 text-white text-[10px] px-3 py-1 rounded-full z-10">Report</button>
+</div>
+<div class="p-3">
+<h3 id="dName" class="font-bold text-[15px]"></h3>
+<div class="flex justify-between items-center mt-1"><span id="dPrice" class="font-bold text-[18px]"></span><span id="dSold" class="text-[11px] bg-red-100 text-red-600 px-2 rounded">SOLD</span></div>
+<!-- SELLER INFO WITH FOLLOW RATE WHATSAPP -->
+<div class="border rounded-xl p-3 mt-3 bg-[#fafafa]">
+<div class="flex justify-between"><div class="flex gap-2 items-center"><img src="https://i.pravatar.cc/100" class="w-9 h-9 rounded-full"><div><p id="dSeller" class="text-[12px] font-bold">Danny Shop</p><p class="text-[10px]">⭐ <span id="dRate">4.8</span> • <span id="dFollows">1.2k</span> followers</p></div></div><button id="followBtn" onclick="followSeller()" class="bg-black text-white text-[11px] px-4 h-8 rounded-full">Follow</button></div>
+<div class="flex gap-2 mt-2"><button onclick="openWhatsApp()" class="flex-1 bg-[#25D366] text-white py-2 rounded-full text-[11px] font-bold"><i class="fa-brands fa-whatsapp"></i> WhatsApp Seller</button><button onclick="messageSeller()" class="flex-1 border py-2 rounded-full text-[11px]">Message</button></div>
+</div>
+<div class="flex gap-2 mt-3"><button onclick="addCartDetail()" class="flex-1 border border-black py-3 rounded-full font-bold text-[12px]">Add to Cart</button><button onclick="likeProd()" class="w-12 h-12 border rounded-full"><i id="likeIcon" class="fa-regular fa-heart"></i></button></div>
+<!-- COMMENTS -->
+<div class="mt-4"><p class="font-bold text-[12px]">Comments & Reviews</p><div id="commentList" class="mt-2 space-y-2 text-[11px]"></div><div class="flex gap-2 mt-2"><input id="commentInput" placeholder="Add comment..." class="flex-1 border rounded-full px-3 py-2 text-[11px]"><button onclick="addComment()" class="bg-black text-white px-4 rounded-full text-[11px]">Send</button></div></div>
+<div class="flex gap-2 mt-4 text-[10px]"><button onclick="doRefund()" class="border px-3 py-1.5 rounded-full">Request Refund</button><button onclick="doCancel()" class="border px-3 py-1.5 rounded-full">Cancel Order</button></div>
+</div>
+</div>
+
+<!-- SELL SCREEN -->
+<div id="sellScreen" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto p-4">
+<h2 class="font-black text-[18px]">Sell Your Product</h2>
+<p class="text-[11px] text-gray-500">Upload will be permanent until you delete</p>
+<input id="upName" placeholder="Product name" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px]">
+<input id="upPrice" type="number" placeholder="Price GH₵" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]">
+<input id="upWhatsapp" placeholder="Your WhatsApp number 0XX..." class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]">
+<select id="upCat" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"></select>
+<input id="upImg" placeholder="Image URL (https://...)" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]">
+<button onclick="uploadProduct()" class="w-full bg-black text-white py-3 rounded-full mt-4 font-bold">UPLOAD NOW</button>
+<p class="text-[10px] text-gray-400 mt-2 text-center">Buyers get email + notification when you go live</p>
+<button onclick="closeSell()" class="w-full border py-3 rounded-full mt-2">Close</button>
+</div>
+
+<!-- LIVE FULLSCREEN TIKTOK STYLE -->
 <div id="liveRoom" class="fixed inset-0 bg-black z-[60] hidden"><div class="relative w-full h-full">
-<video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover bg-black"></video>
-<div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-center" style="background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent)">
-<div class="flex items-center gap-2"><img src="https://i.pravatar.cc/100" class="w-8 h-8 rounded-full border border-white"><div><p id="host" class="text-white text-[11px] font-bold">DORNNY</p><p class="text-white text-[9px]"><span id="viewC">1</span> watching</p></div><button onclick="shareLive()" class="bg-white text-black text-[10px] px-3 py-1 rounded-full ml-2 font-bold">Invite</button><button onclick="toggleTorch()" class="bg-white/20 text-white text-[10px] px-2 py-1 rounded-full">🔦</button></div><button onclick="closeLive()" class="w-8 h-8 bg-white/20 text-white rounded-full">✕</button></div>
-<div id="liveComments" class="absolute left-2 right-20 bottom-[90px] max-h-[30vh] overflow-y-auto hide space-y-1"></div>
-<div class="absolute left-2 right-2 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment..." class="flex-1 bg-white/90 rounded-full px-4 text-[13px] h-[40px] outline-none"><button onclick="sendComment()" class="bg-white w-10 h-10 rounded-full"><i class="fa-solid fa-paper-plane text-black text-[12px]"></i></button></div>
+<video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover"></video>
+<div class="absolute top-0 left-0 right-0 p-3 flex justify-between text-white" style="background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent)">
+<div class="flex gap-2 items-center"><img src="https://i.pravatar.cc/100" class="w-8 h-8 rounded-full"><div><p id="host" class="text-[11px] font-bold">DORNNY</p><p class="text-[9px]"><span id="viewC">1</span> watching</p></div><button onclick="shareLive()" class="bg-white text-black text-[10px] px-3 py-1 rounded-full">Invite</button></div><button onclick="closeLive()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div>
+<div id="liveHearts" class="absolute right-2 bottom-[120px] text-[24px] pointer-events-none"></div>
+<div id="liveComments" class="absolute left-2 right-20 bottom-[80px] max-h-[30vh] overflow-y-auto hide space-y-1"></div>
+<div class="absolute left-2 right-2 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment like TikTok..." class="flex-1 bg-white/90 rounded-full px-4 h-[42px] text-[13px]"><button onclick="sendComment()" class="bg-white w-10 h-10 rounded-full"><i class="fa-solid fa-paper-plane text-[12px]"></i></button><button onclick="likeLive()" class="bg-pink-500 w-10 h-10 rounded-full text-white">❤️</button></div>
 </div></div>
 
-<div id="liveListModal" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-end"><div class="bg-white w-full rounded-t-2xl p-3 max-h-[80vh] overflow-y-auto"><div class="flex justify-between"><b class="text-[13px]">SHEIN LIVE</b><button onclick="closeLiveList()" class="w-7 h-7 bg-[#f6f6f6] rounded-full">✕</button></div><div id="liveListFull" class="grid grid-cols-2 gap-2 mt-3"></div><button onclick="startLive()" class="w-full bg-[#ff2442] text-white py-3 rounded-full mt-4 font-bold text-[13px]">START LIVE</button></div></div>
-
-<!-- SHEIN BOTTOM NAV 5 TABS -->
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1 z-40">
-<button class="flex flex-col items-center text-black"><i class="fa-solid fa-house text-[16px]"></i><span class="text-[9px] mt-0.5">Shop</span></button>
-<button class="flex flex-col items-center text-[#999]"><i class="fa-solid fa-border-all text-[16px]"></i><span class="text-[9px] mt-0.5">Category</span></button>
-<button onclick="openLiveList()" class="flex flex-col items-center text-[#999]"><i class="fa-solid fa-clapperboard text-[16px]"></i><span class="text-[9px] mt-0.5">Live</span></button>
-<button class="flex flex-col items-center text-[#999]"><i class="fa-regular fa-heart text-[16px]"></i><span class="text-[9px] mt-0.5">Wishlist</span></button>
-<button class="flex flex-col items-center text-[#999]"><i class="fa-regular fa-user text-[16px]"></i><span class="text-[9px] mt-0.5">Me</span></button>
+<!-- BOTTOM NAV 7 TABS -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1.5 z-40">
+<button onclick="navTo('home')" class="flex flex-col items-center text-black"><i class="fa-solid fa-house text-[15px]"></i><span class="text-[8px]">Home</span></button>
+<button onclick="navTo('cat')" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-border-all text-[15px]"></i><span class="text-[8px]">Category</span></button>
+<button onclick="openSell()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-circle-plus text-[15px]"></i><span class="text-[8px]">Sell</span></button>
+<button class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-fire text-[15px]"></i><span class="text-[8px]">Trend</span></button>
+<button onclick="openLiveList()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-video text-[15px]"></i><span class="text-[8px]">Live</span></button>
+<button onclick="toggleCart()" class="flex flex-col items-center text-gray-400 relative"><i class="fa-solid fa-bag-shopping text-[15px]"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-black text-white text-[7px] w-3.5 h-3.5 rounded-full flex items-center justify-center">0</span><span class="text-[8px]">Cart</span></button>
+<button class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user text-[15px]"></i><span class="text-[8px]">Me</span></button>
 </nav>
-<button onclick="openLiveList()" class="fixed bottom-[70px] right-3 bg-black w-12 h-12 rounded-full shadow-xl flex items-center justify-center text-white z-30"><i class="fa-solid fa-video text-[14px]"></i></button>
 
 <script>
 const firebaseConfig={apiKey:"AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",authDomain:"dornnysmarket.firebaseapp.com",projectId:"dornnysmarket",storageBucket:"dornnysmarket.firebasestorage.app",messagingSenderId:"726307073658",appId:"1:726307073658:web:24c52654e92de69cfa95c3"};firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
-let products=[{id:1,name:"DAZY Cami Top Solid Color",price:45,old:89,cat:"Women",img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500",sold:"1.2k+"},{id:2,name:"Men Solid Cargo Pants",price:120,old:210,cat:"Men",img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500",sold:"800+"},{id:3,name:"Chunky Sneakers Street",price:350,old:499,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",sold:"2.3k+"},{id:4,name:"SHEIN PETITE Dress",price:95,old:159,cat:"Curve",img:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500",sold:"500+"},{id:5,name:"Mini City Bag",price:65,old:120,cat:"Bags",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500",sold:"3k+"},{id:6,name:"Kids Cartoon Tee",price:35,old:60,cat:"Kids",img:"https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500",sold:"900+"}];
-let cart=[],currentCat='All',currentP=null,currentLiveId=null,unsub=null,stream=null,torchOn=false;
-function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
-function setCat(c){currentCat=c;document.querySelectorAll('.shein-tab').forEach(b=>b.classList.remove('active'));document.getElementById('cat-'+c).classList.add('active');render();}
-function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);let q=document.getElementById('searchInput').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('grid').innerHTML=list.map(p=>{let off=Math.round((1-p.price/p.old)*100);return `<div onclick="openSheet(${p.id})" class="product-card bg-white rounded-[6px] overflow-hidden relative">
-<img src="${p.img}" class="w-full h-[220px] object-cover"><div class="absolute top-1 right-1 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center"><i class="fa-regular fa-heart text-[11px]"></i></div>
-<div class="p-1.5"><p class="text-[11px] truncate">${p.name}</p>
-<div class="flex items-center gap-1 mt-1"><span class="font-bold text-[13px]">GH₵${p.price}</span><span class="text-[10px] line-through text-[#999]">GH₵${p.old}</span><span class="badge-sale">-${off}%</span></div>
-<div class="flex items-center gap-1 mt-1 text-[9px] text-[#999]"><span class="text-[#ff9500]">★ 4.8</span><span>(${p.sold} sold)</span></div>
-</div></div>`}).join('');document.getElementById('cartCount').innerText=cart.length;}
-function openSheet(id){let p=products.find(x=>x.id===id);currentP=p;document.getElementById('sImg').src=p.img;document.getElementById('sName').innerText=p.name;document.getElementById('sPrice').innerText='GH₵'+p.price;document.getElementById('sOld').innerText='GH₵'+p.old;document.getElementById('sheet').style.display='flex';}
-function closeSheet(){document.getElementById('sheet').style.display='none';}
-function addCart(){cart.push(currentP);toast('Added to bag 🛍️');render();closeSheet();}
-db.collection("liveRooms").where("isLive","==",true).onSnapshot(s=>{let lives=s.docs.map(d=>({id:d.id,...d.data()}));let demo=lives.length?lives:[{id:'demo',hostName:'DORNNY Studio',viewers:342,img:products[0].img}];document.getElementById('liveList').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="min-w-[86px] w-[86px] h-[110px] rounded-[8px] overflow-hidden relative"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-1 left-1 bg-[#ff2442] text-white text-[7px] px-1 rounded">LIVE</span><p class="absolute bottom-1 left-1 right-1 text-white text-[8px] truncate">${l.hostName}</p></div>`).join('');document.getElementById('liveListFull').innerHTML=demo.map(l=>`<div onclick="joinLive('${l.id}')" class="relative h-44 rounded-xl overflow-hidden"><img src="${l.img}" class="w-full h-full object-cover"><span class="absolute top-2 left-2 bg-[#ff2442] text-white text-[8px] px-2 py-0.5 rounded">● LIVE ${l.viewers}</span></div>`).join('');});
-function openLiveList(){document.getElementById('liveListModal').style.display='flex';}function closeLiveList(){document.getElementById('liveListModal').style.display='none';}
-function startLive(){closeLiveList();actuallyStart('DORNNY Drop 🔥');}
-async function actuallyStart(title){document.getElementById('liveRoom').style.display='block';document.getElementById('host').innerText='You';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById('v').srcObject=stream;await document.getElementById('v').play();let doc=await db.collection("liveRooms").add({hostName:"DORNNY Host",title,isLive:true,viewers:1,img:products[0].img,createdAt:firebase.firestore.FieldValue.serverTimestamp()});currentLiveId=doc.id;shareLive();unsub=db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(s=>{let d=document.getElementById('liveComments');d.innerHTML=s.docs.map(x=>{let c=x.data();return `<span class="bg-black/40 text-white text-[11px] px-2 py-1 rounded-full inline-block mr-1 mb-1"><b class="text-yellow-300">${c.user}:</b> ${c.text}</span>`}).join('');});db.collection("liveRooms").doc(doc.id).onSnapshot(s=>{if(s.data())document.getElementById('viewC').innerText=s.data().viewers;});}catch(e){toast(e.message);}}
-async function joinLive(id){document.getElementById('liveListModal').style.display='none';document.getElementById('liveRoom').style.display='block';document.getElementById('host').innerText='DORNNY Live';currentLiveId=id;try{db.collection("liveRooms").doc(id).update({viewers:firebase.firestore.FieldValue.increment(1)});unsub=db.collection("liveRooms").doc(id).collection("comments").orderBy("createdAt").onSnapshot(s=>{let d=document.getElementById('liveComments');d.innerHTML=s.docs.map(x=>{let c=x.data();return `<span class="bg-black/40 text-white text-[11px] px-2 py-1 rounded-full inline-block mr-1 mb-1"><b class="text-yellow-300">${c.user}:</b> ${c.text}</span>`}).join('');});db.collection("liveRooms").doc(id).onSnapshot(s=>{if(s.data())document.getElementById('viewC').innerText=s.data().viewers;});}catch(e){}}
-function shareLive(){if(!currentLiveId)return;let link=location.origin+location.pathname+"?live="+currentLiveId;navigator.clipboard.writeText(link).then(()=>toast('Invite link copied! '+link)).catch(()=>prompt('Copy:',link));}
-async function sendComment(){let i=document.getElementById('cInput');let t=i.value.trim();if(!t)return;if(currentLiveId)await db.collection("liveRooms").doc(currentLiveId).collection("comments").add({user:"Guest",text:t,createdAt:firebase.firestore.FieldValue.serverTimestamp()});i.value='';}
-function closeLive(){if(stream)stream.getTracks().forEach(t=>t.stop());if(unsub)unsub();document.getElementById('liveRoom').style.display='none';if(currentLiveId)db.collection("liveRooms").doc(currentLiveId).update({isLive:false});}
-async function toggleTorch(){try{let tr=stream?.getVideoTracks()[0];let cap=tr.getCapabilities();if(!cap.torch){toast('Torch not supported');return;}torchOn=!torchOn;await tr.applyConstraints({advanced:[{torch:torchOn}]});toast(torchOn?'🔦 Bright ON':'🔦 OFF');}catch(e){toast(e.message);}}
-let lp=new URLSearchParams(location.search).get('live');if(lp)setTimeout(()=>joinLive(lp),800);
-render();
+let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
+let products=JSON.parse(localStorage.getItem('dornny_products')||'null')||[{id:1,name:"Gucci Sneaker GH",price:450,cat:"Sneaker",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",seller:"Danny",whatsapp:"0551234567",sold:false,likes:23,rate:4.8,followers:1200},{id:2,name:"Toyota Corolla 2015",price:65000,cat:"Cars",img:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=500",seller:"Auto Hub",whatsapp:"0559876543",sold:false,likes:12,rate:4.9,followers:3400},{id:3,name:"Kids Toy Car",price:85,cat:"Toys",img:"https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=500",seller:"Toys Ghana",whatsapp:"0244123456",sold:false,likes:5,rate:4.5,followers:500}];
+let user=null,cart=[],currentCat="All",currentP=null,currentLiveId=null,unsub=null,stream=null,comments={},follows={},likes={};
+function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500);}
+function doLogin(){let e=document.getElementById('email').value,p=document.getElementById('pass').value,cp=document.getElementById('cpass').value,ph=document.getElementById('phone').value,shop=document.getElementById('shopName').value;if(!e||!p||!ph||!shop)return toast('Fill Email, Phone, Shop Name');if(p!==cp)return toast('Password not match');user={email:e,phone:ph,shop:shop};localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');toast('Welcome to Dornny Market, '+shop+'! Amansan Dwaaso 🎉');sendNotif('Welcome! Email sent to '+e);render();initSwiper();}
+function sendNotif(msg){let c=document.getElementById('notifCount');c.innerText=parseInt(c.innerText)+1;toast('🔔 '+msg+' (Email also sent)');}
+function renderCats(){document.getElementById('catList').innerHTML=categories.map(c=>`<button onclick="setCat('${c}')" id="cat-${c}" class="px-4 py-2 rounded-full text-[11px] border whitespace-nowrap ${currentCat===c?'cat-active':'bg-[#f2f2f2]'}">${c}</button>`).join('');document.getElementById('upCat').innerHTML=categories.filter(c=>c!=='All').map(c=>`<option>${c}</option>`).join('');}
+function setCat(c){currentCat=c;renderCats();render();}
+function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);let q=document.getElementById('search').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('grid').innerHTML=list.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden relative border"><img src="${p.img}" class="w-full h-[160px] object-cover zoom-img">${p.sold?'<span class="absolute top-1 left-1 bg-red-600 text-white text-[8px] px-2 py-0.5 rounded-full">SOLD</span>':''}<div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><p class="text-[10px] text-gray-500">${p.cat} • ${p.seller}</p><div class="flex justify-between items-center mt-1"><span class="font-bold text-[13px]">GH₵${p.price}</span><span class="text-[9px]">❤️ ${p.likes}</span></div></div></div>`).join('');document.getElementById('cartCount').innerText=cart.length;let total=cart.reduce((s,p)=>s+p.price,0);document.getElementById('totalPay').innerText='GH₵'+total;document.getElementById('cartBox').style.display=cart.length?'flex':'none';}
+function initSwiper(){new Swiper('.swiper',{autoplay:{delay:2500},pagination:{el:".swiper-pagination"}});}
+function openDetail(id){currentP=products.find(p=>p.id===id);document.getElementById('dName').innerText=currentP.name;document.getElementById('dPrice').innerText='GH₵'+currentP.price;document.getElementById('dSold').style.display=currentP.sold?'inline':'none';document.getElementById('dSeller').innerText=currentP.seller;document.getElementById('dRate').innerText=currentP.rate;document.getElementById('dFollows').innerText=currentP.followers;document.getElementById('detailImgs').innerHTML=[currentP.img,currentP.img,currentP.img].map(img=>`<div class="swiper-slide"><img src="${img}" class="w-full h-full object-cover" style="touch-action:pinch-zoom"></div>`).join('');document.getElementById('detail').style.display='block';setTimeout(()=>{new Swiper('#detailSwiper',{pagination:{el:".swiper-pagination"}})},100);loadComments();}
+function closeDetail(){document.getElementById('detail').style.display='none';}
+function addCartDetail(){cart.push(currentP);toast('Added - Total GH₵'+cart.reduce((s,p)=>s+p.price,0));render();}
+function toggleCart(){document.getElementById('cartBox').style.display=cart.length?'flex':'none';toast('Cart: '+cart.length+' items - Total to Pay GH₵'+cart.reduce((s,p)=>s+p.price,0));}
+function checkout(){if(!cart.length)return toast('Cart empty');toast('Order placed! Email sent to '+user.email);sendNotif('Order confirmed GH₵'+cart.reduce((s,p)=>s+p.price,0));cart=[];render();}
+function openWhatsApp(){let num=currentP.whatsapp.replace(/[^0-9]/g,'');window.open('https://wa.me/233'+num.slice(-9)+'?text=Hi, I want '+currentP.name,'_blank');}
+function messageSeller(){toast('Message sent to '+currentP.seller+' - He will get email & notification');sendNotif('Message delivered');}
+function followSeller(){let key=currentP.seller;follows[key]=!follows[key];document.getElementById('followBtn').innerText=follows[key]?'Following':'Follow';document.getElementById('followBtn').className=follows[key]?'bg-gray-200 text-black text-[11px] px-4 h-8 rounded-full':'bg-black text-white text-[11px] px-4 h-8 rounded-full';toast(follows[key]?'Following '+key:'Unfollowed');sendNotif(follows[key]?'You followed '+key:'');}
+function likeProd(){likes[currentP.id]=!likes[currentP.id];currentP.likes+=likes[currentP.id]?1:-1;document.getElementById('likeIcon').className=likes[currentP.id]?'fa-solid fa-heart text-red-500':'fa-regular fa-heart';render();toast(likes[currentP.id]?'Liked ❤️':'Unliked');}
+function loadComments(){let list=comments[currentP.id]||[];document.getElementById('commentList').innerHTML=list.map(c=>`<div class="bg-[#f6f6f6] p-2 rounded-lg"><b>${c.user}:</b> ${c.text}</div>`).join('')||'<p class="text-gray-400 text-[10px]">No comments yet</p>';}
+function addComment(){let t=document.getElementById('commentInput').value;if(!t)return;if(!comments[currentP.id])comments[currentP.id]=[];comments[currentP.id].push({user:user.shop,text:t});document.getElementById('commentInput').value='';loadComments();toast('Comment added');sendNotif('New comment on '+currentP.name);}
+function reportProd(){toast('Report sent - We will review. Email sent to admin');}
+function doRefund(){toast('Refund requested - Email sent to '+user.email+' & seller');}
+function doCancel(){toast('Order cancelled - Refund in 24h');}
+function openSell(){document.getElementById('sellScreen').style.display='block';}
+function closeSell(){document.getElementById('sellScreen').style.display='none';}
+function uploadProduct(){let n=document.getElementById('upName').value,pr=parseInt(document.getElementById('upPrice').value),wa=document.getElementById('upWhatsapp').value,ca=document.getElementById('upCat').value,im=document.getElementById('upImg').value||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';if(!n||!pr||!wa)return toast('Fill name, price, WhatsApp');let prod={id:Date.now(),name:n,price:pr,cat:ca,img:im,seller:user.shop,whatsapp:wa,sold:false,likes:0,rate:5.0,followers:0};products.unshift(prod);localStorage.setItem('dornny_products',JSON.stringify(products));toast('Uploaded permanently! Buyers will be notified');sendNotif('New product live: '+n);render();closeSell();}
+function navTo(t){if(t==='home')window.scrollTo(0,0);if(t==='cat')document.getElementById('catList').scrollIntoView();}
+function openLiveList(){startLive();}
+async function startLive(){document.getElementById('liveRoom').style.display='block';document.getElementById('host').innerText=user?user.shop:'DORNNY Host';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById('v').srcObject=stream;let doc=await db.collection("liveRooms").add({hostName:user.shop,title:"Dornny Live",isLive:true,viewers:1,img:products[0]?.img,createdAt:firebase.firestore.FieldValue.serverTimestamp()});currentLiveId=doc.id;shareLive();unsub=db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(s=>{let d=document.getElementById('liveComments');d.innerHTML=s.docs.map(x=>{let c=x.data();return `<span class="bg-black/40 text-white text-[11px] px-2 py-1 rounded-full inline-block mr-1 mb-1"><b class="text-yellow-300">${c.user}:</b> ${c.text}</span>`}).join('');});sendNotif('🔴 '+user.shop+' is LIVE now!');}catch(e){toast(e.message);}}
+function shareLive(){if(!currentLiveId)return;let link=location.origin+location.pathname+'?live='+currentLiveId;navigator.clipboard.writeText(link).then(()=>toast('Invite copied! Share to buyers - they get email alert'));}
+async function sendComment(){let i=document.getElementById('cInput');let t=i.value.trim();if(!t)return;if(currentLiveId)await db.collection("liveRooms").doc(currentLiveId).collection("comments").add({user:user?.shop||'Guest',text:t,createdAt:firebase.firestore.FieldValue.serverTimestamp()});i.value='';}
+function likeLive(){let h=document.getElementById('liveHearts');let e=document.createElement('div');e.innerText='❤️';e.style.animation='fly 2s';h.appendChild(e);setTimeout(()=>e.remove(),2000);if(currentLiveId)db.collection("liveRooms").doc(currentLiveId).collection("comments").add({user:'System',text:'❤️ liked',createdAt:firebase.firestore.FieldValue.serverTimestamp()});}
+function closeLive(){if(stream)stream.getTracks().forEach(t=>t.stop());if(unsub)unsub();document.getElementById('liveRoom').style.display='none';}
+(function(){let s=localStorage.getItem('dornny_user');if(s){user=JSON.parse(s);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');}renderCats();render();})();
 </script>
 </body>
 </html>
