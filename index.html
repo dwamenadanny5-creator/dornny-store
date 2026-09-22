@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DORNNY MARKET - Fixed Live</title>
+<title>DORNNY MARKET - Sizes + Description + Zoom</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <style>
@@ -13,111 +15,196 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:80px}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:22px;font-size:12px;z-index:99999;display:none;max-width:90%}
 .hide::-webkit-scrollbar{display:none}
 .cat-active{background:#111!important;color:#fff!important}
+.size-active{background:#111!important;color:#fff!important;border-color:#111!important}
+.swiper-zoom-container img{object-fit:cover}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
-<div class="bg-[#111] text-white text-center py-3"><p class="font-black">WELCOME TO DORNNY MARKET</p><p class="text-[11px] text-yellow-400">Amansan Dwaaso 🇬🇭 - Live Fixed</p></div>
+<div class="bg-[#111] text-white text-center py-3"><p class="font-black tracking-widest">WELCOME TO DORNNY MARKET</p><p class="text-[11px] text-yellow-400">Amansan Dwaaso 🇬🇭 - Description + Sizes + Zoom</p></div>
 <div id="loginScreen" class="min-h-[70vh] flex items-center justify-center p-4">
 <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-xl">
 <h2 class="text-[20px] font-black text-center">DORNNY MARKET</h2>
-<input id="shopName" placeholder="Shop Name" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
+<input id="shopName" placeholder="Shop Name e.g. Danny shop" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
 <input id="phone" placeholder="Phone" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
 <input id="email" placeholder="Email" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
 <input id="pass" type="password" placeholder="Password" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
 <input id="cpass" type="password" placeholder="Confirm Password" class="w-full border rounded-full px-4 py-3 text-[13px] mb-3">
-<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">CONTINUE</button>
+<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold text-[13px]">CONTINUE</button>
 </div>
 </div>
 <div id="mainApp" class="hidden">
-<div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black">DORNNY</div><div class="flex-1 bg-[#f2f2f2] rounded-full h-[36px] flex items-center px-3"><i class="fa-solid fa-search text-gray-400 text-[12px]"></i><input id="search" oninput="render()" placeholder="Search..." class="bg-transparent ml-2 w-full text-[12px] outline-none"></div></div>
-<div id="liveNowSection" class="bg-black p-2 hidden"><p class="text-white text-[11px] font-bold mb-2">🔴 LIVE NOW - Tap to watch</p><div id="liveNowList" class="flex gap-2 overflow-x-auto hide"></div></div>
+<div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black">DORNNY</div><div class="flex-1 bg-[#f2f2f2] rounded-full h-[36px] flex items-center px-3"><i class="fa-solid fa-search text-gray-400 text-[12px]"></i><input id="search" oninput="render()" placeholder="Search club top..." class="bg-transparent ml-2 w-full text-[12px] outline-none"></div></div>
+<div id="liveNowSection" class="bg-black p-2 hidden"><p class="text-white text-[11px] font-bold mb-2">🔴 LIVE NOW</p><div id="liveNowList" class="flex gap-2 overflow-x-auto hide"></div></div>
 <div class="bg-white p-2 border-b sticky top-[48px] z-20"><div id="catList" class="flex gap-2 overflow-x-auto hide"></div></div>
 <div class="p-2 grid grid-cols-2 gap-2" id="grid"></div>
 </div>
-<div id="detail" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto"><div class="relative"><img id="dImg" class="w-full h-[380px] object-cover"><button onclick="closeDetail()" class="absolute top-3 left-3 w-8 h-8 bg-black/50 text-white rounded-full">✕</button></div><div class="p-3"><h3 id="dName" class="font-bold"></h3><p id="dPrice" class="font-bold text-[18px]"></p><p id="dSeller" class="text-[12px]"></p><div class="flex gap-2 mt-3"><button onclick="addCartDetail()" class="flex-1 border border-black py-3 rounded-full font-bold text-[12px]">Add to Cart</button><button onclick="openCart()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">View Cart</button></div></div></div>
-<div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[55] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full overflow-y-auto flex flex-col"><div class="p-4 border-b flex justify-between"><b>Cart (<span id="cartCount2">0</span>)</b><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 flex-1"></div><div class="p-4 border-t"><div class="flex justify-between font-black"><span>Total</span><span id="totalPay">GH₵0</span></div><input id="momoNumber" placeholder="MoMo 055..." class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px]"><button onclick="checkout()" class="w-full bg-black text-white py-3.5 rounded-full mt-4 font-black">PAY NOW - MoMo/Visa/GhanaPay</button></div></div></div>
-<div id="mePage" class="fixed inset-0 bg-[#f5f5f5] z-[52] hidden overflow-y-auto pb-[80px]"><div class="bg-black text-white p-5 pt-10 relative"><button onclick="closeMe()" class="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full">✕</button><div class="flex gap-3 items-center"><img src="https://i.pravatar.cc/100" class="w-14 h-14 rounded-full border-2 border-white"><div><p id="meShop" class="font-bold">My Shop</p><p id="meEmail" class="text-[11px] text-gray-300"></p></div></div></div><div class="p-3 space-y-3"><div class="bg-white rounded-xl p-3"><p class="font-bold text-[12px]">My Orders - Tap to Open</p><div class="flex justify-around mt-3 text-[11px] text-center"><button onclick="openOrders('topay')" class="flex flex-col items-center"><i class="fa-solid fa-wallet"></i><p>To Pay</p><span id="countPay" class="bg-red-500 text-white text-[8px] px-1 rounded-full">0</span></button><button onclick="openOrders('toship')" class="flex flex-col items-center"><i class="fa-solid fa-truck"></i><p>To Ship</p></button><button onclick="openOrders('toreceive')" class="flex flex-col items-center"><i class="fa-solid fa-box"></i><p>To Receive</p></button><button onclick="openOrders('review')" class="flex flex-col items-center"><i class="fa-solid fa-star"></i><p>Review</p></button></div></div><div class="bg-white rounded-xl divide-y"><button onclick="openMyProducts()" class="w-full p-3.5 text-[12px] text-left">🛍️ My Products (<span id="myProdCount">0</span>)</button><button onclick="openSell()" class="w-full p-3.5 text-[12px] text-left">➕ Upload From Gallery</button><button onclick="doLogout()" class="w-full p-3.5 text-[12px] text-left text-red-500">Logout</button></div></div></div>
-<div id="ordersPage" class="fixed inset-0 bg-[#f5f5f5] z-[53] hidden overflow-y-auto"><div class="bg-white p-4 border-b flex gap-3 items-center"><button onclick="closeOrders()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><b id="ordersTitle">Orders</b></div><div id="ordersList" class="p-3 space-y-2"></div></div>
-<div id="myProductsPage" class="fixed inset-0 bg-white z-[53] hidden overflow-y-auto"><div class="p-4 border-b flex gap-3 items-center"><button onclick="closeMyProducts()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><b>My Products</b></div><div id="myProductsGrid" class="p-2 grid grid-cols-2 gap-2"></div></div>
-<div id="sellScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto p-4"><div class="flex justify-between"><h2 class="font-black">Upload From Gallery</h2><button onclick="closeSell()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div class="mt-4 border-2 border-dashed rounded-xl p-4 text-center"><input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleGallery(event)"><button onclick="document.getElementById('galleryFile').click()" class="bg-black text-white px-6 py-2 rounded-full text-[12px] font-bold">📷 Open Gallery / Camera</button><div id="previewImgs" class="grid grid-cols-3 gap-2 mt-3"></div></div><input id="upName" placeholder="Product name" class="w-full border rounded-xl px-3 py-3 mt-4 text-[13px]"><input id="upPrice" type="number" placeholder="Price GH₵" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"><input id="upWhatsapp" placeholder="WhatsApp" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"><select id="upCat" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"></select><button onclick="uploadProduct()" class="w-full bg-black text-white py-3.5 rounded-full mt-4 font-black">UPLOAD NOW</button></div>
-<div id="liveRoom" class="fixed inset-0 bg-black z-[70] hidden"><div class="relative w-full h-full"><video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover bg-red-900"></video><div class="absolute top-3 left-3 right-3 flex justify-between text-white"><span class="bg-red-600 px-3 py-1 rounded-full text-[11px]">🔴 LIVE - <span id="viewC">1</span> watching</span><button onclick="closeLive()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div id="liveComments" class="absolute left-2 right-20 bottom-[80px] max-h-[25vh] overflow-y-auto text-white text-[11px]"></div><div class="absolute left-2 right-2 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment..." class="flex-1 rounded-full px-4 h-10 text-[13px]"><button onclick="sendComment()" class="bg-white w-10 h-10 rounded-full">✈️</button></div></div></div>
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1.5 z-40"><button onclick="navTo('home')" class="flex flex-col items-center text-black"><i class="fa-solid fa-house"></i><span class="text-[8px]">Home</span></button><button onclick="openSell()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-circle-plus"></i><span class="text-[8px]">Sell</span></button><button onclick="startLive()" class="flex flex-col items-center text-red-500"><i class="fa-solid fa-video"></i><span class="text-[8px]">Live</span></button><button onclick="openCart()" class="flex flex-col items-center text-gray-400 relative"><i class="fa-solid fa-bag-shopping"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-black text-white text-[7px] w-3.5 h-3.5 rounded-full flex items-center justify-center">0</span><span class="text-[8px]">Cart</span></button><button onclick="openMe()" class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user"></i><span class="text-[8px]">Me</span></button></nav>
+<div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-50 hidden overflow-y-auto">
+<div class="bg-white">
+<div class="relative">
+<div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div>
+<button onclick="closeDetail()" class="absolute top-3 left-3 w-8 h-8 bg-black/50 text-white rounded-full z-10">✕</button>
+<div class="absolute top-3 right-3 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full z-10">Pinch to zoom • Slide ←→</div>
+</div>
+<div class="p-3">
+<h3 id="dName" class="font-bold text-[18px]"></h3>
+<p id="dPrice" class="font-black text-[20px] mt-1"></p>
+<p id="dSeller" class="text-[12px] text-gray-500 mt-1"></p>
+<div class="mt-4 bg-[#fafafa] border rounded-xl p-3">
+<p class="font-black text-[13px] mb-2">📝 Description</p>
+<p id="dDesc" class="text-[12px] text-gray-700 leading-5">No description</p>
+</div>
+<div class="mt-3 bg-white border-2 border-black rounded-xl p-3">
+<p class="font-black text-[13px] mb-2">👕 Choose Size</p>
+<div id="sizeList" class="flex flex-wrap gap-2"></div>
+<p id="sizeSelected" class="text-[11px] text-gray-500 mt-2">Select size: M, L, XL, XXL etc</p>
+</div>
+<div class="mt-3 bg-white border rounded-xl p-3">
+<div class="flex justify-between items-center">
+<p class="font-black text-[13px]">📦 Quantity & Stock</p>
+<p id="dStock" class="text-[11px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">12 items left</p>
+</div>
+<div class="flex items-center gap-3 mt-3">
+<button onclick="changeQty(-1)" class="w-9 h-9 border-2 border-black rounded-full font-bold">-</button>
+<span id="qtyNum" class="font-black text-[16px] w-8 text-center">1</span>
+<button onclick="changeQty(1)" class="w-9 h-9 border-2 border-black rounded-full font-bold">+</button>
+<span class="text-[11px] text-gray-500 ml-2">Qty you want to buy</span>
+</div>
+<p class="font-black text-[13px] mt-5 mb-2">🏪 More from this seller - Tap to zoom & slide</p>
+<div class="swiper" id="shopSwiper" style="height:120px"><div class="swiper-wrapper" id="shopItems"></div></div>
+<p class="text-[10px] text-gray-400 mt-2">← Slide left/right to see all items • Pinch to zoom image above • Tap item to view</p>
+</div>
+<div class="flex gap-2 mt-4 sticky bottom-2 bg-[#f5f5f5] p-2 rounded-xl">
+<button id="addBtn" onclick="addCartDetail()" class="flex-1 border-2 border-black py-3.5 rounded-full font-bold text-[12px]">Add to Cart</button>
+<button onclick="openCart()" class="flex-1 bg-black text-white py-3.5 rounded-full font-bold text-[12px]">View Cart</button>
+</div>
+</div>
+</div>
+</div>
+<div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[55] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full overflow-y-auto flex flex-col"><div class="p-4 border-b flex justify-between"><b>My Cart (<span id="cartCount2">0</span>)</b><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 flex-1"></div><div class="p-4 border-t"><div class="flex justify-between font-black text-[16px]"><span>Total</span><span id="totalPay">GH₵0</span></div><input id="momoNumber" placeholder="MoMo 055..." class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px]"><button onclick="checkout()" class="w-full bg-black text-white py-3.5 rounded-full mt-4 font-black">PAY - MoMo/Visa/GhanaPay</button></div></div></div>
+<div id="mePage" class="fixed inset-0 bg-[#f5f5f5] z-[52] hidden overflow-y-auto pb-[80px]"><div class="bg-black text-white p-5 pt-10 relative"><button onclick="closeMe()" class="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full">✕</button><div class="flex gap-3 items-center"><img src="https://i.pravatar.cc/100" class="w-14 h-14 rounded-full border-2 border-white"><div><p id="meShop" class="font-bold">My Shop</p><p id="meEmail" class="text-[11px] text-gray-300"></p></div></div></div><div class="p-3 space-y-3"><div class="bg-white rounded-xl divide-y"><button onclick="openMyProducts()" class="w-full p-3.5 flex justify-between text-[12px] text-left"><span>🛍️ My Products</span><span id="myProdCount" class="font-black">0</span></button><button onclick="openSell()" class="w-full p-3.5 text-[12px] text-left">➕ Upload 3-4 Images + Description + Sizes</button><button onclick="doLogout()" class="w-full p-3.5 text-[12px] text-left text-red-500">Logout</button></div></div></div>
+<div id="myProductsPage" class="fixed inset-0 bg-white z-[53] hidden overflow-y-auto"><div class="p-4 border-b flex gap-3 items-center sticky top-0 bg-white"><button onclick="closeMyProducts()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><b>My Products (<span id="myProdCount2">0</span>)</b></div><div id="myProductsGrid" class="p-2 grid grid-cols-2 gap-2"></div></div>
+<div id="sellScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto p-4"><div class="flex justify-between"><h2 class="font-black text-[16px]">Upload Product - Full Details</h2><button onclick="closeSell()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div>
+<div class="mt-4 border-2 border-dashed rounded-xl p-4 text-center">
+<input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleGallery(event)">
+<button onclick="document.getElementById('galleryFile').click()" class="bg-black text-white px-6 py-3 rounded-full text-[12px] font-bold">📷 Select 3-4 Images From Gallery (Slide & Zoom)</button>
+<p class="text-[10px] text-gray-500 mt-2">Select 3-4 photos - they will slide left/right with pinch zoom</p>
+<div id="previewImgs" class="grid grid-cols-3 gap-2 mt-3"></div>
+</div>
+<input id="upName" placeholder="Product name e.g. Club top" class="w-full border rounded-xl px-3 py-3 mt-4 text-[13px] font-bold">
+<input id="upPrice" type="number" placeholder="Price GH₵ 85" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]">
+<textarea id="upDesc" placeholder="Description - write details about this product... e.g. 100% cotton, shiny material, for club, gym, sizes available" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px] h-20"></textarea>
+<div class="mt-3 border rounded-xl p-3">
+<p class="font-bold text-[12px] mb-2">👕 Select Sizes Available (Buyer will choose)</p>
+<div class="flex flex-wrap gap-2" id="upSizeChoices">
+<button type="button" onclick="toggleUpSize(this,'S')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">S</button>
+<button type="button" onclick="toggleUpSize(this,'M')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">M</button>
+<button type="button" onclick="toggleUpSize(this,'L')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">L</button>
+<button type="button" onclick="toggleUpSize(this,'XL')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">XL</button>
+<button type="button" onclick="toggleUpSize(this,'XXL')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">XXL</button>
+<button type="button" onclick="toggleUpSize(this,'XXXL')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">XXXL</button>
+</div>
+<p id="upSizeSelectedText" class="text-[10px] text-gray-500 mt-2">Selected: None</p>
+</div>
+<input id="upStock" type="number" placeholder="Quantity / Stock e.g. 15 (how many you have)" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px]">
+<input id="upWhatsapp" placeholder="WhatsApp number" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]">
+<select id="upCat" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"></select>
+<button onclick="uploadProduct()" class="w-full bg-black text-white py-4 rounded-full mt-4 font-black text-[13px]">UPLOAD NOW - With Description + Sizes + 4 Images</button>
+</div>
+<div id="liveRoom" class="fixed inset-0 bg-black z-[70] hidden"><div class="relative w-full h-full"><video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover"></video><div class="absolute top-3 left-3 right-3 flex justify-between text-white"><span class="bg-red-600 px-3 py-1 rounded-full text-[11px]">🔴 LIVE - <span id="viewC">1</span> watching</span><button onclick="closeLive()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div id="liveComments" class="absolute left-2 right-20 bottom-[80px] max-h-[25vh] overflow-y-auto text-white text-[11px]"></div><div class="absolute left-2 right-2 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment..." class="flex-1 rounded-full px-4 h-10 text-[13px]"><button onclick="sendComment()" class="bg-white w-10 h-10 rounded-full">✈️</button></div></div></div>
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-1.5 z-40"><button onclick="navTo('home')" class="flex flex-col items-center text-black"><i class="fa-solid fa-house text-[15px]"></i><span class="text-[8px]">Home</span></button><button onclick="setCat('All')" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-border-all text-[15px]"></i><span class="text-[8px]">Category</span></button><button onclick="openSell()" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-circle-plus text-[15px]"></i><span class="text-[8px]">Sell</span></button><button onclick="startLive()" class="flex flex-col items-center text-red-500"><i class="fa-solid fa-video text-[15px]"></i><span class="text-[8px] font-bold">Live</span></button><button onclick="openCart()" class="flex flex-col items-center text-gray-400 relative"><i class="fa-solid fa-bag-shopping text-[15px]"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-black text-white text-[7px] w-3.5 h-3.5 rounded-full flex items-center justify-center">0</span><span class="text-[8px]">Cart</span></button><button onclick="openMe()" class="flex flex-col items-center text-gray-400"><i class="fa-regular fa-user text-[15px]"></i><span class="text-[8px]">Me</span></button></nav>
 <script>
 const firebaseConfig={apiKey:"AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",authDomain:"dornnysmarket.firebaseapp.com",projectId:"dornnysmarket",storageBucket:"dornnysmarket.firebasestorage.app",messagingSenderId:"726307073658",appId:"1:726307073658:web:24c52654e92de69cfa95c3"};firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
-let products=JSON.parse(localStorage.getItem('dornny_products')||'null')||[{id:1,name:"Sneaker GH",price:450,cat:"Sneaker",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",seller:"Danny shop",whatsapp:"233594221108",desc:"Original",sold:false}];
-let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');
-let user=null,cart=[],currentCat="All",currentP=null,currentLiveId=null,unsub=null,stream=null,uploadedImages=[];
+let products=JSON.parse(localStorage.getItem('dornny_products_v2')||'null')||[
+{id:1,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600","https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600","https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600"],img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600",seller:"Danny shop",whatsapp:"233594221108",desc:"Shiny satin club top - PAVTROS brand. 100% polyester, soft, breathable, perfect for club, gym, street wear. Model size L.",sizes:["M","L","XL","XXL"],stock:12,whatsapp:"233594221108"}
+];
+let user=null,cart=[],currentCat="All",currentP=null,currentLiveId=null,unsub=null,stream=null,uploadedImages=[],selectedSizesUp=[],selectedSizeBuy=null,qtyBuy=1,detailSwiper=null,shopSwiper=null;
 function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500);}
-
-// FIXED NOTIFICATION - No more Illegal constructor error
-async function requestNotif(){
-try{
-if(!("Notification" in window)){toast('Notifications not supported on this browser');return;}
-let perm=await Notification.requestPermission();
-if(perm==='granted'){
-toast('✅ Notifications ON - LIVE alerts enabled!');
-localStorage.setItem('notif_allowed','yes');
-// Register service worker for Android
-if('serviceWorker' in navigator){
-try{
-let swBlob=new Blob([`self.addEventListener('push',function(e){self.registration.showNotification(e.data.text());}); self.addEventListener('notificationclick',function(e){e.notification.close(); clients.openWindow('/');});`],{type:'text/javascript'});
-let swUrl=URL.createObjectURL(swBlob);
-await navigator.serviceWorker.register(swUrl);
-}catch(e){console.log('SW reg fail',e);}
-}
-}
-}catch(e){console.log(e); toast('Notification: '+e.message);}
-}
-
-function showPhoneNotification(title, body){
-try{
-// FIX: Use Service Worker showNotification instead of new Notification()
-if(Notification.permission==='granted' && 'serviceWorker' in navigator){
-navigator.serviceWorker.ready.then(reg=>{
-reg.showNotification(title,{body:body,icon:'https://i.pravatar.cc/100',vibrate:[200,100,200]});
-}).catch(()=>{
-// Fallback to toast if SW not ready
-toast('🔴 '+title+': '+body);
-});
-}else if(Notification.permission==='granted'){
-// For browsers that still allow new Notification in secure context
-try{ new Notification(title,{body:body}); }catch(e){ toast('🔴 '+title+': '+body); }
-}else{
-toast('🔴 '+title+': '+body);
-}
-}catch(e){ toast('🔴 '+title+': '+body); }
-}
-
-function doLogin(){let e=document.getElementById('email').value,p=document.getElementById('pass').value,cp=document.getElementById('cpass').value,ph=document.getElementById('phone').value,shop=document.getElementById('shopName').value;if(!e||!p||!ph||!shop)return toast('Fill all');if(p!==cp)return toast('Password mismatch');user={email:e,phone:ph,shop:shop};localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');requestNotif();listenToLiveRooms();render();}
-function listenToLiveRooms(){db.collection('liveRooms').where('isLive','==',true).onSnapshot(snap=>{let lives=snap.docs.map(d=>({id:d.id,...d.data()}));let bar=document.getElementById('liveNowSection');let list=document.getElementById('liveNowList');if(lives.length===0){bar.classList.add('hidden');return;}bar.classList.remove('hidden');list.innerHTML=lives.map(l=>`<div onclick="toast('Open LIVE: ${l.hostName}')" class="bg-[#222] rounded-xl p-2 min-w-[110px] border border-red-500"><p class="text-red-500 text-[9px] font-bold">🔴 LIVE</p><img src="${l.img||'https://i.pravatar.cc/100'}" class="w-full h-16 object-cover rounded mt-1"><p class="text-white text-[10px] font-bold mt-1 truncate">${l.hostName}</p><p class="text-gray-400 text-[8px]">${l.viewers||1} watching</p></div>`).join('');snap.docChanges().forEach(change=>{if(change.type==='added'){let data=change.doc.data();if(data.hostName!==user?.shop){showPhoneNotification('🔴 '+data.hostName+' is LIVE now!', 'Tap to watch on Dornny Market');}}});});}
+function doLogin(){let e=document.getElementById('email').value,p=document.getElementById('pass').value,cp=document.getElementById('cpass').value,ph=document.getElementById('phone').value,shop=document.getElementById('shopName').value;if(!e||!p||!ph||!shop)return toast('Fill all');if(p!==cp)return toast('Password mismatch');user={email:e,phone:ph,shop:shop};localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');listenLive();render();}
+function listenLive(){db.collection('liveRooms').where('isLive','==',true).onSnapshot(s=>{let lives=s.docs.map(d=>({id:d.id,...d.data()}));let bar=document.getElementById('liveNowSection');let list=document.getElementById('liveNowList');if(lives.length===0){bar.classList.add('hidden');return;}bar.classList.remove('hidden');list.innerHTML=lives.map(l=>`<div class="bg-[#222] rounded-xl p-2 min-w-[110px] border border-red-500"><p class="text-red-500 text-[9px] font-bold">🔴 LIVE</p><img src="${l.img||'https://i.pravatar.cc/100'}" class="w-full h-16 object-cover rounded mt-1"><p class="text-white text-[10px] font-bold mt-1 truncate">${l.hostName}</p><p class="text-gray-400 text-[8px]">${l.viewers||1} watching</p></div>`).join('');});}
 function renderCats(){document.getElementById('catList').innerHTML=categories.map(c=>`<button onclick="setCat('${c}')" class="px-4 py-2 rounded-full text-[11px] border whitespace-nowrap ${currentCat===c?'cat-active':'bg-[#f2f2f2]'}">${c}</button>`).join('');document.getElementById('upCat').innerHTML=categories.filter(c=>c!=='All').map(c=>`<option>${c}</option>`).join('');}
 function setCat(c){currentCat=c;renderCats();render();}
-function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);let q=document.getElementById('search').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('grid').innerHTML=list.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><img src="${p.img}" class="w-full h-[160px] object-cover"><div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><span class="font-bold text-[13px]">GH₵${p.price}</span></div></div>`).join('');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartCount2').innerText=cart.length;document.getElementById('totalPay').innerText='GH₵'+cart.reduce((s,p)=>s+p.price,0);document.getElementById('cartItems').innerHTML=cart.map((p,i)=>`<div class="flex gap-2 border-b pb-2"><img src="${p.img}" class="w-14 h-14 rounded"><div class="flex-1"><p class="text-[11px] font-bold">${p.name}</p></div><button onclick="removeCart(${i})" class="text-red-500 text-[11px]">Remove</button></div>`).join('')||'<p class="text-[11px] text-gray-400 p-4 text-center">Cart empty</p>';let myProds=products.filter(p=>p.seller===user?.shop);document.getElementById('myProdCount').innerText=myProds.length;document.getElementById('countPay').innerText=orders.filter(o=>o.status==='topay').length;document.getElementById('myProductsGrid').innerHTML=myProds.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><img src="${p.img}" class="w-full h-[140px] object-cover"><div class="p-2"><p class="text-[11px] font-bold">${p.name}</p></div></div>`).join('')||'<p class="text-center text-[11px] p-4">No products</p>';}
-function openDetail(id){currentP=products.find(p=>p.id===id);document.getElementById('dName').innerText=currentP.name;document.getElementById('dPrice').innerText='GH₵'+currentP.price;document.getElementById('dSeller').innerText=currentP.seller;document.getElementById('dImg').src=currentP.img;document.getElementById('detail').style.display='block';}
+function render(){let list=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);let q=document.getElementById('search').value.toLowerCase();if(q)list=list.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('grid').innerHTML=list.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><img src="${p.imgs? p.imgs[0] : p.img}" class="w-full h-[160px] object-cover"><div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><p class="text-[10px] text-gray-500">${p.sizes? p.sizes.join(', ') : ''}</p><span class="font-bold text-[13px]">GH₵${p.price}</span></div></div>`).join('');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartCount2').innerText=cart.length;document.getElementById('totalPay').innerText='GH₵'+cart.reduce((s,p)=>s+p.price*p.qty,0);document.getElementById('cartItems').innerHTML=cart.map((p,i)=>`<div class="flex gap-2 border-b pb-2 items-center"><img src="${p.imgs? p.imgs[0]:p.img}" class="w-14 h-14 rounded"><div class="flex-1"><p class="text-[11px] font-bold">${p.name}</p><p class="text-[10px]">Size: ${p.selectedSize||'M'} • Qty: ${p.qty}</p><p class="text-[12px] font-bold">GH₵${p.price}</p></div><button onclick="removeCart(${i})" class="text-red-500 text-[11px]">Remove</button></div>`).join('')||'<p class="text-[11px] text-gray-400 p-4 text-center">Cart empty</p>';let myProds=products.filter(p=>p.seller===user?.shop);document.getElementById('myProdCount').innerText=myProds.length;document.getElementById('myProdCount2').innerText=myProds.length;document.getElementById('myProductsGrid').innerHTML=myProds.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><img src="${p.imgs? p.imgs[0]:p.img}" class="w-full h-[140px] object-cover"><div class="p-2"><p class="text-[11px] font-bold">${p.name}</p><p class="font-bold text-[12px]">GH₵${p.price}</p><p class="text-[9px]">${p.sizes? p.sizes.join(','):''} • ${p.stock} left</p></div></div>`).join('')||'<p class="col-span-2 text-center text-[11px] text-gray-400 p-4">No products - Upload from Gallery</p>';}
+function openDetail(id){
+currentP=products.find(p=>p.id===id);
+qtyBuy=1; selectedSizeBuy=null;
+document.getElementById('dName').innerText=currentP.name;
+document.getElementById('dPrice').innerText='GH₵'+currentP.price;
+document.getElementById('dSeller').innerText=currentP.seller+' • '+currentP.stock+' items in stock';
+document.getElementById('dDesc').innerText=currentP.desc||'No description added by seller';
+document.getElementById('dStock').innerText=currentP.stock+' items left';
+document.getElementById('qtyNum').innerText='1';
+let imgs=currentP.imgs && currentP.imgs.length>0? currentP.imgs : [currentP.img];
+document.getElementById('detailImgs').innerHTML=imgs.map(im=>`<div class="swiper-slide"><div class="swiper-zoom-container"><img src="${im}" class="w-full h-full"></div></div>`).join('');
+let sizes=currentP.sizes && currentP.sizes.length>0? currentP.sizes : ["M","L","XL","XXL"];
+document.getElementById('sizeList').innerHTML=sizes.map(s=>`<button onclick="selectBuySize(this,'${s}')" class="sizeBtn border-2 px-4 py-2 rounded-full text-[12px] font-bold">${s}</button>`).join('');
+document.getElementById('sizeSelected').innerText='Select size: '+sizes.join(', ');
+let other=products.filter(p=>p.seller===currentP.seller && p.id!==currentP.id);
+if(other.length===0) other=products.filter(p=>p.id!==currentP.id).slice(0,6);
+document.getElementById('shopItems').innerHTML=other.map(p=>`<div class="swiper-slide" style="width:90px" onclick="openDetail(${p.id})"><img src="${p.imgs? p.imgs[0]:p.img}" class="w-full h-[90px] object-cover rounded-xl border"><p class="text-[9px] font-bold truncate mt-1">${p.name}</p><p class="text-[9px]">GH₵${p.price}</p></div>`).join('');
+document.getElementById('detail').style.display='block';
+setTimeout(()=>{
+if(detailSwiper) detailSwiper.destroy();
+detailSwiper=new Swiper('#detailSwiper',{zoom:true,pagination:{el:'.swiper-pagination',clickable:true}});
+if(shopSwiper) shopSwiper.destroy();
+shopSwiper=new Swiper('#shopSwiper',{slidesPerView:'auto',spaceBetween:8});
+},100);
+}
 function closeDetail(){document.getElementById('detail').style.display='none';}
-function addCartDetail(){cart.push(currentP);toast('Added to cart');render();}
+function selectBuySize(btn,size){document.querySelectorAll('.sizeBtn').forEach(b=>b.classList.remove('size-active'));btn.classList.add('size-active');selectedSizeBuy=size;document.getElementById('sizeSelected').innerText='Selected size: '+size;document.getElementById('addBtn').innerText='Add to Cart - Size '+size;}
+function changeQty(d){qtyBuy+=d;if(qtyBuy<1)qtyBuy=1;if(qtyBuy>currentP.stock)qtyBuy=currentP.stock;document.getElementById('qtyNum').innerText=qtyBuy;}
+function addCartDetail(){
+if(!selectedSizeBuy){toast('Please choose size first - M, L, XL, XXL');return;}
+let item={...currentP, selectedSize:selectedSizeBuy, qty:qtyBuy};
+cart.push(item);
+toast('Added to cart - '+currentP.name+' Size '+selectedSizeBuy+' Qty '+qtyBuy);
+render();
+}
 function removeCart(i){cart.splice(i,1);render();}
 function openCart(){document.getElementById('cartDrawer').style.display='flex';render();}
 function closeCart(){document.getElementById('cartDrawer').style.display='none';}
-function checkout(){let total=cart.reduce((s,p)=>s+p.price,0);if(!total)return toast('Cart empty');let newOrders=cart.map(p=>({id:Date.now()+Math.random(),product:p,status:'topay',date:new Date().toLocaleDateString()}));orders=orders.concat(newOrders);localStorage.setItem('dornny_orders',JSON.stringify(orders));toast('✅ Paid GH₵'+total);cart=[];closeCart();render();openOrders('topay');}
+function checkout(){let total=cart.reduce((s,p)=>s+p.price*p.qty,0);if(!total)return toast('Cart empty');toast('✅ Paid GH₵'+total);cart=[];closeCart();render();}
 function openMe(){document.getElementById('mePage').style.display='block';document.getElementById('meShop').innerText=user?.shop||'My Shop';document.getElementById('meEmail').innerText=user?.email||'';render();}
 function closeMe(){document.getElementById('mePage').style.display='none';}
-function openOrders(status){document.getElementById('ordersPage').style.display='block';document.getElementById('ordersTitle').innerText=status;let filtered=orders.filter(o=>o.status===status);document.getElementById('ordersList').innerHTML=filtered.map(o=>`<div class="bg-white rounded-xl p-3 flex gap-2"><img src="${o.product.img}" class="w-16 h-16 rounded"><div class="flex-1"><p class="text-[11px] font-bold">${o.product.name}</p></div></div>`).join('')||'<p class="text-center p-4 text-[11px]">No orders</p>';}
-function closeOrders(){document.getElementById('ordersPage').style.display='none';}
 function openMyProducts(){document.getElementById('myProductsPage').style.display='block';render();}
 function closeMyProducts(){document.getElementById('myProductsPage').style.display='none';}
-function handleGallery(e){let files=e.target.files;uploadedImages=[];document.getElementById('previewImgs').innerHTML='';for(let file of files){let reader=new FileReader();reader.onload=function(ev){uploadedImages.push(ev.target.result);document.getElementById('previewImgs').innerHTML+=`<div><img src="${ev.target.result}" class="w-full h-20 object-cover rounded"></div>`;};reader.readAsDataURL(file);}}
+function toggleUpSize(btn,size){
+btn.classList.toggle('size-active');
+if(selectedSizesUp.includes(size)){selectedSizesUp=selectedSizesUp.filter(s=>s!==size);}else{selectedSizesUp.push(size);}
+document.getElementById('upSizeSelectedText').innerText='Selected: '+(selectedSizesUp.join(', ')||'None');
+}
+function handleGallery(e){
+let files=e.target.files;uploadedImages=[];document.getElementById('previewImgs').innerHTML='';
+for(let file of files){
+let reader=new FileReader();
+reader.onload=function(ev){
+uploadedImages.push(ev.target.result);
+document.getElementById('previewImgs').innerHTML+=`<div class="relative"><img src="${ev.target.result}" class="w-full h-20 object-cover rounded"><span class="absolute top-1 right-1 bg-black text-white text-[8px] px-1 rounded">${uploadedImages.length}</span></div>`;
+};
+reader.readAsDataURL(file);
+}
+toast(files.length+' images selected - will slide & zoom');
+}
 function doLogout(){localStorage.removeItem('dornny_user');location.reload();}
 function openSell(){document.getElementById('sellScreen').style.display='block';}
 function closeSell(){document.getElementById('sellScreen').style.display='none';}
-function uploadProduct(){let n=document.getElementById('upName').value,pr=parseInt(document.getElementById('upPrice').value),wa=document.getElementById('upWhatsapp').value,ca=document.getElementById('upCat').value;let img=uploadedImages[0]||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';if(!n||!pr||!wa)return toast('Fill all + Gallery');let prod={id:Date.now(),name:n,price:pr,cat:ca,img:img,seller:user.shop,whatsapp:wa,sold:false};products.unshift(prod);localStorage.setItem('dornny_products',JSON.stringify(products));toast('✅ Uploaded from Gallery!');render();closeSell();}
+function uploadProduct(){
+let n=document.getElementById('upName').value,pr=parseInt(document.getElementById('upPrice').value),wa=document.getElementById('upWhatsapp').value,ca=document.getElementById('upCat').value,desc=document.getElementById('upDesc').value,stock=parseInt(document.getElementById('upStock').value)||10;
+if(!n||!pr||!wa)return toast('Fill name, price, WhatsApp');
+if(uploadedImages.length===0)return toast('Select 3-4 images from gallery');
+if(selectedSizesUp.length===0)return toast('Select sizes - M, L, XL etc');
+let prod={id:Date.now(),name:n,price:pr,cat:ca,imgs:uploadedImages,img:uploadedImages[0],seller:user.shop,whatsapp:wa,desc:desc||'No description',sizes:selectedSizesUp,stock:stock};
+products.unshift(prod);
+localStorage.setItem('dornny_products_v2',JSON.stringify(products));
+toast('✅ Uploaded '+uploadedImages.length+' images + sizes '+selectedSizesUp.join(', ')+' + description!');
+render();closeSell();uploadedImages=[];selectedSizesUp=[];document.getElementById('previewImgs').innerHTML='';document.querySelectorAll('.upSizeBtn').forEach(b=>b.classList.remove('size-active'));
+}
 function navTo(t){if(t==='home')window.scrollTo(0,0);}
-async function startLive(){document.getElementById('liveRoom').style.display='block';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById('v').srcObject=stream;let doc=await db.collection("liveRooms").add({hostName:user.shop,isLive:true,viewers:1,img:products[0]?.img,createdAt: firebase.firestore.FieldValue.serverTimestamp()});currentLiveId=doc.id;toast('🔴 LIVE started! Followers notified - No error now');unsub=db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(s=>{document.getElementById('liveComments').innerHTML=s.docs.map(x=>`<div><b>${x.data().user}:</b> ${x.data().text}</div>`).join('');});}catch(e){toast(e.message);}}
+async function startLive(){document.getElementById('liveRoom').style.display='block';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});document.getElementById('v').srcObject=stream;let doc=await db.collection("liveRooms").add({hostName:user.shop,isLive:true,viewers:1,img:products[0]?.imgs? products[0].imgs[0]:products[0]?.img,createdAt: firebase.firestore.FieldValue.serverTimestamp()});currentLiveId=doc.id;toast('🔴 LIVE started - No error');unsub=db.collection("liveRooms").doc(doc.id).collection("comments").orderBy("createdAt").onSnapshot(s=>{document.getElementById('liveComments').innerHTML=s.docs.map(x=>`<div><b>${x.data().user}:</b> ${x.data().text}</div>`).join('');});}catch(e){toast(e.message);}}
 async function sendComment(){let i=document.getElementById('cInput');let t=i.value.trim();if(!t)return;if(currentLiveId)await db.collection("liveRooms").doc(currentLiveId).collection("comments").add({user:user?.shop||'Guest',text:t,createdAt: firebase.firestore.FieldValue.serverTimestamp()});i.value='';}
 function closeLive(){if(stream)stream.getTracks().forEach(t=>t.stop());if(unsub)unsub();if(currentLiveId)db.collection('liveRooms').doc(currentLiveId).update({isLive:false});document.getElementById('liveRoom').style.display='none';}
-(function(){let s=localStorage.getItem('dornny_user');if(s){user=JSON.parse(s);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');listenToLiveRooms();}renderCats();render();})();
+(function(){let s=localStorage.getItem('dornny_user');if(s){user=JSON.parse(s);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');listenLive();}renderCats();render();})();
 </script>
 </body>
 </html>
