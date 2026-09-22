@@ -1,24 +1,77 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>DORNNY - No Financial</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script><style>body{font-family:system-ui;background:#f5f5f5;padding-bottom:85px}.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:22px;font-size:12px;z-index:99999;display:none}.hide::-webkit-scrollbar{display:none}.cat-active{background:#111!important;color:#fff!important}.size-active{background:#111!important;color:#fff!important}</style></head><body><div id="toast" class="toast"></div><div class="bg-[#111] text-white text-center py-2 px-3"><p class="font-black text-[12px]">DORNNY MARKET 🇬🇭</p></div>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>DORNNY - Buyer Location + Refund + Delivery Fee</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script><style>body{font-family:system-ui;background:#f5f5f5;padding-bottom:85px}.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:22px;font-size:12px;z-index:99999;display:none;max-width:90%}.hide::-webkit-scrollbar{display:none}.cat-active{background:#111!important;color:#fff!important}.size-active{background:#111!important;color:#fff!important}</style></head><body><div id="toast" class="toast"></div><div class="bg-[#111] text-white text-center py-2 px-3"><p class="font-black text-[12px]">DORNNY MARKET 🇬🇭</p></div>
 
 <div id="loginScreen" class="min-h-[85vh] flex items-center justify-center p-4"><div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow"><h2 class="font-black text-center text-[20px]">DORNNY LOGIN</h2><p class="text-[11px] text-center text-gray-500">Email or Phone + Password + Confirm</p><input id="emailPhone" type="text" placeholder="Email or Phone *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 mt-5"><div class="relative"><input id="password" type="password" placeholder="Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2"><button type="button" onclick="togglePass('password')" class="absolute right-3 top-3 text-[12px]">👁️</button></div><div class="relative"><input id="confirmPassword" type="password" placeholder="Confirm Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-4"><button type="button" onclick="togglePass('confirmPassword')" class="absolute right-3 top-3 text-[12px]">👁️</button></div><button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN / SIGN UP</button></div></div>
 
 <div id="mainApp" class="hidden"><div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black">DORNNY</div><div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div><button onclick="openVideos()" class="bg-black text-white px-3 py-2 rounded-full text-[10px]">📹</button></div><div id="liveNowSection" class="bg-black p-2 hidden"><p class="text-white text-[11px] font-bold mb-2">🔴 LIVE NOW - Tap to watch REAL video</p><div id="liveNowList" class="flex gap-2 overflow-x-auto hide"></div></div><div class="bg-white p-2 border-b sticky top-[50px] z-20"><div id="catList" class="flex gap-2 overflow-x-auto hide pb-1"></div><p id="catResult" class="text-[11px] font-bold mt-1"></p></div><div id="grid" class="p-2 grid grid-cols-2 gap-2"></div></div>
 
-<!-- FULL DETAIL - WHATSAPP + QUANTITY + LIKE + FOLLOW + RATE + COMMENT -->
-<div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[60] hidden overflow-y-auto pb-[100px]"><div class="bg-white"><div class="relative"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-8 h-8 bg-black/60 text-white rounded-full z-10">✕</button><div class="absolute top-3 right-3 flex gap-2 z-10"><button id="likeBtn" onclick="toggleLike()" class="w-9 h-9 bg-white rounded-full shadow"><i class="fa-regular fa-heart"></i></button><button onclick="shareProduct()" class="w-9 h-9 bg-white rounded-full shadow"><i class="fa-solid fa-share"></i></button></div></div><div class="p-3"><div class="flex justify-between items-start"><div><h3 id="dName" class="font-bold text-[18px]"></h3><p id="dPrice" class="font-black text-[20px]"></p><p id="dSeller" class="text-[12px] text-gray-500"></p><div class="flex gap-2 mt-1"><span id="dRating" class="text-[11px] bg-yellow-100 px-2 py-1 rounded-full"></span><span id="dFollowers" class="text-[11px] bg-gray-100 px-2 py-1 rounded-full"></span></div></div><button id="followBtn" onclick="toggleFollow()" class="bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">+ Follow</button></div><div class="flex gap-2 mt-3"><a id="whatsappLine" href="#" target="_blank" class="flex-1 bg-green-600 text-white py-3 rounded-full text-center font-bold text-[12px]"><i class="fa-brands fa-whatsapp"></i> WhatsApp Seller</a><button onclick="openMessagesWithSeller()" class="flex-1 bg-blue-600 text-white py-3 rounded-full font-bold text-[12px]">💬 Message</button></div><div id="sellerPayInfo" class="mt-3 bg-yellow-50 border rounded-xl p-3"><p class="font-black text-[12px]">💰 Seller Account</p><p id="sellerPayText" class="text-[11px] mt-1"></p></div><div class="mt-3 bg-[#fafafa] border rounded-xl p-3"><p class="font-black text-[13px]">Description</p><p id="dDesc" class="text-[12px] mt-1"></p></div><div class="mt-3 border-2 border-black rounded-xl p-3"><p class="font-black text-[13px] mb-2">Choose Size</p><div id="sizeList" class="flex flex-wrap gap-2"></div><p id="sizeSelected" class="text-[11px] text-gray-500 mt-2"></p></div><div class="mt-3 border rounded-xl p-3"><div class="flex justify-between"><p class="font-black text-[13px]">Quantity</p><p id="dStock" class="text-[11px] bg-green-100 px-2 py-1 rounded-full"></p></div><div class="flex items-center gap-3 mt-3"><button onclick="changeQty(-1)" class="w-10 h-10 border-2 border-black rounded-full font-bold">-</button><span id="qtyNum" class="font-black w-8 text-center text-[16px]">1</span><button onclick="changeQty(1)" class="w-10 h-10 border-2 border-black rounded-full font-bold">+</button></div></div><div class="mt-3 bg-white border rounded-xl p-3"><p class="font-black text-[13px]">⭐ Rate Seller</p><div class="flex gap-1 mt-2"><button onclick="rateSeller(1)" class="text-[22px]">⭐</button><button onclick="rateSeller(2)" class="text-[22px]">⭐</button><button onclick="rateSeller(3)" class="text-[22px]">⭐</button><button onclick="rateSeller(4)" class="text-[22px]">⭐</button><button onclick="rateSeller(5)" class="text-[22px]">⭐</button></div><p id="rateText" class="text-[11px] text-gray-500 mt-1">Tap star to rate</p></div><div class="mt-3 bg-white border rounded-xl p-3"><p class="font-black text-[13px]">💬 Comments (<span id="commentCount">0</span>)</p><div id="commentList" class="mt-2 space-y-2 max-h-40 overflow-y-auto"></div><div class="flex gap-2 mt-3"><input id="commentInput" placeholder="Add comment..." class="flex-1 border rounded-full px-3 py-2 text-[12px]"><button onclick="postComment()" class="bg-black text-white px-4 py-2 rounded-full text-[11px]">Post</button></div></div><div class="flex gap-2 mt-4 mb-20"><button id="addBtn" onclick="addCartDetail()" class="flex-1 border-2 border-black py-3.5 rounded-full font-bold text-[12px]">Add to Cart</button><button onclick="openCart()" class="flex-1 bg-black text-white py-3.5 rounded-full font-bold text-[12px]">View Cart</button></div></div></div></div>
+<!-- DETAIL -->
+<div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[60] hidden overflow-y-auto pb-[100px]"><div class="bg-white"><div class="relative"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-8 h-8 bg-black/60 text-white rounded-full z-10">✕</button><div class="absolute top-3 right-3 flex gap-2 z-10"><button id="likeBtn" onclick="toggleLike()" class="w-9 h-9 bg-white rounded-full shadow"><i class="fa-regular fa-heart"></i></button><button onclick="shareProduct()" class="w-9 h-9 bg-white rounded-full shadow"><i class="fa-solid fa-share"></i></button></div></div><div class="p-3"><div class="flex justify-between items-start"><div><h3 id="dName" class="font-bold text-[18px]"></h3><p id="dPrice" class="font-black text-[20px]"></p><p id="dSeller" class="text-[12px] text-gray-500"></p></div><button id="followBtn" onclick="toggleFollow()" class="bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">+ Follow</button></div><div class="flex gap-2 mt-3"><a id="whatsappLine" href="#" target="_blank" class="flex-1 bg-green-600 text-white py-3 rounded-full text-center font-bold text-[12px]"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a><button onclick="openMessagesWithSeller()" class="flex-1 bg-blue-600 text-white py-3 rounded-full font-bold text-[12px]">💬 Message</button></div><div id="sellerPayInfo" class="mt-3 bg-yellow-50 border rounded-xl p-3"><p id="sellerPayText" class="text-[11px]"></p></div><div class="mt-3 bg-[#fafafa] border rounded-xl p-3"><p class="font-black text-[13px]">Description</p><p id="dDesc" class="text-[12px] mt-1"></p></div><div class="mt-3 border-2 border-black rounded-xl p-3"><p class="font-black text-[13px] mb-2">Choose Size</p><div id="sizeList" class="flex flex-wrap gap-2"></div><p id="sizeSelected" class="text-[11px] text-gray-500 mt-2"></p></div><div class="mt-3 border rounded-xl p-3"><div class="flex justify-between"><p class="font-black text-[13px]">Quantity</p><p id="dStock" class="text-[11px] bg-green-100 px-2 py-1 rounded-full"></p></div><div class="flex items-center gap-3 mt-3"><button onclick="changeQty(-1)" class="w-10 h-10 border-2 border-black rounded-full font-bold">-</button><span id="qtyNum" class="font-black w-8 text-center text-[16px]">1</span><button onclick="changeQty(1)" class="w-10 h-10 border-2 border-black rounded-full font-bold">+</button></div></div><div class="mt-3 bg-white border rounded-xl p-3"><p class="font-black text-[13px]">⭐ Rate Seller</p><div class="flex gap-1 mt-2"><button onclick="rateSeller(1)" class="text-[22px]">⭐</button><button onclick="rateSeller(2)" class="text-[22px]">⭐</button><button onclick="rateSeller(3)" class="text-[22px]">⭐</button><button onclick="rateSeller(4)" class="text-[22px]">⭐</button><button onclick="rateSeller(5)" class="text-[22px]">⭐</button></div><p id="rateText" class="text-[11px] text-gray-500 mt-1"></p></div><div class="mt-3 bg-white border rounded-xl p-3"><p class="font-black text-[13px]">💬 Comments (<span id="commentCount">0</span>)</p><div id="commentList" class="mt-2 space-y-2 max-h-40 overflow-y-auto"></div><div class="flex gap-2 mt-3"><input id="commentInput" placeholder="Add comment..." class="flex-1 border rounded-full px-3 py-2 text-[12px]"><button onclick="postComment()" class="bg-black text-white px-4 py-2 rounded-full text-[11px]">Post</button></div></div><div class="flex gap-2 mt-4 mb-20"><button id="addBtn" onclick="addCartDetail()" class="flex-1 border-2 border-black py-3.5 rounded-full font-bold text-[12px]">Add to Cart</button><button onclick="openCart()" class="flex-1 bg-black text-white py-3.5 rounded-full font-bold text-[12px]">View Cart</button></div></div></div></div>
 
-<div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[70] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><b>Cart</b><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3"></div><div class="p-4 border-t"><div class="flex justify-between font-black"><span>Total</span><span id="totalPay">GH₵0</span></div><button onclick="checkout()" id="payBtn" class="w-full bg-black text-white py-4 rounded-full mt-3 font-black">PAY NOW</button></div></div></div>
+<!-- CART WITH BUYER LOCATION SAVED + REMOVE + DELIVERY FEE BY DISTANCE & PRODUCT -->
+<div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[70] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between items-center"><div><b>Cart</b><p id="cartCount2" class="text-[11px] text-gray-500">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div>
 
-<div id="videosPage" class="fixed inset-0 bg-black z-[65] hidden overflow-y-auto pb-[90px]"><div class="p-4 border-b flex gap-3 items-center sticky top-0 bg-black text-white"><button onclick="closeVideos()" class="w-8 h-8 bg-white/20 rounded-full">←</button><b>📹 Watch Real Videos</b></div><div class="p-3"><div id="videosLiveNow" class="grid grid-cols-2 gap-2"></div></div></div>
+<div id="cartItems" class="p-3 space-y-3 border-b max-h-[25vh] overflow-y-auto"></div>
 
-<div id="mePage" class="fixed inset-0 bg-[#f5f5f5] z-[65] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-5 pt-10"><p id="meShop" class="font-bold">My Shop</p><p id="meEmail" class="text-[11px]"></p><button onclick="closeMe()" class="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full">✕</button></div><div class="p-3"><div id="myPostsGrid" class="grid grid-cols-2 gap-2"></div></div></div>
+<div class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#fcfcfc]">
+<!-- BUYER LOCATION SAVED -->
+<div class="bg-white border-2 border-black rounded-xl p-3 space-y-2">
+<p class="font-black text-[13px]">📍 Buyer Location - Saved Forever</p>
+<p class="text-[10px] text-gray-500">This will be saved, next time auto-fill</p>
+<input id="custName" placeholder="Full Name *" class="w-full border rounded-xl px-3 py-3 text-[12px]">
+<input id="custPhone" placeholder="Phone e.g. 055... *" class="w-full border rounded-xl px-3 py-3 text-[12px]">
+<div class="flex gap-2">
+<select id="custRegion" onchange="calcDelivery()" class="flex-1 border rounded-xl px-2 py-3 text-[12px]">
+<option value="Greater Accra">Greater Accra</option><option value="Ashanti">Ashanti</option><option value="Western">Western</option><option value="Eastern">Eastern</option><option value="Central">Central</option><option value="Volta">Volta</option><option value="Northern">Northern</option><option value="Upper East">Upper East</option><option value="Upper West">Upper West</option><option value="Bono">Bono</option>
+</select>
+<input id="custCity" placeholder="City *" class="flex-1 border rounded-xl px-3 py-3 text-[12px]">
+</div>
+<div class="relative">
+<input id="gpsAddress" placeholder="GPS Address / Location *" class="w-full border rounded-xl px-3 py-3 text-[12px] pr-20">
+<button onclick="getGPS()" class="absolute right-1 top-1 bg-black text-white text-[10px] px-3 py-2 rounded-full h-[90%]">📍 GPS</button>
+</div>
+<p id="gpsStatus" class="text-[10px] text-gray-500">Tap GPS to get your location</p>
+<textarea id="deliveryNote" placeholder="House number, landmark..." class="w-full border rounded-xl px-3 py-3 text-[12px] h-12"></textarea>
+<button onclick="saveBuyerInfo()" class="w-full bg-black text-white py-2.5 rounded-full text-[11px] font-bold">💾 Save My Location</button>
+<p id="buyerSavedText" class="text-[10px] text-green-600 font-bold"></p>
+</div>
+
+<!-- DELIVERY FEE BREAKDOWN -->
+<div id="deliveryBox" class="bg-blue-50 border-2 border-blue-200 rounded-xl p-3">
+<p class="font-black text-[12px]">🚚 Delivery Fees - Depends on Product & Distance</p>
+<div class="text-[11px] space-y-1 mt-2">
+<div class="flex justify-between"><span>Product type charge:</span><span id="productCharge">GH₵0</span></div>
+<div class="flex justify-between"><span>Distance charge (<span id="distanceRegion">Greater Accra</span>):</span><span id="distanceCharge">GH₵0</span></div>
+<div class="flex justify-between font-bold border-t pt-1"><span>Delivery Total:</span><span id="deliveryTotal">GH₵0</span></div>
+</div>
+<p class="text-[9px] text-gray-500 mt-2">Small items GH₵15-25, Furniture/Electronics GH₵50-150, Far regions +GH₵20-50</p>
+</div>
+
+</div>
+
+<div class="p-4 border-t bg-white space-y-2">
+<div class="flex justify-between text-[12px]"><span>Subtotal</span><span id="subTotal">GH₵0</span></div>
+<div class="flex justify-between text-[12px]"><span>Delivery</span><span id="deliveryFeeText">GH₵0</span></div>
+<div class="flex justify-between font-black text-[16px] border-t pt-2"><span>Total Pay</span><span id="totalPay">GH₵0</span></div>
+<input id="momoNumber" placeholder="Your MoMo to pay *" class="w-full border rounded-xl px-3 py-3 text-[12px]">
+<button onclick="checkout()" id="payBtn" class="w-full bg-black text-white py-4 rounded-full font-black text-[14px]">PAY NOW - GH₵0</button>
+</div>
+</div></div>
+
+<!-- ORDER SUCCESS + REFUND INFO -->
+<div id="welcomeScreen" class="fixed inset-0 bg-black/70 z-[80] hidden flex items-center justify-center p-4"><div class="bg-white rounded-[24px] w-full max-w-sm p-6 text-center"><h2 class="font-black text-[20px]">Order Paid! ✅</h2><div class="bg-[#f5f5f5] rounded-xl p-3 mt-4 text-left text-[11px] space-y-1"><p><b>Order:</b> <span id="orderId"></span></p><p><b>Paid:</b> <span id="paidAmount" class="font-black"></span></p><p><b>Delivery:</b> <span id="paidDelivery"></span></p><p><b>To:</b> <span id="deliverTo"></span></p><p><b>Phone:</b> <span id="paidPhone"></span></p></div><p class="text-[10px] text-gray-500 mt-3">You can refund/report within 3 days if damage, scam, etc.</p><button onclick="continueShop()" class="w-full mt-5 bg-black text-white py-3.5 rounded-full font-bold">Continue Shopping 🛍️</button><button onclick="openMyOrders()" class="w-full mt-2 border-2 border-black py-3 rounded-full font-bold text-[12px]">📦 My Orders - Refund/Report</button></div></div>
+
+<!-- REFUND / REPORT MODAL - 3 DAYS RULE -->
+<div id="refundModal" class="fixed inset-0 bg-black/70 z-[90] hidden flex items-center justify-center p-4"><div class="bg-white rounded-[20px] w-full max-w-sm p-5"><div class="flex justify-between items-center"><h3 class="font-black text-[16px]">Refund / Report</h3><button onclick="closeRefund()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><p class="text-[10px] text-gray-500 mt-1">Within 3 days only - After 3 days we can't accept</p><p id="refundOrderInfo" class="text-[11px] font-bold mt-3 bg-[#f5f5f5] p-2 rounded-xl"></p><select id="refundReason" class="w-full border-2 border-black rounded-xl px-3 py-3 text-[12px] mt-3"><option value="">Select Reason *</option><option value="Damage goods">📦 Damage goods</option><option value="Scam">🚨 Scam / Fake seller</option><option value="Wrong item">❌ Wrong item sent</option><option value="Not as described">⚠️ Not as described</option><option value="Late delivery">⏰ Late delivery / Not delivered</option><option value="Others">📝 Others</option></select><textarea id="refundDesc" placeholder="Describe reason why you want refund/report... *" class="w-full border rounded-xl px-3 py-3 text-[12px] h-20 mt-2"></textarea><p class="text-[9px] text-red-500 mt-1">Must describe damage/scam clearly. We check within 3 days.</p><button onclick="submitRefund()" class="w-full bg-red-600 text-white py-3.5 rounded-full font-black mt-3">Submit Refund/Report</button></div></div>
+
+<div id="videosPage" class="fixed inset-0 bg-black z-[65] hidden overflow-y-auto pb-[90px]"><div class="p-4 border-b flex gap-3 items-center sticky top-0 bg-black text-white"><button onclick="closeVideos()" class="w-8 h-8 bg-white/20 rounded-full">←</button><b>📹 Watch</b></div><div class="p-3"><div id="videosLiveNow" class="grid grid-cols-2 gap-2"></div></div></div>
+
+<div id="mePage" class="fixed inset-0 bg-[#f5f5f5] z-[65] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-5 pt-10 relative"><button onclick="closeMe()" class="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full">✕</button><p id="meShop" class="font-bold text-[16px]">My Shop</p><p id="meEmail" class="text-[11px]"></p><div class="flex gap-2 mt-3"><button onclick="openMyOrders()" class="bg-white text-black px-4 py-2 rounded-full text-[11px] font-bold">📦 My Orders + Refund</button><button onclick="doLogout()" class="bg-white/20 px-4 py-2 rounded-full text-[11px]">Logout</button></div></div><div class="p-3 space-y-3"><p class="font-black text-[13px]">📦 My Orders - Refund within 3 days</p><div id="myOrdersList" class="space-y-3"></div><p class="font-black text-[13px] mt-4">My Posts</p><div id="myPostsGrid" class="grid grid-cols-2 gap-2"></div></div></div>
 
 <div id="sellScreen" class="fixed inset-0 bg-white z-[70] hidden overflow-y-auto p-4 pb-[90px]"><div class="flex justify-between"><h2 class="font-black">Upload</h2><button onclick="closeSell()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><input id="upShopName" placeholder="Shop Name *" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-4 font-bold"><input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleGallery(event)"><button onclick="document.getElementById('galleryFile').click()" class="w-full mt-4 bg-black text-white py-3 rounded-full text-[12px]">📷 Select Images</button><div id="previewImgs" class="grid grid-cols-3 gap-2 mt-3"></div><input id="upName" placeholder="Product name" class="w-full border rounded-xl px-3 py-3 mt-4 text-[13px] font-bold"><input id="upPrice" type="number" placeholder="Price GH₵" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"><textarea id="upDesc" placeholder="Description..." class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px] h-20"></textarea><div class="mt-3 border rounded-xl p-3"><p class="font-bold text-[12px] mb-2">Sizes</p><div class="flex flex-wrap gap-2"><button type="button" onclick="toggleUpSize(this,'S')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">S</button><button type="button" onclick="toggleUpSize(this,'M')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">M</button><button type="button" onclick="toggleUpSize(this,'L')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">L</button><button type="button" onclick="toggleUpSize(this,'XL')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">XL</button><button type="button" onclick="toggleUpSize(this,'XXL')" class="upSizeBtn border px-3 py-1.5 rounded-full text-[11px]">XXL</button></div></div><input id="upStock" type="number" placeholder="Stock" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px]"><select id="upCat" class="w-full border rounded-xl px-3 py-3 mt-2 text-[13px]"></select><button onclick="uploadProduct()" class="w-full bg-black text-white py-4 rounded-full mt-4 font-black">UPLOAD NOW</button></div>
 
-<div id="liveRoom" class="fixed inset-0 bg-black z-[80] hidden"><div class="relative w-full h-full"><video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover"></video><video id="viewerVideo" autoplay playsinline class="absolute inset-0 w-full h-full object-cover hidden"></video><div class="absolute top-0 left-0 right-0 p-3 flex justify-between bg-gradient-to-b from-black/80 to-transparent"><span class="bg-red-600 px-3 py-1 rounded-full text-[11px] text-white font-bold">🔴 LIVE REAL <span id="liveLikeCount">0</span></span><div class="flex gap-2"><button onclick="switchCamera()" class="w-9 h-9 bg-white/30 text-white rounded-full">🔄</button><button onclick="closeLive()" class="w-9 h-9 bg-white/20 text-white rounded-full">✕</button></div></div><div class="absolute left-3 right-3 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment..." class="flex-1 rounded-full px-4 h-11 text-[13px]"><button onclick="sendComment()" class="bg-white w-11 h-11 rounded-full">✈️</button></div></div></div>
+<div id="liveRoom" class="fixed inset-0 bg-black z-[80] hidden"><div class="relative w-full h-full"><video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover"></video><video id="viewerVideo" autoplay playsinline class="absolute inset-0 w-full h-full object-cover hidden"></video><div class="absolute top-0 left-0 right-0 p-3 flex justify-between bg-gradient-to-b from-black/80 to-transparent"><span class="bg-red-600 px-3 py-1 rounded-full text-[11px] text-white font-bold">🔴 LIVE REAL</span><div class="flex gap-2"><button onclick="switchCamera()" class="w-9 h-9 bg-white/30 text-white rounded-full">🔄</button><button onclick="closeLive()" class="w-9 h-9 bg-white/20 text-white rounded-full">✕</button></div></div><div class="absolute left-3 right-3 bottom-3 flex gap-2"><input id="cInput" placeholder="Comment..." class="flex-1 rounded-full px-4 h-11 text-[13px]"><button onclick="sendComment()" class="bg-white w-11 h-11 rounded-full">✈️</button></div></div></div>
 
-<!-- BOTTOM NAV WITHOUT FINANCIAL - 6 BUTTONS ONLY -->
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black flex justify-around py-2 z-[9999] shadow-[0_-4px_20px_rgba(0,0,0,0.3)]">
 <button onclick="navTo('home')" class="flex flex-col items-center text-black"><i class="fa-solid fa-house text-[20px]"></i><span class="text-[10px] font-bold">Home</span></button>
 <button onclick="openSell()" class="flex flex-col items-center text-gray-600"><i class="fa-solid fa-circle-plus text-[20px]"></i><span class="text-[10px]">Sell</span></button>
@@ -31,9 +84,9 @@
 <script>
 const firebaseConfig={apiKey:"AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",authDomain:"dornnysmarket.firebaseapp.com",projectId:"dornnysmarket",storageBucket:"dornnysmarket.firebasestorage.app",messagingSenderId:"726307073658",appId:"1:726307073658:web:24c52654e92de69cfa95c3"};firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
-let products=JSON.parse(localStorage.getItem('dornny_products_v2')||'[]');if(products.length===0)products=[{id:1,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"],img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600",seller:"Danny shop",desc:"100% cotton shiny club top",sizes:["M","L","XL","XXL","S"],stock:12,likes:1,rating:4.5,followers:45}];
-let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],selectedSizesUp=[],selectedSizeBuy=null,qtyBuy=1,detailSwiper=null,stream=null,currentLiveId=null,pc=null,currentFacingMode='user';
-function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+let products=JSON.parse(localStorage.getItem('dornny_products_v2')||'[]');if(products.length===0)products=[{id:1,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"],img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600",seller:"Danny shop",desc:"100% cotton shiny club top",sizes:["M","L","XL","XXL"],stock:12,likes:1,rating:4.5}];
+let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],selectedSizesUp=[],selectedSizeBuy=null,qtyBuy=1,detailSwiper=null,stream=null,currentLiveId=null,pc=null,currentFacingMode='user',currentRefundOrder=null;
+function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500);}
 function togglePass(id){let el=document.getElementById(id);el.type=el.type==='password'?'text':'password';}
 function doLogin(){
   let loginInput=document.getElementById('emailPhone').value.trim();
@@ -47,62 +100,129 @@ function doLogin(){
   else{if(!confirm){toast('Enter Confirm *');return;}if(pass!==confirm){toast('❌ Not same');return;}let defaultShop=loginInput.includes('@')?key.split('@')[0]+' shop':'Shop '+key.slice(-4);users[key]={shop:defaultShop,email:key,phone:loginInput.includes('@')?'':key,password:pass,loginId:key};localStorage.setItem('dornny_users',JSON.stringify(users));user={shop:defaultShop,email:key,phone:loginInput.includes('@')?'':key,loginId:key,password:pass};}
   localStorage.setItem('dornny_user',JSON.stringify(user));
   document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');
-  listenLive();renderCats();render();
+  listenLive();renderCats();render();loadBuyerInfo();
 }
 function renderCats(){document.getElementById('catList').innerHTML=categories.map(c=>`<button onclick="setCat('${c}')" class="px-4 py-2 rounded-full text-[11px] border whitespace-nowrap font-bold ${currentCat===c?'cat-active':'bg-[#f2f2f2]'}">${c}</button>`).join('');document.getElementById('upCat').innerHTML=categories.filter(c=>c!=='All').map(c=>`<option value="${c}">${c}</option>`).join('');}
 function setCat(c){currentCat=c;renderCats();render();}
-function getSellerPayment(shop){let all=JSON.parse(localStorage.getItem('dornny_all_seller_payments')||'{}');return all[shop]||{shop:shop,momoNumber:"0551234567",whatsapp:"0551234567",momoName:shop};}
+function getSellerPayment(shop){let all=JSON.parse(localStorage.getItem('dornny_all_seller_payments')||'{}');return all[shop]||{shop:shop,momoNumber:"0551234567",whatsapp:"0551234567"};}
+
+// BUYER LOCATION SAVED FOREVER
+function loadBuyerInfo(){
+  let info=JSON.parse(localStorage.getItem('dornny_buyer_info')||'{}');
+  if(info.name)document.getElementById('custName').value=info.name;
+  if(info.phone)document.getElementById('custPhone').value=info.phone;
+  if(info.region)document.getElementById('custRegion').value=info.region;
+  if(info.city)document.getElementById('custCity').value=info.city;
+  if(info.gps)document.getElementById('gpsAddress').value=info.gps;
+  if(info.note)document.getElementById('deliveryNote').value=info.note;
+  if(info.momo)document.getElementById('momoNumber').value=info.momo;
+  calcDelivery();
+}
+function saveBuyerInfo(){
+  let info={
+    name:document.getElementById('custName').value.trim(),
+    phone:document.getElementById('custPhone').value.trim(),
+    region:document.getElementById('custRegion').value,
+    city:document.getElementById('custCity').value.trim(),
+    gps:document.getElementById('gpsAddress').value.trim(),
+    note:document.getElementById('deliveryNote').value.trim(),
+    momo:document.getElementById('momoNumber').value.trim()
+  };
+  if(!info.name||!info.phone||!info.gps){toast('Fill Name, Phone, GPS *');return;}
+  localStorage.setItem('dornny_buyer_info',JSON.stringify(info));
+  document.getElementById('buyerSavedText').innerText='✅ Saved! Next time auto-fill';
+  toast('✅ Buyer location saved forever!');
+  calcDelivery();
+}
+function getGPS(){
+  let s=document.getElementById('gpsStatus');
+  s.innerText='Getting GPS...';
+  navigator.geolocation.getCurrentPosition(p=>{
+    let lat=p.coords.latitude.toFixed(6),lng=p.coords.longitude.toFixed(6);
+    document.getElementById('gpsAddress').value=`GA-${lat}-${lng} - Accra, Ghana`;
+    s.innerText=`✅ GPS: ${lat}, ${lng} saved`;
+    toast('📍 GPS captured!');
+    calcDelivery();
+  },()=>{s.innerText='❌ GPS failed - Enter manually';});
+}
+
+// DELIVERY FEE BY PRODUCT TYPE & DISTANCE
+function calcDelivery(){
+  let region=document.getElementById('custRegion').value||'Greater Accra';
+  document.getElementById('distanceRegion').innerText=region;
+  let baseDistance=0;
+  if(region==='Greater Accra')baseDistance=20;
+  else if(region==='Central'||region==='Eastern'||region==='Volta')baseDistance=35;
+  else if(region==='Ashanti'||region==='Western')baseDistance=50;
+  else baseDistance=70; // far north
+
+  let productCharge=0;
+  cart.forEach(c=>{
+    let cat=(c.cat||'').toLowerCase();
+    if(['furnitures','appliances','cars','home decors'].includes(cat))productCharge+=80;
+    else if(['electronics','bags','sneaker'].includes(cat))productCharge+=25;
+    else productCharge+=15;
+  });
+  if(cart.length===0)productCharge=0;
+
+  let deliveryTotal=productCharge+baseDistance;
+  document.getElementById('productCharge').innerText='GH₵'+productCharge;
+  document.getElementById('distanceCharge').innerText='GH₵'+baseDistance;
+  document.getElementById('deliveryTotal').innerText='GH₵'+deliveryTotal;
+  document.getElementById('deliveryFeeText').innerText='GH₵'+deliveryTotal;
+
+  let sub=cart.reduce((s,p)=>s+p.price*p.qty,0);
+  document.getElementById('subTotal').innerText='GH₵'+sub;
+  document.getElementById('totalPay').innerText='GH₵'+(sub+deliveryTotal);
+  document.getElementById('payBtn').innerText='PAY NOW - GH₵'+(sub+deliveryTotal);
+  return deliveryTotal;
+}
+
 function render(){
   let s=document.getElementById('search').value.trim().toLowerCase();
   let f=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);
   if(s)f=f.filter(p=>p.name.toLowerCase().includes(s));
   document.getElementById('catResult').innerText=`${f.length} items in ${currentCat}`;
-  document.getElementById('grid').innerHTML=f.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><div class="relative"><img src="${p.imgs[0]}" class="w-full h-[180px] object-cover"><div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full">❤️ ${p.likes||0}</div></div><div class="p-2"><p class="text-[12px] font-bold truncate">${p.name}</p><p class="text-[10px] text-gray-500">${p.cat} • ⭐ ${p.rating||4.5}</p><p class="font-black text-[14px]">GH₵${p.price}</p><p class="text-[9px] text-gray-400">${p.seller}</p></div></div>`).join('');
+  document.getElementById('grid').innerHTML=f.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><div class="relative"><img src="${p.imgs[0]}" class="w-full h-[180px] object-cover"><div class="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full">❤️ ${p.likes||0}</div></div><div class="p-2"><p class="text-[12px] font-bold truncate">${p.name}</p><p class="text-[10px] text-gray-500">${p.cat}</p><p class="font-black text-[14px]">GH₵${p.price}</p><p class="text-[9px] text-gray-400">${p.seller}</p></div></div>`).join('');
   document.getElementById('cartCount').innerText=cart.length;
-  let total=0;cart.forEach(c=>total+=c.price*c.qty);
-  document.getElementById('totalPay').innerText='GH₵'+total;
-  document.getElementById('payBtn').innerText='PAY NOW - GH₵'+total;
-  document.getElementById('cartItems').innerHTML=cart.map(c=>`<div class="flex gap-2 border-b pb-2"><img src="${c.imgs[0]}" class="w-12 h-12 rounded"><div><p class="text-[12px] font-bold">${c.name}</p><p class="text-[11px]">GH₵${c.price} x ${c.qty} • Size ${c.selectedSize}</p></div></div>`).join('')||'<p class="text-center py-6 text-[12px]">Cart empty</p>';
+  document.getElementById('cartCount2').innerText=cart.length+' items';
+  document.getElementById('cartItems').innerHTML=cart.map((c,i)=>`<div class="flex gap-3 border-b pb-3"><img src="${c.imgs[0]}" class="w-16 h-16 rounded-xl object-cover border"><div class="flex-1"><p class="font-bold text-[13px]">${c.name}</p><p class="text-[11px] text-gray-500">Shop: <b>${c.seller}</b> • Size: <b>${c.selectedSize}</b></p><p class="text-[11px]">GH₵${c.price} x ${c.qty} = <b>GH₵${c.price*c.qty}</b></p><div class="flex items-center gap-2 mt-2"><button onclick="changeCartQty(${i},-1)" class="w-7 h-7 border-2 border-black rounded-full font-bold text-[12px]">-</button><span class="text-[12px] font-bold w-5 text-center">${c.qty}</span><button onclick="changeCartQty(${i},1)" class="w-7 h-7 border-2 border-black rounded-full font-bold text-[12px]">+</button><button onclick="removeCart(${i})" class="ml-3 bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-bold">🗑️ Remove</button></div></div></div>`).join('')||'<div class="text-center py-10"><p class="text-[30px]">🛒</p><p class="text-[12px] text-gray-400">Cart empty - Add items</p></div>';
+  calcDelivery();
 }
+function changeCartQty(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart[i].qty=1;render();}
+function removeCart(i){cart.splice(i,1);toast('🗑️ Removed from cart');render();}
+
 function openDetail(id){
   currentP=products.find(p=>p.id===id);qtyBuy=1;selectedSizeBuy=null;
   document.getElementById('dName').innerText=currentP.name;
   document.getElementById('dPrice').innerText='GH₵'+currentP.price;
   document.getElementById('dSeller').innerText=currentP.seller+' • '+currentP.stock+' left';
-  document.getElementById('dRating').innerText=`⭐ ${currentP.rating||4.5}`;
-  document.getElementById('dFollowers').innerText=`👥 ${currentP.followers||45} followers`;
   let pay=getSellerPayment(currentP.seller);
   document.getElementById('sellerPayText').innerHTML=`Seller <b>${currentP.seller}</b><br>MoMo: <b>${pay.momoNumber}</b><br>WhatsApp: ${pay.whatsapp}`;
-  document.getElementById('whatsappLine').href=`https://wa.me/${pay.whatsapp.replace(/[^0-9]/g,'')}?text=Hi, I want ${currentP.name} GH₵${currentP.price}`;
+  document.getElementById('whatsappLine').href=`https://wa.me/${pay.whatsapp.replace(/[^0-9]/g,'')}?text=Hi, I want ${currentP.name}`;
   document.getElementById('dDesc').innerText=currentP.desc||'No description';
   document.getElementById('dStock').innerText=currentP.stock+' left';
   document.getElementById('qtyNum').innerText='1';
-  let imgs=currentP.imgs&&currentP.imgs.length>0?currentP.imgs:[currentP.img];
-  document.getElementById('detailImgs').innerHTML=imgs.map(im=>`<div class="swiper-slide"><div class="swiper-zoom-container"><img src="${im}" class="w-full h-full object-cover"></div></div>`).join('');
-  let sizes=currentP.sizes&&currentP.sizes.length>0?currentP.sizes:["M","L","XL"];
-  document.getElementById('sizeList').innerHTML=sizes.map(s=>`<button onclick="selectBuySize(this,'${s}')" class="sizeBtn border-2 px-4 py-2 rounded-full text-[12px] font-bold">${s}</button>`).join('');
-  document.getElementById('sizeSelected').innerText='Select size - Slide to view, pinch to zoom';
-  let isLiked=JSON.parse(localStorage.getItem('dornny_liked')||'[]').includes(currentP.id);
-  document.getElementById('likeBtn').innerHTML=isLiked?'<i class="fa-solid fa-heart text-red-500"></i>':'<i class="fa-regular fa-heart"></i>';
-  let follows=JSON.parse(localStorage.getItem('dornny_follows')||'[]');
-  document.getElementById('followBtn').innerText=follows.includes(currentP.seller)?'✓ Following':'+ Follow';
+  document.getElementById('detailImgs').innerHTML=currentP.imgs.map(im=>`<div class="swiper-slide"><div class="swiper-zoom-container"><img src="${im}" class="w-full h-full object-cover"></div></div>`).join('');
+  document.getElementById('sizeList').innerHTML=currentP.sizes.map(s=>`<button onclick="selectBuySize(this,'${s}')" class="sizeBtn border-2 px-4 py-2 rounded-full text-[12px] font-bold">${s}</button>`).join('');
   document.getElementById('detail').style.display='block';
   setTimeout(()=>{if(detailSwiper)detailSwiper.destroy();detailSwiper=new Swiper('#detailSwiper',{zoom:true,loop:true,pagination:{el:'.swiper-pagination',clickable:true}});},100);
   loadComments();
 }
 function closeDetail(){document.getElementById('detail').style.display='none';}
-function selectBuySize(btn,size){document.querySelectorAll('.sizeBtn').forEach(b=>b.classList.remove('size-active'));btn.classList.add('size-active');selectedSizeBuy=size;document.getElementById('sizeSelected').innerText='Selected: '+size;document.getElementById('addBtn').innerText='Add to Cart - Size '+size;}
-function changeQty(d){qtyBuy+=d;if(qtyBuy<1)qtyBuy=1;if(qtyBuy>currentP.stock)qtyBuy=currentP.stock;document.getElementById('qtyNum').innerText=qtyBuy;}
-function addCartDetail(){if(!selectedSizeBuy){toast('Choose size first');return;}cart.push({...currentP,selectedSize:selectedSizeBuy,qty:qtyBuy});toast('Added Qty '+qtyBuy);render();}
-function openCart(){document.getElementById('cartDrawer').style.display='flex';}function closeCart(){document.getElementById('cartDrawer').style.display='none';}
-function toggleLike(){let liked=JSON.parse(localStorage.getItem('dornny_liked')||'[]');let idx=liked.indexOf(currentP.id);if(idx>-1){liked.splice(idx,1);currentP.likes--;toast('💔 Unliked');}else{liked.push(currentP.id);currentP.likes++;toast('❤️ Liked!');}localStorage.setItem('dornny_liked',JSON.stringify(liked));localStorage.setItem('dornny_products_v2',JSON.stringify(products));document.getElementById('likeBtn').innerHTML=liked.includes(currentP.id)?'<i class="fa-solid fa-heart text-red-500"></i>':'<i class="fa-regular fa-heart"></i>';render();}
-function toggleFollow(){let follows=JSON.parse(localStorage.getItem('dornny_follows')||'[]');let idx=follows.indexOf(currentP.seller);if(idx>-1){follows.splice(idx,1);}else{follows.push(currentP.seller);toast('👥 Following '+currentP.seller);}localStorage.setItem('dornny_follows',JSON.stringify(follows));document.getElementById('followBtn').innerText=follows.includes(currentP.seller)?'✓ Following':'+ Follow';}
-function rateSeller(stars){toast(`⭐ Rated ${stars} stars!`);document.getElementById('rateText').innerText=`You rated ${stars} stars!`;}
+function selectBuySize(btn,size){document.querySelectorAll('.sizeBtn').forEach(b=>b.classList.remove('size-active'));btn.classList.add('size-active');selectedSizeBuy=size;document.getElementById('sizeSelected').innerText='Selected: '+size;}
+function changeQty(d){qtyBuy+=d;if(qtyBuy<1)qtyBuy=1;document.getElementById('qtyNum').innerText=qtyBuy;}
+function addCartDetail(){if(!selectedSizeBuy){toast('Choose size first');return;}cart.push({...currentP,selectedSize:selectedSizeBuy,qty:qtyBuy});toast('Added to cart');render();}
+function openCart(){document.getElementById('cartDrawer').style.display='flex';loadBuyerInfo();render();}
+function closeCart(){document.getElementById('cartDrawer').style.display='none';}
+function toggleLike(){let liked=JSON.parse(localStorage.getItem('dornny_liked')||'[]');let idx=liked.indexOf(currentP.id);if(idx>-1){liked.splice(idx,1);currentP.likes--;}else{liked.push(currentP.id);currentP.likes++;}localStorage.setItem('dornny_liked',JSON.stringify(liked));localStorage.setItem('dornny_products_v2',JSON.stringify(products));document.getElementById('likeBtn').innerHTML=liked.includes(currentP.id)?'<i class="fa-solid fa-heart text-red-500"></i>':'<i class="fa-regular fa-heart"></i>';render();}
+function toggleFollow(){let follows=JSON.parse(localStorage.getItem('dornny_follows')||'[]');let idx=follows.indexOf(currentP.seller);if(idx>-1)follows.splice(idx,1);else{follows.push(currentP.seller);toast('Following '+currentP.seller);}localStorage.setItem('dornny_follows',JSON.stringify(follows));document.getElementById('followBtn').innerText=follows.includes(currentP.seller)?'✓ Following':'+ Follow';}
+function rateSeller(s){toast('⭐ Rated '+s+' stars!');document.getElementById('rateText').innerText='You rated '+s+' stars!';}
 function loadComments(){let all=JSON.parse(localStorage.getItem('dornny_comments')||'{}');let list=all[currentP.id]||[];document.getElementById('commentCount').innerText=list.length;document.getElementById('commentList').innerHTML=list.map(c=>`<div class="bg-[#f5f5f5] rounded-xl p-2"><p class="font-bold text-[11px]">${c.user}</p><p class="text-[11px]">${c.text}</p></div>`).join('')||'<p class="text-[10px] text-gray-400">No comments yet</p>';}
-function postComment(){let text=document.getElementById('commentInput').value.trim();if(!text)return;let all=JSON.parse(localStorage.getItem('dornny_comments')||'{}');all[currentP.id]=all[currentP.id]||[];all[currentP.id].push({user:user.shop,text:text,date:new Date().toLocaleTimeString()});localStorage.setItem('dornny_comments',JSON.stringify(all));document.getElementById('commentInput').value='';loadComments();toast('Comment posted!');}
-function shareProduct(){if(navigator.share){navigator.share({title:currentP.name,text:`${currentP.name} GH₵${currentP.price}`,url:location.href});}else{toast('Link copied!');}}
+function postComment(){let text=document.getElementById('commentInput').value.trim();if(!text)return;let all=JSON.parse(localStorage.getItem('dornny_comments')||'{}');all[currentP.id]=all[currentP.id]||[];all[currentP.id].push({user:user.shop,text:text});localStorage.setItem('dornny_comments',JSON.stringify(all));document.getElementById('commentInput').value='';loadComments();toast('Comment posted!');}
+function shareProduct(){if(navigator.share)navigator.share({title:currentP.name,text:`${currentP.name} GH₵${currentP.price}`,url:location.href});}
 function openVideos(){document.getElementById('videosPage').style.display='block';}function closeVideos(){document.getElementById('videosPage').style.display='none';}
-function openMe(){document.getElementById('mePage').style.display='block';document.getElementById('meShop').innerText=user?.shop||'My Shop';document.getElementById('meEmail').innerText=user?.email||user?.phone||'';let my=products.filter(p=>p.seller===user.shop);document.getElementById('myPostsGrid').innerHTML=my.map(p=>`<div class="bg-white rounded-xl overflow-hidden border"><img src="${p.imgs[0]}" class="w-full h-[100px] object-cover"><div class="p-2"><p class="text-[10px] font-bold truncate">${p.name}</p><p class="text-[9px]">GH₵${p.price}</p></div></div>`).join('')||'<p class="text-[11px] text-gray-400">No posts</p>';}
+function openMe(){document.getElementById('mePage').style.display='block';document.getElementById('meShop').innerText=user?.shop||'My Shop';document.getElementById('meEmail').innerText=user?.email||'';renderMyOrders();let my=products.filter(p=>p.seller===user.shop);document.getElementById('myPostsGrid').innerHTML=my.map(p=>`<div class="bg-white rounded-xl overflow-hidden border"><img src="${p.imgs[0]}" class="w-full h-[100px] object-cover"><div class="p-2"><p class="text-[10px] font-bold truncate">${p.name}</p><p class="text-[9px]">GH₵${p.price}</p></div></div>`).join('')||'<p class="text-[11px] text-gray-400">No posts</p>';}
 function closeMe(){document.getElementById('mePage').style.display='none';}
 function openSell(){document.getElementById('sellScreen').style.display='block';document.getElementById('upShopName').value=user.shop||'';}function closeSell(){document.getElementById('sellScreen').style.display='none';}
 function toggleUpSize(btn,size){btn.classList.toggle('size-active');if(selectedSizesUp.includes(size)){selectedSizesUp=selectedSizesUp.filter(s=>s!==size);}else{selectedSizesUp.push(size);}}
@@ -110,11 +230,112 @@ function handleGallery(e){uploadedImages=[];document.getElementById('previewImgs
 function uploadProduct(){let shopName=document.getElementById('upShopName').value.trim();let n=document.getElementById('upName').value.trim(),pr=parseInt(document.getElementById('upPrice').value),ca=document.getElementById('upCat').value,desc=document.getElementById('upDesc').value.trim()||'Quality';if(!shopName)return toast('Name shop *');if(!n||!pr)return toast('Name + price *');if(uploadedImages.length===0)return toast('Select images *');user.shop=shopName;localStorage.setItem('dornny_user',JSON.stringify(user));products.unshift({id:Date.now(),name:n,price:pr,cat:ca,imgs:uploadedImages,img:uploadedImages[0],seller:shopName,desc:desc,sizes:selectedSizesUp.length?selectedSizesUp:["M","L","XL"],stock:10,likes:0,rating:4.5});localStorage.setItem('dornny_products_v2',JSON.stringify(products));toast('✅ Uploaded');renderCats();render();closeSell();uploadedImages=[];}
 function navTo(){window.scrollTo(0,0);}
 function switchCamera(){currentFacingMode=currentFacingMode==='user'?'environment':'user';if(stream){stream.getTracks().forEach(t=>t.stop());}navigator.mediaDevices.getUserMedia({video:{facingMode:currentFacingMode},audio:true}).then(s=>{stream=s;document.getElementById('v').srcObject=s;document.getElementById('v').play();if(pc){let track=s.getVideoTracks()[0];let sender=pc.getSenders().find(x=>x.track&&x.track.kind==='video');if(sender)sender.replaceTrack(track);}toast('🔄 '+(currentFacingMode==='user'?'Front':'Back'));});}
-function listenLive(){db.collection('liveRooms').where('isLive','==',true).onSnapshot(s=>{let lives=s.docs.map(d=>({id:d.id,...d.data()}));let unique={};lives.forEach(l=>{let shop=(l.hostName||'').split('@')[0];if(!unique[shop])unique[shop]=l;});let filtered=Object.values(unique).slice(0,6);let bar=document.getElementById('liveNowSection');let list=document.getElementById('liveNowList');if(filtered.length===0){bar.classList.add('hidden');return;}bar.classList.remove('hidden');list.innerHTML=filtered.map(l=>{let shopName=l.hostName.includes('@')?'Danny shop':l.hostName;return `<div onclick="joinLive('${l.id}')" class="bg-[#222] rounded-xl p-2 min-w-[130px] border-2 border-red-500"><p class="text-red-500 text-[8px] font-bold">🔴 LIVE REAL VIDEO</p><div class="w-full h-[70px] bg-black rounded mt-1 flex items-center justify-center text-white text-[9px]">TAP TO WATCH<br>REAL VIDEO</div><p class="text-white text-[10px] font-bold truncate mt-1">${shopName}</p></div>`;}).join('');});}
+function listenLive(){db.collection('liveRooms').where('isLive','==',true).onSnapshot(s=>{let lives=s.docs.map(d=>({id:d.id,...d.data()}));let unique={};lives.forEach(l=>{let shop=(l.hostName||'').split('@')[0];if(!unique[shop])unique[shop]=l;});let filtered=Object.values(unique).slice(0,6);let bar=document.getElementById('liveNowSection');let list=document.getElementById('liveNowList');if(filtered.length===0){bar.classList.add('hidden');return;}bar.classList.remove('hidden');list.innerHTML=filtered.map(l=>{let shopName=l.hostName.includes('@')?'Danny shop':l.hostName;return `<div onclick="joinLive('${l.id}')" class="bg-[#222] rounded-xl p-2 min-w-[130px] border-2 border-red-500"><p class="text-red-500 text-[8px] font-bold">🔴 LIVE REAL VIDEO</p><div class="w-full h-[70px] bg-black rounded mt-1 flex items-center justify-center text-white text-[9px]">TAP TO WATCH</div><p class="text-white text-[10px] font-bold truncate mt-1">${shopName}</p></div>`;}).join('');});}
 async function startLive(){document.getElementById('liveRoom').style.display='block';document.getElementById('v').classList.remove('hidden');document.getElementById('viewerVideo').classList.add('hidden');currentFacingMode='user';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:currentFacingMode},audio:true});document.getElementById('v').srcObject=stream;await document.getElementById('v').play();pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});stream.getTracks().forEach(t=>pc.addTrack(t,stream));let docRef=await db.collection('liveRooms').add({hostName:user.shop,isLive:true,likes:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});currentLiveId=docRef.id;let offer=await pc.createOffer();await pc.setLocalDescription(offer);await docRef.update({offer:{type:offer.type,sdp:offer.sdp}});docRef.onSnapshot(async snap=>{let data=snap.data();if(data&&data.answer&&!pc.currentRemoteDescription){await pc.setRemoteDescription(new RTCSessionDescription(data.answer));}});pc.onicecandidate=e=>{if(e.candidate)docRef.collection('hostCandidates').add(e.candidate.toJSON());};docRef.collection('viewerCandidates').onSnapshot(s=>{s.docChanges().forEach(ch=>{if(ch.type==='added')pc.addIceCandidate(new RTCIceCandidate(ch.doc.data()));});});toast('🔴 LIVE - Real video broadcasting!');}catch(e){toast('Camera error: '+e.message);}}
 async function joinLive(id){document.getElementById('liveRoom').style.display='block';document.getElementById('v').classList.add('hidden');document.getElementById('viewerVideo').classList.remove('hidden');currentLiveId=id;let docRef=db.collection('liveRooms').doc(id);let snap=await docRef.get();if(!snap.exists){toast('Live ended');return;}let data=snap.data();pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});pc.ontrack=e=>{let viewer=document.getElementById('viewerVideo');viewer.srcObject=e.streams[0];viewer.play().then(()=>toast('✅ REAL VIDEO playing!'));};pc.onicecandidate=e=>{if(e.candidate)docRef.collection('viewerCandidates').add(e.candidate.toJSON());};await pc.setRemoteDescription(new RTCSessionDescription(data.offer));let answer=await pc.createAnswer();await pc.setLocalDescription(answer);await docRef.update({answer:{type:answer.type,sdp:answer.sdp}});docRef.collection('hostCandidates').onSnapshot(s=>{s.docChanges().forEach(ch=>{if(ch.type==='added')pc.addIceCandidate(new RTCIceCandidate(ch.doc.data()));});});toast('Joining REAL video...');}
 async function sendComment(){let i=document.getElementById('cInput');let t=i.value.trim();if(!t||!currentLiveId)return;await db.collection('liveRooms').doc(currentLiveId).collection('comments').add({user:user?.shop||'Guest',text:t,createdAt:firebase.firestore.FieldValue.serverTimestamp()});i.value='';}
 function closeLive(){if(stream)stream.getTracks().forEach(t=>t.stop());if(pc)pc.close();if(currentLiveId)db.collection('liveRooms').doc(currentLiveId).update({isLive:false}).catch(()=>{});document.getElementById('liveRoom').style.display='none';currentLiveId=null;}
-function checkout(){let total=cart.reduce((s,p)=>s+p.price*p.qty,0);if(!total)return toast('Cart empty');toast('Paid GH₵'+total+' - Order sent!');cart=[];render();closeCart();}
-(function(){let s=localStorage.getItem('dornny_user');if(s){user=JSON.parse(s);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');listenLive();renderCats();render();}renderCats();render();})();
+
+// CHECKOUT WITH BUYER INFO SAVED + DELIVERY FEE
+function checkout(){
+  let sub=cart.reduce((s,p)=>s+p.price*p.qty,0);
+  if(sub===0){toast('Cart empty');return;}
+  let name=document.getElementById('custName').value.trim();
+  let phone=document.getElementById('custPhone').value.trim();
+  let region=document.getElementById('custRegion').value;
+  let city=document.getElementById('custCity').value.trim();
+  let gps=document.getElementById('gpsAddress').value.trim();
+  let note=document.getElementById('deliveryNote').value.trim();
+  let momo=document.getElementById('momoNumber').value.trim();
+  if(!name||!phone||!city||!gps){toast('⚠️ Fill Name, Phone, City, GPS *');return;}
+  if(!momo){toast('Enter your MoMo *');return;}
+  saveBuyerInfo();
+  let deliveryFee=calcDelivery();
+  let total=sub+deliveryFee;
+  let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');
+  let orderId='DM-'+Date.now().toString().slice(-6);
+  let order={
+    id:orderId,
+    items:JSON.parse(JSON.stringify(cart)),
+    buyer:{name,phone,region,city,gps,note,momo},
+    subtotal:sub,
+    deliveryFee:deliveryFee,
+    total:total,
+    date:Date.now(),
+    dateString:new Date().toLocaleString(),
+    status:'Paid',
+    refund:null
+  };
+  orders.unshift(order);
+  localStorage.setItem('dornny_orders',JSON.stringify(orders));
+  document.getElementById('orderId').innerText=orderId;
+  document.getElementById('paidAmount').innerText='GH₵'+total;
+  document.getElementById('paidDelivery').innerText='GH₵'+deliveryFee+' ('+region+')';
+  document.getElementById('deliverTo').innerText=city+', '+region+' - '+gps;
+  document.getElementById('paidPhone').innerText=phone;
+  document.getElementById('welcomeScreen').style.display='flex';
+  cart=[];render();closeCart();
+}
+function continueShop(){document.getElementById('welcomeScreen').style.display='none';}
+function openMyOrders(){document.getElementById('mePage').style.display='block';renderMyOrders();}
+function doLogout(){localStorage.removeItem('dornny_user');location.reload();}
+
+// REFUND / REPORT WITH 3 DAYS RULE
+function renderMyOrders(){
+  let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');
+  document.getElementById('myOrdersList').innerHTML=orders.map(o=>{
+    let daysDiff=(Date.now()-o.date)/(1000*60*60*24);
+    let canRefund=daysDiff<=3;
+    let refundStatus=o.refund?`<p class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded-full mt-1">Refund: ${o.refund.reason} - ${o.refund.status}</p>`:'';
+    return `<div class="bg-white rounded-xl border p-3">
+      <div class="flex justify-between"><p class="font-black text-[12px]">${o.id}</p><span class="text-[9px] bg-green-100 text-green-700 px-2 py-1 rounded-full">${o.status}</span></div>
+      <p class="text-[10px] text-gray-500">${o.dateString} - ${o.buyer.region}, ${o.buyer.city}</p>
+      <p class="text-[10px] mt-1">${o.items.map(i=>i.name+' x'+i.qty).join(', ')}</p>
+      <p class="text-[11px] font-bold mt-1">Total GH₵${o.total} (Delivery GH₵${o.deliveryFee})</p>
+      ${refundStatus}
+      <div class="flex gap-2 mt-2">
+        ${canRefund&&!o.refund?`<button onclick="openRefund('${o.id}')" class="flex-1 bg-red-600 text-white py-2 rounded-full text-[10px] font-bold">Refund / Report</button>`:`${!canRefund?'<span class="flex-1 bg-gray-100 text-gray-500 py-2 rounded-full text-[10px] text-center">❌ 3 days passed - No refund</span>':''}`}
+        <button onclick="viewOrderLocation('${o.id}')" class="flex-1 border-2 border-black py-2 rounded-full text-[10px] font-bold">📍 Location</button>
+      </div>
+      <p class="text-[9px] text-gray-400 mt-1">${canRefund?`⏰ ${ (3-daysDiff).toFixed(1)} days left to refund/report`:'Refund window closed'}</p>
+    </div>`;
+  }).join('')||'<p class="text-[11px] text-gray-400 text-center py-6">No orders yet - Buy something!</p>';
+}
+function openRefund(orderId){
+  let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');
+  let order=orders.find(o=>o.id===orderId);
+  if(!order)return;
+  let daysDiff=(Date.now()-order.date)/(1000*60*60*24);
+  if(daysDiff>3){toast('❌ 3 days passed - We can\'t accept refund!');return;}
+  currentRefundOrder=orderId;
+  document.getElementById('refundOrderInfo').innerText=`Order ${orderId} - GH₵${order.total} - ${order.dateString} - ${daysDiff.toFixed(1)} days ago`;
+  document.getElementById('refundModal').style.display='flex';
+}
+function closeRefund(){document.getElementById('refundModal').style.display='none';}
+function submitRefund(){
+  let reason=document.getElementById('refundReason').value;
+  let desc=document.getElementById('refundDesc').value.trim();
+  if(!reason){toast('Select reason - Damage, Scam, Others *');return;}
+  if(desc.length<10){toast('Describe reason more - 10+ chars *');return;}
+  let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');
+  let idx=orders.findIndex(o=>o.id===currentRefundOrder);
+  if(idx===-1)return;
+  let daysDiff=(Date.now()-orders[idx].date)/(1000*60*60*24);
+  if(daysDiff>3){toast('❌ 3 days passed - Can\'t accept!');closeRefund();return;}
+  orders[idx].refund={reason:reason,description:desc,status:'Pending Review',date:Date.now(),dateString:new Date().toLocaleString()};
+  orders[idx].status='Refund Requested';
+  localStorage.setItem('dornny_orders',JSON.stringify(orders));
+  toast('✅ Refund/Report submitted! Reason: '+reason);
+  document.getElementById('refundReason').value='';
+  document.getElementById('refundDesc').value='';
+  closeRefund();
+  renderMyOrders();
+}
+function viewOrderLocation(orderId){
+  let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');
+  let o=orders.find(x=>x.id===orderId);
+  if(!o)return;
+  toast(`📍 ${o.buyer.name} - ${o.buyer.gps} - ${o.buyer.city}, ${o.buyer.region} - ${o.buyer.phone}`);
+}
+(function(){let s=localStorage.getItem('dornny_user');if(s){user=JSON.parse(s);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');listenLive();renderCats();render();loadBuyerInfo();}renderCats();render();})();
 </script></body></html>
