@@ -1,11 +1,12 @@
 {
-  "name": "Dornny Market - Amansan Dwaaso",
-  "short_name": "Dornny Market",
-  "description": "Ghana's #1 Online Market - Buy and Sell Anything in Ghana",
-  "start_url": "/dornny-store/",
+  "name": "Dornny Market",
+  "short_name": "Dornny",
+  "description": "Ghana's biggest marketplace - Buy and Sell Everything",
+  "start_url": "https://dwamenadanny5-creator.github.io/dornny-store/",
+  "scope": "https://dwamenadanny5-creator.github.io/dornny-store/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#f68b1e",
+  "theme_color": "#008000",
   "icons": [
     {
       "src": "icon-192.png",
