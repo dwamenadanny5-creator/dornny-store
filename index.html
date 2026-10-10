@@ -16,17 +16,19 @@
 <div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[40] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><div><b>Cart</b><p id="cartCount2" class="text-[11px]">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 border-b max-h-[25vh] overflow-y-auto"></div><div class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#fcfcfc]"><div class="bg-white border-2 border-black rounded-xl p-3 space-y-2"><input id="custName" placeholder="Full Name *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="custPhone" placeholder="Phone *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="custCity" placeholder="City *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="gpsAddress" placeholder="GPS *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><button onclick="getGPS()" class="w-full bg-black text-white py-2 rounded-full text-[10px]">📍 Get GPS</button></div></div><div class="p-4 border-t bg-white space-y-2 pb-[85px]"><div class="flex justify-between font-black text-[18px]"><span>Total</span><span id="totalPay">GH₵0</span></div><input id="momoNumber" placeholder="MoMo Number *" class="w-full border rounded-xl px-3 py-3 text-[12px] mt-2"><button onclick="checkout()" id="payBtn" class="w-full bg-black text-white py-4 rounded-full font-black text-[16px] mt-2">PAY NOW</button></div></div></div>
 <div id="videosPage" class="fixed inset-0 bg-black z-[40] hidden overflow-y-auto pb-[90px]"><div class="p-4 border-b flex gap-3 items-center sticky top-0 bg-black text-white z-20"><button onclick="closeVideos()" class="w-8 h-8 bg-white/20 rounded-full">←</button><b>📹 Live - Amansan dwaaso</b><button onclick="startLive()" class="ml-auto bg-red-600 px-4 py-2 rounded-full text-[11px] font-bold live-pulse">🔴 Go Live</button></div><div class="p-3"><div id="videosPastList" class="grid grid-cols-1 gap-3"></div></div></div>
 
-<!-- FIXED LIVE ROOM - COMMENT BAR ALWAYS VISIBLE ON TOP -->
+<!-- FIXED LIVE ROOM - SOUND ON + COMMENT VISIBLE -->
 <div id="liveRoom" class="fixed inset-0 bg-black z-[999] hidden"><div class="relative w-full h-full">
-<video id="v" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover bg-black"></video>
+<video id="v" autoplay playsinline class="absolute inset-0 w-full h-full object-cover bg-black"></video>
 <div class="absolute top-0 left-0 right-0 p-3 flex justify-between bg-gradient-to-b from-black/80 to-transparent z-20">
 <span class="bg-red-600 px-3 py-1.5 rounded-full text-[11px] text-white font-bold live-pulse">🔴 LIVE <span id="liveHostName">Amansan dwaaso</span></span>
+<div class="flex gap-2">
+<button onclick="toggleMute()" id="muteBtn" class="w-11 h-11 bg-black/70 text-white rounded-full font-bold border-2 border-white">🔊</button>
 <button onclick="closeLive()" class="w-11 h-11 bg-black/70 text-white rounded-full font-bold border-2 border-white">✕</button>
 </div>
+</div>
 <div id="liveComments" class="absolute left-3 right-3 bottom-[90px] max-h-[45vh] overflow-y-auto text-white text-[13px] space-y-2 z-20 p-2 pointer-events-none"></div>
-<!-- COMMENT BAR - FIXED POSITION ALWAYS ON TOP - NOT HIDDEN -->
 <div class="absolute left-0 right-0 bottom-0 bg-gradient-to-t from-black via-black/90 to-transparent p-3 pt-8 z-[1000] flex gap-2 items-center">
-<input id="cInput" placeholder="💬 Comment live... - Amansan dwaaso" class="flex-1 rounded-full px-5 h-[48px] text-[14px] bg-white border-2 border-black outline-none font-bold shadow-lg">
+<input id="cInput" placeholder="💬 Comment live..." class="flex-1 rounded-full px-5 h-[48px] text-[14px] bg-white border-2 border-black outline-none font-bold shadow-lg">
 <button onclick="sendComment()" class="bg-white w-[48px] h-[48px] rounded-full font-bold border-2 border-black flex items-center justify-center shadow-lg text-[18px]">✈️</button>
 <button onclick="closeLive()" class="bg-red-600 text-white px-4 h-[48px] rounded-full font-bold text-[12px] shadow-lg">END</button>
 </div>
@@ -100,7 +102,6 @@ function openMyGoods(){if(!user){toast('Login first');return;}let myProducts=pro
 function deleteProduct(id){openCustomConfirm('Delete this product?',()=>{products=products.filter(p=>p.id!==id);localStorage.setItem('dornny_products_v2', JSON.stringify(products));render(); openMyGoods(); updateNotifBadge();toast('🗑️ Deleted');});}
 function editProduct(id){let p=products.find(x=>x.id===id); if(!p) return;openSell();document.getElementById('upName').value=p.name;document.getElementById('upPrice').value=p.price;document.getElementById('upDesc').value=p.fullDesc||'';document.getElementById('upSizes').value=(p.sizes||[]).join(',');document.getElementById('upColors').value=(p.colors||[]).join(',');uploadedImages=p.imgs;document.getElementById('previewImgs').innerHTML=p.imgs.map(im=>`<img src="${im}" class="w-full h-20 object-cover rounded border">`).join('');products=products.filter(x=>x.id!==id);localStorage.setItem('dornny_products_v2', JSON.stringify(products));}
 function uploadProduct(){let shopName=document.getElementById('upShopName').value.trim();let n=document.getElementById('upName').value.trim();let pr=parseFloat(document.getElementById('upPrice').value);let ca=document.getElementById('upCat').value;let desc=document.getElementById('upDesc').value.trim();let sizesInput=document.getElementById('upSizes').value.trim();let colorsInput=document.getElementById('upColors').value.trim();if(!shopName||!n||!pr||uploadedImages.length===0){toast('Fill shop,name,price,images');return;}if(!desc){toast('Add description');return;}if(!sizesInput){toast('Choose size');return;}if(!colorsInput){toast('Choose color');return;}let sizes=sizesInput.split(',').map(s=>s.trim()).filter(Boolean);let colors=colorsInput.split(',').map(c=>c.trim()).filter(Boolean);let newProduct={id:Date.now(),name:n,price:pr,originalPrice:pr*5,cat:ca,imgs:[...uploadedImages],seller:shopName,desc:n,fullDesc:desc,specs:[`Shop: ${shopName}`,`Sizes: ${sizes.join(', ')}`,`Colors: ${colors.join(', ')}`],sizes:sizes,colors:colors,stock:12,likes:0,rating:4.75,sold:"Just uploaded"};products.unshift(newProduct);localStorage.setItem('dornny_products_v2',JSON.stringify(products));user.shop=shopName;localStorage.setItem('dornny_user',JSON.stringify(user));uploadedImages=[];selectedSizesSet.clear();selectedColorsSet.clear();document.getElementById('previewImgs').innerHTML='';document.getElementById('upName').value='';document.getElementById('upPrice').value='';document.getElementById('upDesc').value='';document.getElementById('upSizes').value='';document.getElementById('upColors').value='';document.querySelectorAll('.size-chip,.color-chip').forEach(b=>{b.classList.remove('bg-black','text-white','border-black');});renderCats();render();closeSell();navHome();setTimeout(()=>openDetail(newProduct.id),600);}
-function searchAccount(val){if(!val)return;document.getElementById('search').value=val;render();closeMe();navHome();}
 function openSellerChat(sellerName){if(!user){toast('Login first');return;}currentChatSeller=sellerName||currentChatSeller;document.getElementById('chatSellerName').innerText=currentChatSeller;document.getElementById('chatSellerImg').src=getShopProfile(currentChatSeller);document.getElementById('sellerChatModal').style.display='flex';renderChatMessages();}
 function closeSellerChat(){document.getElementById('sellerChatModal').style.display='none';}
 function messageCurrentSeller(){closeSellerPerf();setTimeout(()=>openSellerChat(currentChatSeller),200);}
@@ -124,30 +125,32 @@ function submitRating(){if(currentRating===0){toast('Tap stars');return;}let msg
 function closeMe(){document.getElementById('mePage').style.display='none'; setBottomActive('home');}
 function checkout(){let name=document.getElementById('custName').value.trim();let phone=document.getElementById('custPhone').value.trim();let city=document.getElementById('custCity').value.trim();let gps=document.getElementById('gpsAddress').value.trim();let momo=document.getElementById('momoNumber').value.trim();if(!name||!phone||!city||!gps||!momo){toast('Fill Name, Phone, City, GPS, MoMo');return;}if(cart.length===0){toast('Cart empty');return;}let total=0;cart.forEach(c=>{total+=Number(c.price);});let orderId='DM-'+Math.floor(100000+Math.random()*900000);let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');orders.unshift({id:orderId,total,items:[...cart],name,phone,city,gps,momo,dateString:new Date().toLocaleString()});localStorage.setItem('dornny_orders',JSON.stringify(orders));document.getElementById('orderId').innerText=orderId;document.getElementById('paidAmount').innerText='GH₵'+total;document.getElementById('welcomeScreen').style.display='flex';cart=[]; render();}
 function continueShop(){document.getElementById('welcomeScreen').style.display='none'; closeCart(); navHome();}
-
-// FIXED LIVE SYSTEM - COMMENT BAR NOT HIDDEN
 function renderLives(){let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');let homeList=document.getElementById('liveNowList');let homeSection=document.getElementById('liveNowSection');let topCount=document.getElementById('liveCountTop');let pastList=document.getElementById('videosPastList');if(lives.length>0){if(homeSection) homeSection.style.display='block';if(topCount) topCount.innerText=lives.length+' LIVE';if(homeList) homeList.innerHTML=lives.map(l=>`<div class="min-w-[150px] bg-[#1a1a1a] border border-red-900 rounded-xl p-3"><div class="flex items-center gap-1 text-[10px] text-red-500 font-bold"><span class="w-2 h-2 bg-red-600 rounded-full live-pulse"></span> LIVE</div><div class="text-[13px] font-bold mt-1 truncate text-white">${l.shop}</div><div class="text-[9px] text-gray-400">${l.time}</div><button onclick="joinLive('${l.shop}')" class="bg-red-600 text-white text-[11px] px-4 py-1 rounded-full mt-2 font-bold">JOIN</button></div>`).join('');if(pastList) pastList.innerHTML=lives.map(l=>`<div class="bg-[#1a1a1a] rounded-xl p-3 border border-red-900 flex gap-3 items-center"><div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center text-white font-bold">🔴</div><div class="flex-1"><p class="font-black text-white text-[14px]">${l.shop} - LIVE</p><p class="text-[10px] text-gray-400">${l.time}</p></div><button onclick="joinLive('${l.shop}')" class="bg-red-600 text-white px-4 py-2 rounded-full text-[11px] font-bold">JOIN</button></div>`).join('');} else {if(homeSection) homeSection.style.display='block';if(topCount) topCount.innerText='0 LIVE';if(homeList) homeList.innerHTML='<div class="text-[11px] text-white py-2">No LIVE now - Be first to Go Live! 🔴</div>';if(pastList) pastList.innerHTML='<div class="text-center py-20 text-white"><p class="text-[40px]">📹</p><p class="font-bold mt-2">No LIVE now</p><p class="text-[11px] text-gray-400 mt-1">Tap Go Live to start</p><button onclick="startLive()" class="mt-4 bg-red-600 text-white px-6 py-3 rounded-full font-bold">🔴 Go Live Now</button></div>';}}
 async function startLive(){
  if(!user){toast('Login first');return;}
- // HIDE BOTTOM MENU AND KOFI TO SHOW COMMENT BAR
  document.getElementById('bottomNav').style.display='none';
  document.getElementById('kofi-btn').style.display='none';
  document.getElementById('kofi-chat').style.display='none';
  try{
-  liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:true});
-  document.getElementById('v').srcObject=liveStream;
-  document.getElementById('liveHostName').innerText=user.shop;
+  liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:{echoCancellation:true, noiseSuppression:true, autoGainControl:true}});
+  let v=document.getElementById('v');
+  v.srcObject=liveStream;
+  v.muted=false;
+  v.volume=1.0;
+  await v.play();
+  document.getElementById('liveHostName').innerText=user.shop + ' 🔊';
+  document.getElementById('muteBtn').innerText='🔊';
   document.getElementById('liveRoom').style.display='block';
   document.getElementById('videosPage').style.display='none';
-  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">🔴 '+user.shop+' started LIVE - Amansan dwaaso</div>';
+  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">🔴 '+user.shop+' LIVE - Sound ON 🔊</div>';
   let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
   lives=lives.filter(l=>l.shop!==user.shop);
   lives.unshift({id:Date.now(),shop:user.shop,time:new Date().toLocaleTimeString()});
   localStorage.setItem('dornny_lives',JSON.stringify(lives));
   renderLives();
-  toast('🔴 You are LIVE! Comment bar is at bottom!');
+  toast('🔴 LIVE with SOUND ON 🔊');
  }catch(e){
-  toast('❌ Camera blocked but LIVE started: '+e.message);
+  toast('❌ Allow Mic + Camera: '+e.message);
   document.getElementById('liveRoom').style.display='block';
   document.getElementById('videosPage').style.display='none';
   document.getElementById('liveHostName').innerText=user?user.shop:'Guest';
@@ -160,17 +163,19 @@ async function startLive(){
 function joinLive(shopName){
  document.getElementById('bottomNav').style.display='none';
  document.getElementById('kofi-btn').style.display='none';
- document.getElementById('liveHostName').innerText=shopName;
+ let v=document.getElementById('v');
+ if(v.srcObject){ v.muted=false; v.volume=1; v.play(); }
+ document.getElementById('liveHostName').innerText=shopName + ' 🔊';
  document.getElementById('liveRoom').style.display='block';
  document.getElementById('videosPage').style.display='none';
- document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">Joined '+shopName+' LIVE - Say hi! 👋</div>';
+ document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">Joined '+shopName+' LIVE - Sound ON 🔊</div>';
 }
-function closeLive(){
- if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;}
- document.getElementById('liveRoom').style.display='none';
- document.getElementById('videosPage').style.display='block';
- document.getElementById('bottomNav').style.display='flex';
- document.getElementById('kofi-btn').style.display='flex';
+function closeLive(){if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;} document.getElementById('liveRoom').style.display='none';document.getElementById('videosPage').style.display='block';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofi-btn').style.display='flex';}
+function toggleMute(){
+ let v=document.getElementById('v');
+ let btn=document.getElementById('muteBtn');
+ if(v.muted || v.volume===0){ v.muted=false; v.volume=1; btn.innerText='🔊'; toast('🔊 Sound ON'); }
+ else { v.muted=true; btn.innerText='🔇'; toast('🔇 Sound OFF'); }
 }
 function sendComment(){
  let inp=document.getElementById('cInput'); let txt=inp.value.trim(); if(!txt)return;
@@ -180,7 +185,7 @@ function sendComment(){
  div.innerHTML='<span class="text-[#f68b1e]">'+(user?user.shop:'Guest')+':</span> '+txt;
  box.appendChild(div); box.scrollTop=box.scrollHeight; inp.value='';
  setTimeout(()=>{
-   let replies=['Nice! 🔥','How much? 💰','I want! 🛒','Amansan dwaaso! 🇬🇭','Location? 📍'];
+   let replies=['Nice! 🔥','How much? 💰','I want! 🛒','Amansan dwaaso! 🇬🇭'];
    let r=document.createElement('div');
    r.className='text-[12px] bg-white rounded-2xl px-4 py-2 w-fit max-w-[80%] text-black font-bold';
    r.innerHTML='<span class="text-red-600">Viewer:</span> '+replies[Math.floor(Math.random()*replies.length)];
@@ -193,8 +198,9 @@ let kofiOpen=false;
 function toggleKofi(){const c=document.getElementById('kofi-chat');kofiOpen=!kofiOpen;c.style.display=kofiOpen?'flex':'none';if(kofiOpen)document.getElementById('kofi-input').focus();}
 function sendKofi(){const inp=document.getElementById('kofi-input');const txt=inp.value.trim();if(!txt)return;addKofiMsg(txt,'user');inp.value='';document.getElementById('kofi-typing').style.display='block';setTimeout(()=>{document.getElementById('kofi-typing').style.display='none';autoKofiReply(txt);},800);}
 function addKofiMsg(t,w){const b=document.getElementById('kofi-msgs');const d=document.createElement('div');d.className='msg msg-'+w;d.innerHTML=w==='kofi'?'🤖 '+t:t;b.appendChild(d);b.scrollTop=b.scrollHeight;}
-function autoKofiReply(q){q=q.toLowerCase();let a='';if(q.includes('sell')||q.includes('upload'))a='To SELL: Tap Sell → Select 5 images → Name, Price, Description, Sizes, Colors → UPLOAD NOW!';else if(q.includes('buy')||q.includes('cart'))a='To BUY: Tap product → Add to Cart → Fill Name, Phone, City, GPS, MoMo → PAY NOW';else if(q.includes('gps'))a='📍 Get GPS: In Cart tap Get GPS button - auto-fills!';else if(q.includes('momo')||q.includes('pay'))a='MoMo: Enter MoMo Number in Cart then PAY NOW. Order DM-xxxx created!';else if(q.includes('live'))a='🔴 LIVE: Tap Live Video → Go Live → Your shop shows LIVE NOW on Home! Comment bar now fixed at bottom - not hidden!';else if(q.includes('report')||q.includes('scam'))a='🚨 Report: Me → Report Seller → Fill form → SEND to 0555258032 via WhatsApp!';else if(q.includes('contact')||q.includes('help'))a='📞 Assistance: 0555258032<br>Call / WhatsApp / Chat KOFI AI here 24/7!';else if(q.includes('hello')||q.includes('hi')||q.includes('akwaaba'))a='Akwaaba! 👋 Welcome to Dornny - Amansan dwaaso! How can I help?';else a=`"${q}" - I help with SELL, BUY, CART, GPS, MoMo, LIVE, REPORT!`;addKofiMsg(a,'kofi');}
+function autoKofiReply(q){q=q.toLowerCase();let a='';if(q.includes('sell'))a='To SELL: Tap Sell → Select 5 images → Name, Price, Description, Sizes, Colors → UPLOAD NOW!';else if(q.includes('buy')||q.includes('cart'))a='To BUY: Tap product → Add to Cart → Fill Name, Phone, City, GPS, MoMo → PAY NOW';else if(q.includes('gps'))a='📍 Get GPS: In Cart tap Get GPS - auto-fills!';else if(q.includes('momo')||q.includes('pay'))a='MoMo: Enter MoMo Number then PAY NOW. Order DM-xxxx created!';else if(q.includes('live'))a='🔴 LIVE: Tap Live Video → Go Live → Sound ON 🔊 Tap 🔊 button to mute/unmute. Comment bar at bottom fixed!';else if(q.includes('sound')||q.includes('mic'))a='🔊 Sound: Tap 🔊 button top-right in LIVE to turn ON/OFF. Allow microphone permission! Volume up phone!';else if(q.includes('report')||q.includes('scam'))a='🚨 Report: Me → Report Seller → SEND to 0555258032';else if(q.includes('hello')||q.includes('hi')||q.includes('akwaaba'))a='Akwaaba! 👋 Welcome to Dornny - Amansan dwaaso!';else a=`"${q}" - I help with SELL, BUY, LIVE 🔊, COMMENT, GPS, MoMo!`;addKofiMsg(a,'kofi');}
 (function(){let savedUser=localStorage.getItem('dornny_user');if(savedUser){user=JSON.parse(savedUser); document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden'); renderCats(); render(); updateNotifBadge(); loadProfilePic(); renderLives();} else {renderCats(); render(); renderLives();}if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}})();
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
