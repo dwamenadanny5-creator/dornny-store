@@ -15,25 +15,14 @@
 <div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[120px]"><div class="bg-white min-h-screen"><div class="relative bg-[#f8f8f8]"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-10 h-10 bg-white/80 rounded-full z-20 flex items-center justify-center font-bold">✕</button></div><div class="bg-white p-3"><div class="flex items-center gap-2 mt-2"><span id="dPrice" class="font-black text-[22px] text-[#ff3e3e]"></span><span id="dOriginalPrice" class="text-gray-400 text-[13px] line-through"></span></div><div class="mt-3"><p id="dTitleFull" class="text-[13px] font-bold"></p><div id="dSold" class="mt-2"></div></div><div class="mt-4 bg-[#f9f9f9] rounded-xl p-3 border"><p class="font-black text-[12px]">Description</p><p id="dFullDesc" class="text-[11px] text-gray-600 mt-2"></p><div id="dSpecs" class="mt-3 space-y-1 text-[11px]"></div></div><div id="detailSellerPerf" class="mt-3 bg-white border-2 border-black rounded-xl p-3"></div><div class="mt-3 flex gap-2"><button onclick="openReportModalWithSeller()" class="flex-1 bg-red-50 border-2 border-red-600 text-red-600 py-2.5 rounded-full text-[11px] font-bold">🚨 Report Seller</button><button onclick="openRateModal()" class="flex-1 bg-yellow-50 border-2 border-black py-2.5 rounded-full text-[11px] font-bold">⭐ Rate App</button></div></div><div class="fixed bottom-[75px] left-0 right-0 bg-white border-t-2 border-black p-2 flex gap-2 items-center z-[60]"><button onclick="openStorePerf()" class="w-12 h-12 bg-[#f2f2f2] rounded-full">🏪</button><button onclick="toggleLike()" class="w-12 h-12 bg-[#f2f2f2] rounded-full"><i class="fa-regular fa-heart"></i></button><button onclick="addCartDetailFixed()" class="flex-1 bg-black text-white py-3.5 rounded-full font-black text-[14px]">Add to Cart</button></div></div></div>
 <div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[40] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><div><b>Cart</b><p id="cartCount2" class="text-[11px]">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 border-b max-h-[25vh] overflow-y-auto"></div><div class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#fcfcfc]"><div class="bg-white border-2 border-black rounded-xl p-3 space-y-2"><input id="custName" placeholder="Full Name *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="custPhone" placeholder="Phone *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="custCity" placeholder="City *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="gpsAddress" placeholder="GPS *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><button onclick="getGPS()" class="w-full bg-black text-white py-2 rounded-full text-[10px]">📍 Get GPS</button></div></div><div class="p-4 border-t bg-white space-y-2 pb-[85px]"><div class="flex justify-between font-black text-[18px]"><span>Total</span><span id="totalPay">GH₵0</span></div><input id="momoNumber" placeholder="MoMo Number *" class="w-full border rounded-xl px-3 py-3 text-[12px] mt-2"><button onclick="checkout()" id="payBtn" class="w-full bg-black text-white py-4 rounded-full font-black text-[16px] mt-2">PAY NOW</button></div></div></div>
 <div id="videosPage" class="fixed inset-0 bg-black z-[40] hidden overflow-y-auto pb-[90px]"><div class="p-4 border-b flex gap-3 items-center sticky top-0 bg-black text-white z-20"><button onclick="closeVideos()" class="w-8 h-8 bg-white/20 rounded-full">←</button><b>📹 Live - Amansan dwaaso</b><button onclick="startLive()" class="ml-auto bg-red-600 px-4 py-2 rounded-full text-[11px] font-bold live-pulse">🔴 Go Live</button></div><div class="p-3"><div id="videosPastList" class="grid grid-cols-1 gap-3"></div></div></div>
-
-<!-- FIXED LIVE ROOM - SOUND ON + COMMENT VISIBLE -->
 <div id="liveRoom" class="fixed inset-0 bg-black z-[999] hidden"><div class="relative w-full h-full">
 <video id="v" autoplay playsinline class="absolute inset-0 w-full h-full object-cover bg-black"></video>
 <div class="absolute top-0 left-0 right-0 p-3 flex justify-between bg-gradient-to-b from-black/80 to-transparent z-20">
 <span class="bg-red-600 px-3 py-1.5 rounded-full text-[11px] text-white font-bold live-pulse">🔴 LIVE <span id="liveHostName">Amansan dwaaso</span></span>
-<div class="flex gap-2">
-<button onclick="toggleMute()" id="muteBtn" class="w-11 h-11 bg-black/70 text-white rounded-full font-bold border-2 border-white">🔊</button>
-<button onclick="closeLive()" class="w-11 h-11 bg-black/70 text-white rounded-full font-bold border-2 border-white">✕</button>
-</div>
-</div>
-<div id="liveComments" class="absolute left-3 right-3 bottom-[90px] max-h-[45vh] overflow-y-auto text-white text-[13px] space-y-2 z-20 p-2 pointer-events-none"></div>
-<div class="absolute left-0 right-0 bottom-0 bg-gradient-to-t from-black via-black/90 to-transparent p-3 pt-8 z-[1000] flex gap-2 items-center">
-<input id="cInput" placeholder="💬 Comment live..." class="flex-1 rounded-full px-5 h-[48px] text-[14px] bg-white border-2 border-black outline-none font-bold shadow-lg">
-<button onclick="sendComment()" class="bg-white w-[48px] h-[48px] rounded-full font-bold border-2 border-black flex items-center justify-center shadow-lg text-[18px]">✈️</button>
-<button onclick="closeLive()" class="bg-red-600 text-white px-4 h-[48px] rounded-full font-bold text-[12px] shadow-lg">END</button>
-</div>
+<div class="flex gap-2"><button onclick="toggleMute()" id="muteBtn" class="w-11 h-11 bg-black/70 text-white rounded-full font-bold border-2 border-white">🔊</button><button onclick="closeLive()" class="w-11 h-11 bg-black/70 text-white rounded-full font-bold border-2 border-white">✕</button></div>
+</div><div id="liveComments" class="absolute left-3 right-3 bottom-[90px] max-h-[45vh] overflow-y-auto text-white text-[13px] space-y-2 z-20 p-2"></div>
+<div class="absolute left-0 right-0 bottom-0 bg-gradient-to-t from-black via-black/90 to-transparent p-3 pt-8 z-[1000] flex gap-2 items-center"><input id="cInput" placeholder="💬 Comment live..." class="flex-1 rounded-full px-5 h-[48px] text-[14px] bg-white border-2 border-black outline-none font-bold shadow-lg"><button onclick="sendComment()" class="bg-white w-[48px] h-[48px] rounded-full font-bold border-2 border-black flex items-center justify-center shadow-lg text-[18px]">✈️</button><button onclick="closeLive()" class="bg-red-600 text-white px-4 h-[48px] rounded-full font-bold text-[12px] shadow-lg">END</button></div>
 </div></div>
-
 <div id="sellerPerfModal" class="fixed inset-0 bg-black/70 z-[70] hidden flex items-center justify-center p-3"><div class="bg-white rounded-[24px] w-full max-w-md p-5"><div class="flex justify-between"><p class="font-black" id="perfShopName">Seller</p><button onclick="closeSellerPerf()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div class="grid grid-cols-2 gap-3 mt-4"><div class="bg-[#f5f5f5] rounded-xl p-3"><p class="text-[10px]">Products</p><p class="font-black text-[20px]" id="perfProducts">0</p></div><div class="bg-[#f5f5f5] rounded-xl p-3"><p class="text-[10px]">Sales</p><p class="font-black text-[20px]" id="perfSales">0</p></div><div class="bg-[#f5f5f5] rounded-xl p-3"><p class="text-[10px]">Revenue</p><p class="font-black text-[16px] text-[#ff3e3e]" id="perfRevenue">GH₵0</p></div><div class="bg-[#f5f5f5] rounded-xl p-3"><p class="text-[10px]">Likes</p><p class="font-black text-[20px]" id="perfLikes">0</p></div></div><div class="grid grid-cols-2 gap-3 mt-4"><button onclick="messageCurrentSeller()" class="bg-black text-white py-3 rounded-full font-bold text-[12px]">💬 Message</button><button onclick="whatsappCurrentSeller()" class="bg-[#25D366] text-white py-3 rounded-full font-bold text-[12px]">WhatsApp</button></div><button onclick="openSellerStore(currentChatSeller)" class="w-full bg-[#f2f2f2] py-3 rounded-full font-bold mt-3">🏪 View All Goods</button></div></div>
 <div id="sellerChatModal" class="fixed inset-0 bg-black/70 z-[80] hidden flex items-end sm:items-center justify-center"><div class="bg-white w-full max-w-md h-[75vh] rounded-t-[24px] flex flex-col mb-[75px]"><div class="p-4 border-b flex justify-between items-center bg-black text-white rounded-t-[24px]"><div class="flex items-center gap-2"><img id="chatSellerImg" src="" class="w-8 h-8 rounded-full border object-cover"><div><p class="font-black text-[14px]" id="chatSellerName">Shop</p><p class="text-[10px] text-gray-300" id="chatProductName">Chat</p></div></div><button onclick="closeSellerChat()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div id="chatMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f5f5f5]"></div><div class="p-3 border-t-2 border-black bg-white flex gap-2 items-center"><input id="chatInput" type="text" placeholder="Type message..." class="flex-1 border-2 border-black rounded-full px-4 py-3 text-[13px] outline-none"><button onclick="sendSellerMessage()" class="bg-black text-white w-[48px] h-[48px] rounded-full font-black">➤</button></div></div></div>
 <div id="reportModal" class="fixed inset-0 bg-black/80 z-[99999] hidden flex items-end sm:items-center justify-center p-3"><div class="bg-white rounded-t-[24px] sm:rounded-[24px] w-full max-w-md max-h-[90vh] overflow-y-auto p-5 pb-[90px] sm:pb-5"><div class="flex justify-between items-center"><p class="font-black text-[16px]">🚨 Report Problem</p><button onclick="closeReportModal()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><select id="reportType" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-4 text-[12px] font-bold bg-white"><option value="Scam - Seller took money">Scam - Seller took money</option><option value="Fake product">Fake product</option><option value="Not delivered">Not delivered</option><option value="Other">Other</option></select><input id="reportSeller" placeholder="Seller shop name *" class="w-full border rounded-xl px-3 py-3 mt-3 text-[12px] font-bold"><input id="reportOrder" placeholder="Order ID (if any)" class="w-full border rounded-xl px-3 py-3 mt-2 text-[12px]"><textarea id="reportMessage" placeholder="Describe what happened..." class="w-full border-2 border-black rounded-xl px-3 py-3 mt-3 text-[12px] h-[100px] outline-none"></textarea><button onclick="submitReport()" class="w-full bg-red-600 text-white py-4 rounded-full mt-4 font-black text-[14px]">🚨 SEND TO 0555258032</button></div></div>
@@ -125,82 +114,103 @@ function submitRating(){if(currentRating===0){toast('Tap stars');return;}let msg
 function closeMe(){document.getElementById('mePage').style.display='none'; setBottomActive('home');}
 function checkout(){let name=document.getElementById('custName').value.trim();let phone=document.getElementById('custPhone').value.trim();let city=document.getElementById('custCity').value.trim();let gps=document.getElementById('gpsAddress').value.trim();let momo=document.getElementById('momoNumber').value.trim();if(!name||!phone||!city||!gps||!momo){toast('Fill Name, Phone, City, GPS, MoMo');return;}if(cart.length===0){toast('Cart empty');return;}let total=0;cart.forEach(c=>{total+=Number(c.price);});let orderId='DM-'+Math.floor(100000+Math.random()*900000);let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');orders.unshift({id:orderId,total,items:[...cart],name,phone,city,gps,momo,dateString:new Date().toLocaleString()});localStorage.setItem('dornny_orders',JSON.stringify(orders));document.getElementById('orderId').innerText=orderId;document.getElementById('paidAmount').innerText='GH₵'+total;document.getElementById('welcomeScreen').style.display='flex';cart=[]; render();}
 function continueShop(){document.getElementById('welcomeScreen').style.display='none'; closeCart(); navHome();}
-function renderLives(){let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');let homeList=document.getElementById('liveNowList');let homeSection=document.getElementById('liveNowSection');let topCount=document.getElementById('liveCountTop');let pastList=document.getElementById('videosPastList');if(lives.length>0){if(homeSection) homeSection.style.display='block';if(topCount) topCount.innerText=lives.length+' LIVE';if(homeList) homeList.innerHTML=lives.map(l=>`<div class="min-w-[150px] bg-[#1a1a1a] border border-red-900 rounded-xl p-3"><div class="flex items-center gap-1 text-[10px] text-red-500 font-bold"><span class="w-2 h-2 bg-red-600 rounded-full live-pulse"></span> LIVE</div><div class="text-[13px] font-bold mt-1 truncate text-white">${l.shop}</div><div class="text-[9px] text-gray-400">${l.time}</div><button onclick="joinLive('${l.shop}')" class="bg-red-600 text-white text-[11px] px-4 py-1 rounded-full mt-2 font-bold">JOIN</button></div>`).join('');if(pastList) pastList.innerHTML=lives.map(l=>`<div class="bg-[#1a1a1a] rounded-xl p-3 border border-red-900 flex gap-3 items-center"><div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center text-white font-bold">🔴</div><div class="flex-1"><p class="font-black text-white text-[14px]">${l.shop} - LIVE</p><p class="text-[10px] text-gray-400">${l.time}</p></div><button onclick="joinLive('${l.shop}')" class="bg-red-600 text-white px-4 py-2 rounded-full text-[11px] font-bold">JOIN</button></div>`).join('');} else {if(homeSection) homeSection.style.display='block';if(topCount) topCount.innerText='0 LIVE';if(homeList) homeList.innerHTML='<div class="text-[11px] text-white py-2">No LIVE now - Be first to Go Live! 🔴</div>';if(pastList) pastList.innerHTML='<div class="text-center py-20 text-white"><p class="text-[40px]">📹</p><p class="font-bold mt-2">No LIVE now</p><p class="text-[11px] text-gray-400 mt-1">Tap Go Live to start</p><button onclick="startLive()" class="mt-4 bg-red-600 text-white px-6 py-3 rounded-full font-bold">🔴 Go Live Now</button></div>';}}
+
+// FIXED LIVE - NO PLENTY FAKE, AUTO CLEAN
+function renderLives(){
+ let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
+ let now=Date.now();
+ lives=lives.filter(l=>{
+   if(!l.shop || l.shop==='undefined' || l.shop.includes('undefined') || l.shop.trim()==='') return false;
+   if(now - l.id > 3600000) return false;
+   return true;
+ });
+ localStorage.setItem('dornny_lives',JSON.stringify(lives));
+ let homeList=document.getElementById('liveNowList');
+ let homeSection=document.getElementById('liveNowSection');
+ let topCount=document.getElementById('liveCountTop');
+ let pastList=document.getElementById('videosPastList');
+ if(lives.length>0){
+  if(homeSection) homeSection.style.display='block';
+  if(topCount) topCount.innerText=lives.length+' LIVE';
+  if(homeList) homeList.innerHTML=lives.map(l=>`<div class="min-w-[150px] bg-[#1a1a1a] border border-red-900 rounded-xl p-3"><div class="flex items-center gap-1 text-[10px] text-red-500 font-bold"><span class="w-2 h-2 bg-red-600 rounded-full live-pulse"></span> LIVE</div><div class="text-[13px] font-bold mt-1 truncate text-white">${l.shop}</div><div class="text-[9px] text-gray-400">${l.time}</div><button onclick="joinLive('${l.shop}')" class="bg-red-600 text-white text-[11px] px-4 py-1 rounded-full mt-2 font-bold">JOIN</button></div>`).join('');
+  if(pastList) pastList.innerHTML=lives.map(l=>`<div class="bg-[#1a1a1a] rounded-xl p-3 border border-red-900 flex gap-3 items-center"><div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center text-white font-bold">🔴</div><div class="flex-1"><p class="font-black text-white text-[14px]">${l.shop} - LIVE</p><p class="text-[10px] text-gray-400">${l.time}</p></div><div class="flex gap-2"><button onclick="joinLive('${l.shop}')" class="bg-red-600 text-white px-4 py-2 rounded-full text-[11px] font-bold">JOIN</button><button onclick="endSpecificLive('${l.shop}')" class="bg-black border border-white text-white px-3 py-2 rounded-full text-[10px]">END</button></div></div>`).join('') + `<button onclick="clearAllLives()" class="w-full mt-4 bg-white text-black py-3 rounded-full font-bold text-[12px] border-2 border-black">🧹 Clear All Fake LIVE - Amansan dwaaso</button>`;
+ } else {
+  if(homeSection) homeSection.style.display='block';
+  if(topCount) topCount.innerText='0 LIVE';
+  if(homeList) homeList.innerHTML='<div class="text-[11px] text-white py-2">No LIVE now - Be first! 🔴</div>';
+  if(pastList) pastList.innerHTML='<div class="text-center py-20 text-white"><p class="text-[40px]">📹</p><p class="font-bold mt-2">No LIVE now</p><button onclick="startLive()" class="mt-4 bg-red-600 text-white px-6 py-3 rounded-full font-bold">🔴 Go Live Now</button><br><button onclick="clearAllLives()" class="mt-3 bg-white text-black px-6 py-2 rounded-full text-[12px]">🧹 Clear Fake Lives</button></div>';
+ }
+}
+function clearAllLives(){openCustomConfirm('Clear all LIVE?',()=>{localStorage.removeItem('dornny_lives');renderLives();toast('✅ Cleared');});}
+function endSpecificLive(shopName){let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');lives=lives.filter(l=>l.shop!==shopName);localStorage.setItem('dornny_lives',JSON.stringify(lives));renderLives();toast('Ended '+shopName);}
 async function startLive(){
  if(!user){toast('Login first');return;}
  document.getElementById('bottomNav').style.display='none';
  document.getElementById('kofi-btn').style.display='none';
  document.getElementById('kofi-chat').style.display='none';
- try{
-  liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:{echoCancellation:true, noiseSuppression:true, autoGainControl:true}});
-  let v=document.getElementById('v');
-  v.srcObject=liveStream;
-  v.muted=false;
-  v.volume=1.0;
-  await v.play();
-  document.getElementById('liveHostName').innerText=user.shop + ' 🔊';
-  document.getElementById('muteBtn').innerText='🔊';
-  document.getElementById('liveRoom').style.display='block';
-  document.getElementById('videosPage').style.display='none';
-  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">🔴 '+user.shop+' LIVE - Sound ON 🔊</div>';
-  let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
-  lives=lives.filter(l=>l.shop!==user.shop);
-  lives.unshift({id:Date.now(),shop:user.shop,time:new Date().toLocaleTimeString()});
-  localStorage.setItem('dornny_lives',JSON.stringify(lives));
-  renderLives();
-  toast('🔴 LIVE with SOUND ON 🔊');
- }catch(e){
-  toast('❌ Allow Mic + Camera: '+e.message);
-  document.getElementById('liveRoom').style.display='block';
-  document.getElementById('videosPage').style.display='none';
-  document.getElementById('liveHostName').innerText=user?user.shop:'Guest';
-  let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
-  lives.unshift({id:Date.now(),shop:user?user.shop:'Guest',time:new Date().toLocaleTimeString()});
-  localStorage.setItem('dornny_lives',JSON.stringify(lives));
-  renderLives();
- }
-}
-function joinLive(shopName){
- document.getElementById('bottomNav').style.display='none';
- document.getElementById('kofi-btn').style.display='none';
- let v=document.getElementById('v');
- if(v.srcObject){ v.muted=false; v.volume=1; v.play(); }
- document.getElementById('liveHostName').innerText=shopName + ' 🔊';
  document.getElementById('liveRoom').style.display='block';
  document.getElementById('videosPage').style.display='none';
- document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">Joined '+shopName+' LIVE - Sound ON 🔊</div>';
+ document.getElementById('liveHostName').innerText=user.shop + ' 🔊';
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:"user"},audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  liveStream=stream;
+  let v=document.getElementById('v');
+  v.srcObject=stream;
+  v.muted=false; v.volume=1; v.setAttribute('autoplay',''); v.setAttribute('playsinline','');
+  await v.play().catch(()=>{});
+  document.getElementById('muteBtn').innerText='🔊';
+  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-green-600 rounded-full px-4 py-2 w-fit text-white font-bold">🔴 LIVE - Camera ON ✅ Sound ON 🔊</div>';
+  toast('✅ Camera + Sound ON');
+ }catch(e){
+  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-red-600 rounded-full px-4 py-2 w-fit text-white">❌ '+e.message+'<br>Allow Camera+Mic</div>';
+  toast('❌ '+e.message);
+ }
+ let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
+ lives=lives.filter(l=>l.shop!==user.shop);
+ lives.unshift({id:Date.now(),shop:user.shop,time:new Date().toLocaleTimeString()});
+ localStorage.setItem('dornny_lives',JSON.stringify(lives));
+ renderLives();
 }
-function closeLive(){if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;} document.getElementById('liveRoom').style.display='none';document.getElementById('videosPage').style.display='block';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofi-btn').style.display='flex';}
-function toggleMute(){
- let v=document.getElementById('v');
- let btn=document.getElementById('muteBtn');
- if(v.muted || v.volume===0){ v.muted=false; v.volume=1; btn.innerText='🔊'; toast('🔊 Sound ON'); }
- else { v.muted=true; btn.innerText='🔇'; toast('🔇 Sound OFF'); }
+async function joinLive(shopName){
+ document.getElementById('bottomNav').style.display='none';
+ document.getElementById('kofi-btn').style.display='none';
+ document.getElementById('liveRoom').style.display='block';
+ document.getElementById('videosPage').style.display='none';
+ document.getElementById('liveHostName').innerText=shopName + ' 🔊';
+ try{
+  if(!liveStream){
+    const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+    liveStream=stream;
+  }
+  let v=document.getElementById('v');
+  v.srcObject=liveStream; v.muted=false; v.volume=1; await v.play().catch(()=>{});
+  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-black/70 rounded-full px-4 py-2 w-fit text-white">Joined '+shopName+' LIVE - Video ON ✅</div>';
+ }catch(e){
+  document.getElementById('liveComments').innerHTML='<div class="text-[12px] bg-red-600 rounded-full px-4 py-2 w-fit text-white">❌ Camera blocked: '+e.message+'</div>';
+ }
 }
-function sendComment(){
- let inp=document.getElementById('cInput'); let txt=inp.value.trim(); if(!txt)return;
- let box=document.getElementById('liveComments');
- let div=document.createElement('div');
- div.className='text-[13px] bg-black/70 rounded-2xl px-4 py-2 w-fit max-w-[85%] text-white font-bold border border-white/30 shadow';
- div.innerHTML='<span class="text-[#f68b1e]">'+(user?user.shop:'Guest')+':</span> '+txt;
- box.appendChild(div); box.scrollTop=box.scrollHeight; inp.value='';
- setTimeout(()=>{
-   let replies=['Nice! 🔥','How much? 💰','I want! 🛒','Amansan dwaaso! 🇬🇭'];
-   let r=document.createElement('div');
-   r.className='text-[12px] bg-white rounded-2xl px-4 py-2 w-fit max-w-[80%] text-black font-bold';
-   r.innerHTML='<span class="text-red-600">Viewer:</span> '+replies[Math.floor(Math.random()*replies.length)];
-   box.appendChild(r); box.scrollTop=box.scrollHeight;
- },1200);
+function closeLive(){
+ if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;}
+ let lives=JSON.parse(localStorage.getItem('dornny_lives')||'[]');
+ if(user){lives=lives.filter(l=>l.shop!==user.shop);} else {lives=[];}
+ localStorage.setItem('dornny_lives',JSON.stringify(lives));
+ document.getElementById('liveRoom').style.display='none';
+ document.getElementById('videosPage').style.display='block';
+ document.getElementById('bottomNav').style.display='flex';
+ document.getElementById('kofi-btn').style.display='flex';
+ renderLives();
+ toast('🔴 LIVE Ended - Deleted');
 }
+function toggleMute(){let v=document.getElementById('v');let btn=document.getElementById('muteBtn');if(v.muted || v.volume===0){v.muted=false;v.volume=1;btn.innerText='🔊';toast('🔊 Sound ON');} else {v.muted=true;btn.innerText='🔇';toast('🔇 Sound OFF');}}
+function sendComment(){let inp=document.getElementById('cInput'); let txt=inp.value.trim(); if(!txt)return;let box=document.getElementById('liveComments');let div=document.createElement('div');div.className='text-[13px] bg-black/70 rounded-2xl px-4 py-2 w-fit max-w-[85%] text-white font-bold border border-white/30 shadow';div.innerHTML='<span class="text-[#f68b1e]">'+(user?user.shop:'Guest')+':</span> '+txt;box.appendChild(div); box.scrollTop=box.scrollHeight; inp.value=''; setTimeout(()=>{let replies=['Nice! 🔥','How much? 💰','I want! 🛒','Amansan dwaaso! 🇬🇭'];let r=document.createElement('div');r.className='text-[12px] bg-white rounded-2xl px-4 py-2 w-fit max-w-[80%] text-black font-bold';r.innerHTML='<span class="text-red-600">Viewer:</span> '+replies[Math.floor(Math.random()*replies.length)];box.appendChild(r); box.scrollTop=box.scrollHeight;},1200);}
 function openLiveVideo(){closeAllPages();document.getElementById('videosPage').style.display='block';renderLives();setBottomActive('live');}
 function closeVideos(){document.getElementById('videosPage').style.display='none';setBottomActive('home');}
 let kofiOpen=false;
 function toggleKofi(){const c=document.getElementById('kofi-chat');kofiOpen=!kofiOpen;c.style.display=kofiOpen?'flex':'none';if(kofiOpen)document.getElementById('kofi-input').focus();}
 function sendKofi(){const inp=document.getElementById('kofi-input');const txt=inp.value.trim();if(!txt)return;addKofiMsg(txt,'user');inp.value='';document.getElementById('kofi-typing').style.display='block';setTimeout(()=>{document.getElementById('kofi-typing').style.display='none';autoKofiReply(txt);},800);}
 function addKofiMsg(t,w){const b=document.getElementById('kofi-msgs');const d=document.createElement('div');d.className='msg msg-'+w;d.innerHTML=w==='kofi'?'🤖 '+t:t;b.appendChild(d);b.scrollTop=b.scrollHeight;}
-function autoKofiReply(q){q=q.toLowerCase();let a='';if(q.includes('sell'))a='To SELL: Tap Sell → Select 5 images → Name, Price, Description, Sizes, Colors → UPLOAD NOW!';else if(q.includes('buy')||q.includes('cart'))a='To BUY: Tap product → Add to Cart → Fill Name, Phone, City, GPS, MoMo → PAY NOW';else if(q.includes('gps'))a='📍 Get GPS: In Cart tap Get GPS - auto-fills!';else if(q.includes('momo')||q.includes('pay'))a='MoMo: Enter MoMo Number then PAY NOW. Order DM-xxxx created!';else if(q.includes('live'))a='🔴 LIVE: Tap Live Video → Go Live → Sound ON 🔊 Tap 🔊 button to mute/unmute. Comment bar at bottom fixed!';else if(q.includes('sound')||q.includes('mic'))a='🔊 Sound: Tap 🔊 button top-right in LIVE to turn ON/OFF. Allow microphone permission! Volume up phone!';else if(q.includes('report')||q.includes('scam'))a='🚨 Report: Me → Report Seller → SEND to 0555258032';else if(q.includes('hello')||q.includes('hi')||q.includes('akwaaba'))a='Akwaaba! 👋 Welcome to Dornny - Amansan dwaaso!';else a=`"${q}" - I help with SELL, BUY, LIVE 🔊, COMMENT, GPS, MoMo!`;addKofiMsg(a,'kofi');}
+function autoKofiReply(q){q=q.toLowerCase();let a='';if(q.includes('sell'))a='To SELL: Tap Sell → Select 5 images → Name, Price, Description, Sizes, Colors → UPLOAD NOW!';else if(q.includes('buy')||q.includes('cart'))a='To BUY: Tap product → Add to Cart → Fill Name, Phone, City, GPS, MoMo → PAY NOW';else if(q.includes('live'))a='🔴 LIVE: Now fixed! No more plenty fake! When you END, LIVE deletes!';else if(q.includes('sound'))a='🔊 Sound: Allow Mic + Camera, tap 🔊 button top-right!';else if(q.includes('hello')||q.includes('hi'))a='Akwaaba! 👋 Dornny fixed!';else a=`"${q}" - I help with SELL, BUY, LIVE!`;addKofiMsg(a,'kofi');}
 (function(){let savedUser=localStorage.getItem('dornny_user');if(savedUser){user=JSON.parse(savedUser); document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden'); renderCats(); render(); updateNotifBadge(); loadProfilePic(); renderLives();} else {renderCats(); render(); renderLives();}if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}})();
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
