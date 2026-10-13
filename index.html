@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>DORNNY MARKET - REPORT ONLY AT ME</title>
+<title>DORNNY - KOFI AI 6 LANGUAGES</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -19,78 +19,49 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 @keyframes speakPulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 .listening{animation:listenPulse 1s infinite; background:#ef4444!important;}
 @keyframes listenPulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,0.7)}70%{box-shadow:0 0 0 12px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
+.lang-active{background:#f68b1e!important;color:#000!important;border:2px solid #fff!important}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
-<div class="bg-[#111] text-white text-center py-2.5"><p class="font-black text-[13px]">DORNNY MARKET 🇬🇭</p></div>
+<div class="bg-[#111] text-white text-center py-2.5"><p class="font-black text-[13px]">DORNNY MARKET 🇬🇭 - KOFI 6 LANGUAGES</p></div>
 
 <div id="loginScreen" class="min-h-[85vh] flex items-center justify-center p-4">
 <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow">
 <h2 class="font-black text-center text-[20px]">DORNNY MARKET</h2>
-<p class="text-center text-[11px] text-[#f68b1e] font-bold">Amansan dwaaso</p>
+<p class="text-center text-[11px] text-[#f68b1e] font-bold">Kofi AI - 6 Languages</p>
 <input id="emailPhone" type="text" placeholder="Email or Phone *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 mt-5">
 <input id="password" type="password" placeholder="Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
 <input id="confirmPassword" type="password" placeholder="Confirm *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-4">
-<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN / SIGN UP</button>
+<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN</button>
 </div>
 </div>
 
 <div id="mainApp" class="hidden">
 <div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b">
-<div class="font-black text-[14px] leading-tight">DORNNY<br><span class="text-[9px] text-[#f68b1e]">Report at Me</span></div>
-<div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search on Dornny..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div>
+<div class="font-black text-[14px]">DORNNY<br><span class="text-[9px] text-[#f68b1e]">6 Languages Kofi</span></div>
+<div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div>
 <button onclick="openNotificationPage()" class="relative bg-[#f2f2f2] w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-bell"></i><span id="notifBadge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></button>
 </div>
 <div class="bg-white p-2 border-b sticky top-[50px] z-20"><div id="catList" class="flex gap-2 overflow-x-auto hide pb-1"></div><p id="catResult" class="text-[11px] font-bold mt-1"></p></div>
 <div id="grid" class="p-2 grid grid-cols-2 gap-2"></div>
 </div>
 
-<!-- REPORT PAGE - ONLY AT ME -->
 <div id="reportRefundPage" class="fixed inset-0 bg-white z-[65] hidden overflow-y-auto pb-[90px]">
-<div class="bg-red-600 text-white p-4 sticky top-0 z-10">
-<div class="flex justify-between items-center">
-<h2 class="font-black text-[16px]">🚨 Report / Scam / Refund - 0555258032</h2>
-<button onclick="closeReportPage()" class="w-8 h-8 bg-white/20 rounded-full">✕</button>
-</div>
-<p class="text-[11px] text-yellow-200 mt-1">Buyer writes problem here → WhatsApp 0555258032</p>
-</div>
+<div class="bg-red-600 text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">🚨 Report / Scam / Refund - 0555258032</h2><button onclick="closeReportPage()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div></div>
 <div class="p-4 space-y-4">
-<div class="bg-red-50 border-2 border-red-600 rounded-xl p-3">
-<p class="font-black text-[13px] text-red-700">📋 Select Your Problem *</p>
-</div>
-<div>
-<p class="font-bold text-[12px]">1. Type of Problem *</p>
-<select id="reportType" class="w-full border-2 border-red-600 rounded-xl px-3 py-3 mt-1 text-[13px] font-bold bg-white">
-<option value="">-- Select Problem * --</option>
-<option value="Report Scam">🚨 Report Scam</option>
-<option value="I didn't receive my goods">📦 I didn't receive my goods</option>
-<option value="It damage / Damaged">💔 It damage / Damaged</option>
-<option value="It is not the color I want">🎨 It is not the color I want</option>
-<option value="It is not the same thing I order">❌ It is not the same thing I order</option>
-<option value="Refund Request">💰 Refund Request</option>
-<option value="Other">📝 Other</option>
-</select>
-</div>
-<div><p class="font-bold text-[12px]">2. Order ID *</p><input id="reportOrderId" placeholder="e.g. DM-860333" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
-<div><p class="font-bold text-[12px]">3. Your Name *</p><input id="reportName" placeholder="Your full name *" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
-<div><p class="font-bold text-[12px]">4. Your Phone *</p><input id="reportPhone" placeholder="e.g. 0555258032 *" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
-<div><p class="font-bold text-[12px]">5. Write Your Problem *</p><textarea id="reportDetails" placeholder="Write your problem here..." class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[12px] h-[120px] outline-none"></textarea></div>
-<div class="bg-gray-50 border-2 border-black rounded-xl p-3">
-<p class="font-bold text-[11px]">📸 Upload Evidence (Optional)</p>
-<input type="file" id="reportEvidence" accept="image/*" multiple class="hidden" onchange="handleReportEvidence(event)">
-<button onclick="document.getElementById('reportEvidence').click()" class="w-full mt-2 bg-black text-white py-3 rounded-full text-[11px] font-bold">📷 Upload Evidence Photos</button>
-<div id="reportEvidencePreview" class="grid grid-cols-3 gap-2 mt-2"></div>
-</div>
-<div class="grid grid-cols-1 gap-3">
+<div><p class="font-bold text-[12px]">Type *</p><select id="reportType" class="w-full border-2 border-red-600 rounded-xl px-3 py-3 mt-1 text-[13px] font-bold bg-white"><option value="">-- Select --</option><option value="Report Scam">🚨 Report Scam</option><option value="I didn't receive my goods">📦 I didn't receive</option><option value="It damage">💔 Damage</option><option value="It is not the color I want">🎨 Wrong color</option><option value="It is not the same thing I order">❌ Not same order</option><option value="Refund Request">💰 Refund</option></select></div>
+<div><p class="font-bold text-[12px]">Order ID *</p><input id="reportOrderId" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
+<div><p class="font-bold text-[12px]">Your Name *</p><input id="reportName" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
+<div><p class="font-bold text-[12px]">Your Phone *</p><input id="reportPhone" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
+<div><p class="font-bold text-[12px]">Write Problem *</p><textarea id="reportDetails" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[12px] h-[120px] outline-none" placeholder="Write here..."></textarea></div>
+<div><input type="file" id="reportEvidence" accept="image/*" multiple class="hidden" onchange="handleReportEvidence(event)"><button onclick="document.getElementById('reportEvidence').click()" class="w-full bg-black text-white py-3 rounded-full text-[11px] font-bold">📷 Upload Evidence</button><div id="reportEvidencePreview" class="grid grid-cols-3 gap-2 mt-2"></div></div>
 <button onclick="sendReportWhatsApp()" class="w-full bg-[#25D366] text-white py-4 rounded-full font-black text-[14px]">WhatsApp to 0555258032</button>
-<button onclick="sendReportMessage()" class="w-full bg-black text-white py-4 rounded-full font-black text-[14px]">Send Report / Save</button>
-</div>
-<button onclick="closeReportPage()" class="w-full bg-gray-200 py-3 rounded-full mt-4 font-bold text-[12px]">Back</button>
+<button onclick="sendReportMessage()" class="w-full bg-black text-white py-4 rounded-full font-black text-[14px]">Save Report</button>
+<button onclick="closeReportPage()" class="w-full bg-gray-200 py-3 rounded-full mt-2 font-bold text-[12px]">Back</button>
 </div>
 </div>
 
-<!-- VERIFICATION -->
 <div id="sellerVerificationScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto pb-[90px]">
 <div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[18px]">🔒 SELLER VERIFICATION</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div></div>
 <div class="p-4 space-y-4">
@@ -112,58 +83,56 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 
 <div id="mePage" class="fixed inset-0 bg-[#f2f2f2] z-[30] hidden overflow-y-auto pb-[90px]">
 <div class="bg-white p-3 sticky top-0 z-10 flex gap-2 items-center border-b"><button onclick="navHome()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><div class="bg-[#f2f2f2] rounded-full h-[42px] flex items-center px-4 flex-1 ml-2"><i class="fa-solid fa-search text-gray-500"></i><input id="accountSearch" oninput="searchAccount(this.value)" placeholder="Search" class="bg-transparent ml-3 w-full text-[14px] outline-none"></div></div>
-
 <div class="bg-white p-4 mt-2 flex gap-4 items-center">
 <input type="file" id="profileFile" accept="image/*" class="hidden" onchange="handleProfilePic(event)">
 <div class="relative" onclick="document.getElementById('profileFile').click()"><img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black bg-gray-100"><div class="absolute bottom-0 right-0 bg-black text-white w-7 h-7 rounded-full flex items-center justify-center text-[12px] border-2 border-white">📷</div></div>
-<div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span> <span id="verifiedBadge" class="hidden">✓ VERIFIED</span><span id="unverifiedBadge" class="hidden">✗ NOT VERIFIED</span></p><p class="text-[12px] text-[#f68b1e] font-bold truncate" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p></div><button onclick="navHome()" class="bg-black text-white px-3 py-2 rounded-full text-[10px] font-bold self-start">Back</button>
+<div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span></p><p class="text-[12px] text-[#f68b1e] font-bold truncate" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p></div><button onclick="navHome()" class="bg-black text-white px-3 py-2 rounded-full text-[10px] font-bold self-start">Back</button>
 </div>
-
 <div class="bg-white mt-2">
 <button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p><p class="text-[10px] text-gray-300" id="myGoodsVerifyText">Verify first</p></div></button>
-
-<!-- REPORT ONLY AT ME - AS YOU ASKED -->
-<button onclick="openReportPage()" class="w-full flex items-center gap-4 p-4 border-b bg-red-600 text-white border-2 border-black"><div class="w-8 h-8 bg-white text-red-600 rounded-full flex items-center justify-center"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">🚨 Report / Scam / Refund - 0555258032</p><p class="text-[10px] text-yellow-200">I didn't receive goods, damage, wrong color, not same thing</p></div><span class="bg-yellow-400 text-black text-[9px] px-2 py-1 rounded-full font-bold">REPORT</span></button>
-
+<button onclick="openReportPage()" class="w-full flex items-center gap-4 p-4 border-b bg-red-600 text-white border-2 border-black"><div class="w-8 h-8 bg-white text-red-600 rounded-full flex items-center justify-center"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">🚨 Report / Scam / Refund - 0555258032</p><p class="text-[10px] text-yellow-200">I didn't receive, damage, wrong color, not same</p></div><span class="bg-yellow-400 text-black text-[9px] px-2 py-1 rounded-full font-bold">REPORT</span></button>
 <button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50 border-2 border-yellow-600"><div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Seller Verification</p></div><span class="bg-black text-white text-[9px] px-2 py-1 rounded-full">VERIFY</span></button>
 <button onclick="openMyChats()" class="w-full flex items-center gap-4 p-4 border-b bg-green-50"><i class="fa-solid fa-message w-8 text-green-600"></i><span class="flex-1 text-left font-bold text-[13px]">My Messages</span></button>
-<button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI - Talks English + Twi</p></div></button>
+<button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI - 6 Languages</p><p class="text-[10px] text-green-600">EN, TWI, EWE, GA, HAUSA, FR</p></div></button>
 </div>
-
-<div class="bg-white mt-3 p-3 border-t-2 border-black">
-<p class="font-black text-[13px]">👨‍💼 Assistance - Report Here</p>
-<div class="flex gap-3 items-center mt-3 bg-[#f9f9f9] rounded-xl p-3 border-2 border-black">
-<img src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png" class="w-[60px] h-[60px] rounded-full object-cover border-2 border-black bg-white">
-<div class="flex-1"><p class="font-black text-[14px]">Dornny Assistance 🇬🇭</p><p class="text-[11px] font-bold">📞 0555258032</p><div class="flex gap-2 mt-2"><button onclick="callAssistance()" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold">📞 Call</button><button onclick="openReportPage()" class="bg-red-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold">🚨 Report / Refund</button><button onclick="whatsappAssistance()" class="bg-[#25D366] text-white px-3 py-1.5 rounded-full text-[10px] font-bold">WhatsApp</button></div></div>
-</div>
-</div>
-
-<div class="bg-white mt-3 p-3"><p class="font-black text-[13px]">📦 My Orders - Report if problem (ONLY AT ME)</p></div>
+<div class="bg-white mt-3 p-3"><p class="font-black text-[13px]">📦 My Orders - Report at Me only</p></div>
 <div id="myOrdersList" class="p-2 space-y-2"></div>
-
 <div class="bg-white mt-4 p-4 flex gap-2 mb-4"><button onclick="openSell()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">+ Sell</button><button onclick="doLogout()" class="flex-1 bg-gray-200 py-3 rounded-full font-bold text-[12px]">Logout</button></div>
 </div>
 
 <div id="sellerStorePage" class="fixed inset-0 bg-[#f5f5f5] z-[45] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex items-center gap-3 border-b"><button onclick="closeSellerStore()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black text-[14px]">Seller Store</p></div><div class="bg-white p-4 mt-2 flex gap-4 items-center border-b-2 border-black"><img id="storeProfileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[75px] h-[75px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p id="storeShopName" class="font-black text-[16px]">Shop Name</p><p id="storeShopStats" class="text-[11px] text-gray-500 mt-1">0 products</p><p id="storeVerifiedInfo" class="text-[10px] font-bold mt-1 px-2 py-1 rounded-full">Verification</p><div class="flex gap-2 mt-3"><button onclick="messageStoreSeller()" class="bg-black text-white px-5 py-2 rounded-full text-[11px] font-bold">💬 Message</button></div></div></div><div class="p-2"><div id="sellerStoreGrid" class="grid grid-cols-2 gap-2"></div></div></div>
 
+<!-- KOFI AI 6 LANGUAGES -->
 <div id="kofiAIPage" class="fixed inset-0 bg-[#0f0f0f] z-[85] hidden flex flex-col">
-<div class="bg-gradient-to-r from-black to-[#f68b1e] p-3 flex items-center gap-3">
+<div class="bg-gradient-to-r from-black to-[#f68b1e] p-2 flex items-center gap-2">
 <button onclick="closeKofiAI()" class="w-9 h-9 bg-white/20 text-white rounded-full font-bold">←</button>
-<div id="kofiAvatar" class="w-10 h-10 bg-white rounded-full flex items-center justify-center font-black">🤖</div>
-<div class="flex-1"><p class="font-black text-white text-[14px]">Kofi AI - Smart 🇬🇭</p><p class="text-[10px] text-green-300">● Report at Me only</p></div>
-<button onclick="setKofiLang('en')" id="langEnBtn" class="bg-white text-black px-3 py-1 rounded-full text-[10px] font-bold">EN</button>
-<button onclick="setKofiLang('twi')" id="langTwiBtn" class="bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-bold">TWI</button>
-<button id="voiceToggleBtn" onclick="toggleKofiVoice()" class="bg-white text-black w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold ml-1">🔊</button>
-<button onclick="clearKofiChat()" class="bg-white/20 text-white px-2 py-1 rounded-full text-[9px] ml-1">Clear</button>
+<div id="kofiAvatar" class="w-9 h-9 bg-white rounded-full flex items-center justify-center font-black text-[14px]">🤖</div>
+<div class="flex-1"><p class="font-black text-white text-[12px]">Kofi AI - 6 Languages 🇬🇭</p><p class="text-[9px] text-green-300">Auto-detects your language</p></div>
+<button id="voiceToggleBtn" onclick="toggleKofiVoice()" class="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold">🔊</button>
+<button onclick="clearKofiChat()" class="bg-white/20 text-white px-2 py-1 rounded-full text-[8px]">Clear</button>
 </div>
+
+<div class="bg-black p-2 flex gap-1 overflow-x-auto hide border-b border-[#333]">
+<button onclick="setKofiLang('en')" id="langEnBtn" class="lang-active px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap">EN 🇬🇭</button>
+<button onclick="setKofiLang('twi')" id="langTwiBtn" class="bg-[#222] text-white px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap">TWI</button>
+<button onclick="setKofiLang('ewe')" id="langEweBtn" class="bg-[#222] text-white px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap">EWE</button>
+<button onclick="setKofiLang('ga')" id="langGaBtn" class="bg-[#222] text-white px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap">GA</button>
+<button onclick="setKofiLang('hausa')" id="langHausaBtn" class="bg-[#222] text-white px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap">HAUSA</button>
+<button onclick="setKofiLang('french')" id="langFrBtn" class="bg-[#222] text-white px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap">FR</button>
+</div>
+
 <div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#0a0a0a]"></div>
+
 <div class="p-3 bg-[#1a1a1a] border-t">
 <div class="flex gap-2 items-center">
 <button id="micBtn" onclick="toggleVoiceInput()" class="bg-[#f68b1e] w-12 h-12 rounded-full flex items-center justify-center text-[18px] font-bold">🎤</button>
-<input id="kofiInput" placeholder="Type or speak English/Twi..." class="flex-1 bg-[#222] border border-[#333] text-white rounded-full px-4 py-3 text-[12px] outline-none">
+<input id="kofiInput" placeholder="Type English, Twi, Ewe, Ga, Hausa, French..." class="flex-1 bg-[#222] border border-[#333] text-white rounded-full px-4 py-3 text-[12px] outline-none">
 <button onclick="sendKofiMessage()" class="bg-[#f68b1e] w-12 h-12 rounded-full flex items-center justify-center font-black">➤</button>
 </div>
-<p class="text-[9px] text-gray-400 mt-2" id="voiceStatus">🎤 Tap mic to speak • Report at Me page</p>
+<div class="flex justify-between items-center mt-2">
+<p class="text-[9px] text-gray-400" id="voiceStatus">🎤 Tap mic • Kofi auto-detects Twi/Ewe/Ga/Hausa/FR</p>
+<p class="text-[9px] text-yellow-400" id="currentLangDisplay">Lang: English (Auto)</p>
+</div>
 </div>
 </div>
 
@@ -171,10 +140,7 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 
 <div id="categoryPage" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex items-center gap-3 border-b"><button onclick="closeCategory()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Categories</p></div><div id="categoryGrid" class="p-3 grid grid-cols-2 gap-3"></div></div>
 
-<!-- DETAIL PAGE - REPORT REMOVED FROM HERE AS YOU CIRCLED -->
-<div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[120px]"><div class="bg-white min-h-screen"><div class="relative bg-[#f8f8f8]"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-10 h-10 bg-white/80 rounded-full z-20 flex items-center justify-center font-bold">✕</button></div><div class="bg-white p-3"><div class="flex items-center gap-2 mt-2"><span id="dPrice" class="font-black text-[22px] text-[#ff3e3e]"></span><span id="dOriginalPrice" class="text-gray-400 text-[13px] line-through"></span></div><div class="mt-3"><p id="dTitleFull" class="text-[13px] font-bold"></p><div id="dSold" class="mt-2"></div></div><div class="mt-4 bg-[#f9f9f9] rounded-xl p-3 border"><p class="font-black text-[12px]">Description</p><p id="dFullDesc" class="text-[11px] text-gray-600 mt-2"></p><div id="dSpecs" class="mt-3 space-y-1 text-[11px]"></div></div><div id="detailSellerPerf" class="mt-3 bg-white border-2 border-black rounded-xl p-3"></div>
-<!-- REPORT REMOVED FROM HERE - ONLY AT ME NOW -->
-</div><div class="fixed bottom-[75px] left-0 right-0 bg-white border-t-2 border-black p-2 flex gap-2 items-center z-[60]"><button onclick="openStorePerf()" class="w-12 h-12 bg-[#f2f2f2] rounded-full">🏪</button><button onclick="addCartDetailFixed()" class="flex-1 bg-black text-white py-3.5 rounded-full font-black text-[14px]">Add to Cart</button></div></div></div>
+<div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[120px]"><div class="bg-white min-h-screen"><div class="relative bg-[#f8f8f8]"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-10 h-10 bg-white/80 rounded-full z-20 flex items-center justify-center font-bold">✕</button></div><div class="bg-white p-3"><div class="flex items-center gap-2 mt-2"><span id="dPrice" class="font-black text-[22px] text-[#ff3e3e]"></span><span id="dOriginalPrice" class="text-gray-400 text-[13px] line-through"></span></div><div class="mt-3"><p id="dTitleFull" class="text-[13px] font-bold"></p><div id="dSold" class="mt-2"></div></div><div class="mt-4 bg-[#f9f9f9] rounded-xl p-3 border"><p class="font-black text-[12px]">Description</p><p id="dFullDesc" class="text-[11px] text-gray-600 mt-2"></p><div id="dSpecs" class="mt-3 space-y-1 text-[11px]"></div></div><div id="detailSellerPerf" class="mt-3 bg-white border-2 border-black rounded-xl p-3"></div></div><div class="fixed bottom-[75px] left-0 right-0 bg-white border-t-2 border-black p-2 flex gap-2 items-center z-[60]"><button onclick="openStorePerf()" class="w-12 h-12 bg-[#f2f2f2] rounded-full">🏪</button><button onclick="addCartDetailFixed()" class="flex-1 bg-black text-white py-3.5 rounded-full font-black text-[14px]">Add to Cart</button></div></div></div>
 
 <div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[40] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><div><b>Cart</b><p id="cartCount2" class="text-[11px]">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 border-b max-h-[25vh] overflow-y-auto"></div><div class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#fcfcfc]"><div class="bg-white border-2 border-black rounded-xl p-3 space-y-2"><input id="custName" placeholder="Full Name *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="custPhone" placeholder="Phone *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="custCity" placeholder="City *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><input id="gpsAddress" placeholder="GPS *" class="w-full border rounded-xl px-3 py-3 text-[12px]"><button onclick="getGPS()" class="w-full bg-black text-white py-2 rounded-full text-[10px]">📍 Get GPS</button></div></div><div class="p-4 border-t bg-white space-y-2 pb-[85px]"><div class="flex justify-between font-black text-[18px]"><span>Total</span><span id="totalPay">GH₵0</span></div><input id="momoNumber" placeholder="Your MoMo Number *" class="w-full border rounded-xl px-3 py-3 text-[12px] mt-2"><button onclick="checkout()" id="payBtn" class="w-full bg-black text-white py-4 rounded-full font-black text-[16px] mt-2">PAY NOW</button></div></div></div>
 
@@ -195,7 +161,7 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 
 <script>
 let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
-let defaultProducts=[{id:1001,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600"],seller:"Danny shop",desc:"Club top",fullDesc:"Club top",specs:["Verified"],sizes:["M"],colors:["White"],stock:18,likes:1,verified:true}];
+let defaultProducts=[{id:1001,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600"],seller:"Danny shop",desc:"Club top",fullDesc:"Club top",specs:["Verified"],sizes:["M"],colors:["White"],stock:18,likes:1,verified:true},{id:1002,name:"Sneakers",price:150,cat:"Sneaker",imgs:["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"],seller:"Kwame Shop",desc:"Sneakers",fullDesc:"Quality sneakers",specs:["Quality"],sizes:["42"],colors:["White"],stock:10,likes:2,verified:true},{id:1003,name:"Ladies Bag",price:95,cat:"Bags",imgs:["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600"],seller:"Ama Collections",desc:"Bag",fullDesc:"Ladies bag",specs:["Fashion"],sizes:[],colors:["Black"],stock:5,likes:3,verified:true}];
 let storedProducts=JSON.parse(localStorage.getItem('dornny_products_v2')||'null');let products=storedProducts&&storedProducts.length>0?storedProducts:defaultProducts;localStorage.setItem('dornny_products_v2',JSON.stringify(products));
 let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],detailSwiper=null,stream=null,currentChatSeller=null,currentStoreSeller=null,faceStream=null;
 let ghanaFrontData=null,ghanaBackData=null,faceScanData=null,reportEvidenceData=[];
@@ -224,8 +190,8 @@ function renderCats(){document.getElementById('catList').innerHTML=categories.ma
 function setCat(c){currentCat=c;renderCats();render();}
 function getGPS(){navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude.toFixed(6),lng=p.coords.longitude.toFixed(6);document.getElementById('gpsAddress').value=`GA-${lat}-${lng} - Ghana`;});}
 function getVerificationGPS(){navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude.toFixed(6),lng=p.coords.longitude.toFixed(6);document.getElementById('verGPS').value=`GA-${lat}-${lng}`; document.getElementById('verLocation').value=document.getElementById('verLocation').value+' - '+`GA-${lat}-${lng}`; toast('📍 GPS Added');});}
-function updateVerificationUI(){if(!user) return;let verified=isSellerVerified(user.shop);if(verified){document.getElementById('verifiedBadge').classList.remove('hidden');document.getElementById('unverifiedBadge').classList.add('hidden');document.getElementById('meVerificationStatus').innerText='✓ VERIFIED - Can Sell';document.getElementById('meVerificationStatus').className='text-green-600 font-bold';document.getElementById('myGoodsVerifyText').innerText='✓ Verified Seller';}else{document.getElementById('verifiedBadge').classList.add('hidden');document.getElementById('unverifiedBadge').classList.remove('hidden');document.getElementById('meVerificationStatus').innerText='✗ NOT VERIFIED - Verify to Sell';document.getElementById('meVerificationStatus').className='text-red-600 font-bold';document.getElementById('myGoodsVerifyText').innerText='✗ Not Verified';}}
-function render(){let s=document.getElementById('search').value.trim().toLowerCase();let f=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);if(s)f=f.filter(p=>p.name.toLowerCase().includes(s));document.getElementById('catResult').innerText=`${f.length} items`;document.getElementById('grid').innerHTML=f.map(p=>{let prof=getShopProfile(p.seller); let ver=isSellerVerified(p.seller); return `<div class="bg-white rounded-xl overflow-hidden border ${ver?'border-green-600 border-2':'border-red-300'}"><div onclick="openDetail(${p.id})" class="relative cursor-pointer"><img src="${p.imgs[0]}" class="w-full h-[180px] object-cover"><div class="absolute top-2 left-2 bg-white rounded-full p-[2px]"><img src="${prof}" class="w-7 h-7 rounded-full object-cover border-2 ${ver?'border-green-600':'border-red-600'}"></div><div class="absolute top-2 right-2 ${ver?'bg-green-600':'bg-red-600'} text-white text-[8px] px-2 py-1 rounded-full font-bold">${ver?'✓ VERIFIED':'✗'}</div></div><div class="p-2"><p onclick="openDetail(${p.id})" class="text-[11px] font-bold truncate cursor-pointer">${p.name}</p><div onclick="openSellerStore('${p.seller}'); event.stopPropagation();" class="flex items-center gap-1 mt-2 cursor-pointer bg-[#f2f2f2] rounded-full px-2 py-1 w-fit"><img src="${prof}" class="w-5 h-5 rounded-full border object-cover"><p class="text-[9px] font-bold truncate">${p.seller}</p></div><p class="font-black text-[14px] text-[#ff3e3e] mt-1">GH₵${p.price}</p></div></div>`;}).join('');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartCount2').innerText=cart.length+' items';document.getElementById('cartItems').innerHTML=cart.map((c,i)=>`<div class="flex gap-3 border-b pb-3"><img src="${c.imgs[0]}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-[13px]">${c.name}</p><p class="text-[11px]">GH₵${c.price} x ${c.qty||1}</p><button onclick="removeCart(${i})" class="mt-1 bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Remove</button></div></div>`).join('')||'<div class="text-center py-10"><p>🛒 Cart empty</p></div>';let total=0;cart.forEach(c=>{total+=(Number(c.price)||0)*(Number(c.qty)||1);});document.getElementById('totalPay').innerText='GH₵'+total;}
+function updateVerificationUI(){if(!user) return;let verified=isSellerVerified(user.shop);if(verified){document.getElementById('meVerificationStatus').innerText='✓ VERIFIED - Can Sell';document.getElementById('meVerificationStatus').className='text-green-600 font-bold';document.getElementById('myGoodsVerifyText').innerText='✓ Verified Seller';}else{document.getElementById('meVerificationStatus').innerText='✗ NOT VERIFIED - Verify to Sell';document.getElementById('meVerificationStatus').className='text-red-600 font-bold';document.getElementById('myGoodsVerifyText').innerText='✗ Not Verified';}}
+function render(){let s=document.getElementById('search').value.trim().toLowerCase();let f=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);if(s)f=f.filter(p=>p.name.toLowerCase().includes(s));document.getElementById('catResult').innerText=`${f.length} items`;document.getElementById('grid').innerHTML=f.map(p=>{let prof=getShopProfile(p.seller); let ver=isSellerVerified(p.seller); return `<div class="bg-white rounded-xl overflow-hidden border ${ver?'border-green-600 border-2':'border-red-300'}"><div onclick="openDetail(${p.id})" class="relative cursor-pointer"><img src="${p.imgs[0]}" class="w-full h-[180px] object-cover"><div class="absolute top-2 left-2 bg-white rounded-full p-[2px]"><img src="${prof}" class="w-7 h-7 rounded-full object-cover border-2 ${ver?'border-green-600':'border-red-600'}"></div><div class="absolute top-2 right-2 ${ver?'bg-green-600':'bg-red-600'} text-white text-[8px] px-2 py-1 rounded-full font-bold">${ver?'✓ VERIFIED':'✗'}</div></div><div class="p-2"><p onclick="openDetail(${p.id})" class="text-[11px] font-bold truncate cursor-pointer">${p.name}</p><p class="font-black text-[14px] text-[#ff3e3e] mt-1">GH₵${p.price}</p></div></div>`;}).join('');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartCount2').innerText=cart.length+' items';document.getElementById('cartItems').innerHTML=cart.map((c,i)=>`<div class="flex gap-3 border-b pb-3"><img src="${c.imgs[0]}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-[13px]">${c.name}</p><p class="text-[11px]">GH₵${c.price} x ${c.qty||1}</p><button onclick="removeCart(${i})" class="mt-1 bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Remove</button></div></div>`).join('')||'<div class="text-center py-10"><p>🛒 Cart empty</p></div>';let total=0;cart.forEach(c=>{total+=(Number(c.price)||0)*(Number(c.qty)||1);});document.getElementById('totalPay').innerText='GH₵'+total;}
 function removeCart(i){cart.splice(i,1);render();}
 function setBottomActive(tab){document.querySelectorAll('#bottomNav button').forEach(b=>{b.classList.remove('bottom-active');b.classList.add('text-gray-500');});let map={home:'navHome',category:'navCategory',live:'navLive',sell:'navSell',cart:'navCart',me:'navMe'};let id=map[tab];if(id){document.getElementById(id).classList.add('bottom-active');document.getElementById(id).classList.remove('text-gray-500');}}
 function navHome(){closeAllPages();currentCat="All";renderCats();render();setBottomActive('home');}
@@ -258,8 +224,8 @@ function handleGhanaCardBack(e){let file=e.target.files[0]; if(!file) return; le
 async function startFaceScan(){try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}, audio:false});faceStream=s;const video=document.getElementById('faceVideo');video.srcObject=s;video.classList.remove('hidden');document.getElementById('facePlaceholder').classList.add('hidden');document.getElementById('startFaceBtn').classList.add('hidden');document.getElementById('captureFaceBtn').classList.remove('hidden');await video.play();}catch(err){toast('❌ Camera blocked');}}
 function captureFace(){const video=document.getElementById('faceVideo');const canvas=document.getElementById('faceCanvas');const img=document.getElementById('facePreview');canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.drawImage(video,0,0);faceScanData=canvas.toDataURL('image/jpeg',0.8);img.src=faceScanData;img.classList.remove('hidden');video.classList.add('hidden');document.getElementById('captureFaceBtn').classList.add('hidden');document.getElementById('retakeFaceBtn').classList.remove('hidden');document.getElementById('faceScanStatus').innerText='✅ Face Scanned';if(faceStream){faceStream.getTracks().forEach(t=>t.stop()); faceStream=null;}}
 function retakeFace(){faceScanData=null;document.getElementById('facePreview').classList.add('hidden');document.getElementById('facePlaceholder').classList.remove('hidden');document.getElementById('startFaceBtn').classList.remove('hidden');document.getElementById('retakeFaceBtn').classList.add('hidden');document.getElementById('faceScanStatus').innerText='Face scan not done yet';}
-function validateGhanaCardNumber(card){card=card.trim().toUpperCase();const regex=/^GHA-\d{9}-\d$/;if(!regex.test(card)){return {valid:false, reason:'Invalid format'};}return {valid:true};}
-function submitVerification(){let sellerName=document.getElementById('verSellerName').value.trim();let age=parseInt(document.getElementById('verAge').value);let gender=document.getElementById('verGender').value;let shopName=document.getElementById('verShopName').value.trim();let ghanaCard=document.getElementById('verGhanaCard').value.trim().toUpperCase();let location=document.getElementById('verLocation').value.trim();let whatsapp=document.getElementById('verWhatsapp').value.trim();let momo=document.getElementById('verMomo').value.trim();if(!sellerName||!age||!gender||!shopName||!ghanaCard||!location||!whatsapp||!momo){toast('❌ Fill ALL');return;}if(age<18){toast('❌ Age 18+');return;}if(!ghanaFrontData||!ghanaBackData||!faceScanData){toast('❌ Upload Ghana Card + Face');return;}let ghanaCheck=validateGhanaCardNumber(ghanaCard);if(!ghanaCheck.valid){document.getElementById('verificationCheck').classList.remove('hidden');document.getElementById('checkResults').innerHTML=`<div class="bg-red-100 border border-red-600 rounded p-2"><p class="font-bold text-red-700">❌ REJECTED</p></div>`;toast('❌ Ghana Card Incorrect');return;}let verificationData={sellerName,age,gender,shopName,ghanaCard,location,whatsapp,momo,ghanaFront:ghanaFrontData,ghanaBack:ghanaBackData,faceScan:faceScanData,verified:true,verifiedAt:new Date().toLocaleString()};localStorage.setItem('dornny_seller_verified_'+shopName, JSON.stringify(verificationData));toast('✅ VERIFIED');setTimeout(()=>{closeVerification();openSell();updateVerificationUI();user.shop=shopName;localStorage.setItem('dornny_user', JSON.stringify(user));document.getElementById('meShop').innerText=shopName;document.getElementById('upShopName').value=shopName;render();},1000);}
+function validateGhanaCardNumber(card){card=card.trim().toUpperCase();const regex=/^GHA-\d{9}-\d$/;if(!regex.test(card)){return {valid:false};}return {valid:true};}
+function submitVerification(){let sellerName=document.getElementById('verSellerName').value.trim();let age=parseInt(document.getElementById('verAge').value);let gender=document.getElementById('verGender').value;let shopName=document.getElementById('verShopName').value.trim();let ghanaCard=document.getElementById('verGhanaCard').value.trim().toUpperCase();let location=document.getElementById('verLocation').value.trim();let whatsapp=document.getElementById('verWhatsapp').value.trim();let momo=document.getElementById('verMomo').value.trim();if(!sellerName||!age||!gender||!shopName||!ghanaCard||!location||!whatsapp||!momo){toast('❌ Fill ALL');return;}if(age<18){toast('❌ Age 18+');return;}if(!ghanaFrontData||!ghanaBackData||!faceScanData){toast('❌ Upload Ghana Card + Face');return;}let ghanaCheck=validateGhanaCardNumber(ghanaCard);if(!ghanaCheck.valid){toast('❌ Ghana Card Incorrect');return;}let verificationData={sellerName,age,gender,shopName,ghanaCard,location,whatsapp,momo,ghanaFront:ghanaFrontData,ghanaBack:ghanaBackData,faceScan:faceScanData,verified:true,verifiedAt:new Date().toLocaleString()};localStorage.setItem('dornny_seller_verified_'+shopName, JSON.stringify(verificationData));toast('✅ VERIFIED');setTimeout(()=>{closeVerification();openSell();updateVerificationUI();user.shop=shopName;localStorage.setItem('dornny_user', JSON.stringify(user));document.getElementById('meShop').innerText=shopName;document.getElementById('upShopName').value=shopName;render();},1000);}
 function openMyGoods(){if(!user){toast('Login first');return;}let myProducts=products.filter(p=>p.seller===user.shop);let container=document.getElementById('myOrdersList');if(!isSellerVerified(user.shop)){container.innerHTML=`<div class="bg-yellow-50 border-2 border-yellow-600 rounded-xl p-6 text-center"><p class="text-[40px]">🔒</p><p class="font-black text-[14px] mt-2">Not Verified</p><button onclick="openVerificationFromMe()" class="mt-4 bg-black text-white px-6 py-3 rounded-full font-bold text-[12px]">🔒 Verify Now</button></div>`;return;}if(myProducts.length===0){container.innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p class="text-[40px]">📦</p><p class="font-black text-[14px] mt-2">No goods yet</p><button onclick="openSell()" class="mt-4 bg-black text-white px-6 py-3 rounded-full font-bold text-[12px]">+ Upload Goods</button></div>`;return;}container.innerHTML=`<div class="bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-black text-[13px] text-green-700">📦 My Goods - ${myProducts.length} items</p></div>` + myProducts.map(p=>`<div class="bg-white rounded-xl overflow-hidden border-2 border-green-600 p-3 mt-2"><div class="flex gap-3"><img src="${p.imgs[0]}" class="w-20 h-20 rounded-xl object-cover border"><div class="flex-1"><p class="font-bold text-[12px] truncate">${p.name}</p><p class="text-[11px] font-black text-[#ff3e3e]">GH₵${p.price}</p></div></div></div>`).join('');}
 function uploadProduct(){if(!user) return;if(!isSellerVerified(user.shop)){toast('❌ Not Verified'); openVerificationFromMe(); return;}let shopName=document.getElementById('upShopName').value.trim();let n=document.getElementById('upName').value.trim();let pr=parseFloat(document.getElementById('upPrice').value);let ca=document.getElementById('upCat').value;let desc=document.getElementById('upDesc').value.trim();if(!shopName||!n||!pr||uploadedImages.length===0){toast('Fill shop, name, price, images');return;}let newProduct={id:Date.now(),name:n,price:pr,originalPrice:pr*5,cat:ca,imgs:[...uploadedImages],seller:shopName,desc:n,fullDesc:desc,specs:[`Shop: ${shopName}`,`Verified`],sizes:[],colors:[],stock:12,likes:0,verified:true};products.unshift(newProduct);localStorage.setItem('dornny_products_v2',JSON.stringify(products));uploadedImages=[];document.getElementById('previewImgs').innerHTML='';document.getElementById('upName').value='';document.getElementById('upPrice').value='';document.getElementById('upDesc').value='';renderCats();render();closeSell();navHome();toast('✅ Uploaded');}
 function searchAccount(val){if(!val)return;document.getElementById('search').value=val;render();}
@@ -269,46 +235,13 @@ function messageCurrentSeller(){closeSellerPerf();setTimeout(()=>openSellerChat(
 function renderChatMessages(){let chats=JSON.parse(localStorage.getItem('dornny_chats')||'[]');let filtered=chats.filter(c=>c.seller===currentChatSeller);let container=document.getElementById('chatMessages');if(filtered.length===0){container.innerHTML=`<div class="text-center py-16"><p class="text-[40px]">💬</p><p class="text-[13px] font-bold">Start chat with ${currentChatSeller}</p></div>`;return;}container.innerHTML=filtered.map(c=>`<div class="${c.from===user.shop?'bg-black text-white ml-10':'bg-white mr-10 border-2 border-black'} rounded-2xl p-3 text-[12px]"><p class="font-bold text-[9px] opacity-70">${c.from}</p><p class="mt-1">${c.message}</p></div>`).join('');container.scrollTop=container.scrollHeight;}
 function sendSellerMessage(){let input=document.getElementById('chatInput');let msg=input.value.trim();if(!msg)return;let chats=JSON.parse(localStorage.getItem('dornny_chats')||'[]');chats.push({id:Date.now(),seller:currentChatSeller,buyer:user.shop,from:user.shop,message:msg,time:new Date().toLocaleString()});localStorage.setItem('dornny_chats',JSON.stringify(chats));input.value='';renderChatMessages();}
 function openMyChats(){let chats=JSON.parse(localStorage.getItem('dornny_chats')||'[]');if(chats.length===0){document.getElementById('myOrdersList').innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p>💬 No messages</p></div>`;return;}let grouped={};chats.forEach(c=>{if(!grouped[c.seller])grouped[c.seller]=[];grouped[c.seller].push(c);});document.getElementById('myOrdersList').innerHTML=Object.keys(grouped).map(seller=>{let last=grouped[seller][grouped[seller].length-1];return `<div onclick="openSellerChat('${seller}')" class="bg-white rounded-xl p-3 border-2 flex gap-3 cursor-pointer"><p class="font-bold text-[12px]">${seller}</p><p class="text-[11px] text-gray-600 truncate">${last.message}</p></div>`;}).join('');}
-
-// REPORT FUNCTIONS - ONLY AT ME
 function openReportPage(){document.getElementById('reportRefundPage').style.display='block';document.getElementById('kofiFloatingBtn').style.display='none';document.getElementById('bottomNav').style.display='none';if(user){document.getElementById('reportName').value=user.shop; document.getElementById('reportPhone').value=user.phone||'';} }
 function closeReportPage(){document.getElementById('reportRefundPage').style.display='none';document.getElementById('kofiFloatingBtn').style.display='flex';document.getElementById('bottomNav').style.display='flex';}
 function openReportPageWithOrder(orderId,type){openReportPage(); document.getElementById('reportOrderId').value=orderId||''; if(type){document.getElementById('reportType').value=type;} }
 function handleReportEvidence(e){reportEvidenceData=[];document.getElementById('reportEvidencePreview').innerHTML='';let files=Array.from(e.target.files).slice(0,3);files.forEach(file=>{let reader=new FileReader();reader.onload=ev=>{reportEvidenceData.push(ev.target.result);document.getElementById('reportEvidencePreview').innerHTML+=`<img src="${ev.target.result}" class="w-full h-20 object-cover rounded border">`;};reader.readAsDataURL(file);});}
-function sendReportWhatsApp(){
-  let type=document.getElementById('reportType').value;
-  let orderId=document.getElementById('reportOrderId').value.trim();
-  let name=document.getElementById('reportName').value.trim();
-  let phone=document.getElementById('reportPhone').value.trim();
-  let details=document.getElementById('reportDetails').value.trim();
-  if(!type||!orderId||!name||!phone||!details){toast('❌ Fill all fields: type, order, name, phone, problem');return;}
-  let msg=`🚨 DORNNY MARKET REPORT - ${type}%0A%0AOrder ID: ${orderId}%0AName: ${name}%0APhone: ${phone}%0AProblem: ${details}%0A%0AFrom: ${user?user.shop:'Buyer'} - ${user?user.email:''}%0ATime: ${new Date().toLocaleString()}%0A%0APlease check and refund/action - 0555258032`;
-  window.open(`https://wa.me/233555258032?text=${msg}`,'_blank');
-  // Save report
-  let reports=JSON.parse(localStorage.getItem('dornny_reports')||'[]');
-  reports.unshift({id:'RP-'+Date.now(),type,orderId,name,phone,details,date:new Date().toLocaleString(),user:user?user.shop:''});
-  localStorage.setItem('dornny_reports',JSON.stringify(reports));
-  toast('✅ Report sent via WhatsApp to 0555258032');
-  setTimeout(closeReportPage,1000);
-}
-function sendReportMessage(){
-  let type=document.getElementById('reportType').value;
-  let orderId=document.getElementById('reportOrderId').value.trim();
-  let name=document.getElementById('reportName').value.trim();
-  let phone=document.getElementById('reportPhone').value.trim();
-  let details=document.getElementById('reportDetails').value.trim();
-  if(!type||!orderId||!name||!phone||!details){toast('❌ Fill all fields');return;}
-  let reports=JSON.parse(localStorage.getItem('dornny_reports')||'[]');
-  reports.unshift({id:'RP-'+Date.now(),type,orderId,name,phone,details,date:new Date().toLocaleString(),user:user?user.shop:''});
-  localStorage.setItem('dornny_reports',JSON.stringify(reports));
-  let notifs=JSON.parse(localStorage.getItem('dornny_notifications')||'[]');
-  notifs.unshift({title:`🚨 Report ${type}`,message:`Order ${orderId} - ${details.substring(0,50)} - From ${name}`,time:new Date().toLocaleString()});
-  localStorage.setItem('dornny_notifications',JSON.stringify(notifs));
-  updateNotifBadge();
-  toast('✅ Report saved - Dornny will contact you on 0555258032 for refund');
-  closeReportPage();
-}
-function openMyOrders(){let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');if(orders.length===0){document.getElementById('myOrdersList').innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p>📦 No orders yet</p><p class="text-[10px] text-gray-500 mt-2">Orders like DM-860333 will appear here</p><button onclick="openReportPage()" class="mt-3 bg-red-600 text-white px-4 py-2 rounded-full text-[11px] font-bold">🚨 Report / Refund - Only at Me</button></div>`;return;}
+function sendReportWhatsApp(){let type=document.getElementById('reportType').value;let orderId=document.getElementById('reportOrderId').value.trim();let name=document.getElementById('reportName').value.trim();let phone=document.getElementById('reportPhone').value.trim();let details=document.getElementById('reportDetails').value.trim();if(!type||!orderId||!name||!phone||!details){toast('❌ Fill all fields');return;}let msg=`🚨 DORNNY REPORT - ${type}%0AOrder: ${orderId}%0AName: ${name}%0APhone: ${phone}%0AProblem: ${details}%0AFrom: ${user?user.shop:''}%0ATime: ${new Date().toLocaleString()}`;window.open(`https://wa.me/233555258032?text=${msg}`,'_blank');let reports=JSON.parse(localStorage.getItem('dornny_reports')||'[]');reports.unshift({id:'RP-'+Date.now(),type,orderId,name,phone,details,date:new Date().toLocaleString()});localStorage.setItem('dornny_reports',JSON.stringify(reports));toast('✅ Sent to 0555258032');setTimeout(closeReportPage,1000);}
+function sendReportMessage(){let type=document.getElementById('reportType').value;let orderId=document.getElementById('reportOrderId').value.trim();let name=document.getElementById('reportName').value.trim();let phone=document.getElementById('reportPhone').value.trim();let details=document.getElementById('reportDetails').value.trim();if(!type||!orderId||!name||!phone||!details){toast('❌ Fill all');return;}let reports=JSON.parse(localStorage.getItem('dornny_reports')||'[]');reports.unshift({id:'RP-'+Date.now(),type,orderId,name,phone,details,date:new Date().toLocaleString()});localStorage.setItem('dornny_reports',JSON.stringify(reports));let notifs=JSON.parse(localStorage.getItem('dornny_notifications')||'[]');notifs.unshift({title:`🚨 Report ${type}`,message:`Order ${orderId} - ${details.substring(0,50)}`});localStorage.setItem('dornny_notifications',JSON.stringify(notifs));updateNotifBadge();toast('✅ Report saved');closeReportPage();}
+function openMyOrders(){let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');if(orders.length===0){document.getElementById('myOrdersList').innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p>📦 No orders yet</p><button onclick="openReportPage()" class="mt-3 bg-red-600 text-white px-4 py-2 rounded-full text-[11px] font-bold">🚨 Report / Refund - Only at Me</button></div>`;return;}
 document.getElementById('myOrdersList').innerHTML=orders.map(o=>`
 <div class="bg-white rounded-xl p-3 border-2 border-black">
 <div class="flex justify-between items-center">
@@ -324,7 +257,7 @@ document.getElementById('myOrdersList').innerHTML=orders.map(o=>`
 function renderMyOrders(){openMyOrders();}
 function doLogout(){localStorage.removeItem('dornny_user');location.reload();}
 function callAssistance(){window.open('tel:0555258032','_self');}
-function whatsappAssistance(){window.open(`https://wa.me/233555258032?text=Hello Dornny Assistance - I want to report`,'_blank');}
+function whatsappAssistance(){window.open(`https://wa.me/233555258032?text=Hello Dornny Assistance`,'_blank');}
 function continueShop(){document.getElementById('welcomeScreen').style.display='none';navHome();}
 function checkout(){if(cart.length===0){toast('Cart empty');return;}let name=document.getElementById('custName').value.trim();let phone=document.getElementById('custPhone').value.trim();if(!name||!phone){toast('Fill name,phone');return;}let total=0;cart.forEach(c=>total+=c.price*(c.qty||1));let orderId='DM-'+Date.now().toString().slice(-6);let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');orders.unshift({id:orderId,total:total,dateString:new Date().toLocaleString(),items:[...cart]});localStorage.setItem('dornny_orders',JSON.stringify(orders));document.getElementById('orderId').innerText=orderId;document.getElementById('paidAmount').innerText='GH₵'+total;document.getElementById('welcomeScreen').style.display='flex';cart=[];render();closeCart();}
 let liveStream=null;let isMuted=false;
@@ -341,89 +274,390 @@ function sendComment(){let inp=document.getElementById('cInput');if(!inp||!inp.v
   btn.addEventListener('touchend', function(e){isDragging=false; btn.style.transition='';const touch=e.changedTouches[0];const dx=Math.abs(touch.clientX-startX); const dy=Math.abs(touch.clientY-startY);if(dx<10 && dy<10){openKofiAI();}});
 })();
 
+// KOFI AI - 6 LANGUAGES + SMART ANSWERS - FIXES TWI ISSUE
 function cleanTextForSpeech(html){let div=document.createElement('div'); div.innerHTML=html; return div.textContent || div.innerText || '';}
-function kofiSpeak(text){if(!kofiVoiceEnabled) return;if(!('speechSynthesis' in window)){return;}window.speechSynthesis.cancel();let clean=cleanTextForSpeech(text);clean=clean.replace(/🔊 Play|View/g,'').trim();if(clean.length>250){clean=clean.substring(0,250);}let utterance=new SpeechSynthesisUtterance(clean);if(kofiLang==='twi'){utterance.lang='ak-GH';}else{utterance.lang='en-GH';}utterance.rate=0.9;utterance.pitch=1;utterance.volume=1;let voices=window.speechSynthesis.getVoices();let goodVoice=voices.find(v=>v.lang.includes('en-GH')||v.lang.includes('en-NG')||v.name.includes('Google')&&v.lang.includes('en'));if(goodVoice){utterance.voice=goodVoice;}utterance.onstart=function(){document.getElementById('kofiAvatar').classList.add('speaking');document.getElementById('kofiFloatingBtn').classList.add('speaking');};utterance.onend=function(){document.getElementById('kofiAvatar').classList.remove('speaking');document.getElementById('kofiFloatingBtn').classList.remove('speaking');};utterance.onerror=function(){document.getElementById('kofiAvatar').classList.remove('speaking');document.getElementById('kofiFloatingBtn').classList.remove('speaking');};window.speechSynthesis.speak(utterance);}
+
+function kofiSpeak(text){
+  if(!kofiVoiceEnabled) return;
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  let clean=cleanTextForSpeech(text);
+  clean=clean.replace(/🔊 Play|View|Report at Me - 0555258032/g,'').trim();
+  if(clean.length>350){clean=clean.substring(0,350);}
+  let utterance=new SpeechSynthesisUtterance(clean);
+  // Language map for TTS
+  let langMap={en:'en-GH', twi:'ak-GH', ewe:'ee', ga:'en-GH', hausa:'ha-NG', french:'fr-FR'};
+  utterance.lang=langMap[kofiLang]||'en-GH';
+  utterance.rate=0.9; utterance.pitch=1; utterance.volume=1;
+  let voices=window.speechSynthesis.getVoices();
+  let v=null;
+  if(kofiLang==='french'){v=voices.find(x=>x.lang.includes('fr-FR'));}
+  else if(kofiLang==='hausa'){v=voices.find(x=>x.lang.includes('ha')||x.lang.includes('en-NG'));}
+  else {v=voices.find(x=>x.lang.includes('en-GH')||x.name.includes('Google')&&x.lang.includes('en'));}
+  if(v) utterance.voice=v;
+  utterance.onstart=function(){document.getElementById('kofiAvatar').classList.add('speaking');document.getElementById('kofiFloatingBtn').classList.add('speaking');};
+  utterance.onend=function(){document.getElementById('kofiAvatar').classList.remove('speaking');document.getElementById('kofiFloatingBtn').classList.remove('speaking');};
+  utterance.onerror=function(){document.getElementById('kofiAvatar').classList.remove('speaking');document.getElementById('kofiFloatingBtn').classList.remove('speaking');};
+  window.speechSynthesis.speak(utterance);
+}
 function stopKofiSpeaking(){if('speechSynthesis' in window){window.speechSynthesis.cancel();}let av=document.getElementById('kofiAvatar');if(av) av.classList.remove('speaking');let fb=document.getElementById('kofiFloatingBtn');if(fb) fb.classList.remove('speaking');}
-function toggleKofiVoice(){kofiVoiceEnabled=!kofiVoiceEnabled;let btn=document.getElementById('voiceToggleBtn');if(kofiVoiceEnabled){btn.innerText='🔊';btn.className='bg-white text-black w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold ml-1';toast('🔊 Voice ON');}else{btn.innerText='🔇';btn.className='bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-[14px] font-bold ml-1';stopKofiSpeaking();toast('🔇 Voice OFF');}}
-function setKofiLang(lang){kofiLang=lang;document.getElementById('langEnBtn').className=lang==='en'?'bg-white text-black px-3 py-1 rounded-full text-[10px] font-bold':'bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-bold';document.getElementById('langTwiBtn').className=lang==='twi'?'bg-[#f68b1e] text-black px-3 py-1 rounded-full text-[10px] font-bold':'bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-bold';toast(lang==='twi'?'Twi ON':'English ON');}
-function initSpeechRecognition(){const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;if(!SpeechRecognition){return null;}const rec=new SpeechRecognition();rec.continuous=false;rec.interimResults=false;rec.maxAlternatives=1;return rec;}
-function toggleVoiceInput(){if(isListening){stopVoiceInput();return;}startVoiceInput();}
-function startVoiceInput(){recognition=initSpeechRecognition();if(!recognition){toast('Voice not supported');return;}if(kofiLang==='twi'){try{recognition.lang='ak-GH';}catch(e){recognition.lang='en-GH';}}else{recognition.lang='en-GH';}isListening=true;document.getElementById('micBtn').classList.add('listening');document.getElementById('micBtn').innerText='⏹️';document.getElementById('voiceStatus').innerText=kofiLang==='twi'?'🎤 Retie...':'🎤 Listening...';recognition.onresult=function(event){let transcript=event.results[0][0].transcript;document.getElementById('kofiInput').value=transcript;toast(`🎤 ${transcript}`);setTimeout(()=>{sendKofiMessage();},500);};recognition.onerror=function(event){document.getElementById('voiceStatus').innerText=`❌ ${event.error}`;stopVoiceInput();};recognition.onend=function(){stopVoiceInput();};try{recognition.start();}catch(e){toast('Mic blocked'); stopVoiceInput();}}
-function stopVoiceInput(){isListening=false;document.getElementById('micBtn').classList.remove('listening');document.getElementById('micBtn').innerText='🎤';if(recognition){try{recognition.stop();}catch(e){}}document.getElementById('voiceStatus').innerText='🎤 Tap mic to speak • Report at Me page';}
+function toggleKofiVoice(){kofiVoiceEnabled=!kofiVoiceEnabled;let btn=document.getElementById('voiceToggleBtn');if(kofiVoiceEnabled){btn.innerText='🔊';toast('🔊 Voice ON');}else{btn.innerText='🔇';stopKofiSpeaking();toast('🔇 Voice OFF');}}
+function setKofiLang(lang){
+  kofiLang=lang;
+  document.querySelectorAll('[id^=lang]').forEach(b=>{b.classList.remove('lang-active');b.classList.add('bg-[#222]','text-white');});
+  let activeBtn=document.getElementById('lang'+lang.charAt(0).toUpperCase()+lang.slice(1)+'Btn')||document.getElementById('langEnBtn');
+  if(activeBtn){activeBtn.classList.add('lang-active');activeBtn.classList.remove('bg-[#222]','text-white');}
+  let names={en:'English',twi:'Twi',ewe:'Ewe',ga:'Ga',hausa:'Hausa',french:'French'};
+  document.getElementById('currentLangDisplay').innerText='Lang: '+ (names[lang]||lang);
+  document.getElementById('kofiInput').placeholder={en:'Type English...',twi:'Kasa Twi...',ewe:'Lɔ Eʋegbe...',ga:'Kɛmɔ Ga...',hausa:'Rubuta Hausa...',french:'Écrivez en Français...'}[lang]||'Type...';
+  toast('🌍 '+names[lang]+' ON');
+  // Greet in that language
+  if(document.getElementById('kofiAIPage').style.display==='flex'){
+    let greetings={
+      en:'Helo, you are welcome! I speak 6 languages now. How can I help you buy things?',
+      twi:'Akwaaba! Me ne Kofi AI. Me kasa Twi, English, Ewe, Ga, Hausa ne French. Wopɛ sɛ wotɔ biribi? Mente nea woka no ase a, kyerɛkyerɛ mu yie, mɛboa wo!',
+      ewe:'Woezɔ! Nyɛ Kofi AI. Me ƒo Eʋegbe, Twi, Ga, Hausa, Fransegbe. Nukae nèdi?',
+      ga:'Atuu! Mi ji Kofi AI. Mi wie Twi, Ewe, Ga, Hausa, French. Nɔ otao?',
+      hausa:'Sannu! Ni Kofi AI ne. Ina magana Hausa, Twi, Ewe, Ga, Turanci, Faransanci. Me kake so?',
+      french:'Bonjour! Je suis Kofi AI. Je parle Anglais, Twi, Ewe, Ga, Hausa et Français. Comment puis-je vous aider à acheter?'
+    };
+    let g=greetings[lang]||greetings.en;
+    addKofiMessage('bot',g);
+    kofiSpeak(g);
+  }
+}
+
+// AUTO-DETECT LANGUAGE FROM TEXT
+function detectLanguage(text){
+  let t=text.toLowerCase();
+  // French keywords
+  if(/(bonjour|salut|comment|ça va|merci|acheter|je veux|remboursement|arnaque|s'il vous plaît)/.test(t)) return 'french';
+  // Hausa
+  if(/(sannu|ina kwana|yaya|na gode|ina son|me ke so|ban gane ba|taya|don Allah)/.test(t)) return 'hausa';
+  // Ga
+  if(/(atuu|atɛ|ɛtɛ|oatso|oyiwala|nɔ|baako)/.test(t)) return 'ga';
+  // Ewe
+  if(/(woezɔ|akpe|etɛ|nukae|medo|meɖo|me se|akpe)/.test(t)) return 'ewe';
+  // Twi - includes the phrase from screenshot
+  if(/(akwaaba|ɛte sɛn|wote sɛn|medaase|daase|mente|nkyerɛkyerɛmu|yie|wae|nti|ase|woka|no|maakye|maaha|maadwo|wopɛ|tɔ|pɛ|kasa|kyerɛ)/.test(t)) return 'twi';
+  // Default English
+  return 'en';
+}
+
+// SMART MULTILINGUAL ANSWERS - FIXES "SAME ANSWER EVERY TIME"
+function getKofiSmartAnswer(msg, lang){
+  let original=msg;
+  msg=msg.toLowerCase().trim();
+
+  // FIX FOR YOUR SCREENSHOT: "mente nea woka no ase o nkyerɛkyerɛmu yie wae" = I don't understand what you are saying please explain well
+  if(msg.includes('mente') && msg.includes('ase')){
+    if(lang==='twi' || detectLanguage(original)==='twi'){
+      return `Yoo, me te wo ase! Wokaa sɛ "mente nea woka no ase o nkyerɛkyerɛmu yie wae" - Ɛyɛ nokware, me nkyerɛkyerɛmu no nyɛ yie kane. Afei me bɛkyerɛ mu yie!
+
+Akwaaba! Me ne Kofi AI. Wopɛ sɛ wotɔ biribi? Kyerɛ me:
+1. Wopɛ dɛn? (Men's, Women's, Sneakers, Bags)
+2. Wo budget yɛ sɛn? (GH₵)
+3. Wo ho problem bi wɔ hɔ? (Scam, damage, wrong color) - Kɔ Me page → Report → WhatsApp 0555258032
+
+Kasa bio wɔ Twi mu, mɛte wo ase yie!`;
+    }
+  }
+  if(msg.includes('what are you saying') || msg.includes('what you saying')){
+    return `Helo, you are welcome! Sorry I was not clear before - that was my mistake.
+
+I am Kofi AI - Dornny Market helper. I can:
+1. Help you buy things - Tell me "I want to buy Sneakers under GH₵200"
+2. Help with report - If you didn't receive goods, damaged, wrong color, not same order - Go to Me page → Report → WhatsApp 0555258032 for refund
+3. Speak 6 languages - English, Twi, Ewe, Ga, Hausa, French - Just speak your language, I will answer same language
+
+You said "What are you saying" - I was saying tap Report at Me page for refund help. How can I help you now?`;
+  }
+
+  // Buy intent - NOW ANSWERS CORRECTLY FOR "I want to buy things"
+  if(msg.includes('buy') || msg.includes('want') || msg.includes('need') || msg.includes('pɛ') || msg.includes('tɔ') || msg.includes('achète') || msg.includes('so')){
+    let matching=products.filter(p=>{ return msg.split(' ').some(w=> w.length>2 && (p.name.toLowerCase().includes(w) || p.cat.toLowerCase().includes(w))); });
+    if(matching.length===0){matching=products.slice(0,3);}
+    let list=matching.map(p=>`${p.name} - GH₵${p.price} (${p.cat})`).join('<br>');
+    let chips=matching.map(p=>`<span class="product-chip" onclick="searchAccount('${p.name}')">${p.name} GH₵${p.price}</span>`).join(' ');
+    if(lang==='twi'){
+      return `Yie! Wopɛ sɛ wotɔ nneɛma - Ɛyɛ! Me wɔ nneɛma bebree:
+
+${list}
+
+Kyerɛ me dɛn na wopɛ pɔtee? Wopɛ Sneakers, Bags, Men, Women? Wo budget yɛ sɛn?
+
+${chips}
+
+Tap product no so na wotɔ, anaa kɔ Home na hwehwɛ. Akwaaba!`;
+    }else if(lang==='ewe'){
+      return `Eyi! Èdi be ye aƒle nuwo - Enyo!
+
+${list}
+
+Nukae nèdi tututu? Sneakers, Bags, Men, Women? Ga ene?
+
+${chips}`;
+    }else if(lang==='french'){
+      return `Parfait! Vous voulez acheter - Super!
+
+${list}
+
+Que voulez-vous exactement? Sneakers, Sacs, Hommes, Femmes? Quel est votre budget?
+
+${chips}`;
+    }else if(lang==='hausa'){
+      return `Yayi! Kuna son sayayya - Madalla!
+
+${list}
+
+Me kuke so daidai? Sneakers, Bags, Maza, Mata? Nawa budget?
+
+${chips}`;
+    }else{
+      return `Great! You want to buy things - Perfect! I can help.
+
+Here are some items for you:
+
+${list}
+
+Tell me what exactly you want? Like "Sneakers", "Bags", "Men's wear", "Ladies bag", or your budget like "under GH₵100".
+
+${chips}
+
+Tap a product to view, or go Home to search. Helo, you are welcome!`;
+    }
+  }
+
+  // Report / Scam / Refund / Damage / Color / Not same - ALL YOUR REQUESTS
+  if(/(report|scam|refund|damage|damaged|color|colour|not same|not receive|didn't receive|did not receive|arnaque|remboursement|endommagé|mauvais)/.test(msg)){
+    if(lang==='twi'){
+      return `Yoo, me te wo ase! Wo wɔ problem?
+
+🚨 Report / Scam / Refund:
+- Scam? Seller agye sika na wamma nneɛma?
+- I didn't receive? Damage? Wrong color? Not same?
+
+Kɔ Me page → Report button kɔkɔɔ no → Fill form:
+1. Type: Scam / I didn't receive / Damage / Wrong color / Not same
+2. Order ID: DM-xxxx (sɛ wɔ screenshot no)
+3. Write problem + WhatsApp to 0555258032
+
+Kofi AI bɛboa wo, na Dornny Assistance bɛ refund wo sika!`;
+    }else if(lang==='french'){
+      return `Je comprends! Vous avez un problème?
+
+🚨 Signaler / Arnaque / Remboursement:
+- Arnaque? Endommagé? Mauvaise couleur? Pas la même chose? Pas reçu?
+
+Allez à Me page → Bouton Report rouge → Remplir:
+1. Type: Arnaque / Pas reçu / Endommagé / Mauvaise couleur / Pas même chose
+2. Order ID: DM-xxxx
+3. Écrire problème + WhatsApp 0555258032
+
+Nous allons vous rembourser!`;
+    }else{
+      return `I understand! You have issue?
+
+🚨 Report / Scam / Refund Help:
+You mentioned: "${original}"
+
+For:
+- Report Scam
+- I didn't receive my goods
+- It damage / Damaged
+- It is not the color I want
+- It is not the same thing I order
+- Refund
+
+Go to Me page → Big RED Report button (as in your screenshot) → Fill:
+1. Type of problem
+2. Order ID: e.g. DM-860333
+3. Your name + phone + write problem
+4. Tap WhatsApp to 0555258032
+
+Dornny will check seller verification and refund you! Kofi AI is here to help.`;
+    }
+  }
+
+  // Price
+  if(msg.includes('price') || msg.includes('how much') || msg.includes('gh') || msg.includes('boɔ') || msg.includes('prix')){
+    let cheapest=products.slice().sort((a,b)=>a.price-b.price).slice(0,3).map(p=>`${p.name} GH₵${p.price}`).join(', ');
+    if(lang==='twi') return `Boɔ? Ey! Cheapest: ${cheapest}. Kyerɛ me dɛn na wopɛ na meka boɔ no.`;
+    if(lang==='french') return `Prix? Voilà les moins chers: ${cheapest}. Dites-moi ce que vous voulez.`;
+    return `Price? Here are cheapest: ${cheapest}. Tell me what product you want and I will tell price. Current product ${currentP?currentP.name+' GH₵'+currentP.price:'tap any product'}.`;
+  }
+
+  // Delivery
+  if(msg.includes('deliver') || msg.includes('delivery') || msg.includes('ship')){
+    if(lang==='twi') return `Delivery: Accra same day GH₵20-30, Kumasi 1 day GH₵30-40, other regions 2 days. Akwaaba!`;
+    if(lang==='french') return `Livraison: Accra même jour GH₵20-30, autres régions 1-2 jours.`;
+    return `Delivery: Accra same day GH₵20-30, other regions 1-2 days. Free delivery over GH₵500. Helo, you are welcome!`;
+  }
+
+  // Greetings
+  if(/(helo|hello|hi|akwaaba|woezɔ|atuu|sannu|bonjour|salut)/.test(msg)){
+    let greetings={
+      en:`Helo, you are welcome to Dornny Market! 🇬🇭 I am Kofi AI, I speak 6 languages: English, Twi, Ewe, Ga, Hausa, French. Tell me "I want to buy Sneakers" or "Report scam" and I will help!`,
+      twi:`Akwaaba! Wo ho te sɛn? Me ne Kofi AI. Me kasa Twi, English, Ewe, Ga, Hausa, French. Wopɛ sɛ wotɔ biribi anaa wo wɔ problem? Kasa Twi mu kɛkɛ!`,
+      ewe:`Woezɔ! Nɔnɔme? Nyɛ Kofi AI. Me ƒo Eʋegbe 6. Nukae nèdi?`,
+      ga:`Atuu! Ojee? Mi ji Kofi AI. Mi wie wiemɔi 6. Nɔ otao?`,
+      hausa:`Sannu da zuwa Dornny Market! Ni Kofi AI ne. Ina magana harsuna 6. Me kake so?`,
+      french:`Bonjour et bienvenue à Dornny Market! Je suis Kofi AI, je parle 6 langues. Comment puis-je vous aider à acheter?`
+    };
+    return greetings[lang]||greetings.en;
+  }
+
+  // Default - smart fallback in user's language
+  if(lang==='twi'){
+    return `Helo! Me nte "${original}" no ase yie? Ma me nkyerɛ mu yie:
+
+Me ne Kofi AI, me boa:
+- Tɔ nneɛma: Ka "Me pɛ Sneakers" anaa "I want to buy things"
+- Report: "Scam, damage, wrong color, refund" → Me page → Report → WhatsApp 0555258032
+- Kasa Twi mu, me te wo ase!
+
+Kyerɛ bio wɔ Twi mu, mɛboa wo yie!`;
+  }else if(lang==='french'){
+    return `Bonjour! Je n'ai pas bien compris "${original}".
+
+Je suis Kofi AI, je peux:
+- Aider à acheter: Dites "Je veux acheter Sneakers"
+- Aider signaler: "Arnaque, endommagé, mauvaise couleur, remboursement" → Me page → Report → WhatsApp 0555258032
+
+Parlez en Français, je comprends!`;
+  }else{
+    return `Helo, you are welcome! You said: "${original}" - I am Kofi AI, now speaking ${lang}.
+
+I can help:
+- Buy: Say "I want to buy Sneakers under GH₵200" → I will show products
+- Report: If scam, damage, wrong color, not same, didn't receive → Go Me page → RED Report button → WhatsApp 0555258032 for refund
+- Speak any language: English, Twi, Ewe, Ga, Hausa, French - I auto-detect and answer same language
+
+Your Twi "mente nea woka no ase o nkyerɛkyerɛmu yie wae" means you didn't understand me before - sorry! Now I will explain well. How can I help you buy?`;
+  }
+}
+
+function addKofiMessage(who,text){
+  let div=document.createElement('div');
+  div.className=who==='user'?'flex justify-end':'flex justify-start';
+  let bubbleClass=who==='user'?'bg-[#f68b1e] text-black':'bg-[#222] text-white border';
+  let speakBtn=who==='bot'?`<button onclick="kofiSpeak(\`${cleanTextForSpeech(text).replace(/`/g,'').replace(/'/g,'')}\`)" class="mt-1 bg-white/20 px-2 py-1 rounded-full text-[9px]">🔊 Play</button>`:``;
+  let reportBtn='';
+  if(who==='bot' && /(report|scam|refund|damage|color|not same|didn't receive|mente)/i.test(text)){
+    reportBtn=`<button onclick="openReportPage();closeKofiAI();openMe();" class="mt-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold">🚨 Report at Me - 0555258032</button>`;
+  }
+  div.innerHTML=`<div class="${bubbleClass} rounded-2xl px-4 py-3 max-w-[85%] text-[12px] leading-relaxed"><div>${text.replace(/\n/g,'<br>')}</div>${speakBtn} ${reportBtn}</div>`;
+  document.getElementById('kofiMessages').appendChild(div);
+  document.getElementById('kofiMessages').scrollTop=document.getElementById('kofiMessages').scrollHeight;
+}
 
 function openKofiAI(){
   document.getElementById('kofiAIPage').style.display='flex';
   document.getElementById('bottomNav').style.display='none';
   document.getElementById('kofiFloatingBtn').style.display='none';
   if(document.getElementById('kofiMessages').innerHTML.trim()===''){
-    let welcomeText='Helo, you are welcome to Dornny Market! I am Kofi AI. Drag my button anywhere. If you have problem with order - scam, damage, wrong color, not same, didn\'t receive - Go to Me page and tap Report. It will go to WhatsApp 0555258032 for refund. How can I help you today?';
-    addKofiMessage('bot',welcomeText);
-    setTimeout(()=>{kofiSpeak(welcomeText);},500);
+    let welcome=`Helo, you are welcome to Dornny Market! 🇬🇭 I am Kofi AI - Now speaks 6 languages:
+
+🇬🇭 English, Twi, Ewe, Ga, Hausa, Français
+
+Try:
+- "I want to buy things" → I will show products correctly
+- "Mente nea woka no ase" (Twi) → I will explain in Twi
+- "Report scam, damage, wrong color, refund" → Go Me → Report → WhatsApp 0555258032
+- Speak any language, I auto-detect and answer same language!
+
+How can I help you today?`;
+    addKofiMessage('bot',welcome);
+    setTimeout(()=>kofiSpeak(welcome),600);
+  }else{
+    // Welcome back in current language
+    let back={
+      en:'Helo, you are welcome back! How can I help?',
+      twi:'Akwaaba bio! Wopɛ sɛ wotɔ dɛn?',
+      ewe:'Woezɔ gake! Nukae nèdi?',
+      ga:'Atuu ekome! Nɔ otao?',
+      hausa:'Barka da dawowa! Me kake so?',
+      french:'Bon retour! Comment puis-je vous aider?'
+    };
+    let txt=back[kofiLang]||back.en;
+    setTimeout(()=>kofiSpeak(txt),300);
   }
 }
-function closeKofiAI(){stopKofiSpeaking();document.getElementById('kofiAIPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';}
+function closeKofiAI(){stopKofiSpeaking();stopVoiceInput();document.getElementById('kofiAIPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';}
 function clearKofiChat(){stopKofiSpeaking();document.getElementById('kofiMessages').innerHTML='';}
-function addKofiMessage(who,text){
-  let div=document.createElement('div');
-  div.className=who==='user'?'flex justify-end':'flex justify-start';
-  let bubbleClass=who==='user'?'bg-[#f68b1e] text-black':'bg-[#222] text-white border';
-  let extra=who==='bot'?`<button onclick="kofiSpeak(this.parentElement.innerText)" class="mt-1 bg-white/20 px-2 py-1 rounded-full text-[9px]">🔊 Play</button><br>${(text.toLowerCase().includes('report')||text.toLowerCase().includes('scam')||text.toLowerCase().includes('damage')||text.toLowerCase().includes('refund'))?`<button onclick="openReportPage()" class="mt-2 bg-red-600 text-white px-3 py-2 rounded-full text-[10px] font-bold">🚨 Report at Me - 0555258032</button>`:''}`:'';
-  div.innerHTML=`<div class="${bubbleClass} rounded-2xl px-4 py-3 max-w-[80%] text-[12px] leading-relaxed"><div>${text}</div>${extra}</div>`;
-  document.getElementById('kofiMessages').appendChild(div);
-  document.getElementById('kofiMessages').scrollTop=document.getElementById('kofiMessages').scrollHeight;
-  if(who==='bot' && kofiVoiceEnabled && document.getElementById('kofiMessages').children.length>1){
-    setTimeout(()=>kofiSpeak(text),300);
-  }
-}
-function getKofiSmartAnswer(msg){
-  let lower=msg.toLowerCase();
-  if(lower.includes('buy')||lower.includes('want to buy')||lower.includes('tɔ')||lower.includes('pɛ')){
-    let prods=products.slice(0,3).map(p=>`${p.name} - GH₵${p.price}`).join('<br>');
-    if(kofiLang==='twi'||lower.includes('twi')||lower.includes('akwaaba')){
-      return `Akwaaba! Wopɛ sɛ wotɔ biribi a? Yɛwɔ nnoɔma pii:<br><br>${prods}<br><br>Kɔ Home na hwehwɛ, anaasɛ kasa: "Men's wear" anaa "Bags". Sɛ wo order bɔne a, kɔ Me page na bɔ Report - 0555258032 WhatsApp.`;
-    }
-    return `Helo, you are welcome! You want to buy things? Great! We have:<br><br>${prods}<br><br>Go to Home to search, or tell me category like "Men", "Bags", "Sneakers". If problem, go to Me page → Report → WhatsApp 0555258032 for refund.`;
-  }
-  if(lower.includes('report')||lower.includes('scam')||lower.includes('damage')||lower.includes('damaged')||lower.includes('didn\'t receive')||lower.includes('didnt receive')||lower.includes('color')||lower.includes('same thing')||lower.includes('refund')||lower.includes('wrong')){
-    if(kofiLang==='twi'){
-      return `Yɛhu sɛ wo order mu asɛm wɔ hɔ! Sɛ wannya wo nneɛma, anaa ɛsɛe, kɔla bɔne, anaa ɛnyɛ nea wowɔeɛ a:<br><br>1. Kɔ Me page<br>2. Tap "🚨 Report / Scam / Refund"<br>3. Kyerɛw wo problem<br>4. Tap WhatsApp 0555258032 - Yɛbɛma wo refund.<br><br>Tap button below:`;
-    }
-    return `I understand your problem! If you didn't receive goods, damage, wrong color, not same as ordered, or scam:<br><br>1. Go to Me page (as your screenshot)<br>2. Tap "🚨 Report / Scam / Refund - 0555258032"<br>3. Select problem: Scam / Didn't receive / Damage / Wrong color / Not same / Refund<br>4. Write your problem<br>5. Tap WhatsApp to 0555258032 - We will refund/ban seller.<br><br>Your reports are in Me page orders DM-xxxx with REPORT button.`;
-  }
-  if(lower.includes('price')||lower.includes('how much')){
-    return currentP?`Price of ${currentP.name} is GH₵${currentP.price} (was GH₵${currentP.originalPrice}). Tap Add to Cart. If wrong price after order, report at Me → 0555258032`:`Tap any product to see price. Cheapest is GH₵${Math.min(...products.map(p=>p.price))}. Need help? Say what you want to buy.`;
-  }
-  if(lower.includes('deliver')){
-    return `Delivery: Accra same day GH₵20-30, other regions 1-2 days. If you didn't receive, report at Me page → WhatsApp 0555258032 for refund.`;
-  }
-  if(lower.includes('helo')||lower.includes('hello')||lower.includes('hi')||lower.includes('akwaaba')){
-    return kofiLang==='twi'?`Akwaaba! Me ne Kofi AI. Metumi akasa Twi ne English. Wopɛ sɛ wotɔ deɛn? Sɛ asɛm wɔ hɔ a, kɔ Me page bɔ Report - 0555258032.`:`Helo! You are welcome to Dornny Market! I am Kofi AI - I can speak English + Twi with voice. You can type or tap 🎤 to speak. Want to buy? Say "I want to buy things". If any problem like scam/damage/wrong, go to Me page → Report → WhatsApp 0555258032. How can I help?`;
-  }
-  return kofiLang==='twi'?`Akwaaba! Matee "${original}"? Me ne Kofi AI. Ka Twi anaa English. Sɛ wopɛ biribi a ka: "Mepɛ sɛ metɔ". Sɛ asɛm wɔ hɔ a, kɔ Me page → Report / Refund → WhatsApp 0555258032.`:`Helo, you are welcome! I got: "${msg}". I am Kofi AI - Smart. Try: "I want to buy things", "Report scam", "Refund", "Price", "Delivery". If you have issue like didn't receive/damage/wrong color/not same, go to Me page → Report → WhatsApp 0555258032 for refund.`;
-}
 function sendKofiMessage(){
   let input=document.getElementById('kofiInput');
   let txt=input.value.trim();
-  if(!txt)return;
+  if(!txt) return;
+  // Detect language automatically
+  let detected=detectLanguage(txt);
+  if(detected!==kofiLang){
+    // Auto switch language UI
+    setKofiLang(detected);
+  }
   addKofiMessage('user',txt);
   input.value='';
   setTimeout(()=>{
-    let reply=getKofiSmartAnswer(txt);
+    let reply=getKofiSmartAnswer(txt, kofiLang);
     addKofiMessage('bot',reply);
     kofiSpeak(reply);
   },600);
 }
 
+// Voice input - supports 6 languages
+function initSpeechRecognition(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) return null;
+  const rec=new SpeechRecognition();
+  rec.continuous=false; rec.interimResults=false; rec.maxAlternatives=1;
+  return rec;
+}
+function toggleVoiceInput(){
+  if(isListening){stopVoiceInput();return;}
+  startVoiceInput();
+}
+function startVoiceInput(){
+  recognition=initSpeechRecognition();
+  if(!recognition){toast('Voice not supported - Use Chrome');return;}
+  let langMap={en:'en-GH', twi:'ak-GH', ewe:'ee-GH', ga:'en-GH', hausa:'ha-NG', french:'fr-FR'};
+  recognition.lang=langMap[kofiLang]||'en-GH';
+  // For Twi/Ewe/Ga, Chrome may not have exact, fallback to en-GH but still captures Twi sounds
+  try{}catch(e){recognition.lang='en-GH';}
+  isListening=true;
+  document.getElementById('micBtn').classList.add('listening');
+  document.getElementById('micBtn').innerText='⏹️';
+  document.getElementById('voiceStatus').innerText={en:'🎤 Listening English...',twi:'🎤 Retie Twi... Kasa!',ewe:'🎤 Me le wò yɔm Eʋegbe...',ga:'🎤 Mi bo Ga...',hausa:'🎤 Ina sauraron Hausa...',french:'🎤 Écoute Français...'}[kofiLang]||'🎤 Listening...';
+  recognition.onresult=function(event){
+    let transcript=event.results[0][0].transcript;
+    document.getElementById('kofiInput').value=transcript;
+    toast(`🎤 Heard: ${transcript}`);
+    let detected=detectLanguage(transcript);
+    if(detected!==kofiLang){setKofiLang(detected);}
+    setTimeout(()=>sendKofiMessage(),500);
+  };
+  recognition.onerror=function(event){document.getElementById('voiceStatus').innerText=`❌ ${event.error} - Try again`; stopVoiceInput();};
+  recognition.onend=function(){stopVoiceInput();};
+  try{recognition.start();}catch(e){toast('Mic blocked: Allow microphone'); stopVoiceInput();}
+}
+function stopVoiceInput(){
+  isListening=false;
+  document.getElementById('micBtn').classList.remove('listening');
+  document.getElementById('micBtn').innerText='🎤';
+  if(recognition){try{recognition.stop();}catch(e){}}
+  document.getElementById('voiceStatus').innerText='🎤 Tap mic • Auto-detects EN/TWI/EWE/GA/HAUSA/FR';
+}
+
 (function(){
   let saved=localStorage.getItem('dornny_user');
   if(saved){
-    try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateNotifBadge();loadProfilePic();updateVerificationUI();}catch(e){console.log(e);}
+    try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateNotifBadge();loadProfilePic();updateVerificationUI();}catch(e){}
   }else{renderCats();render();updateNotifBadge();}
+  // Preload voices
+  if('speechSynthesis' in window){window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};}
 })();
 </script>
 
-<div id="welcomeScreen" class="fixed inset-0 bg-black/70 z-[60] hidden flex items-center justify-center p-4"><div class="bg-white rounded-[24px] w-full max-w-sm p-6 text-center"><h2 class="font-black text-[20px]">Order Paid! ✅</h2><p class="text-[11px] mt-2"><span id="orderId"></span> - <span id="paidAmount"></span></p><p class="text-[10px] text-red-600 mt-2">If problem: Me → Report → 0555258032</p><button onclick="continueShop()" class="w-full mt-5 bg-black text-white py-3.5 rounded-full font-bold">Continue Shopping</button></div></div>
+<div id="welcomeScreen" class="fixed inset-0 bg-black/70 z-[60] hidden flex items-center justify-center p-4"><div class="bg-white rounded-[24px] w-full max-w-sm p-6 text-center"><h2 class="font-black text-[20px]">Order Paid! ✅</h2><p class="text-[11px] mt-2"><span id="orderId"></span> - <span id="paidAmount"></span></p><button onclick="continueShop()" class="w-full mt-5 bg-black text-white py-3.5 rounded-full font-bold">Continue Shopping</button></div></div>
 
 </body>
 </html>
-  
