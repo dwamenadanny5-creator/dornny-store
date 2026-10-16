@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>DORNNY - ADMIN VERIFY</title>
+<title>DORNNY - FINAL ADMIN CIRCLED</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -14,7 +14,7 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 .hide::-webkit-scrollbar{display:none}
 .cat-active{background:#111!important;color:#fff!important}
 .bottom-active{color:#f68b1e!important}
-.kofi-btn{position:fixed;bottom:85px;right:12px;z-index:9999;width:58px;height:58px;background:linear-gradient(135deg,#000,#f68b1e);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.4);border:2px solid #fff;touch-action:none;user-select:none;cursor:grab}
+.kofi-btn{position:fixed;bottom:85px;right:12px;z-index:9999;width:58px;height:58px;background:linear-gradient(135deg,#000,#f68b1e);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.4);border:2px solid #fff}
 .lang-active{background:#f68b1e!important;color:#000!important;border:2px solid #fff!important}
 .live-card{animation:liveGlow 2s infinite}
 @keyframes liveGlow{0%{border-color:#ef4444}50%{border-color:#fbbf24}100%{border-color:#ef4444}}
@@ -22,23 +22,22 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 </head>
 <body>
 <div id="toast" class="toast"></div>
-<div class="bg-[#111] text-white text-center py-2.5"><p class="font-black text-[13px]">DORNNY MARKET 🇬🇭 - ADMIN VERIFY</p></div>
+<div class="bg-[#111] text-white text-center py-2.5"><p class="font-black text-[13px]">DORNNY MARKET 🇬🇭 - ADMIN FINAL</p></div>
 
 <div id="loginScreen" class="min-h-[85vh] flex items-center justify-center p-4">
 <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow">
 <h2 class="font-black text-center text-[20px]">DORNNY MARKET</h2>
-<p class="text-center text-[11px] text-green-600 font-bold">Admin: Login with 0555258032</p>
+<p class="text-center text-[11px] text-green-600 font-bold">Admin: Login 0555258032 to see seller files</p>
 <input id="emailPhone" type="text" placeholder="Email or Phone *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 mt-5">
 <input id="password" type="password" placeholder="Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
 <input id="confirmPassword" type="password" placeholder="Confirm *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-4">
 <button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN</button>
-<p class="text-[9px] text-center mt-3 text-gray-500">Admin phone: 0555258032 sees all seller files</p>
 </div>
 </div>
 
 <div id="mainApp" class="hidden">
 <div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b">
-<div class="font-black text-[14px]">DORNNY<br><span class="text-[9px] text-green-600">Admin Verify</span></div>
+<div class="font-black text-[14px]">DORNNY<br><span class="text-[9px] text-green-600">Admin Final</span></div>
 <div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div>
 <button onclick="openNotificationPage()" class="relative bg-[#f2f2f2] w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-bell"></i><span id="notifBadge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></button>
 </div>
@@ -46,10 +45,10 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 <div id="grid" class="p-2 grid grid-cols-2 gap-2"></div>
 </div>
 
-<!-- ADMIN PAGE - YOU CAN SEE SELLERS FILES AND SAVE FOR FUTURE -->
+<!-- ADMIN PAGE - YOU CAN SEE SELLER FILES FOR FUTURE PURPOSE -->
 <div id="adminPage" class="fixed inset-0 bg-white z-[90] hidden overflow-y-auto pb-[90px]">
 <div class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center">
-<div><h2 class="font-black text-[16px]">👑 ADMIN - SELLER FILES TO SAVE</h2><p class="text-[10px] text-green-300">Only you 0555258032 can see this - Save for future purpose</p></div>
+<div><h2 class="font-black text-[16px]">👑 ADMIN - SELLER FILES</h2><p class="text-[10px] text-green-300">Only 0555258032 can see - Save for future</p></div>
 <button onclick="closeAdminPage()" class="w-8 h-8 bg-white/20 rounded-full">✕</button>
 </div>
 <div class="p-3">
@@ -60,8 +59,7 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 <button onclick="renderAdminVerifications('pending')" class="bg-yellow-600 text-white py-2 rounded-full text-[11px] font-bold">Pending</button>
 <button onclick="renderAdminVerifications('approved')" class="bg-green-600 text-white py-2 rounded-full text-[11px] font-bold">Approved</button>
 </div>
-<button onclick="downloadAllVerifications()" class="w-full mt-3 bg-green-600 text-white py-3 rounded-full text-[12px] font-bold">📥 Download All Data JSON for Future</button>
-<button onclick="clearAllVerifications()" class="w-full mt-2 bg-red-100 text-red-600 py-2 rounded-full text-[10px] font-bold">🗑️ Clear All (Admin only)</button>
+<button onclick="downloadAllVerifications()" class="w-full mt-3 bg-green-600 text-white py-3 rounded-full text-[12px] font-bold">📥 Download All JSON for Future</button>
 </div>
 <div id="adminVerificationsList" class="mt-4 space-y-4"></div>
 </div>
@@ -69,8 +67,8 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 
 <div id="sellerVerificationScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto pb-[90px]">
 <div class="bg-black text-white p-4 sticky top-0 z-10">
-<div class="flex justify-between items-center"><h2 class="font-black text-[18px]">🔒 SELLER VERIFICATION</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div>
-<p class="text-[10px] text-green-300 mt-1">Files will be sent to Admin 0555258032 for approval - Save for future</p>
+<div class="flex justify-between items-center"><h2 class="font-black text-[18px]">🔒 SELLER VERIFICATION - ADMIN SAVE</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div>
+<p class="text-[10px] text-green-300 mt-1">Files sent to Admin 0555258032 - Saved for future purpose</p>
 </div>
 <div class="p-4 space-y-4">
 <div><p class="font-bold text-[12px]">1. Seller Full Name *</p><input id="verSellerName" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
@@ -83,7 +81,7 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 <div><p class="font-bold text-[12px]">8. MoMo *</p><input id="verMomo" type="tel" class="w-full border-2 border-green-600 rounded-xl px-3 py-3 mt-1 text-[13px] font-bold bg-green-50"></div>
 
 <div class="bg-gray-50 border-2 border-black rounded-xl p-3">
-<p class="font-bold text-[12px]">📸 Ghana Card Photos * - Will appear where you circled</p>
+<p class="font-bold text-[12px]">📸 Ghana Card Photos * - Photo appears where you circled green</p>
 <div class="grid grid-cols-2 gap-3 mt-3">
 <div class="border-2 border-black rounded-xl p-2 bg-white">
 <input type="file" id="ghanaCardFront" accept="image/*" class="hidden" onclick="this.value=null" onchange="handleGhanaCardFront(event)">
@@ -125,31 +123,27 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 </div>
 
 <div id="verificationCheck" class="bg-white border-2 border-black rounded-xl p-3 hidden"><p class="font-black text-[12px]">🔍 Status:</p><div id="checkResults" class="mt-2 space-y-1 text-[11px]"></div></div>
-<button onclick="submitVerificationAdmin()" id="submitVerBtn" class="w-full bg-black text-white py-4 rounded-full mt-6 font-black text-[16px]">✅ SEND TO ADMIN FOR VERIFY</button>
+<button onclick="submitVerificationAdmin()" id="submitVerBtn" class="w-full bg-black text-white py-4 rounded-full mt-6 font-black text-[16px]">✅ SEND TO ADMIN 0555258032</button>
 <button onclick="closeVerification()" class="w-full bg-gray-200 py-3 rounded-full mt-3 font-bold text-[12px]">Cancel</button>
 </div>
 </div>
 
 <div id="mePage" class="fixed inset-0 bg-[#f2f2f2] z-[30] hidden overflow-y-auto pb-[90px]">
-<div class="bg-white p-3 sticky top-0 z-10 flex gap-2 items-center border-b"><button onclick="navHome()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Me</p></div>
-<div class="bg-white p-4 mt-2 flex gap-4 items-center"><img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span></p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p></div></div>
+<div class="bg-white p-3 sticky top-0 z-10 flex gap-2 items-center border-b"><button onclick="navHome()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Me - <span id="meShop">shop</span></p></div>
+<div class="bg-white p-4 mt-2 flex gap-4 items-center"><img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p class="text-[12px] text-[#f68b1e] font-bold truncate" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p></div></div>
 <div class="bg-white mt-2">
-<button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white border-2 border-yellow-400"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">👑 ADMIN - View Seller Files</p><p class="text-[10px] text-yellow-300" id="adminPendingCount">0 pending</p></div><span class="bg-red-600 text-white text-[9px] px-2 py-1 rounded-full">ADMIN ONLY</span></button>
-<button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p></div></button>
-<button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-green-50 border-2 border-green-600"><div class="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Seller Verification</p><p class="text-[10px] text-green-600">Send files to Admin</p></div></button>
+<button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white border-2 border-yellow-400"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">👑 ADMIN - View Seller Files & Save for Future</p><p class="text-[10px] text-yellow-300" id="adminPendingCount">0 pending</p></div><span class="bg-red-600 text-white text-[9px] px-2 py-1 rounded-full">ADMIN ONLY</span></button>
+<button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p><p class="text-[10px] text-gray-300" id="myGoodsVerifyText">Verify first</p></div></button>
+<button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50 border-2 border-yellow-600"><div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Seller Verification</p><p class="text-[10px] text-green-600">Send to Admin 0555258032</p></div></button>
 </div>
-<div id="myOrdersList" class="p-2 space-y-2 mt-3"></div>
+<div id="myOrdersList" class="p-2 space-y-2"></div>
 <div class="bg-white mt-4 p-4 flex gap-2 mb-4"><button onclick="openSell()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">+ Sell</button><button onclick="doLogout()" class="flex-1 bg-gray-200 py-3 rounded-full font-bold text-[12px]">Logout</button></div>
 </div>
 
 <div id="sellScreen" class="fixed inset-0 bg-white z-[40] hidden overflow-y-auto p-4 pb-[90px]"><div class="flex justify-between items-center"><h2 class="font-black text-[18px]">SELL</h2><button onclick="closeSell()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="verifiedSellerInfo" class="mt-4 bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-black text-[12px] text-green-700">✓ VERIFIED BY ADMIN</p><p id="verifiedSellerDetails" class="text-[10px] text-gray-700 mt-1">Verified</p></div><input id="upShopName" placeholder="Shop Name *" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-4 font-bold text-[13px]" readonly><input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleGallery(event)"><button onclick="document.getElementById('galleryFile').click()" class="w-full mt-4 bg-black text-white py-3.5 rounded-full text-[12px] font-bold">📷 Select Images</button><div id="previewImgs" class="grid grid-cols-3 gap-2 mt-3"></div><input id="upName" placeholder="Product name *" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-4 text-[13px] font-bold"><input id="upPrice" type="number" placeholder="Price GH₵ *" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px] font-bold"><select id="upCat" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px] bg-gray-100 font-bold"></select><textarea id="upDesc" placeholder="Describe..." class="w-full border-2 border-black rounded-xl px-3 py-3 mt-2 text-[13px] h-[110px] outline-none"></textarea><button onclick="uploadProduct()" class="w-full bg-black text-white py-4 rounded-full mt-6 font-black text-[15px]">UPLOAD NOW</button></div>
 
 <div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[120px]"><div class="bg-white min-h-screen"><div class="relative bg-[#f8f8f8]"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-10 h-10 bg-white/80 rounded-full z-20 flex items-center justify-center font-bold">✕</button></div><div class="bg-white p-3"><span id="dPrice" class="font-black text-[22px] text-[#ff3e3e]"></span><p id="dTitleFull" class="text-[13px] font-bold mt-2"></p></div><div class="fixed bottom-[75px] left-0 right-0 bg-white border-t-2 border-black p-2 flex gap-2 items-center z-[60]"><button onclick="addCartDetailFixed()" class="flex-1 bg-black text-white py-3.5 rounded-full font-black text-[14px]">Add to Cart</button></div></div></div>
-
 <div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[40] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><div><b>Cart</b><p id="cartCount2" class="text-[11px]">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 border-b max-h-[25vh] overflow-y-auto"></div><div class="p-4 border-t bg-white pb-[85px]"><div class="flex justify-between font-black text-[18px]"><span>Total</span><span id="totalPay">GH₵0</span></div><button onclick="checkout()" class="w-full bg-black text-white py-4 rounded-full font-black text-[16px] mt-2">PAY NOW</button></div></div></div>
-
-<div id="videosPage" class="fixed inset-0 bg-black z-[40] hidden overflow-y-auto pb-[90px]"><div class="p-4 border-b flex gap-3 items-center sticky top-0 bg-black text-white z-10"><button onclick="closeVideos()" class="w-8 h-8 bg-white/20 rounded-full">←</button><b>Live</b><button onclick="startLive()" class="ml-auto bg-red-600 px-4 py-2 rounded-full text-[11px] font-bold">🔴 Go Live</button></div><div id="activeLivesList" class="p-3"></div></div>
-<div id="liveRoom" class="fixed inset-0 bg-black z-[50] hidden"><video id="v" autoplay playsinline class="absolute inset-0 w-full h-full object-cover"></video><div class="absolute top-0 left-0 right-0 p-3 flex justify-between"><span class="bg-red-600 px-3 py-1 rounded-full text-[11px] text-white font-bold">🔴 LIVE</span><button onclick="closeLive()" class="w-11 h-11 bg-white/20 text-white rounded-full">✕</button></div></div>
 <div id="notificationPage" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex items-center gap-3 border-b"><button onclick="closeNotificationPage()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Notifications</p></div><div id="notificationList" class="p-2 space-y-2"></div></div>
 <div id="kofiFloatingBtn" class="kofi-btn">🤖</div>
 <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-[100]"><button onclick="navHome()" id="navHome" class="flex flex-col items-center bottom-active"><i class="fa-solid fa-house text-[18px]"></i><span class="text-[9px] font-bold mt-1">Home</span></button><button onclick="openMe()" id="navMe" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-user text-[18px]"></i><span class="text-[9px] mt-1">Me</span></button><button onclick="openSell()" id="navSell" class="flex flex-col items-center text-gray-500"><div class="bg-black text-white w-9 h-9 rounded-full flex items-center justify-center -mt-1"><i class="fa-solid fa-plus text-[16px]"></i></div><span class="text-[9px] font-bold mt-1">Sell</span></button><button onclick="openCart()" id="navCart" class="flex flex-col items-center text-gray-500 relative"><i class="fa-solid fa-cart-shopping text-[18px]"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-[#f68b1e] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span><span class="text-[9px] mt-1">Cart</span></button></nav>
@@ -158,116 +152,72 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
 let defaultProducts=[{id:1001,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600"],seller:"Danny shop"}];
 let products=JSON.parse(localStorage.getItem('dornny_products_v2')||'null')||defaultProducts;
-let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],detailSwiper=null,stream=null,faceStream=null,liveStream=null;
+let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],detailSwiper=null,faceStream=null,liveStream=null;
 let ghanaFrontData=null,ghanaBackData=null,faceScanData=null;
 
 function getShopProfile(s){return localStorage.getItem('dornny_shop_profile_'+s)||'https://cdn-icons-png.flaticon.com/512/149/149071.png';}
 function isSellerVerified(s){let d=JSON.parse(localStorage.getItem('dornny_seller_verified_'+s)||'null');return d&&d.verified===true;}
 function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
-function isAdmin(){if(!user)return false;let admins=["0555258032","233555258032","+233555258032","admin"];return admins.includes(user.loginId)||admins.includes(user.phone)||user.loginId==="admin";}
-function updateAdminButton(){let btn=document.getElementById('adminBtn');if(!btn)return;if(isAdmin()){btn.classList.remove('hidden');btn.classList.add('flex');let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let pending=all.filter(v=>v.status==='pending').length;document.getElementById('adminPendingCount').innerText=pending+' pending - Tap to see files & save for future';document.getElementById('adminPendingTotal')&&(document.getElementById('adminPendingTotal').innerText=pending);}else{btn.classList.add('hidden');}}
+function isAdmin(){if(!user)return false;let a=["0555258032","233555258032","+233555258032","admin"];return a.includes(user.loginId)||a.includes(user.phone)||user.email==="admin@dornny.com";}
+function updateAdminButton(){let btn=document.getElementById('adminBtn');if(!btn)return;if(isAdmin()){btn.classList.remove('hidden');btn.classList.add('flex');let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let pend=all.filter(v=>v.status==='pending').length;document.getElementById('adminPendingCount').innerText=pend+' pending to verify - Tap to see files & save';let pt=document.getElementById('adminPendingTotal'); if(pt) pt.innerText=pend;}else{btn.classList.add('hidden');}}
 function openAdminPage(){if(!isAdmin()){toast('❌ Only Admin 0555258032');return;}document.getElementById('adminPage').style.display='block';document.getElementById('kofiFloatingBtn').style.display='none';document.getElementById('bottomNav').style.display='none';renderAdminVerifications('all');}
 function closeAdminPage(){document.getElementById('adminPage').style.display='none';document.getElementById('kofiFloatingBtn').style.display='flex';document.getElementById('bottomNav').style.display='flex';}
 function renderAdminVerifications(filter){
 let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');
 document.getElementById('adminTotalCount').innerText=all.length;
-let pendingCount=all.filter(v=>v.status==='pending').length;
-let el=document.getElementById('adminPendingTotal'); if(el) el.innerText=pendingCount;
+let pend=all.filter(v=>v.status==='pending').length;
+let pt=document.getElementById('adminPendingTotal'); if(pt) pt.innerText=pend;
 let filtered=filter==='pending'?all.filter(v=>v.status==='pending'):filter==='approved'?all.filter(v=>v.status==='approved'):all;
 let list=document.getElementById('adminVerificationsList');
-if(filtered.length===0){list.innerHTML='<div class="bg-white border rounded-xl p-6 text-center"><p class="text-[40px]">📭</p><p class="font-bold">No seller files</p><p class="text-[10px] text-gray-500">When someone verifies, you see their Ghana Card here to save for future</p></div>';return;}
+if(filtered.length===0){list.innerHTML='<div class="bg-white border rounded-xl p-6 text-center"><p class="text-[40px]">📭</p><p class="font-bold">No seller files yet</p><p class="text-[10px] text-gray-500">When someone verifies, you will see their Ghana Card here to save for future purpose</p></div>';return;}
 list.innerHTML=filtered.map(v=>`
 <div class="bg-white border-2 border-black rounded-xl p-3">
-<div class="flex justify-between"><p class="font-black text-[13px]">${v.sellerName} - ${v.shopName} ${v.status==='approved'?'✅ Approved':'⏳ Pending'}</p><span class="text-[8px] bg-gray-100 px-2 py-1 rounded-full">${v.date}</span></div>
+<div class="flex justify-between"><p class="font-black text-[13px]">${v.sellerName} - ${v.shopName} ${v.status==='approved'?'✅':'⏳'}</p><span class="text-[8px] bg-gray-100 px-2 py-1 rounded-full">${v.date}</span></div>
 <p class="text-[11px] mt-2"><b>Card:</b> ${v.ghanaCard} | <b>Age:</b> ${v.age} | <b>${v.gender}</b></p>
-<p class="text-[11px]"><b>Location:</b> ${v.location} | <b>GPS:</b> ${v.gps||''}</p>
+<p class="text-[11px]"><b>Loc:</b> ${v.location} | <b>GPS:</b> ${v.gps||''}</p>
 <p class="text-[11px]"><b>WhatsApp:</b> ${v.whatsapp} | <b>MoMo:</b> ${v.momo}</p>
 <div class="grid grid-cols-3 gap-2 mt-3">
-<div class="border-2 border-black rounded-xl p-1 bg-gray-50"><p class="text-[9px] font-bold text-center">Front - Where you circled</p><img src="${v.ghanaFront}" class="w-full h-28 object-cover rounded mt-1 border"><button onclick="downloadSingleImage('${v.id}','front')" class="w-full mt-1 bg-black text-white py-1.5 rounded-full text-[9px] font-bold">💾 Save Front</button></div>
-<div class="border-2 border-black rounded-xl p-1 bg-gray-50"><p class="text-[9px] font-bold text-center">Back - Where you circled</p><img src="${v.ghanaBack}" class="w-full h-28 object-cover rounded mt-1 border"><button onclick="downloadSingleImage('${v.id}','back')" class="w-full mt-1 bg-black text-white py-1.5 rounded-full text-[9px] font-bold">💾 Save Back</button></div>
-<div class="border-2 border-black rounded-xl p-1 bg-gray-50"><p class="text-[9px] font-bold text-center">Face Scan</p>${v.faceScan?`<img src="${v.faceScan}" class="w-full h-28 object-cover rounded mt-1 border">`:`<p class="text-[8px] text-center mt-8">No face</p>`}<button onclick="downloadSingleImage('${v.id}','face')" class="w-full mt-1 bg-black text-white py-1.5 rounded-full text-[9px] font-bold">💾 Save Face</button></div>
+<div class="border-2 border-black rounded-xl p-1 bg-gray-50"><p class="text-[9px] font-bold text-center">Front</p><img src="${v.ghanaFront}" class="w-full h-28 object-cover rounded mt-1 border"><button onclick="downloadSingleImage('${v.id}','front')" class="w-full mt-1 bg-black text-white py-1.5 rounded-full text-[9px]">💾 Save</button></div>
+<div class="border-2 border-black rounded-xl p-1 bg-gray-50"><p class="text-[9px] font-bold text-center">Back</p><img src="${v.ghanaBack}" class="w-full h-28 object-cover rounded mt-1 border"><button onclick="downloadSingleImage('${v.id}','back')" class="w-full mt-1 bg-black text-white py-1.5 rounded-full text-[9px]">💾 Save</button></div>
+<div class="border-2 border-black rounded-xl p-1 bg-gray-50"><p class="text-[9px] font-bold text-center">Face</p>${v.faceScan?`<img src="${v.faceScan}" class="w-full h-28 object-cover rounded mt-1 border">`:`<p class="text-[8px] text-center mt-8">No face</p>`}<button onclick="downloadSingleImage('${v.id}','face')" class="w-full mt-1 bg-black text-white py-1.5 rounded-full text-[9px]">💾 Save</button></div>
 </div>
 <div class="grid grid-cols-2 gap-2 mt-3">
-<button onclick="approveVerification('${v.id}')" class="bg-green-600 text-white py-3 rounded-full text-[11px] font-black">✅ Approve & Verify Seller</button>
+<button onclick="approveVerification('${v.id}')" class="bg-green-600 text-white py-3 rounded-full text-[11px] font-black">✅ Approve & Verify</button>
 <button onclick="rejectVerification('${v.id}')" class="bg-red-600 text-white py-3 rounded-full text-[11px] font-bold">❌ Reject</button>
 </div>
-<button onclick="copyVerificationData('${v.id}')" class="w-full mt-2 bg-yellow-50 border border-yellow-600 py-2 rounded-full text-[10px] font-bold">📋 Copy Details for Future Save</button>
 </div>`).join('');
 }
-function approveVerification(id){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let idx=all.findIndex(v=>v.id===id);if(idx<0)return;all[idx].status='approved';localStorage.setItem('dornny_all_verifications',JSON.stringify(all));localStorage.setItem('dornny_seller_verified_'+all[idx].shopName,JSON.stringify({...all[idx],verified:true,approvedBy:'Admin 0555258032',approvedAt:new Date().toLocaleString()}));toast('✅ Approved '+all[idx].shopName+' - Now can sell');renderAdminVerifications('all');}
+function approveVerification(id){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let idx=all.findIndex(v=>v.id===id);if(idx<0)return;all[idx].status='approved';localStorage.setItem('dornny_all_verifications',JSON.stringify(all));localStorage.setItem('dornny_seller_verified_'+all[idx].shopName,JSON.stringify({...all[idx],verified:true,approvedBy:'Admin 0555258032',approvedAt:new Date().toLocaleString()}));toast('✅ Approved '+all[idx].shopName);renderAdminVerifications('all');}
 function rejectVerification(id){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');all=all.filter(v=>v.id!==id);localStorage.setItem('dornny_all_verifications',JSON.stringify(all));toast('❌ Rejected');renderAdminVerifications('all');}
-function downloadSingleImage(id,type){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let v=all.find(x=>x.id===id);if(!v)return;let url=type==='front'?v.ghanaFront:type==='back'?v.ghanaBack:v.faceScan;if(!url){toast('No image');return;}let a=document.createElement('a');a.href=url;a.download=`${v.shopName}_${type}_${v.ghanaCard}.jpg`;a.click();toast('💾 Saved '+type+' for future');}
-function copyVerificationData(id){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let v=all.find(x=>x.id===id);if(!v)return;let text=`Name: ${v.sellerName}\nShop: ${v.shopName}\nCard: ${v.ghanaCard}\nAge: ${v.age}\nGender: ${v.gender}\nLocation: ${v.location}\nGPS: ${v.gps}\nWhatsApp: ${v.whatsapp}\nMoMo: ${v.momo}\nDate: ${v.date}`;navigator.clipboard.writeText(text).then(()=>toast('📋 Copied details for future save')); }
-function downloadAllVerifications(){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');if(all.length===0){toast('No data');return;}let blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`DORNNY_ALL_SELLERS_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('📥 Downloaded all seller files for future purpose');}
-function clearAllVerifications(){if(!isAdmin())return;if(!confirm('Clear all seller files? This deletes for future save too!'))return;localStorage.setItem('dornny_all_verifications',JSON.stringify([]));toast('🗑️ Cleared');renderAdminVerifications('all');}
+function downloadSingleImage(id,type){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let v=all.find(x=>x.id===id);if(!v)return;let url=type==='front'?v.ghanaFront:type==='back'?v.ghanaBack:v.faceScan;let a=document.createElement('a');a.href=url;a.download=`${v.shopName}_${type}_${v.ghanaCard}.jpg`;a.click();toast('💾 Saved '+type+' for future');}
+function downloadAllVerifications(){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');if(all.length===0){toast('No data');return;}let blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`DORNNY_ALL_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('📥 Downloaded for future');}
 
 function doLogin(){let login=document.getElementById('emailPhone').value.trim();let pass=document.getElementById('password').value.trim();let conf=document.getElementById('confirmPassword').value.trim();if(!login){toast('Enter Email or Phone');return;}if(!pass||pass.length<4){toast('Password 4+');return;}let key=login.includes('@')?login.toLowerCase():login.replace(/[^0-9+]/g,'');let users=JSON.parse(localStorage.getItem('dornny_users')||'{}');if(users[key]){if(users[key].password!==pass){toast('Wrong pass');return;}user={shop:users[key].shop,loginId:key,phone:users[key].phone||key,email:users[key].email||key};}else{if(!conf){toast('Enter Confirm');return;}if(pass!==conf){toast('Not same');return;}let shop=login.includes('@')?key.split('@')[0]+' shop':'Shop '+key.slice(-4);users[key]={shop:shop,password:pass,loginId:key,phone:key,email:key};localStorage.setItem('dornny_users',JSON.stringify(users));user={shop:shop,loginId:key,phone:key,email:key};}localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateVerificationUI();updateAdminButton();}
 function renderCats(){document.getElementById('catList').innerHTML=categories.map(c=>`<button onclick="setCat('${c}')" class="px-4 py-2 rounded-full text-[11px] border whitespace-nowrap font-bold ${currentCat===c?'cat-active':'bg-[#f2f2f2]'}">${c}</button>`).join('');document.getElementById('upCat').innerHTML=categories.filter(c=>c!=='All').map(c=>`<option value="${c}">${c}</option>`).join('');}
 function setCat(c){currentCat=c;renderCats();render();}
 function getVerificationGPS(){navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude.toFixed(6),lng=p.coords.longitude.toFixed(6);document.getElementById('verGPS').value=`GA-${lat}-${lng}`;document.getElementById('verLocation').value=document.getElementById('verLocation').value+' - GA-'+lat;toast('📍 GPS Added');});}
-function updateVerificationUI(){if(!user)return;let v=isSellerVerified(user.shop);document.getElementById('meVerificationStatus').innerText=v?'✓ VERIFIED BY ADMIN':'⏳ Not Verified / Waiting Admin';document.getElementById('meVerificationStatus').className=v?'text-green-600 font-bold':'text-red-600 font-bold';document.getElementById('meShop').innerText=user.shop;}
+function updateVerificationUI(){if(!user)return;let v=isSellerVerified(user.shop);document.getElementById('meVerificationStatus').innerText=v?'✓ VERIFIED BY ADMIN':'✗ NOT VERIFIED';document.getElementById('meVerificationStatus').className=v?'text-green-600 font-bold':'text-red-600 font-bold';document.getElementById('meShop').innerText=user.shop;}
 function render(){let s=document.getElementById('search').value.trim().toLowerCase();let f=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);if(s)f=f.filter(p=>p.name.toLowerCase().includes(s));document.getElementById('catResult').innerText=f.length+' items';document.getElementById('grid').innerHTML=f.map(p=>`<div class="bg-white rounded-xl overflow-hidden border-2 ${isSellerVerified(p.seller)?'border-green-600':'border-red-300'}"><div onclick="openDetail(${p.id})"><img src="${p.imgs[0]}" class="w-full h-[160px] object-cover"></div><div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><p class="font-black text-[13px] text-[#ff3e3e]">GH₵${p.price}</p></div></div>`).join('');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartCount2').innerText=cart.length+' items';document.getElementById('cartItems').innerHTML=cart.map((c,i)=>`<div class="flex gap-3 border-b pb-3"><img src="${c.imgs[0]}" class="w-16 h-16 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-[13px]">${c.name}</p><button onclick="removeCart(${i})" class="mt-1 bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Remove</button></div></div>`).join('')||'<div class="text-center py-10"><p>🛒 Cart empty</p></div>';let total=0;cart.forEach(c=>{total+=c.price*(c.qty||1);});document.getElementById('totalPay').innerText='GH₵'+total;}
 function removeCart(i){cart.splice(i,1);render();}
 function navHome(){closeAllPages();currentCat="All";renderCats();render();}
-function closeAllPages(){document.getElementById('mePage').style.display='none';document.getElementById('videosPage').style.display='none';document.getElementById('cartDrawer').style.display='none';document.getElementById('detail').style.display='none';document.getElementById('sellScreen').style.display='none';document.getElementById('notificationPage').style.display='none';document.getElementById('sellerVerificationScreen').style.display='none';document.getElementById('adminPage').style.display='none';document.getElementById('liveRoom').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';if(faceStream){faceStream.getTracks().forEach(t=>t.stop());faceStream=null;}}
+function closeAllPages(){document.getElementById('mePage').style.display='none';document.getElementById('cartDrawer').style.display='none';document.getElementById('detail').style.display='none';document.getElementById('sellScreen').style.display='none';document.getElementById('notificationPage').style.display='none';document.getElementById('sellerVerificationScreen').style.display='none';document.getElementById('adminPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';if(faceStream){faceStream.getTracks().forEach(t=>t.stop());faceStream=null;}}
 function openDetail(id){currentP=products.find(p=>p.id===id);if(!currentP)return;document.getElementById('dTitleFull').innerText=currentP.name;document.getElementById('dPrice').innerText='GH₵'+currentP.price;document.getElementById('detailImgs').innerHTML=currentP.imgs.map(im=>`<div class="swiper-slide"><img src="${im}" class="w-full h-full object-cover"></div>`).join('');document.getElementById('detail').style.display='block';setTimeout(()=>{if(detailSwiper)detailSwiper.destroy();detailSwiper=new Swiper('#detailSwiper',{loop:true,pagination:{el:'.swiper-pagination'}});},100);}
 function closeDetail(){document.getElementById('detail').style.display='none';}
 function addCartDetailFixed(){if(!currentP)return;cart.push({...currentP,qty:1});render();openCart();}
 function openCart(){document.getElementById('cartDrawer').style.display='flex';render();}
 function closeCart(){document.getElementById('cartDrawer').style.display='none';}
-function openMe(){closeAllPages();document.getElementById('mePage').style.display='block';document.getElementById('meShop').innerText=user?user.shop:"Shop";document.getElementById('myOrdersList').innerHTML='<div class="bg-white p-3 rounded-xl"><p class="text-[11px]">Admin sees all seller files to save for future</p></div>';updateVerificationUI();updateAdminButton();}
+function openMe(){closeAllPages();document.getElementById('mePage').style.display='block';document.getElementById('meShop').innerText=user?user.shop:"Shop";updateVerificationUI();updateAdminButton();}
 function openVerificationFromMe(){closeAllPages();document.getElementById('sellerVerificationScreen').style.display='block';if(user){document.getElementById('verShopName').value=user.shop;}document.getElementById('kofiFloatingBtn').style.display='none';document.getElementById('bottomNav').style.display='none';}
-function openSell(){if(!user){toast('Login first');return;}if(!isSellerVerified(user.shop)){closeAllPages();document.getElementById('sellerVerificationScreen').style.display='block';document.getElementById('verShopName').value=user.shop;toast('🔒 Waiting Admin Approval or Verify First');return;}closeAllPages();document.getElementById('sellScreen').style.display='block';document.getElementById('upShopName').value=user.shop;let verData=JSON.parse(localStorage.getItem('dornny_seller_verified_'+user.shop)||'null');if(verData){document.getElementById('verifiedSellerDetails').innerText=`✓ ${verData.sellerName} - ${verData.ghanaCard} - Approved by Admin`;} }
+function openSell(){if(!user){toast('Login first');return;}if(!isSellerVerified(user.shop)){closeAllPages();document.getElementById('sellerVerificationScreen').style.display='block';document.getElementById('verShopName').value=user.shop;toast('🔒 Waiting Admin Approval');return;}closeAllPages();document.getElementById('sellScreen').style.display='block';document.getElementById('upShopName').value=user.shop;}
 function closeSell(){document.getElementById('sellScreen').style.display='none';}
 function closeVerification(){document.getElementById('sellerVerificationScreen').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';if(faceStream){faceStream.getTracks().forEach(t=>t.stop());faceStream=null;}}
 function handleGallery(e){uploadedImages=[];document.getElementById('previewImgs').innerHTML='';Array.from(e.target.files).slice(0,5).forEach(file=>{let r=new FileReader();r.onload=ev=>{uploadedImages.push(ev.target.result);document.getElementById('previewImgs').innerHTML+=`<img src="${ev.target.result}" class="w-full h-20 object-cover rounded border">`;};r.readAsDataURL(file);});}
-
-// FIXED - BOTH APPEAR WHERE YOU CIRCLED + ADMIN SAVE
-function compressImage(file,cb){
-let reader=new FileReader();
-reader.onload=function(ev){
-let img=new Image();
-img.onload=function(){
-let canvas=document.createElement('canvas');
-canvas.width=800; canvas.height=img.height*(800/img.width);
-let ctx=canvas.getContext('2d');
-ctx.drawImage(img,0,0,canvas.width,canvas.height);
-cb(canvas.toDataURL('image/jpeg',0.7));
-};
-img.src=ev.target.result;
-};
-reader.readAsDataURL(file);
-}
-function handleGhanaCardFront(e){
-let file=e.target.files[0]; if(!file) return;
-toast('📷 Loading Front...');
-compressImage(file,function(comp){
-ghanaFrontData=comp;
-let preview=document.getElementById('previewGhanaFront');
-preview.src=comp; preview.classList.remove('hidden');
-document.getElementById('frontPlaceholder').classList.add('hidden');
-document.getElementById('frontStatus').innerText='✅ Front added - Shows where circled!';
-document.getElementById('frontStatus').className='text-[9px] font-bold text-center mt-1 text-green-600';
-toast('✅ Front shows where circled!');
-});
-}
-function handleGhanaCardBack(e){
-let file=e.target.files[0]; if(!file) return;
-toast('📷 Loading Back...');
-compressImage(file,function(comp){
-ghanaBackData=comp;
-let preview=document.getElementById('previewGhanaBack');
-preview.src=comp; preview.classList.remove('hidden');
-document.getElementById('backPlaceholder').classList.add('hidden');
-document.getElementById('backStatus').innerText='✅ Back added - Shows where circled!';
-document.getElementById('backStatus').className='text-[9px] font-bold text-center mt-1 text-green-600';
-toast('✅ Back shows where circled!');
-});
-}
-async function startFaceScan(){try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});faceStream=s;const v=document.getElementById('faceVideo');v.srcObject=s;v.classList.remove('hidden');document.getElementById('facePlaceholder').classList.add('hidden');document.getElementById('startFaceBtn').classList.add('hidden');document.getElementById('captureFaceBtn').classList.remove('hidden');document.getElementById('faceScanStatus').innerText='📷 Camera ON - Center face then Capture';await v.play();}catch(err){toast('❌ Allow Camera');}}
-function captureFace(){let v=document.getElementById('faceVideo');let c=document.getElementById('faceCanvas');let img=document.getElementById('facePreview');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);faceScanData=c.toDataURL('image/jpeg',0.8);img.src=faceScanData;img.classList.remove('hidden');v.classList.add('hidden');document.getElementById('captureFaceBtn').classList.add('hidden');document.getElementById('retakeFaceBtn').classList.remove('hidden');document.getElementById('faceScanStatus').innerText='✅ Face captured - Where you circled';document.getElementById('faceScanStatus').className='text-[10px] font-bold text-center mt-2 text-green-600';toast('✅ Face captured');}
-function retakeFace(){document.getElementById('facePreview').classList.add('hidden');document.getElementById('faceVideo').classList.remove('hidden');document.getElementById('captureFaceBtn').classList.remove('hidden');document.getElementById('retakeFaceBtn').classList.add('hidden');document.getElementById('faceScanStatus').innerText='📷 Retake - Center face';}
-
+function compressImage(file,cb){let reader=new FileReader();reader.onload=function(ev){let img=new Image();img.onload=function(){let canvas=document.createElement('canvas');canvas.width=800;canvas.height=img.height*(800/img.width);let ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);cb(canvas.toDataURL('image/jpeg',0.7));};img.src=ev.target.result;};reader.readAsDataURL(file);}
+function handleGhanaCardFront(e){let file=e.target.files[0];if(!file)return;toast('📷 Loading Front...');compressImage(file,function(comp){ghanaFrontData=comp;let p=document.getElementById('previewGhanaFront');p.src=comp;p.classList.remove('hidden');document.getElementById('frontPlaceholder').classList.add('hidden');document.getElementById('frontStatus').innerText='✅ Front added - Shows where circled!';document.getElementById('frontStatus').className='text-[9px] font-bold text-center mt-1 text-green-600';toast('✅ Front shows where circled!');});}
+function handleGhanaCardBack(e){let file=e.target.files[0];if(!file)return;toast('📷 Loading Back...');compressImage(file,function(comp){ghanaBackData=comp;let p=document.getElementById('previewGhanaBack');p.src=comp;p.classList.remove('hidden');document.getElementById('backPlaceholder').classList.add('hidden');document.getElementById('backStatus').innerText='✅ Back added - Shows where circled!';document.getElementById('backStatus').className='text-[9px] font-bold text-center mt-1 text-green-600';toast('✅ Back shows where circled!');});}
+async function startFaceScan(){try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});faceStream=s;const v=document.getElementById('faceVideo');v.srcObject=s;v.classList.remove('hidden');document.getElementById('facePlaceholder').classList.add('hidden');document.getElementById('startFaceBtn').classList.add('hidden');document.getElementById('captureFaceBtn').classList.remove('hidden');document.getElementById('faceScanStatus').innerText='📷 Camera ON - Center face';await v.play();}catch(err){toast('❌ Allow Camera');}}
+function captureFace(){let v=document.getElementById('faceVideo');let c=document.getElementById('faceCanvas');let img=document.getElementById('facePreview');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);faceScanData=c.toDataURL('image/jpeg',0.8);img.src=faceScanData;img.classList.remove('hidden');v.classList.add('hidden');document.getElementById('captureFaceBtn').classList.add('hidden');document.getElementById('retakeFaceBtn').classList.remove('hidden');document.getElementById('faceScanStatus').innerText='✅ Face captured';document.getElementById('faceScanStatus').className='text-[10px] font-bold text-center mt-2 text-green-600';}
+function retakeFace(){document.getElementById('facePreview').classList.add('hidden');document.getElementById('faceVideo').classList.remove('hidden');document.getElementById('captureFaceBtn').classList.remove('hidden');document.getElementById('retakeFaceBtn').classList.add('hidden');}
 function submitVerificationAdmin(){
 let sellerName=document.getElementById('verSellerName').value.trim();
 let age=parseInt(document.getElementById('verAge').value);
@@ -280,26 +230,22 @@ let whatsapp=document.getElementById('verWhatsapp').value.trim();
 let momo=document.getElementById('verMomo').value.trim();
 if(!sellerName||!age||age<18||!gender||!shopName||!ghanaCard||!location||!whatsapp||!momo){toast('❌ Fill all fields');return;}
 if(!ghanaFrontData){toast('❌ Upload Front where circled');return;}
-if(!ghanaBackData){toast('❌ Upload Back where circled - Tap Back button');return;}
+if(!ghanaBackData){toast('❌ Upload Back where circled');return;}
 if(!faceScanData){toast('❌ Do Face Scan');return;}
 let data={id:'VER-'+Date.now(),sellerName,age,gender,shopName,ghanaCard:ghanaCard.toUpperCase(),location,gps,whatsapp,momo,ghanaFront:ghanaFrontData,ghanaBack:ghanaBackData,faceScan:faceScanData,date:new Date().toLocaleString(),status:'pending',verified:false};
 let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');
 all.unshift(data);
 localStorage.setItem('dornny_all_verifications',JSON.stringify(all));
 document.getElementById('verificationCheck').classList.remove('hidden');
-document.getElementById('checkResults').innerHTML=`<div class="bg-yellow-100 border-2 border-yellow-600 rounded-xl p-3"><p class="font-black text-[12px]">⏳ Sent to Admin 0555258032</p><p class="text-[10px] mt-1">Your Ghana Card Front + Back + Face saved for future purpose. Admin will approve soon. Shop: ${shopName}</p></div>`;
-document.getElementById('submitVerBtn').innerText='⏳ WAITING FOR ADMIN APPROVAL';
-toast('✅ Sent to Admin - Files saved for future purpose');
+document.getElementById('checkResults').innerHTML=`<div class="bg-yellow-100 border-2 border-yellow-600 rounded-xl p-3"><p class="font-black text-[12px]">⏳ Sent to Admin 0555258032 - Saved for future</p><p class="text-[10px] mt-1">Shop: ${shopName} - Admin will approve</p></div>`;
+document.getElementById('submitVerBtn').innerText='⏳ WAITING FOR ADMIN 0555258032';
+toast('✅ Sent to Admin - Saved for future purpose');
 setTimeout(()=>{closeVerification();},2000);
 }
-function uploadProduct(){if(!user)return;if(!isSellerVerified(user.shop)){toast('Not Verified - Wait Admin');return;}let shop=document.getElementById('upShopName').value.trim();let n=document.getElementById('upName').value.trim();let pr=parseFloat(document.getElementById('upPrice').value);let ca=document.getElementById('upCat').value;if(!shop||!n||!pr||uploadedImages.length===0){toast('Fill all');return;}let newP={id:Date.now(),name:n,price:pr,cat:ca,imgs:[...uploadedImages],seller:shop};products.unshift(newP);localStorage.setItem('dornny_products_v2',JSON.stringify(products));uploadedImages=[];document.getElementById('previewImgs').innerHTML='';document.getElementById('upName').value='';document.getElementById('upPrice').value='';render();closeSell();navHome();toast('✅ Uploaded');}
+function uploadProduct(){if(!user)return;if(!isSellerVerified(user.shop)){toast('Not Verified - Wait Admin 0555258032');return;}let shop=document.getElementById('upShopName').value.trim();let n=document.getElementById('upName').value.trim();let pr=parseFloat(document.getElementById('upPrice').value);let ca=document.getElementById('upCat').value;if(!shop||!n||!pr||uploadedImages.length===0){toast('Fill all');return;}let newP={id:Date.now(),name:n,price:pr,cat:ca,imgs:[...uploadedImages],seller:shop};products.unshift(newP);localStorage.setItem('dornny_products_v2',JSON.stringify(products));uploadedImages=[];document.getElementById('previewImgs').innerHTML='';document.getElementById('upName').value='';document.getElementById('upPrice').value='';render();closeSell();navHome();toast('✅ Uploaded');}
 function openNotificationPage(){document.getElementById('notificationPage').style.display='block';}
 function closeNotificationPage(){document.getElementById('notificationPage').style.display='none';}
-function openLiveVideo(){document.getElementById('videosPage').style.display='block';}
-function closeVideos(){document.getElementById('videosPage').style.display='none';}
-function startLive(){toast('Live coming');}
-function closeLive(){if(liveStream){liveStream.getTracks().forEach(t=>t.stop());}document.getElementById('liveRoom').style.display='none';}
-function checkout(){if(cart.length===0){toast('Cart empty');return;}let total=0;cart.forEach(c=>total+=c.price);let orderId='DM-'+Date.now().toString().slice(-6);let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');orders.unshift({id:orderId,total:total,dateString:new Date().toLocaleString()});localStorage.setItem('dornny_orders',JSON.stringify(orders));cart=[];render();closeCart();toast('✅ Order '+orderId);}
+function checkout(){if(cart.length===0){toast('Cart empty');return;}let total=0;cart.forEach(c=>total+=c.price);let orderId='DM-'+Date.now().toString().slice(-6);let orders=JSON.parse(localStorage.getItem('dornny_orders')||'[]');orders.unshift({id:orderId,total:total});localStorage.setItem('dornny_orders',JSON.stringify(orders));cart=[];render();closeCart();toast('✅ Order '+orderId);}
 function doLogout(){localStorage.removeItem('dornny_user');location.reload();}
 (function(){let saved=localStorage.getItem('dornny_user');if(saved){try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateVerificationUI();updateAdminButton();}catch(e){}}else{renderCats();render();}})();
 </script>
