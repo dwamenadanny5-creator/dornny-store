@@ -11,12 +11,13 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <style>
-body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:22px;font-size:12px;z-index:9999;display:none;max-width:90%;text-align:center}
+body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:22px;font-size:12px;z-index:999999;display:none;max-width:90%;text-align:center}
 .hide::-webkit-scrollbar{display:none}
 .cat-active{background:#111!important;color:#fff!important}
 .bottom-active{color:#f68b1e!important}
-.kofi-btn{position:fixed;bottom:85px;right:12px;z-index:9999;width:54px;height:54px;background:linear-gradient(135deg,#000,#f68b1e);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.4);border:2px solid #fff}
+.kofi-btn{position:fixed;bottom:85px;right:12px;z-index:9999;width:56px;height:56px;background:linear-gradient(135deg,#000,#f68b1e);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.4);border:2px solid #fff}
+.lang-btn{transition:all .2s}
 </style>
 </head>
 <body>
@@ -25,39 +26,30 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 
 <div id="loginScreen" class="min-h-[85vh] flex items-center justify-center p-4">
 <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow"><h2 class="font-black text-center text-[20px]">DORNNY MARKET</h2><p class="text-center text-[11px] text-[#f68b1e] font-bold">Amansan Dwaaso</p>
-<input id="emailPhone" type="text" placeholder="Email or Phone *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 mt-5">
-<input id="password" type="password" placeholder="Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2">
-<input id="confirmPassword" type="password" placeholder="Confirm *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-4">
-<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN</button>
-</div>
+<input id="emailPhone" type="text" placeholder="Email or Phone *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 mt-5"><input id="password" type="password" placeholder="Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2"><input id="confirmPassword" type="password" placeholder="Confirm *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-4">
+<button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN</button></div>
 </div>
 
 <div id="mainApp" class="hidden">
-<div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black text-[13px] leading-[12px]">DORNNY<br>MARKET<br><span class="text-[8px] text-[#f68b1e]">Amansan Dwaaso</span></div>
-<div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div>
-</div>
+<div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black text-[13px] leading-[12px]">DORNNY<br>MARKET<br><span class="text-[8px] text-[#f68b1e]">Amansan Dwaaso</span></div><div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search products..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div></div>
 <div class="bg-gradient-to-r from-[#f68b1e] to-black text-white m-2 rounded-xl p-3 flex justify-between items-center"><div><p class="font-black text-[12px]">🪙 SELLER EARN - 2 GHS WEEKLY</p><p class="text-[10px]">Balance: GH₵<span id="coinBalanceHome">0.00</span></p></div><button onclick="openMe()" class="bg-white text-black px-3 py-2 rounded-full text-[10px] font-black">EARN →</button></div>
 <div class="bg-white p-2 border-b sticky top-[50px] z-20"><div id="catList" class="flex gap-2 overflow-x-auto hide pb-1"></div><p id="catResult" class="text-[11px] font-bold mt-1 text-gray-600"></p></div>
-<div id="grid" class="p-2 grid grid-cols-2 gap-2"><p class="col-span-2 text-center py-10 text-[12px]">🔄 Loading products...</p></div>
+<div id="grid" class="p-2 grid grid-cols-2 gap-2"><p class="col-span-2 text-center py-10 text-[12px]">Loading products...</p></div>
 </div>
 
-<!-- NEW SELLER VERIFICATION - 50 GHS MONTHLY -->
+<!-- SELLER VERIFICATION 50 GHS -->
 <div id="sellerVerificationScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto pb-[90px]">
-<div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">🔒 Seller Verification - 50 GHS / Month</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><p class="text-[10px] text-yellow-300 mt-1">Pay 50 GHS monthly to sell - Simple form</p></div>
+<div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">Seller Verification - 50 GHS / Month</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><p class="text-[10px] text-yellow-300 mt-1">Pay 50 GHS monthly to sell - Products show on all phones</p></div>
 <div class="p-4 space-y-4">
-<div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-3"><p class="font-black text-[12px]">💰 Monthly Fee: 50 GHS</p><p class="text-[10px] mt-1">Pay via MoMo to start selling. Renew every 30 days. Your products show on all phones.</p></div>
-
+<div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-3"><p class="font-black text-[12px]">💰 Monthly Fee: 50 GHS</p><p class="text-[10px] mt-1">Pay via MoMo to start selling. Renew every 30 days.</p></div>
 <div><p class="font-bold text-[12px]">1. Seller Full Name *</p><input id="verSellerName" placeholder="e.g. Danny Mensah" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
 <div><p class="font-bold text-[12px]">2. Age *</p><input id="verAge" type="number" placeholder="e.g. 25" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
 <div><p class="font-bold text-[12px]">3. Gender *</p><select id="verGender" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold bg-white"><option value="">Select Gender *</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
 <div><p class="font-bold text-[12px]">4. Location *</p><input id="verLocation" placeholder="e.g. Accra - Madina" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"><div class="flex gap-2 mt-2"><input id="verGPS" class="flex-1 border rounded-xl px-3 py-2 text-[11px] bg-gray-100" placeholder="GPS auto"><button onclick="getVerificationGPS()" class="bg-black text-white px-3 py-2 rounded-full text-[10px]">📍 Get GPS</button></div></div>
-
-<div class="bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-bold text-[12px] text-green-800">5. MoMo Number to Pay 50 GHS *</p><input id="verMomo" type="tel" placeholder="0555258032" class="w-full border-2 border-green-600 rounded-xl px-3 py-3 mt-2 text-[13px] font-bold bg-white"><p class="text-[9px] mt-2">Send 50 GHS to: <b>0555258032 - Dornny Market</b> - Then click Pay</p></div>
-
-<div class="bg-black text-white rounded-xl p-3 mt-4"><p class="font-black text-[12px]">Payment Status: <span id="payStatus">Not Paid</span></p><p class="text-[9px] text-yellow-300" id="payExpiry">Pay 50 GHS to activate selling for 30 days</p></div>
-
-<button onclick="payMonthlyFee()" id="payBtn" class="w-full bg-[#f68b1e] text-black py-4 rounded-full mt-4 font-black text-[15px]">💳 PAY 50 GHS NOW - Activate Selling</button>
-<button onclick="submitVerificationAdmin()" id="submitVerBtn" class="w-full bg-black text-white py-4 rounded-full mt-3 font-black text-[14px] hidden">✅ COMPLETE VERIFICATION</button>
+<div class="bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-bold text-[12px] text-green-800">5. MoMo Number to Pay 50 GHS *</p><input id="verMomo" type="tel" placeholder="0555258032" class="w-full border-2 border-green-600 rounded-xl px-3 py-3 mt-2 text-[13px] font-bold bg-white"><p class="text-[9px] mt-2">Send 50 GHS to: <b>0555258032 - Dornny Market</b></p></div>
+<div class="bg-black text-white rounded-xl p-3"><p class="font-black text-[12px]">Payment: <span id="payStatus">Not Paid</span></p><p class="text-[9px] text-yellow-300" id="payExpiry">Pay 50 GHS to activate for 30 days</p></div>
+<button onclick="payMonthlyFee()" id="payBtn" class="w-full bg-[#f68b1e] text-black py-4 rounded-full mt-4 font-black text-[15px]">💳 PAY 50 GHS NOW</button>
+<button onclick="submitVerificationAdmin()" id="submitVerBtn" class="w-full bg-black text-white py-4 rounded-full mt-3 font-black text-[14px] hidden">✅ COMPLETE</button>
 <button onclick="closeVerification()" class="w-full bg-gray-200 py-3 rounded-full mt-3 font-bold text-[12px]">Cancel</button>
 </div>
 </div>
@@ -67,10 +59,10 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 <div class="bg-gradient-to-r from-[#f68b1e] to-black text-white m-3 rounded-2xl p-4"><p class="font-black text-[14px]">🪙 Earn Box</p><p class="text-[11px]">Balance: GH₵<span id="coinBalance">0.00</span></p><p class="text-[9px] mt-1" id="coinStatus">Verify to earn</p></div>
 <div class="bg-white p-4 mt-2 flex gap-4 items-center"><img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span></p><p class="text-[12px] text-[#f68b1e] font-bold" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p><p class="text-[9px] text-gray-500" id="meExpiry"></p></div></div>
 <div class="bg-white mt-2">
-<button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Admin</p></div></button>
+<button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Admin - Sellers</p></div></button>
 <button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p><p class="text-[10px] text-gray-300" id="myGoodsVerifyText">Verify first</p></div></button>
 <button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50 border-2 border-yellow-600"><div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Become Seller - 50 GHS / Month</p></div></button>
-<button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI</p></div></button>
+<button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI - Voice Chat</p><p class="text-[9px]">Speaks Twi, English, Hausa, Ewe, Ga, French</p></div></button>
 </div>
 <div class="bg-white mt-4 p-4 flex gap-2 mb-4"><button onclick="openSell()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">+ Sell</button><button onclick="doLogout()" class="flex-1 bg-gray-200 py-3 rounded-full font-bold text-[12px]">Logout</button></div>
 </div>
@@ -81,100 +73,68 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px}
 
 <div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[40] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><div><b>Cart</b><p id="cartCount2" class="text-[11px]">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 border-b max-h-[35vh] overflow-y-auto"></div><div class="p-4 border-t bg-white space-y-2 pb-[85px]"><div class="flex justify-between font-black text-[18px]"><span>Total</span><span id="totalPay">GH₵0</span></div><button onclick="checkout()" class="w-full bg-black text-white py-4 rounded-full font-black text-[16px] mt-2">PAY NOW</button></div></div></div>
 <div id="categoryPage" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex items-center gap-3 border-b"><button onclick="closeCategory()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Categories</p></div><div id="categoryGrid" class="p-3 grid grid-cols-2 gap-3"></div></div>
-<div id="adminPage" class="fixed inset-0 bg-white z-[90] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center"><h2 class="font-black">Admin - Sellers 50GHS</h2><button onclick="closeAdminPage()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div class="p-3"><div id="adminVerificationsList" class="mt-4 space-y-4"></div></div></div>
+<div id="adminPage" class="fixed inset-0 bg-white z-[90] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center"><h2 class="font-black">Admin - Sellers</h2><button onclick="closeAdminPage()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div class="p-3"><div id="adminVerificationsList" class="mt-4 space-y-4"></div></div></div>
 <div id="sellerStorePage" class="fixed inset-0 bg-[#f5f5f5] z-[45] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex items-center gap-3 border-b"><button onclick="closeSellerStore()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black text-[14px]">Seller Store</p></div><div class="bg-white p-4 mt-2 border-b-2 border-black"><div class="flex gap-4 items-center"><img id="storeProfileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[75px] h-[75px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p id="storeShopName" class="font-black text-[16px]">Shop</p><p id="storeShopStats" class="text-[11px] text-gray-500">0 products</p><p id="storeVerifiedInfo" class="text-[10px] font-bold"></p></div></div><div class="grid grid-cols-2 gap-2 mt-4"><button id="storeFollowBtn" onclick="toggleFollowCurrentStore()" class="bg-black text-white py-2.5 rounded-full text-[11px] font-bold">+ Follow</button><button onclick="openWhatsAppStoreSeller()" class="bg-[#25D366] text-white py-2.5 rounded-full text-[11px] font-bold">💬 WhatsApp</button></div></div><div class="p-2"><div id="sellerStoreGrid" class="grid grid-cols-2 gap-2"></div></div></div>
 <div id="coinHistoryPage" class="fixed inset-0 bg-white z-[70] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center"><h2 class="font-black">🪙 Earn History</h2><button onclick="closeCoinHistory()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div class="p-4"><div class="bg-yellow-50 border-2 border-black rounded-xl p-3"><p class="font-black">Total: GH₵<span id="coinTotalEarned">0.00</span></p></div><div id="coinHistoryList" class="mt-4 space-y-2"></div></div></div>
 
 <div id="kofiFloatingBtn" class="kofi-btn" onclick="openKofiAI()">🤖</div>
 <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-[100]"><button onclick="navHome()" id="navHome" class="flex flex-col items-center bottom-active"><i class="fa-solid fa-house text-[18px]"></i><span class="text-[9px] font-bold mt-1">Home</span></button><button onclick="openCategoryPage()" id="navCategory" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-table-cells-large text-[18px]"></i><span class="text-[9px] mt-1">Category</span></button><button onclick="openSell()" id="navSell" class="flex flex-col items-center text-gray-500"><div class="bg-black text-white w-9 h-9 rounded-full flex items-center justify-center -mt-1"><i class="fa-solid fa-plus text-[16px]"></i></div><span class="text-[9px] font-bold mt-1">Sell</span></button><button onclick="openCart()" id="navCart" class="flex flex-col items-center text-gray-500 relative"><i class="fa-solid fa-cart-shopping text-[18px]"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-[#f68b1e] text-white text-[8px] w-4 h-4 rounded-full">0</span><span class="text-[9px] mt-1">Cart</span></button><button onclick="openMe()" id="navMe" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-user text-[18px]"></i><span class="text-[9px] mt-1">Me</span></button></nav>
 
-<!-- KOFI AI - FIXED REPLYING -->
-<div id="kofiAIPage" class="fixed inset-0 bg-white z-[80] hidden flex-col"><div class="bg-black text-white p-3 flex justify-between items-center"><h2 class="font-black text-[14px]">🤖 Kofi AI</h2><button onclick="closeKofiAI()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f5f5f5]"><div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-2xl text-[12px] max-w-[85%]">👋 Hello! I am Kofi - Your Dornny Market assistant. How can I help you today?</div></div></div><div class="p-3 border-t flex gap-2 bg-white"><input id="kofiInput" onkeydown="if(event.key==='Enter')sendKofiMessage()" placeholder="Ask Kofi..." class="flex-1 border rounded-full px-4 py-2 text-[13px]"><button onclick="sendKofiMessage()" class="bg-black text-white px-5 py-2 rounded-full font-bold">Send</button></div></div>
+<!-- KOFI AI - WORLD CLASS VOICE + MULTILINGUAL + FULL CHAT -->
+<div id="kofiAIPage" class="fixed inset-0 bg-white z-[80] hidden flex-col">
+  <div class="bg-black text-white p-3 flex justify-between items-center">
+    <div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#f68b1e] rounded-full flex items-center justify-center">🤖</div><div><h2 class="font-black text-[13px]">Kofi AI - World Assistant</h2><p class="text-[8px] text-green-300">Voice ON • Twi, English, Hausa, Ewe, Ga, French</p></div></div>
+    <button onclick="closeKofiAI()" class="w-8 h-8 bg-white/20 rounded-full">✕</button>
+  </div>
+  <div class="bg-yellow-50 border-b p-2 flex gap-1.5 overflow-x-auto hide">
+    <button onclick="setKofiLang('en')" id="lang-en" class="lang-btn bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold">English</button>
+    <button onclick="setKofiLang('tw')" id="lang-tw" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Twi</button>
+    <button onclick="setKofiLang('ha')" id="lang-ha" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Hausa</button>
+    <button onclick="setKofiLang('ee')" id="lang-ee" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ewe</button>
+    <button onclick="setKofiLang('ga')" id="lang-ga" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ga</button>
+    <button onclick="setKofiLang('fr')" id="lang-fr" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">French</button>
+  </div>
+  <div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f8f8f8]">
+    <div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-[18px] rounded-bl-[4px] text-[13px] max-w-[85%]">👋 Akwaaba! Hello! I am <b>Kofi</b> - Your Dornny Market world assistant.<br><br>I speak <b>Twi, English, Hausa, Ewe, Ga, French</b>.<br>I know everything about Dornny Market AND I can answer any question in the world - math, health, business, school, love, anything.<br><br>🎤 Tap mic to speak, I will speak back.</div></div>
+  </div>
+  <div class="bg-white border-t p-2.5 flex items-end gap-2">
+    <button onclick="toggleVoice()" id="micBtn" class="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center text-[18px]">🎤</button>
+    <div class="flex-1 bg-[#f2f2f2] rounded-[22px] flex items-end p-2 border"><textarea id="kofiInput" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendKofiMessage()}" placeholder="Ask Kofi anything..." class="flex-1 bg-transparent px-3 py-2 text-[13px] outline-none resize-none max-h-[90px] min-h-[36px]" rows="1"></textarea><button onclick="speakLast()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[12px] ml-1">🔊</button></div>
+    <button onclick="sendKofiMessage()" class="w-11 h-11 bg-black text-white rounded-full flex items-center justify-center font-bold">↑</button>
+  </div>
+</div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA",
-  authDomain: "dornnysmarket.firebaseapp.com",
-  projectId: "dornnysmarket",
-  storageBucket: "dornnysmarket.firebasestorage.app",
-  messagingSenderId: "726307073658",
-  appId: "1:726307073658:web:24c52654e92de69cfa95c3"
-};
-let db=null;
-try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); }catch(e){}
-
+const firebaseConfig = { apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA", authDomain: "dornnysmarket.firebaseapp.com", projectId: "dornnysmarket", storageBucket: "dornnysmarket.firebasestorage.app", messagingSenderId: "726307073658", appId: "1:726307073658:web:24c52654e92de69cfa95c3" };
+let db=null; try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); }catch(e){}
 let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
 let defaultProducts=[{id:1001,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600"],seller:"Danny shop",desc:"Club top",likes:2}];
-let products=[...defaultProducts];
-let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],detailSwiper=null,currentStoreSeller=null;
+let products=[...defaultProducts]; let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],detailSwiper=null,currentStoreSeller=null;
 let followedSellers=JSON.parse(localStorage.getItem('dornny_followed')||'[]');
-
 function getShopProfile(s){return localStorage.getItem('dornny_shop_profile_'+s)||'https://cdn-icons-png.flaticon.com/512/149/149071.png';}
-function isSellerVerified(s){
-  let d=JSON.parse(localStorage.getItem('dornny_seller_verified_'+s)||'null');
-  if(!d||!d.verified) return false;
-  if(d.expiry && Date.now() > d.expiry){ localStorage.removeItem('dornny_seller_verified_'+s); return false; }
-  return true;
-}
+function isSellerVerified(s){let d=JSON.parse(localStorage.getItem('dornny_seller_verified_'+s)||'null'); if(!d||!d.verified) return false; if(d.expiry && Date.now()>d.expiry){localStorage.removeItem('dornny_seller_verified_'+s);return false;} return true;}
 function getSellerVerification(s){return JSON.parse(localStorage.getItem('dornny_seller_verified_'+s)||'null');}
-function getSellerWhatsApp(s){let v=getSellerVerification(s);return v?v.whatsapp||v.momo:'';}
+function getSellerWhatsApp(s){let v=getSellerVerification(s);return v?v.momo||v.whatsapp:'';}
 function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
-function isAdmin(){if(!user)return false;return ["0555258032","233555258032"].includes(user.loginId);}
+function isAdmin(){if(!user)return false;return ["0555258032"].includes(user.loginId);}
 function updateAdminButton(){let b=document.getElementById('adminBtn');if(!b)return;if(isAdmin()){b.classList.remove('hidden');b.classList.add('flex');}else{b.classList.add('hidden');}}
 function openAdminPage(){document.getElementById('adminPage').style.display='block';renderAdminVerifications();}
 function closeAdminPage(){document.getElementById('adminPage').style.display='none';}
-function renderAdminVerifications(){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let l=document.getElementById('adminVerificationsList');if(all.length===0){l.innerHTML='<div class="bg-white border rounded-xl p-6 text-center"><p>No sellers yet</p></div>';return;}l.innerHTML=all.map(v=>`<div class="bg-white border-2 border-black rounded-xl p-3"><p class="font-black text-[13px]">${v.sellerName} - ${v.shopName}</p><p class="text-[11px]">Age:${v.age} Gender:${v.gender} Location:${v.location}</p><p class="text-[11px]">MoMo:${v.momo} Paid: GH₵${v.amount} Expiry: ${new Date(v.expiry).toLocaleDateString()}</p></div>`).join('');}
+function renderAdminVerifications(){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let l=document.getElementById('adminVerificationsList');if(all.length===0){l.innerHTML='<div class="bg-white border rounded-xl p-6 text-center"><p>No sellers yet</p></div>';return;}l.innerHTML=all.map(v=>`<div class="bg-white border-2 border-black rounded-xl p-3"><p class="font-black text-[13px]">${v.sellerName} - ${v.shopName}</p><p class="text-[11px]">Age:${v.age} Gender:${v.gender} Location:${v.location} MoMo:${v.momo} Paid:${v.amount} Exp:${new Date(v.expiry).toLocaleDateString()}</p></div>`).join('');}
 function openWhatsAppDirect(num,shop){let c=num.replace(/[^0-9]/g,'');if(c.startsWith('0'))c='233'+c.substring(1);window.open(`https://wa.me/${c}?text=${encodeURIComponent('Hello '+shop+' from Dornny Market')}`,'_blank');}
 function doLogin(){let login=document.getElementById('emailPhone').value.trim();let pass=document.getElementById('password').value.trim();let conf=document.getElementById('confirmPassword').value.trim();if(!login){toast('Enter Email or Phone');return;}if(!pass||pass.length<4){toast('Password 4+');return;}let key=login.includes('@')?login.toLowerCase():login.replace(/[^0-9+]/g,'');let users=JSON.parse(localStorage.getItem('dornny_users')||'{}');if(users[key]){if(users[key].password!==pass){toast('Wrong password');return;}user={shop:users[key].shop,email:users[key].email,phone:users[key].phone,loginId:key};}else{if(!conf){toast('Enter Confirm');return;}if(pass!==conf){toast('Not same');return;}let defaultShop=login.includes('@')?key.split('@')[0]+' shop':'Shop '+key.slice(-4);users[key]={shop:defaultShop,email:key,phone:login.includes('@')?'':key,password:pass,loginId:key};localStorage.setItem('dornny_users',JSON.stringify(users));user={shop:defaultShop,email:key,phone:login.includes('@')?'':key,loginId:key};}localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();}
 function renderCats(){document.getElementById('catList').innerHTML=categories.map(c=>`<button onclick="setCat('${c}')" class="px-4 py-2 rounded-full text-[11px] border whitespace-nowrap font-bold ${currentCat===c?'cat-active':'bg-[#f2f2f2]'}">${c}</button>`).join('');document.getElementById('upCat').innerHTML=categories.filter(c=>c!=='All').map(c=>`<option value="${c}">${c}</option>`).join('');}
 function setCat(c){currentCat=c;renderCats();render();}
 function getVerificationGPS(){navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude.toFixed(6),lng=p.coords.longitude.toFixed(6);document.getElementById('verGPS').value=`GA-${lat}-${lng}`;document.getElementById('verLocation').value=document.getElementById('verLocation').value+' - GA-'+lat;});}
-function updateVerificationUI(){
-  if(!user) return;
-  let v=getSellerVerification(user.shop);
-  let verified=isSellerVerified(user.shop);
-  document.getElementById('meVerificationStatus').innerText=verified?`✓ VERIFIED - 50 GHS Paid`:'✗ NOT VERIFIED';
-  document.getElementById('meVerificationStatus').className=verified?'text-green-600 font-bold':'text-red-600 font-bold';
-  document.getElementById('myGoodsVerifyText').innerText=verified?'✓ Active - 50 GHS/month':'✗ Pay 50 GHS to sell';
-  if(verified && v){
-    let days=Math.ceil((v.expiry-Date.now())/(24*60*60*1000));
-    document.getElementById('meExpiry').innerText=`Expires in ${days} days - Renew 50 GHS`;
-    document.getElementById('payStatus').innerText=`Paid - Expires in ${days} days`;
-    document.getElementById('payExpiry').innerText=`Expiry: ${new Date(v.expiry).toLocaleString()} - 50 GHS/month`;
-    document.getElementById('payBtn').classList.add('hidden');
-    document.getElementById('submitVerBtn').classList.remove('hidden');
-    document.getElementById('submitVerBtn').innerText='✅ VERIFIED - 50 GHS Active';
-  }
-}
+function updateVerificationUI(){if(!user) return;let v=getSellerVerification(user.shop);let verified=isSellerVerified(user.shop);document.getElementById('meVerificationStatus').innerText=verified?`✓ VERIFIED - 50 GHS Paid`:'✗ NOT VERIFIED';document.getElementById('meVerificationStatus').className=verified?'text-green-600 font-bold':'text-red-600 font-bold';document.getElementById('myGoodsVerifyText').innerText=verified?'✓ Active - 50 GHS/month':'✗ Pay 50 GHS to sell';if(verified&&v){let days=Math.ceil((v.expiry-Date.now())/(24*60*60*1000));document.getElementById('meExpiry').innerText=`Expires in ${days} days`;document.getElementById('payStatus').innerText=`Paid - ${days} days left`;document.getElementById('payBtn').classList.add('hidden');document.getElementById('submitVerBtn').classList.remove('hidden');}}
 function getCoinBalance(){if(!user) return 0;let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');return coins.reduce((s,c)=>s+c.amount,0);}
 function getLastClaim(){if(!user) return 0;return parseInt(localStorage.getItem('dornny_last_claim_'+user.shop)||'0');}
-function updateCoinUI(){if(!user) return;let b=getCoinBalance();document.getElementById('coinBalance').innerText=b.toFixed(2);document.getElementById('coinBalanceHome').innerText=b.toFixed(2);let ver=isSellerVerified(user.shop);document.getElementById('coinStatus').innerText=ver?'Active seller - 50 GHS/month':'Pay 50 GHS to earn';}
+function updateCoinUI(){if(!user) return;let b=getCoinBalance();document.getElementById('coinBalance').innerText=b.toFixed(2);document.getElementById('coinBalanceHome').innerText=b.toFixed(2);document.getElementById('coinStatus').innerText=isSellerVerified(user.shop)?'Active seller':'Pay 50 GHS to earn';}
 function claimWeeklyCoins(){if(!isSellerVerified(user.shop)){toast('Pay 50 GHS to earn');openVerificationFromMe();return;}let last=getLastClaim();let now=Date.now();if(last!==0&&now-last<7*24*60*60*1000){toast('Wait 7 days');return;}let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');coins.push({amount:2,date:new Date().toLocaleString()});localStorage.setItem('dornny_coins_'+user.shop,JSON.stringify(coins));localStorage.setItem('dornny_last_claim_'+user.shop,now.toString());updateCoinUI();toast('2 GHS claimed');}
 function openCoinHistory(){let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');document.getElementById('coinHistoryPage').style.display='block';document.getElementById('coinTotalEarned').innerText=getCoinBalance().toFixed(2);document.getElementById('coinHistoryList').innerHTML=coins.map(c=>`<div class="bg-white border rounded-xl p-3"><p>+ GH₵${c.amount} - ${c.date}</p></div>`).join('');}
 function closeCoinHistory(){document.getElementById('coinHistoryPage').style.display='none';}
-
-function loadProductsFromCloud(){
-if(!db){ render(); return; }
-db.collection('dornny_products').orderBy('createdAt','desc').onSnapshot((snap)=>{
-let data=[]; snap.forEach(doc=>data.push(doc.data()));
-if(data.length>0){ products=data; } render();
-}, ()=>{ render(); });
-}
-
-function render(){
-let s=document.getElementById('search').value.trim().toLowerCase();
-let f=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);
-if(s)f=f.filter(p=>p.name.toLowerCase().includes(s));
-document.getElementById('catResult').innerText=`${f.length} items - Dornny Market`;
-document.getElementById('grid').innerHTML=f.length===0?'<div class="col-span-2 text-center py-10">No products yet - Be first!</div>':f.map(p=>{
-let prof=getShopProfile(p.seller); let ver=isSellerVerified(p.seller);
-return `<div class="bg-white rounded-xl overflow-hidden border ${ver?'border-green-600 border-2':'border-gray-200'}"><div onclick="openDetail(${p.id})" class="relative cursor-pointer"><img src="${p.imgs[0]}" class="w-full h-[180px] object-cover"><div class="absolute top-2 left-2 bg-white rounded-full p-[2px]"><img src="${prof}" class="w-7 h-7 rounded-full"></div><div class="absolute top-2 right-2 ${ver?'bg-green-600':'bg-red-600'} text-white text-[8px] px-2 py-1 rounded-full font-bold">${ver?'✓':'✗'}</div></div><div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><div class="flex justify-between items-center mt-1"><p class="font-black text-[14px] text-[#ff3e3e]">GH₵${p.price}</p><span class="text-[10px]">❤️ ${p.likes||0}</span></div><div class="flex gap-1 mt-2"><button onclick="event.stopPropagation();openWhatsAppSeller('${p.seller}')" class="flex-1 bg-[#25D366] text-white py-1.5 rounded-full text-[9px] font-bold">WhatsApp</button><button onclick="event.stopPropagation();openSellerStore('${p.seller}')" class="flex-1 bg-black text-white py-1.5 rounded-full text-[9px] font-bold">Store</button></div></div></div>`;
-}).join('');
-document.getElementById('cartCount').innerText=cart.length;
-document.getElementById('cartCount2').innerText=cart.length+' items';
-document.getElementById('cartItems').innerHTML=cart.map((c,i)=>`<div class="flex gap-3 border-b pb-3"><img src="${c.imgs[0]}" class="w-16 h-16 rounded"><div class="flex-1"><p class="font-bold text-[13px]">${c.name}</p><button onclick="removeCart(${i})" class="mt-1 bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Remove</button></div></div>`).join('');
-let total=0;cart.forEach(c=>total+=Number(c.price)||0);document.getElementById('totalPay').innerText='GH₵'+total;
-}
+function loadProductsFromCloud(){if(!db){render();return;}db.collection('dornny_products').orderBy('createdAt','desc').onSnapshot((snap)=>{let data=[];snap.forEach(doc=>data.push(doc.data()));if(data.length>0){products=data;}render();},()=>{render();});}
+function render(){let s=document.getElementById('search').value.trim().toLowerCase();let f=currentCat==='All'?products:products.filter(p=>p.cat===currentCat);if(s)f=f.filter(p=>p.name.toLowerCase().includes(s));document.getElementById('catResult').innerText=`${f.length} items`;document.getElementById('grid').innerHTML=f.length===0?'<div class="col-span-2 text-center py-10">No products yet - Be first!</div>':f.map(p=>{let prof=getShopProfile(p.seller);let ver=isSellerVerified(p.seller);return `<div class="bg-white rounded-xl overflow-hidden border ${ver?'border-green-600 border-2':'border-gray-200'}"><div onclick="openDetail(${p.id})" class="relative cursor-pointer"><img src="${p.imgs[0]}" class="w-full h-[180px] object-cover"><div class="absolute top-2 left-2 bg-white rounded-full p-[2px]"><img src="${prof}" class="w-7 h-7 rounded-full"></div><div class="absolute top-2 right-2 ${ver?'bg-green-600':'bg-red-600'} text-white text-[8px] px-2 py-1 rounded-full font-bold">${ver?'✓':'✗'}</div></div><div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><div class="flex justify-between items-center mt-1"><p class="font-black text-[14px] text-[#ff3e3e]">GH₵${p.price}</p><span class="text-[10px]">❤️ ${p.likes||0}</span></div><div class="flex gap-1 mt-2"><button onclick="event.stopPropagation();openWhatsAppSeller('${p.seller}')" class="flex-1 bg-[#25D366] text-white py-1.5 rounded-full text-[9px] font-bold">WhatsApp</button><button onclick="event.stopPropagation();openSellerStore('${p.seller}')" class="flex-1 bg-black text-white py-1.5 rounded-full text-[9px] font-bold">Store</button></div></div></div>`;}).join('');document.getElementById('cartCount').innerText=cart.length;document.getElementById('cartCount2').innerText=cart.length+' items';document.getElementById('cartItems').innerHTML=cart.map((c,i)=>`<div class="flex gap-3 border-b pb-3"><img src="${c.imgs[0]}" class="w-16 h-16 rounded"><div class="flex-1"><p class="font-bold text-[13px]">${c.name}</p><button onclick="removeCart(${i})" class="mt-1 bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Remove</button></div></div>`).join('');let total=0;cart.forEach(c=>total+=Number(c.price)||0);document.getElementById('totalPay').innerText='GH₵'+total;}
 function removeCart(i){cart.splice(i,1);render();}
 function navHome(){closeAllPages();currentCat="All";renderCats();render();}
 function openCategoryPage(){renderCategoryGrid();document.getElementById('categoryPage').style.display='block';}
@@ -191,49 +151,13 @@ function openCart(){document.getElementById('cartDrawer').style.display='flex';r
 function closeCart(){document.getElementById('cartDrawer').style.display='none';}
 function openMe(){closeAllPages();document.getElementById('mePage').style.display='block';document.getElementById('meShop').innerText=user?user.shop:"Shop";document.getElementById('meEmail').innerText=user?user.email||user.phone:"";updateVerificationUI();updateAdminButton();updateCoinUI();}
 function openVerificationFromMe(){closeAllPages(); document.getElementById('sellerVerificationScreen').style.display='block'; if(user){document.getElementById('verSellerName').value=user.shop;}}
-function openSell(){if(!user){toast('Login first');return;}if(!isSellerVerified(user.shop)){closeAllPages(); document.getElementById('sellerVerificationScreen').style.display='block'; toast('Pay 50 GHS to sell'); return;}closeAllPages(); document.getElementById('sellScreen').style.display='block'; let verData=getSellerVerification(user.shop); if(verData){let days=Math.ceil((verData.expiry-Date.now())/(24*60*60*1000));document.getElementById('verifiedSellerDetails').innerText=`✓ Active - ${verData.sellerName} - 50 GHS paid - Expires in ${days} days`;document.getElementById('sellExpiry').innerText=`Expiry: ${new Date(verData.expiry).toLocaleDateString()}`;}}
+function openSell(){if(!user){toast('Login first');return;}if(!isSellerVerified(user.shop)){closeAllPages(); document.getElementById('sellerVerificationScreen').style.display='block'; toast('Pay 50 GHS to sell'); return;}closeAllPages(); document.getElementById('sellScreen').style.display='block'; let verData=getSellerVerification(user.shop); if(verData){let days=Math.ceil((verData.expiry-Date.now())/(24*60*60*1000));document.getElementById('verifiedSellerDetails').innerText=`✓ Active - ${verData.sellerName} - 50 GHS - Expires in ${days} days`;document.getElementById('sellExpiry').innerText=`Expiry: ${new Date(verData.expiry).toLocaleDateString()}`;}}
 function closeSell(){document.getElementById('sellScreen').style.display='none';}
 function closeVerification(){document.getElementById('sellerVerificationScreen').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';}
 function handleGallery(e){uploadedImages=[];document.getElementById('previewImgs').innerHTML='';let files=Array.from(e.target.files);files.slice(0,5).forEach(file=>{let reader=new FileReader();reader.onload=ev=>{uploadedImages.push(ev.target.result);document.getElementById('previewImgs').innerHTML+=`<img src="${ev.target.result}" class="w-full h-20 object-cover rounded border">`;};reader.readAsDataURL(file);});}
-
-// NEW 50 GHS PAYMENT LOGIC
-function payMonthlyFee(){
- let sellerName=document.getElementById('verSellerName').value.trim();
- let age=parseInt(document.getElementById('verAge').value);
- let gender=document.getElementById('verGender').value;
- let location=document.getElementById('verLocation').value.trim();
- let momo=document.getElementById('verMomo').value.trim();
- if(!sellerName||!age||age<18||!gender||!location||!momo){toast('Fill Name, Age, Gender, Location, MoMo');return;}
- // Simulate payment - In real use, integrate Paystack / MoMo API
- toast('Processing 50 GHS payment...');
- setTimeout(()=>{
-   let expiry=Date.now()+30*24*60*60*1000;
-   let data={sellerName,age,gender,location,momo,shopName:user.shop,amount:50,date:new Date().toLocaleString(),expiry,verified:true,whatsapp:momo};
-   localStorage.setItem('dornny_seller_verified_'+user.shop,JSON.stringify(data));
-   let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]'); all.unshift(data); localStorage.setItem('dornny_all_verifications',JSON.stringify(all));
-   document.getElementById('payStatus').innerText='Paid - Active';
-   document.getElementById('payBtn').classList.add('hidden');
-   document.getElementById('submitVerBtn').classList.remove('hidden');
-   toast('✅ 50 GHS Paid - Active for 30 days - You can now sell');
-   updateVerificationUI();
- },1500);
-}
-function submitVerificationAdmin(){
- if(!isSellerVerified(user.shop)){toast('Pay 50 GHS first');return;}
- toast('✅ Verified - 50 GHS Active - You can sell now');
- setTimeout(()=>{closeVerification(); openMe();},1000);
-}
-function uploadProduct(){
-if(!user)return;
-if(!isSellerVerified(user.shop)){toast('Pay 50 GHS to sell');openVerificationFromMe();return;}
-let shop=user.shop; let n=document.getElementById('upName').value.trim(); let pr=parseFloat(document.getElementById('upPrice').value); let ca=document.getElementById('upCat').value;
-if(!n||!pr||uploadedImages.length===0){toast('Fill all');return;}
-let newP={id:Date.now(),name:n,price:pr,cat:ca,imgs:[...uploadedImages],seller:shop,desc:document.getElementById('upDesc').value,likes:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()};
-document.getElementById('uploadBtn').innerText='Uploading...';
-db.collection('dornny_products').doc(String(newP.id)).set(newP).then(()=>{
-toast('✅ Product uploaded - Shows on all phones');document.getElementById('uploadBtn').innerText='UPLOAD NOW';uploadedImages=[];document.getElementById('previewImgs').innerHTML='';document.getElementById('upName').value='';document.getElementById('upPrice').value='';closeSell();navHome();
-}).catch(e=>{toast('Error: '+e.message);document.getElementById('uploadBtn').innerText='UPLOAD NOW';});
-}
+function payMonthlyFee(){let sellerName=document.getElementById('verSellerName').value.trim();let age=parseInt(document.getElementById('verAge').value);let gender=document.getElementById('verGender').value;let location=document.getElementById('verLocation').value.trim();let momo=document.getElementById('verMomo').value.trim();if(!sellerName||!age||age<18||!gender||!location||!momo){toast('Fill all fields');return;}toast('Processing 50 GHS...');setTimeout(()=>{let expiry=Date.now()+30*24*60*60*1000;let data={sellerName,age,gender,location,momo,shopName:user.shop,amount:50,date:new Date().toLocaleString(),expiry,verified:true,whatsapp:momo};localStorage.setItem('dornny_seller_verified_'+user.shop,JSON.stringify(data));let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');all.unshift(data);localStorage.setItem('dornny_all_verifications',JSON.stringify(all));document.getElementById('payStatus').innerText='Paid - Active';document.getElementById('payBtn').classList.add('hidden');document.getElementById('submitVerBtn').classList.remove('hidden');toast('✅ 50 GHS Paid - Active 30 days');updateVerificationUI();},1500);}
+function submitVerificationAdmin(){if(!isSellerVerified(user.shop)){toast('Pay first');return;}toast('✅ Verified - You can sell now');setTimeout(()=>{closeVerification();openMe();},1000);}
+function uploadProduct(){if(!user)return;if(!isSellerVerified(user.shop)){toast('Pay 50 GHS');openVerificationFromMe();return;}let shop=user.shop;let n=document.getElementById('upName').value.trim();let pr=parseFloat(document.getElementById('upPrice').value);let ca=document.getElementById('upCat').value;if(!n||!pr||uploadedImages.length===0){toast('Fill all');return;}let newP={id:Date.now(),name:n,price:pr,cat:ca,imgs:[...uploadedImages],seller:shop,desc:document.getElementById('upDesc').value,likes:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()};document.getElementById('uploadBtn').innerText='Uploading...';db.collection('dornny_products').doc(String(newP.id)).set(newP).then(()=>{toast('✅ Uploaded - Shows on all phones');document.getElementById('uploadBtn').innerText='UPLOAD NOW';uploadedImages=[];document.getElementById('previewImgs').innerHTML='';document.getElementById('upName').value='';document.getElementById('upPrice').value='';closeSell();navHome();}).catch(e=>{toast('Error: '+e.message);document.getElementById('uploadBtn').innerText='UPLOAD NOW';});}
 function checkout(){if(cart.length===0){toast('Cart empty');return;}toast('Order placed');cart=[];render();closeCart();}
 function doLogout(){localStorage.removeItem('dornny_user');location.reload();}
 function openWhatsAppSeller(seller){let num=getSellerWhatsApp(seller);if(!num){toast('No WhatsApp');return;}openWhatsAppDirect(num,seller);}
@@ -243,31 +167,28 @@ function toggleFollowCurrentSeller(){if(!currentP)return;toggleFollowSeller(curr
 function toggleFollowCurrentStore(){if(!currentStoreSeller)return;toggleFollowSeller(currentStoreSeller);}
 function toggleFollowSeller(seller){let isF=followedSellers.includes(seller);if(isF){followedSellers=followedSellers.filter(s=>s!==seller);}else{followedSellers.push(seller);}localStorage.setItem('dornny_followed',JSON.stringify(followedSellers));toast(isF?'Unfollowed':'Following');}
 
-// KOFI AI FIXED - NOW REPLIES
-function openKofiAI(){closeAllPages();document.getElementById('kofiAIPage').style.display='flex';}
-function closeKofiAI(){document.getElementById('kofiAIPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';}
-function sendKofiMessage(){
- let inp=document.getElementById('kofiInput');
- let txt=inp.value.trim();
- if(!txt) return;
- let box=document.getElementById('kofiMessages');
- box.innerHTML+=`<div class="flex justify-end"><div class="bg-[#f68b1e] text-black px-4 py-2.5 rounded-2xl text-[12px] max-w-[80%] font-bold">${txt}</div></div>`;
- inp.value='';
- box.scrollTop=box.scrollHeight;
- // FIXED AI REPLY
- setTimeout(()=>{
-   let lower=txt.toLowerCase();
-   let reply="I am Kofi, your Dornny Market helper. Products now show on all phones. How can I help?";
-   if(lower.includes('sell')) reply="To sell: Pay 50 GHS monthly in Me > Become Seller > Fill Name, Age, Gender, Location > Pay. Then you can upload products.";
-   else if(lower.includes('50')||lower.includes('pay')||lower.includes('month')) reply="Yes, seller fee is 50 GHS every 30 days. Pay via MoMo 0555258032. After payment, you can sell for 30 days. Renew monthly.";
-   else if(lower.includes('product')||lower.includes('goods')||lower.includes('upload')) reply="Your products are stored in cloud, so they show on all phones in Ghana. Make sure you are verified (50 GHS) and you will see My Goods.";
-   else if(lower.includes('verify')||lower.includes('verification')) reply="Verification now is simple: Name, Age, Gender, Location + 50 GHS monthly. No Ghana Card needed anymore.";
-   else if(lower.includes('whatsapp')) reply="Buyers will WhatsApp you directly using your MoMo number. Make sure it's correct.";
-   else if(lower.includes('earn')||lower.includes('2 ghs')) reply="Earn 2 GHS weekly after you pay 50 GHS seller fee. Claim in Me page.";
-   box.innerHTML+=`<div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-2xl text-[12px] max-w-[85%]">🤖 Kofi: ${reply}</div></div>`;
-   box.scrollTop=box.scrollHeight;
- },600);
+// KOFI AI WORLD VOICE MULTILINGUAL
+let kofiLang='en'; let lastKofiReply=""; let recognition=null; let isListening=false;
+function setKofiLang(lang){kofiLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.className='lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold');document.getElementById('lang-'+lang).className='lang-btn bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold';let name={en:'English',tw:'Twi',ha:'Hausa',ee:'Ewe',ga:'Ga',fr:'French'}[lang];toast('Kofi speaks '+name);addKofiMessage(`Language: ${name}. I will reply in ${name}.`, true);}
+function addKofiMessage(text,isBot){let box=document.getElementById('kofiMessages');let cls=isBot?'justify-start':'justify-end';let bubble=isBot?'bg-[#222] text-white rounded-[18px] rounded-bl-[4px]':'bg-[#f68b1e] text-black rounded-[18px] rounded-br-[4px] font-bold';box.innerHTML+=`<div class="flex ${cls}"><div class="${bubble} px-4 py-3 text-[13px] max-w-[85%] leading-[18px]">${text}<div class="mt-1"><button onclick="speakText(\`${text.replace(/`/g,'').substring(0,200)}\`)" class="text-[9px] opacity-60">🔊 Play</button></div></div></div>`;box.scrollTop=box.scrollHeight;}
+function speakText(text){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();let clean=text.replace(/<[^>]*>/g,'').substring(0,300);let u=new SpeechSynthesisUtterance(clean);let map={en:'en-GH',tw:'en-GH',ha:'en-GH',ee:'en-GH',ga:'en-GH',fr:'fr-FR'};u.lang=map[kofiLang]||'en-GH';u.rate=0.95;lastKofiReply=clean;speechSynthesis.speak(u);}
+function speakLast(){if(lastKofiReply)speakText(lastKofiReply);}
+function toggleVoice(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){toast('Voice not supported, type');return;}if(isListening){recognition.stop();return;}let SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang=kofiLang==='fr'?'fr-FR':'en-GH';recognition.start();isListening=true;document.getElementById('micBtn').innerText='🔴';document.getElementById('micBtn').className='w-11 h-11 bg-red-500 text-white rounded-full flex items-center justify-center animate-pulse';toast('Listening...');recognition.onresult=(e)=>{document.getElementById('kofiInput').value=e.results[0][0].transcript;sendKofiMessage();};recognition.onend=()=>{isListening=false;document.getElementById('micBtn').innerText='🎤';document.getElementById('micBtn').className='w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center';};}
+function getKofiWorldAnswer(q,lang){
+ let lower=q.toLowerCase();
+ if(lower.includes('dornny')||lower.includes('amansan')){return lang==='tw'?"Dornny Market yɛ Ghana #1 marketplace - Amansan Dwaaso. Sellers tua 50 GHS bosome biara. Nneɛma nyinaa da phone nyinaa so.": lang==='ha'?"Dornny Market kasuwa ce ta #1 a Ghana. Masu sayarwa suna biyan 50 GHS.": lang==='fr'?"Dornny Market est le marché #1 du Ghana. Les vendeurs paient 50 GHS par mois.":"Dornny Market is Ghana's #1 marketplace - Amansan Dwaaso. Sellers pay 50 GHS per month, products show on all phones, chat sellers on WhatsApp, earn 2 GHS weekly.";}
+ if(lower.includes('50')||lower.includes('pay')||lower.includes('sell')){return lang==='tw'?"Sɛ wopɛ sɛ wotɔn: Kɔ Me > Become Seller > Hyɛ Name, Age, Gender, Location > Tua 50 GHS MoMo 0555258032. Wobɛtɔn nna 30.":"To sell: Go Me > Become Seller > Fill Name, Age, Gender, Location > Pay 50 GHS via MoMo 0555258032. Sell for 30 days. Renew monthly.";}
+ if(lower.includes('hello')||lower.includes('akwaaba')||lower.includes('hi')){return lang==='tw'?"Akwaaba! Me yɛ Kofi! Ɛte sɛn? Mɛtumi aboa wo dɛn? Me nim Dornny Market ne wiase nyinaa ho asɛm.":"Hello! I am Kofi! How are you? I know everything about Dornny Market and I can answer any question in the world - math, health, business, school, love. Ask me anything, I will chat long with you!";}
+ // World knowledge general
+ return `You asked: "${q}". As Kofi your world assistant, here is detailed answer: ` + (lower.includes('business') ? "For business in Ghana, Dornny Market helps you sell online. Pay 50 GHS, upload products, customers WhatsApp you. For general business, focus on customers, good product, marketing." : lower.includes('love')||lower.includes('relationship') ? "Relationship advice: Communication, respect, trust. Listen, care, support each other. If about Dornny Market, sellers build trust by being verified." : lower.includes('school')||lower.includes('education') ? "Education is key. Study hard, ask teachers, use Dornny Market to buy books. I can help with math, science, English, any subject." : `This is interesting. In general, ${q} requires careful thinking. For Dornny Market context, we help Ghanaians buy and sell easily. For world knowledge, I can explain steps, examples, and translate to Twi, Hausa, Ewe, Ga, French. Tell me more about what you want to know about ${q}, and I will give you a long detailed answer.`) + ` I can continue chatting as long as you want.`;
 }
+function sendKofiMessage(){
+ let inp=document.getElementById('kofiInput'); let txt=inp.value.trim(); if(!txt) return;
+ addKofiMessage(txt,false); inp.value=''; let box=document.getElementById('kofiMessages'); let typingId='typing-'+Date.now(); box.innerHTML+=`<div id="${typingId}" class="flex justify-start"><div class="bg-gray-200 text-gray-500 px-4 py-3 rounded-2xl text-[11px]">Kofi typing...</div></div>`; box.scrollTop=box.scrollHeight;
+ setTimeout(()=>{document.getElementById(typingId)?.remove(); let reply=getKofiWorldAnswer(txt,kofiLang); addKofiMessage(`🤖 Kofi: ${reply}`, true); speakText(reply);},900);
+}
+function openKofiAI(){closeAllPages();document.getElementById('kofiAIPage').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='none';setTimeout(()=>{document.getElementById('kofiMessages').scrollTop=document.getElementById('kofiMessages').scrollHeight;},300);}
+function closeKofiAI(){document.getElementById('kofiAIPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';if(speechSynthesis) speechSynthesis.cancel();}
 
 (function(){let saved=localStorage.getItem('dornny_user');if(saved){try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();}catch(e){}}else{renderCats();loadProductsFromCloud();}})();
 </script>
