@@ -17,7 +17,6 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 .cat-active{background:#111!important;color:#fff!important}
 .bottom-active{color:#f68b1e!important}
 .kofi-btn{position:fixed;bottom:85px;right:12px;z-index:9999;width:56px;height:56px;background:linear-gradient(135deg,#000,#f68b1e);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.4);border:2px solid #fff}
-.lang-btn{transition:all .2s}
 </style>
 </head>
 <body>
@@ -37,9 +36,8 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 <div id="grid" class="p-2 grid grid-cols-2 gap-2"><p class="col-span-2 text-center py-10 text-[12px]">Loading products...</p></div>
 </div>
 
-<!-- SELLER VERIFICATION 50 GHS -->
 <div id="sellerVerificationScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto pb-[90px]">
-<div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">Seller Verification - 50 GHS / Month</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><p class="text-[10px] text-yellow-300 mt-1">Pay 50 GHS monthly to sell - Products show on all phones</p></div>
+<div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">Seller Verification - 50 GHS / Month</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><p class="text-[10px] text-yellow-300 mt-1">Pay 50 GHS monthly to sell</p></div>
 <div class="p-4 space-y-4">
 <div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-3"><p class="font-black text-[12px]">💰 Monthly Fee: 50 GHS</p><p class="text-[10px] mt-1">Pay via MoMo to start selling. Renew every 30 days.</p></div>
 <div><p class="font-bold text-[12px]">1. Seller Full Name *</p><input id="verSellerName" placeholder="e.g. Danny Mensah" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div>
@@ -80,27 +78,31 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 <div id="kofiFloatingBtn" class="kofi-btn" onclick="openKofiAI()">🤖</div>
 <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-[100]"><button onclick="navHome()" id="navHome" class="flex flex-col items-center bottom-active"><i class="fa-solid fa-house text-[18px]"></i><span class="text-[9px] font-bold mt-1">Home</span></button><button onclick="openCategoryPage()" id="navCategory" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-table-cells-large text-[18px]"></i><span class="text-[9px] mt-1">Category</span></button><button onclick="openSell()" id="navSell" class="flex flex-col items-center text-gray-500"><div class="bg-black text-white w-9 h-9 rounded-full flex items-center justify-center -mt-1"><i class="fa-solid fa-plus text-[16px]"></i></div><span class="text-[9px] font-bold mt-1">Sell</span></button><button onclick="openCart()" id="navCart" class="flex flex-col items-center text-gray-500 relative"><i class="fa-solid fa-cart-shopping text-[18px]"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-[#f68b1e] text-white text-[8px] w-4 h-4 rounded-full">0</span><span class="text-[9px] mt-1">Cart</span></button><button onclick="openMe()" id="navMe" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-user text-[18px]"></i><span class="text-[9px] mt-1">Me</span></button></nav>
 
-<!-- KOFI AI - WORLD CLASS VOICE + MULTILINGUAL + FULL CHAT -->
-<div id="kofiAIPage" class="fixed inset-0 bg-white z-[80] hidden flex-col">
-  <div class="bg-black text-white p-3 flex justify-between items-center">
+<!-- KOFI AI - FIXED CHAT BAR VISIBLE -->
+<div id="kofiAIPage" class="fixed inset-0 bg-white z-[9999] hidden flex-col" style="height:100vh;height:100dvh">
+  <div class="bg-black text-white p-3 flex justify-between items-center shrink-0">
     <div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#f68b1e] rounded-full flex items-center justify-center">🤖</div><div><h2 class="font-black text-[13px]">Kofi AI - World Assistant</h2><p class="text-[8px] text-green-300">Voice ON • Twi, English, Hausa, Ewe, Ga, French</p></div></div>
-    <button onclick="closeKofiAI()" class="w-8 h-8 bg-white/20 rounded-full">✕</button>
+    <button onclick="closeKofiAI()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">✕</button>
   </div>
-  <div class="bg-yellow-50 border-b p-2 flex gap-1.5 overflow-x-auto hide">
-    <button onclick="setKofiLang('en')" id="lang-en" class="lang-btn bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold">English</button>
-    <button onclick="setKofiLang('tw')" id="lang-tw" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Twi</button>
-    <button onclick="setKofiLang('ha')" id="lang-ha" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Hausa</button>
-    <button onclick="setKofiLang('ee')" id="lang-ee" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ewe</button>
-    <button onclick="setKofiLang('ga')" id="lang-ga" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ga</button>
-    <button onclick="setKofiLang('fr')" id="lang-fr" class="lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">French</button>
+  <div class="bg-yellow-50 border-b p-2 flex gap-1.5 overflow-x-auto hide shrink-0">
+    <button onclick="setKofiLang('en')" id="lang-en" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold">English</button>
+    <button onclick="setKofiLang('tw')" id="lang-tw" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Twi</button>
+    <button onclick="setKofiLang('ha')" id="lang-ha" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Hausa</button>
+    <button onclick="setKofiLang('ee')" id="lang-ee" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ewe</button>
+    <button onclick="setKofiLang('ga')" id="lang-ga" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ga</button>
+    <button onclick="setKofiLang('fr')" id="lang-fr" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">French</button>
   </div>
-  <div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f8f8f8]">
-    <div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-[18px] rounded-bl-[4px] text-[13px] max-w-[85%]">👋 Akwaaba! Hello! I am <b>Kofi</b> - Your Dornny Market world assistant.<br><br>I speak <b>Twi, English, Hausa, Ewe, Ga, French</b>.<br>I know everything about Dornny Market AND I can answer any question in the world - math, health, business, school, love, anything.<br><br>🎤 Tap mic to speak, I will speak back.</div></div>
+  <div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f8f8f8]" style="padding-bottom:100px">
+    <div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-[18px] rounded-bl-[4px] text-[13px] max-w-[85%]">👋 Akwaaba! Hello! I am <b>Kofi</b> - Your Dornny Market world assistant.<br><br>I speak <b>Twi, English, Hausa, Ewe, Ga, French</b>.<br>I know everything about Dornny Market AND I can answer any question in the world.<br><br>🎤 Tap mic to speak, I will speak back.</div></div>
   </div>
-  <div class="bg-white border-t p-2.5 flex items-end gap-2">
-    <button onclick="toggleVoice()" id="micBtn" class="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center text-[18px]">🎤</button>
-    <div class="flex-1 bg-[#f2f2f2] rounded-[22px] flex items-end p-2 border"><textarea id="kofiInput" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendKofiMessage()}" placeholder="Ask Kofi anything..." class="flex-1 bg-transparent px-3 py-2 text-[13px] outline-none resize-none max-h-[90px] min-h-[36px]" rows="1"></textarea><button onclick="speakLast()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[12px] ml-1">🔊</button></div>
-    <button onclick="sendKofiMessage()" class="w-11 h-11 bg-black text-white rounded-full flex items-center justify-center font-bold">↑</button>
+  <!-- CHAT BAR FIXED VISIBLE FOR CUSTOMERS -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black p-2.5 flex items-center gap-2 z-[10000]" style="padding-bottom:max(10px, env(safe-area-inset-bottom))">
+    <button onclick="toggleVoice()" id="micBtn" class="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center text-[18px] shrink-0 border">🎤</button>
+    <div class="flex-1 bg-[#f2f2f2] rounded-full flex items-center px-3 border-2 border-black">
+      <input id="kofiInput" onkeydown="if(event.key==='Enter'){sendKofiMessage()}" placeholder="Ask Kofi anything..." class="flex-1 bg-transparent px-2 py-3 text-[14px] outline-none" type="text">
+      <button onclick="speakLast()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[12px] border">🔊</button>
+    </div>
+    <button onclick="sendKofiMessage()" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-black text-[18px] shrink-0">↑</button>
   </div>
 </div>
 
@@ -130,7 +132,6 @@ function updateVerificationUI(){if(!user) return;let v=getSellerVerification(use
 function getCoinBalance(){if(!user) return 0;let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');return coins.reduce((s,c)=>s+c.amount,0);}
 function getLastClaim(){if(!user) return 0;return parseInt(localStorage.getItem('dornny_last_claim_'+user.shop)||'0');}
 function updateCoinUI(){if(!user) return;let b=getCoinBalance();document.getElementById('coinBalance').innerText=b.toFixed(2);document.getElementById('coinBalanceHome').innerText=b.toFixed(2);document.getElementById('coinStatus').innerText=isSellerVerified(user.shop)?'Active seller':'Pay 50 GHS to earn';}
-function claimWeeklyCoins(){if(!isSellerVerified(user.shop)){toast('Pay 50 GHS to earn');openVerificationFromMe();return;}let last=getLastClaim();let now=Date.now();if(last!==0&&now-last<7*24*60*60*1000){toast('Wait 7 days');return;}let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');coins.push({amount:2,date:new Date().toLocaleString()});localStorage.setItem('dornny_coins_'+user.shop,JSON.stringify(coins));localStorage.setItem('dornny_last_claim_'+user.shop,now.toString());updateCoinUI();toast('2 GHS claimed');}
 function openCoinHistory(){let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');document.getElementById('coinHistoryPage').style.display='block';document.getElementById('coinTotalEarned').innerText=getCoinBalance().toFixed(2);document.getElementById('coinHistoryList').innerHTML=coins.map(c=>`<div class="bg-white border rounded-xl p-3"><p>+ GH₵${c.amount} - ${c.date}</p></div>`).join('');}
 function closeCoinHistory(){document.getElementById('coinHistoryPage').style.display='none';}
 function loadProductsFromCloud(){if(!db){render();return;}db.collection('dornny_products').orderBy('createdAt','desc').onSnapshot((snap)=>{let data=[];snap.forEach(doc=>data.push(doc.data()));if(data.length>0){products=data;}render();},()=>{render();});}
@@ -167,28 +168,45 @@ function toggleFollowCurrentSeller(){if(!currentP)return;toggleFollowSeller(curr
 function toggleFollowCurrentStore(){if(!currentStoreSeller)return;toggleFollowSeller(currentStoreSeller);}
 function toggleFollowSeller(seller){let isF=followedSellers.includes(seller);if(isF){followedSellers=followedSellers.filter(s=>s!==seller);}else{followedSellers.push(seller);}localStorage.setItem('dornny_followed',JSON.stringify(followedSellers));toast(isF?'Unfollowed':'Following');}
 
-// KOFI AI WORLD VOICE MULTILINGUAL
+// KOFI AI WORLD VOICE - FIXED BAR
 let kofiLang='en'; let lastKofiReply=""; let recognition=null; let isListening=false;
-function setKofiLang(lang){kofiLang=lang;document.querySelectorAll('.lang-btn').forEach(b=>b.className='lang-btn bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold');document.getElementById('lang-'+lang).className='lang-btn bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold';let name={en:'English',tw:'Twi',ha:'Hausa',ee:'Ewe',ga:'Ga',fr:'French'}[lang];toast('Kofi speaks '+name);addKofiMessage(`Language: ${name}. I will reply in ${name}.`, true);}
-function addKofiMessage(text,isBot){let box=document.getElementById('kofiMessages');let cls=isBot?'justify-start':'justify-end';let bubble=isBot?'bg-[#222] text-white rounded-[18px] rounded-bl-[4px]':'bg-[#f68b1e] text-black rounded-[18px] rounded-br-[4px] font-bold';box.innerHTML+=`<div class="flex ${cls}"><div class="${bubble} px-4 py-3 text-[13px] max-w-[85%] leading-[18px]">${text}<div class="mt-1"><button onclick="speakText(\`${text.replace(/`/g,'').substring(0,200)}\`)" class="text-[9px] opacity-60">🔊 Play</button></div></div></div>`;box.scrollTop=box.scrollHeight;}
-function speakText(text){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();let clean=text.replace(/<[^>]*>/g,'').substring(0,300);let u=new SpeechSynthesisUtterance(clean);let map={en:'en-GH',tw:'en-GH',ha:'en-GH',ee:'en-GH',ga:'en-GH',fr:'fr-FR'};u.lang=map[kofiLang]||'en-GH';u.rate=0.95;lastKofiReply=clean;speechSynthesis.speak(u);}
+function setKofiLang(lang){kofiLang=lang;document.querySelectorAll('#kofiAIPage .bg-black').forEach(()=>{});let btns=document.querySelectorAll('#kofiAIPage [id^="lang-"]');btns.forEach(b=>b.className='bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold');document.getElementById('lang-'+lang).className='bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold';let name={en:'English',tw:'Twi',ha:'Hausa',ee:'Ewe',ga:'Ga',fr:'French'}[lang];toast('Kofi speaks '+name);addKofiMessage(`Language: ${name}. I will reply in ${name}.`, true);}
+function addKofiMessage(text,isBot){let box=document.getElementById('kofiMessages');let cls=isBot?'justify-start':'justify-end';let bubble=isBot?'bg-[#222] text-white rounded-[18px] rounded-bl-[4px]':'bg-[#f68b1e] text-black rounded-[18px] rounded-br-[4px] font-bold';box.innerHTML+=`<div class="flex ${cls}"><div class="${bubble} px-4 py-3 text-[13px] max-w-[85%] leading-[18px]">${text}<div class="mt-1"><button onclick="speakText(this.parentNode.parentNode.innerText)" class="text-[9px] opacity-60">🔊 Play</button></div></div></div>`;box.scrollTop=box.scrollHeight;}
+function speakText(text){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();let clean=text.replace(/<[^>]*>/g,'').replace('🔊 Play','').substring(0,300);let u=new SpeechSynthesisUtterance(clean);let map={en:'en-GH',tw:'en-GH',ha:'en-GH',ee:'en-GH',ga:'en-GH',fr:'fr-FR'};u.lang=map[kofiLang]||'en-GH';u.rate=0.95;lastKofiReply=clean;speechSynthesis.speak(u);}
 function speakLast(){if(lastKofiReply)speakText(lastKofiReply);}
-function toggleVoice(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){toast('Voice not supported, type');return;}if(isListening){recognition.stop();return;}let SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang=kofiLang==='fr'?'fr-FR':'en-GH';recognition.start();isListening=true;document.getElementById('micBtn').innerText='🔴';document.getElementById('micBtn').className='w-11 h-11 bg-red-500 text-white rounded-full flex items-center justify-center animate-pulse';toast('Listening...');recognition.onresult=(e)=>{document.getElementById('kofiInput').value=e.results[0][0].transcript;sendKofiMessage();};recognition.onend=()=>{isListening=false;document.getElementById('micBtn').innerText='🎤';document.getElementById('micBtn').className='w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center';};}
+function toggleVoice(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){toast('Voice not supported, type');return;}if(isListening){recognition.stop();return;}let SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang=kofiLang==='fr'?'fr-FR':'en-GH';recognition.start();isListening=true;document.getElementById('micBtn').innerText='🔴';document.getElementById('micBtn').className='w-11 h-11 bg-red-500 text-white rounded-full flex items-center justify-center animate-pulse border';toast('Listening...');recognition.onresult=(e)=>{document.getElementById('kofiInput').value=e.results[0][0].transcript;sendKofiMessage();};recognition.onend=()=>{isListening=false;document.getElementById('micBtn').innerText='🎤';document.getElementById('micBtn').className='w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center border';};}
 function getKofiWorldAnswer(q,lang){
  let lower=q.toLowerCase();
  if(lower.includes('dornny')||lower.includes('amansan')){return lang==='tw'?"Dornny Market yɛ Ghana #1 marketplace - Amansan Dwaaso. Sellers tua 50 GHS bosome biara. Nneɛma nyinaa da phone nyinaa so.": lang==='ha'?"Dornny Market kasuwa ce ta #1 a Ghana. Masu sayarwa suna biyan 50 GHS.": lang==='fr'?"Dornny Market est le marché #1 du Ghana. Les vendeurs paient 50 GHS par mois.":"Dornny Market is Ghana's #1 marketplace - Amansan Dwaaso. Sellers pay 50 GHS per month, products show on all phones, chat sellers on WhatsApp, earn 2 GHS weekly.";}
  if(lower.includes('50')||lower.includes('pay')||lower.includes('sell')){return lang==='tw'?"Sɛ wopɛ sɛ wotɔn: Kɔ Me > Become Seller > Hyɛ Name, Age, Gender, Location > Tua 50 GHS MoMo 0555258032. Wobɛtɔn nna 30.":"To sell: Go Me > Become Seller > Fill Name, Age, Gender, Location > Pay 50 GHS via MoMo 0555258032. Sell for 30 days. Renew monthly.";}
- if(lower.includes('hello')||lower.includes('akwaaba')||lower.includes('hi')){return lang==='tw'?"Akwaaba! Me yɛ Kofi! Ɛte sɛn? Mɛtumi aboa wo dɛn? Me nim Dornny Market ne wiase nyinaa ho asɛm.":"Hello! I am Kofi! How are you? I know everything about Dornny Market and I can answer any question in the world - math, health, business, school, love. Ask me anything, I will chat long with you!";}
- // World knowledge general
- return `You asked: "${q}". As Kofi your world assistant, here is detailed answer: ` + (lower.includes('business') ? "For business in Ghana, Dornny Market helps you sell online. Pay 50 GHS, upload products, customers WhatsApp you. For general business, focus on customers, good product, marketing." : lower.includes('love')||lower.includes('relationship') ? "Relationship advice: Communication, respect, trust. Listen, care, support each other. If about Dornny Market, sellers build trust by being verified." : lower.includes('school')||lower.includes('education') ? "Education is key. Study hard, ask teachers, use Dornny Market to buy books. I can help with math, science, English, any subject." : `This is interesting. In general, ${q} requires careful thinking. For Dornny Market context, we help Ghanaians buy and sell easily. For world knowledge, I can explain steps, examples, and translate to Twi, Hausa, Ewe, Ga, French. Tell me more about what you want to know about ${q}, and I will give you a long detailed answer.`) + ` I can continue chatting as long as you want.`;
+ if(lower.includes('hello')||lower.includes('akwaaba')||lower.includes('hi')){return lang==='tw'?"Akwaaba! Me yɛ Kofi! Ɛte sɛn? Mɛtumi aboa wo dɛn? Me nim Dornny Market ne wiase nyinaa ho asɛm.":"Hello! I am Kofi! How are you? I know everything about Dornny Market and I can answer any question in the world - math, health, business, school, love. Ask me anything!"}
+ return `You asked: "${q}". As Kofi your world assistant, detailed answer: For Dornny Market, pay 50 GHS to sell, products show on all phones. For ${q}, the best approach is step by step, stay positive, take action. I can explain more in ${lang}, give examples, translate. Ask me long questions, I will chat long with you.`;
 }
 function sendKofiMessage(){
  let inp=document.getElementById('kofiInput'); let txt=inp.value.trim(); if(!txt) return;
  addKofiMessage(txt,false); inp.value=''; let box=document.getElementById('kofiMessages'); let typingId='typing-'+Date.now(); box.innerHTML+=`<div id="${typingId}" class="flex justify-start"><div class="bg-gray-200 text-gray-500 px-4 py-3 rounded-2xl text-[11px]">Kofi typing...</div></div>`; box.scrollTop=box.scrollHeight;
  setTimeout(()=>{document.getElementById(typingId)?.remove(); let reply=getKofiWorldAnswer(txt,kofiLang); addKofiMessage(`🤖 Kofi: ${reply}`, true); speakText(reply);},900);
 }
-function openKofiAI(){closeAllPages();document.getElementById('kofiAIPage').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='none';setTimeout(()=>{document.getElementById('kofiMessages').scrollTop=document.getElementById('kofiMessages').scrollHeight;},300);}
-function closeKofiAI(){document.getElementById('kofiAIPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';if(speechSynthesis) speechSynthesis.cancel();}
+function openKofiAI(){
+  document.getElementById('mePage').style.display='none';
+  document.getElementById('categoryPage').style.display='none';
+  document.getElementById('cartDrawer').style.display='none';
+  document.getElementById('detail').style.display='none';
+  document.getElementById('sellScreen').style.display='none';
+  document.getElementById('sellerStorePage').style.display='none';
+  document.getElementById('sellerVerificationScreen').style.display='none';
+  document.getElementById('adminPage').style.display='none';
+  document.getElementById('coinHistoryPage').style.display='none';
+  document.getElementById('bottomNav').style.display='none';
+  document.getElementById('kofiFloatingBtn').style.display='none';
+  document.getElementById('kofiAIPage').style.display='flex';
+}
+function closeKofiAI(){
+  document.getElementById('kofiAIPage').style.display='none';
+  document.getElementById('bottomNav').style.display='flex';
+  document.getElementById('kofiFloatingBtn').style.display='flex';
+  if(window.speechSynthesis) speechSynthesis.cancel();
+}
 
 (function(){let saved=localStorage.getItem('dornny_user');if(saved){try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();}catch(e){}}else{renderCats();loadProductsFromCloud();}})();
 </script>
