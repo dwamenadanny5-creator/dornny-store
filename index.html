@@ -10,6 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
 <style>
 body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:22px;font-size:12px;z-index:999999;display:none;max-width:90%;text-align:center}
@@ -17,20 +18,64 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 .cat-active{background:#111!important;color:#fff!important}
 .bottom-active{color:#f68b1e!important}
 .kofi-btn{position:fixed;bottom:85px;right:12px;z-index:9999;width:56px;height:56px;background:linear-gradient(135deg,#000,#f68b1e);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.4);border:2px solid #fff}
+.live-ring{border:2px solid #ff0000;box-shadow:0 0 0 3px rgba(255,0,0,.3)}
+.status-ring{border:2px solid #f68b1e;box-shadow:0 0 0 3px rgba(246,139,30,.3)}
+.heart-anim{animation:floatHeart 1.5s ease-out forwards;position:absolute;bottom:100px;right:20px;font-size:24px;pointer-events:none}
+@keyframes floatHeart{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-200px) scale(1.5);opacity:0}}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 <div class="bg-[#111] text-white text-center py-2.5"><p class="font-black text-[14px]">DORNNY MARKET</p><p class="text-[10px] text-[#f68b1e] font-bold">Amansan Dwaaso</p></div>
 <div id="loginScreen" class="min-h-[85vh] flex items-center justify-center p-4"><div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow"><h2 class="font-black text-center text-[20px]">DORNNY MARKET</h2><p class="text-center text-[11px] text-[#f68b1e] font-bold">Amansan Dwaaso</p><input id="emailPhone" type="text" placeholder="Email or Phone *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2 mt-5"><input id="password" type="password" placeholder="Password *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-2"><input id="confirmPassword" type="password" placeholder="Confirm *" class="w-full border rounded-full px-4 py-3 text-[13px] mb-4"><button onclick="doLogin()" class="w-full bg-black text-white py-3 rounded-full font-bold">LOGIN</button></div></div>
+
 <div id="mainApp" class="hidden">
 <div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black text-[13px] leading-[12px]">DORNNY<br>MARKET<br><span class="text-[8px] text-[#f68b1e]">Amansan Dwaaso</span></div><div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search products..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div></div>
+
+<div class="bg-white p-2 border-b">
+<div class="flex justify-between items-center"><p class="font-black text-[11px]">🟠 STATUS - Saved Lives (Cloud - All Phones)</p><p class="text-[9px] text-gray-500">24h</p></div>
+<div id="statusScroll" class="flex gap-3 overflow-x-auto hide mt-2 pb-1"></div>
+<div class="flex justify-between items-center mt-3"><p class="font-black text-[12px]">🔴 LIVE NOW</p><button onclick="sellerGoLive()" class="bg-red-600 text-white px-3 py-1.5 rounded-full text-[10px] font-black">GO LIVE 📹</button></div>
+<div id="liveScroll" class="flex gap-3 overflow-x-auto hide mt-2 pb-1"></div>
+</div>
+
 <div class="bg-gradient-to-r from-[#f68b1e] to-black text-white m-2 rounded-xl p-3 flex justify-between items-center"><div><p class="font-black text-[12px]">🪙 SELLER EARN - 2 GHS WEEKLY</p><p class="text-[10px]">Balance: GH₵<span id="coinBalanceHome">0.00</span></p></div><button onclick="openMe()" class="bg-white text-black px-3 py-2 rounded-full text-[10px] font-black">EARN →</button></div>
 <div class="bg-white p-2 border-b sticky top-[50px] z-20"><div id="catList" class="flex gap-2 overflow-x-auto hide pb-1"></div><p id="catResult" class="text-[11px] font-bold mt-1 text-gray-600"></p></div>
 <div id="grid" class="p-2 grid grid-cols-2 gap-2"><p class="col-span-2 text-center py-10 text-[12px]">Loading products...</p></div>
 </div>
+
+<div id="liveRoomPage" class="fixed inset-0 bg-black z-[200] hidden flex-col" style="height:100vh">
+  <div class="relative flex-1 bg-black overflow-hidden">
+    <video id="liveVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
+    <img id="livePlaceholder" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800" class="w-full h-full object-cover absolute inset-0 hidden">
+    <div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-start bg-gradient-to-b from-black/70 to-transparent">
+      <div class="flex items-center gap-2"><img id="liveSellerImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-10 h-10 rounded-full border-2 border-white"><div><p id="liveSellerName" class="text-white font-black text-[13px]">Seller</p><div class="flex items-center gap-2"><span class="bg-red-600 text-white text-[8px] px-2 py-0.5 rounded-full animate-pulse">LIVE</span><span id="liveViewers" class="text-white text-[10px]">👁️ 0</span><span id="liveLikes" class="text-white text-[10px]">❤️ 0</span><span id="recIndicator" class="bg-red-600 text-white text-[8px] px-2 py-0.5 rounded-full hidden">● REC Cloud</span></div></div></div>
+      <button onclick="leaveLive()" class="w-9 h-9 bg-white/20 backdrop-blur rounded-full text-white flex items-center justify-center">✕</button>
+    </div>
+    <div id="liveProductTag" class="absolute top-20 left-3 bg-white rounded-xl p-2 flex gap-2 items-center max-w-[70%] border-2 border-black hidden"><img id="liveProductImg" src="" class="w-12 h-12 rounded object-cover"><div><p id="liveProductName" class="font-bold text-[11px]"></p><p id="liveProductPrice" class="font-black text-[12px] text-red-600"></p></div><button onclick="addLiveProductToCart()" class="bg-black text-white px-2 py-1 rounded-full text-[9px]">Buy</button></div>
+    <div id="liveComments" class="absolute bottom-[85px] left-3 right-20 max-h-[35vh] overflow-y-auto space-y-1.5 flex flex-col justify-end"></div>
+    <div id="heartContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+    <div id="giftAnim" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden"><div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-4 rounded-2xl font-black text-[20px] animate-bounce">🎁 GIFT SENT! 🎉</div></div>
+    <div id="uploadProgress" class="absolute bottom-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-6 py-4 rounded-2xl hidden text-center"><p class="font-black text-[13px]">☁️ Uploading to Cloud...</p><p id="uploadPercent" class="text-[20px] font-black text-yellow-400 mt-1">0%</p><p class="text-[10px] text-gray-300">Status will show on all phones</p></div>
+  </div>
+  <div class="bg-black/90 p-2.5 flex items-center gap-2 border-t border-white/20">
+    <div class="flex-1 bg-white/20 backdrop-blur rounded-full flex items-center px-3 py-1"><input id="liveCommentInput" placeholder="Comment..." class="flex-1 bg-transparent text-white text-[13px] outline-none placeholder:text-white/60"><button onclick="sendLiveComment()" class="text-white text-[18px] ml-2">➤</button></div>
+    <button onclick="likeLive()" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-[18px]">❤️</button>
+    <button onclick="followLiveSeller()" id="liveFollowBtn" class="bg-white text-black px-3 py-2 rounded-full text-[10px] font-black">+ Follow</button>
+    <button onclick="openGiftPanel()" class="w-10 h-10 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-[16px]">🎁</button>
+  </div>
+  <div id="giftPanel" class="absolute bottom-[65px] left-0 right-0 bg-white rounded-t-2xl p-3 hidden"><div class="flex justify-between items-center mb-3"><p class="font-black text-[13px]">Send Gift to Seller</p><button onclick="closeGiftPanel()" class="w-7 h-7 bg-gray-100 rounded-full">✕</button></div><div class="grid grid-cols-4 gap-2"><button onclick="sendGift(5,'🌹')" class="bg-pink-50 border-2 border-pink-200 rounded-xl p-2 text-center"><p class="text-[20px]">🌹</p><p class="text-[10px] font-bold">Rose</p><p class="text-[9px] text-red-600">GH₵5</p></button><button onclick="sendGift(10,'❤️')" class="bg-red-50 border-2 border-red-200 rounded-xl p-2 text-center"><p class="text-[20px]">❤️</p><p class="text-[10px] font-bold">Love</p><p class="text-[9px] text-red-600">GH₵10</p></button><button onclick="sendGift(20,'🎁')" class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-2 text-center"><p class="text-[20px]">🎁</p><p class="text-[10px] font-bold">Gift</p><p class="text-[9px] text-red-600">GH₵20</p></button><button onclick="sendGift(50,'👑')" class="bg-purple-50 border-2 border-purple-300 rounded-xl p-2 text-center"><p class="text-[20px]">👑</p><p class="text-[10px] font-bold">Crown</p><p class="text-[9px] text-red-600">GH₵50</p></button></div></div>
+  <div id="sellerLiveControls" class="absolute bottom-[65px] left-0 right-0 bg-black/80 p-3 hidden"><div class="flex gap-2"><button onclick="switchCamera()" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[11px]">🔄 Switch Camera</button><button onclick="stopLive()" class="flex-1 bg-red-600 text-white py-2 rounded-full text-[11px] font-black">⏹️ END & SAVE TO CLOUD STATUS</button></div><p class="text-[9px] text-yellow-300 text-center mt-2">Video saves to cloud and shows on all phones for 24h</p></div>
+</div>
+
+<div id="statusViewerPage" class="fixed inset-0 bg-black z-[210] hidden flex-col" style="height:100vh">
+  <div class="relative flex-1 bg-black"><video id="statusVideo" autoplay controls playsinline class="w-full h-full object-contain"></video><div class="absolute top-0 left-0 right-0 p-3 flex justify-between items-center bg-gradient-to-b from-black/70 to-transparent"><div class="flex items-center gap-2"><img id="statusSellerImg" src="" class="w-10 h-10 rounded-full border-2 border-white"><div><p id="statusSellerName" class="text-white font-black text-[13px]"></p><p id="statusTime" class="text-white/70 text-[10px]"></p></div></div><button onclick="closeStatusViewer()" class="w-9 h-9 bg-white/20 rounded-full text-white">✕</button></div><div class="absolute bottom-20 left-3 right-3 flex gap-2"><button onclick="openWhatsAppSellerFromStatus()" class="flex-1 bg-[#25D366] text-white py-3 rounded-full font-bold text-[12px]">💬 WhatsApp Seller</button><button onclick="followStatusSeller()" id="statusFollowBtn" class="bg-white text-black px-4 py-3 rounded-full font-bold text-[12px]">+ Follow</button></div></div>
+</div>
+
 <div id="sellerVerificationScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">Seller Verification - 50 GHS / Month</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div></div><div class="p-4 space-y-4"><div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-3"><p class="font-black text-[12px]">💰 Monthly Fee: 50 GHS</p></div><div><p class="font-bold text-[12px]">1. Seller Full Name *</p><input id="verSellerName" placeholder="e.g. Danny Mensah" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div><div><p class="font-bold text-[12px]">2. Age *</p><input id="verAge" type="number" placeholder="e.g. 25" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div><div><p class="font-bold text-[12px]">3. Gender *</p><select id="verGender" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold bg-white"><option value="">Select Gender *</option><option value="Male">Male</option><option value="Female">Female</option></select></div><div><p class="font-bold text-[12px]">4. Location *</p><input id="verLocation" placeholder="e.g. Accra - Madina" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"><div class="flex gap-2 mt-2"><input id="verGPS" class="flex-1 border rounded-xl px-3 py-2 text-[11px] bg-gray-100" placeholder="GPS auto"><button onclick="getVerificationGPS()" class="bg-black text-white px-3 py-2 rounded-full text-[10px]">📍 Get GPS</button></div></div><div class="bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-bold text-[12px] text-green-800">5. MoMo Number to Pay 50 GHS *</p><input id="verMomo" type="tel" placeholder="0555258032" class="w-full border-2 border-green-600 rounded-xl px-3 py-3 mt-2 text-[13px] font-bold bg-white"><p class="text-[9px] mt-2">Send 50 GHS to: <b>0555258032 - Dornny Market</b></p></div><div class="bg-black text-white rounded-xl p-3"><p class="font-black text-[12px]">Payment: <span id="payStatus">Not Paid</span></p><p class="text-[9px] text-yellow-300" id="payExpiry">Pay 50 GHS to activate for 30 days</p></div><button onclick="payMonthlyFee()" id="payBtn" class="w-full bg-[#f68b1e] text-black py-4 rounded-full mt-4 font-black text-[15px]">💳 PAY 50 GHS NOW</button><button onclick="submitVerificationAdmin()" id="submitVerBtn" class="w-full bg-black text-white py-4 rounded-full mt-3 font-black text-[14px] hidden">✅ COMPLETE</button><button onclick="closeVerification()" class="w-full bg-gray-200 py-3 rounded-full mt-3 font-bold text-[12px]">Cancel</button></div></div>
-<div id="mePage" class="fixed inset-0 bg-[#f2f2f2] z-[30] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex gap-2 items-center border-b"><button onclick="navHome()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Me</p></div><div class="bg-gradient-to-r from-[#f68b1e] to-black text-white m-3 rounded-2xl p-4"><p class="font-black text-[14px]">🪙 Earn Box</p><p class="text-[11px]">Balance: GH₵<span id="coinBalance">0.00</span></p><p class="text-[9px] mt-1" id="coinStatus">Verify to earn</p></div><div class="bg-white p-4 mt-2 flex gap-4 items-center"><img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span></p><p class="text-[12px] text-[#f68b1e] font-bold" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p><p class="text-[9px] text-gray-500" id="meExpiry"></p></div></div><div class="bg-white mt-2"><button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Admin - Sellers</p></div></button><button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p><p class="text-[10px] text-gray-300" id="myGoodsVerifyText">Verify first</p></div></button><button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50 border-2 border-yellow-600"><div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Become Seller - 50 GHS / Month</p></div></button><button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI - Voice Chat</p><p class="text-[9px]">Speaks Twi, English, Hausa, Ewe, Ga, French</p></div></button></div><div class="bg-white mt-4 p-4 flex gap-2 mb-4"><button onclick="openSell()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">+ Sell</button><button onclick="doLogout()" class="flex-1 bg-gray-200 py-3 rounded-full font-bold text-[12px]">Logout</button></div></div>
+<div id="mePage" class="fixed inset-0 bg-[#f2f2f2] z-[30] hidden overflow-y-auto pb-[90px]"><div class="bg-white p-3 sticky top-0 z-10 flex gap-2 items-center border-b"><button onclick="navHome()" class="w-8 h-8 bg-gray-100 rounded-full">←</button><p class="font-black">Me</p></div><div class="bg-gradient-to-r from-[#f68b1e] to-black text-white m-3 rounded-2xl p-4"><p class="font-black text-[14px]">🪙 Earn Box</p><p class="text-[11px]">Balance: GH₵<span id="coinBalance">0.00</span></p><p class="text-[9px] mt-1" id="coinStatus">Verify to earn</p></div><div class="bg-white p-4 mt-2 flex gap-4 items-center"><img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black"><div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span></p><p class="text-[12px] text-[#f68b1e] font-bold" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p><p class="text-[9px] text-gray-500" id="meExpiry"></p></div></div>
+<div class="bg-white mt-2 p-3 border-b"><p class="font-black text-[12px]">🟠 My Cloud Status (All Phones See)</p><div id="myStatusList" class="mt-2 space-y-2"></div></div>
+<div class="bg-white mt-2"><button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Admin - Sellers</p></div></button><button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p><p class="text-[10px] text-gray-300" id="myGoodsVerifyText">Verify first</p></div></button><button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50 border-2 border-yellow-600"><div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Become Seller - 50 GHS / Month</p></div></button><button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI - Voice Chat</p><p class="text-[9px]">Speaks Twi, English, Hausa, Ewe, Ga, French</p></div></button></div><div class="bg-white mt-4 p-4 flex gap-2 mb-4"><button onclick="openSell()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">+ Sell</button><button onclick="doLogout()" class="flex-1 bg-gray-200 py-3 rounded-full font-bold text-[12px]">Logout</button></div></div>
 <div id="sellScreen" class="fixed inset-0 bg-white z-[40] hidden overflow-y-auto p-4 pb-[90px]"><div class="flex justify-between items-center"><h2 class="font-black text-[18px]">Sell Product</h2><button onclick="closeSell()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="verifiedSellerInfo" class="mt-4 bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-black text-[12px] text-green-700" id="verifiedSellerDetails">Verified</p><p class="text-[9px]" id="sellExpiry"></p></div><input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleGallery(event)"><button onclick="document.getElementById('galleryFile').click()" class="w-full mt-4 bg-black text-white py-3.5 rounded-full text-[12px] font-bold">📷 Select Images (1-5)</button><div id="previewImgs" class="grid grid-cols-3 gap-2 mt-3"></div><input id="upName" placeholder="Product name *" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-4 text-[13px] font-bold"><input id="upPrice" type="number" placeholder="Price GH₵ *" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px] font-bold"><select id="upCat" class="w-full border rounded-xl px-3 py-3 mt-3 text-[13px] bg-gray-100 font-bold"></select><textarea id="upDesc" placeholder="Description..." class="w-full border-2 border-black rounded-xl px-3 py-3 mt-2 text-[13px] h-[110px]"></textarea><button onclick="uploadProduct()" id="uploadBtn" class="w-full bg-black text-white py-4 rounded-full mt-6 font-black text-[15px]">UPLOAD NOW</button></div>
 <div id="detail" class="fixed inset-0 bg-[#f5f5f5] z-[40] hidden overflow-y-auto pb-[120px]"><div class="bg-white min-h-screen"><div class="relative bg-[#f8f8f8]"><div class="swiper" id="detailSwiper" style="height:420px"><div class="swiper-wrapper" id="detailImgs"></div><div class="swiper-pagination"></div></div><button onclick="closeDetail()" class="absolute top-3 left-3 w-10 h-10 bg-white/80 rounded-full z-20 flex items-center justify-center font-bold">✕</button></div><div class="bg-white p-3"><span id="dPrice" class="font-black text-[22px] text-[#ff3e3e]"></span><p id="dTitleFull" class="text-[13px] font-bold mt-2"></p><div id="dSold" class="mt-2"></div><div class="mt-3 bg-white border-2 border-green-600 rounded-xl p-3"><p class="font-black text-[12px]">💬 Contact Seller</p><p id="detailSellerWhatsApp" class="text-[11px] mt-1"></p><div class="grid grid-cols-2 gap-2 mt-3"><button onclick="openWhatsAppCurrentSeller()" class="bg-[#25D366] text-white py-3 rounded-full text-[11px] font-bold">💬 WhatsApp</button><button id="detailFollowBtn" onclick="toggleFollowCurrentSeller()" class="bg-black text-white py-3 rounded-full text-[11px] font-bold">+ Follow</button></div></div></div><div class="fixed bottom-[75px] left-0 right-0 bg-white border-t-2 border-black p-2 flex gap-2 items-center z-[60]"><button onclick="addCartDetailFixed()" class="flex-1 bg-black text-white py-3.5 rounded-full font-black text-[14px]">Add to Cart</button></div></div></div>
 <div id="cartDrawer" class="fixed inset-0 bg-black/50 z-[40] hidden flex justify-end"><div class="bg-white w-[95%] max-w-sm h-full flex flex-col"><div class="p-4 border-b flex justify-between"><div><b>Cart</b><p id="cartCount2" class="text-[11px]">0 items</p></div><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div id="cartItems" class="p-3 space-y-3 border-b max-h-[35vh] overflow-y-auto"></div><div class="p-4 border-t bg-white space-y-2 pb-[85px]"><div class="flex justify-between font-black text-[18px]"><span>Total</span><span id="totalPay">GH₵0</span></div><button onclick="checkout()" class="w-full bg-black text-white py-4 rounded-full font-black text-[16px] mt-2">PAY NOW</button></div></div></div>
@@ -40,30 +85,11 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 <div id="coinHistoryPage" class="fixed inset-0 bg-white z-[70] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-4 sticky top-0 z-10 flex justify-between items-center"><h2 class="font-black">🪙 Earn History</h2><button onclick="closeCoinHistory()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div><div class="p-4"><div class="bg-yellow-50 border-2 border-black rounded-xl p-3"><p class="font-black">Total: GH₵<span id="coinTotalEarned">0.00</span></p></div><div id="coinHistoryList" class="mt-4 space-y-2"></div></div></div>
 <div id="kofiFloatingBtn" class="kofi-btn" onclick="openKofiAI()">🤖</div>
 <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-[100]"><button onclick="navHome()" id="navHome" class="flex flex-col items-center bottom-active"><i class="fa-solid fa-house text-[18px]"></i><span class="text-[9px] font-bold mt-1">Home</span></button><button onclick="openCategoryPage()" id="navCategory" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-table-cells-large text-[18px]"></i><span class="text-[9px] mt-1">Category</span></button><button onclick="openSell()" id="navSell" class="flex flex-col items-center text-gray-500"><div class="bg-black text-white w-9 h-9 rounded-full flex items-center justify-center -mt-1"><i class="fa-solid fa-plus text-[16px]"></i></div><span class="text-[9px] font-bold mt-1">Sell</span></button><button onclick="openCart()" id="navCart" class="flex flex-col items-center text-gray-500 relative"><i class="fa-solid fa-cart-shopping text-[18px]"></i><span id="cartCount" class="absolute -top-1 -right-1 bg-[#f68b1e] text-white text-[8px] w-4 h-4 rounded-full">0</span><span class="text-[9px] mt-1">Cart</span></button><button onclick="openMe()" id="navMe" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-user text-[18px]"></i><span class="text-[9px] mt-1">Me</span></button></nav>
-
-<div id="kofiAIPage" class="fixed inset-0 bg-white z-[9999] hidden flex-col" style="height:100vh;height:100dvh">
-  <div class="bg-black text-white p-3 flex justify-between items-center shrink-0"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#f68b1e] rounded-full flex items-center justify-center">🤖</div><div><h2 class="font-black text-[13px]">Kofi AI - World Assistant</h2><p class="text-[8px] text-green-300">Smart • Long Chat • Twi, English, Hausa, Ewe, Ga, French</p></div></div><button onclick="closeKofiAI()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">✕</button></div>
-  <div class="bg-yellow-50 border-b p-2 flex gap-1.5 overflow-x-auto hide shrink-0">
-    <button onclick="setKofiLang('en')" id="lang-en" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold">English</button>
-    <button onclick="setKofiLang('tw')" id="lang-tw" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Twi</button>
-    <button onclick="setKofiLang('ha')" id="lang-ha" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Hausa</button>
-    <button onclick="setKofiLang('ee')" id="lang-ee" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ewe</button>
-    <button onclick="setKofiLang('ga')" id="lang-ga" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ga</button>
-    <button onclick="setKofiLang('fr')" id="lang-fr" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">French</button>
-  </div>
-  <div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f8f8f8]" style="padding-bottom:100px">
-    <div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-[18px] rounded-bl-[4px] text-[13px] max-w-[85%]">👋 Akwaaba! I am <b>Kofi</b> - Your Dornny Market world assistant.<br><br>I speak Twi, English, Hausa, Ewe, Ga, French and I can help you with anything - buying, selling, business, school, life.<br><br>🎤 Tap mic to speak, I will speak back.</div></div>
-  </div>
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black p-2.5 flex items-center gap-2 z-[10000]" style="padding-bottom:max(10px, env(safe-area-inset-bottom))">
-    <button onclick="toggleVoice()" id="micBtn" class="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center text-[18px] shrink-0 border">🎤</button>
-    <div class="flex-1 bg-[#f2f2f2] rounded-full flex items-center px-3 border-2 border-black"><input id="kofiInput" onkeydown="if(event.key==='Enter'){sendKofiMessage()}" placeholder="Ask Kofi anything..." class="flex-1 bg-transparent px-2 py-3 text-[14px] outline-none" type="text"><button onclick="speakLast()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[12px] border">🔊</button></div>
-    <button onclick="sendKofiMessage()" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-black text-[18px] shrink-0">↑</button>
-  </div>
-</div>
+<div id="kofiAIPage" class="fixed inset-0 bg-white z-[9999] hidden flex-col" style="height:100vh;height:100dvh"><div class="bg-black text-white p-3 flex justify-between items-center shrink-0"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#f68b1e] rounded-full flex items-center justify-center">🤖</div><div><h2 class="font-black text-[13px]">Kofi AI - World Assistant</h2><p class="text-[8px] text-green-300">Smart • Long Chat • Twi, English, Hausa, Ewe, Ga, French</p></div></div><button onclick="closeKofiAI()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">✕</button></div><div class="bg-yellow-50 border-b p-2 flex gap-1.5 overflow-x-auto hide shrink-0"><button onclick="setKofiLang('en')" id="lang-en" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold">English</button><button onclick="setKofiLang('tw')" id="lang-tw" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Twi</button><button onclick="setKofiLang('ha')" id="lang-ha" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Hausa</button><button onclick="setKofiLang('ee')" id="lang-ee" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ewe</button><button onclick="setKofiLang('ga')" id="lang-ga" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Ga</button><button onclick="setKofiLang('fr')" id="lang-fr" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">French</button></div><div id="kofiMessages" class="flex-1 overflow-y-auto p-3 space-y-3 bg-[#f8f8f8]" style="padding-bottom:100px"><div class="flex justify-start"><div class="bg-[#222] text-white px-4 py-3 rounded-[18px] rounded-bl-[4px] text-[13px] max-w-[85%]">👋 Akwaaba! I am <b>Kofi</b> - Your Dornny Market world assistant.<br><br>I speak Twi, English, Hausa, Ewe, Ga, French and I can help you with anything - buying, selling, business, school, life.<br><br>🎤 Tap mic to speak, I will speak back.</div></div></div><div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black p-2.5 flex items-center gap-2 z-[10000]" style="padding-bottom:max(10px, env(safe-area-inset-bottom))"><button onclick="toggleVoice()" id="micBtn" class="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center text-[18px] shrink-0 border">🎤</button><div class="flex-1 bg-[#f2f2f2] rounded-full flex items-center px-3 border-2 border-black"><input id="kofiInput" onkeydown="if(event.key==='Enter'){sendKofiMessage()}" placeholder="Ask Kofi anything..." class="flex-1 bg-transparent px-2 py-3 text-[14px] outline-none" type="text"><button onclick="speakLast()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[12px] border">🔊</button></div><button onclick="sendKofiMessage()" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center font-black text-[18px] shrink-0">↑</button></div></div>
 
 <script>
 const firebaseConfig = { apiKey: "AIzaSyBpZzAyVZegord63vYH_zkX2weSv2Ds6BA", authDomain: "dornnysmarket.firebaseapp.com", projectId: "dornnysmarket", storageBucket: "dornnysmarket.firebasestorage.app", messagingSenderId: "726307073658", appId: "1:726307073658:web:24c52654e92de69cfa95c3" };
-let db=null; try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); }catch(e){}
+let db=null, storage=null; try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); storage=firebase.storage(); }catch(e){}
 let categories=["All","Men","Women","Kids","Sneaker","Pet","Toys","Furnitures","Office","Jewelry & Accs","Slippers","Cars","Food & Drinks","Home Decors","Phone & Accs","Second hands","Cosmetics","Bags","Appliances","Sport","Electronics"];
 let defaultProducts=[{id:1001,name:"Club top",price:85,cat:"Men",imgs:["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600"],seller:"Danny shop",desc:"Club top",likes:2}];
 let products=[...defaultProducts]; let user=null,cart=[],currentCat="All",currentP=null,uploadedImages=[],detailSwiper=null,currentStoreSeller=null;
@@ -79,11 +105,11 @@ function openAdminPage(){document.getElementById('adminPage').style.display='blo
 function closeAdminPage(){document.getElementById('adminPage').style.display='none';}
 function renderAdminVerifications(){let all=JSON.parse(localStorage.getItem('dornny_all_verifications')||'[]');let l=document.getElementById('adminVerificationsList');if(all.length===0){l.innerHTML='<div class="bg-white border rounded-xl p-6 text-center"><p>No sellers yet</p></div>';return;}l.innerHTML=all.map(v=>`<div class="bg-white border-2 border-black rounded-xl p-3"><p class="font-black text-[13px]">${v.sellerName} - ${v.shopName}</p><p class="text-[11px]">Age:${v.age} Gender:${v.gender} Location:${v.location} MoMo:${v.momo} Paid:${v.amount} Exp:${new Date(v.expiry).toLocaleDateString()}</p></div>`).join('');}
 function openWhatsAppDirect(num,shop){let c=num.replace(/[^0-9]/g,'');if(c.startsWith('0'))c='233'+c.substring(1);window.open(`https://wa.me/${c}?text=${encodeURIComponent('Hello '+shop+' from Dornny Market')}`,'_blank');}
-function doLogin(){let login=document.getElementById('emailPhone').value.trim();let pass=document.getElementById('password').value.trim();let conf=document.getElementById('confirmPassword').value.trim();if(!login){toast('Enter Email or Phone');return;}if(!pass||pass.length<4){toast('Password 4+');return;}let key=login.includes('@')?login.toLowerCase():login.replace(/[^0-9+]/g,'');let users=JSON.parse(localStorage.getItem('dornny_users')||'{}');if(users[key]){if(users[key].password!==pass){toast('Wrong password');return;}user={shop:users[key].shop,email:users[key].email,phone:users[key].phone,loginId:key};}else{if(!conf){toast('Enter Confirm');return;}if(pass!==conf){toast('Not same');return;}let defaultShop=login.includes('@')?key.split('@')[0]+' shop':'Shop '+key.slice(-4);users[key]={shop:defaultShop,email:key,phone:login.includes('@')?'':key,password:pass,loginId:key};localStorage.setItem('dornny_users',JSON.stringify(users));user={shop:defaultShop,email:key,phone:login.includes('@')?'':key,loginId:key};}localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();}
+function doLogin(){let login=document.getElementById('emailPhone').value.trim();let pass=document.getElementById('password').value.trim();let conf=document.getElementById('confirmPassword').value.trim();if(!login){toast('Enter Email or Phone');return;}if(!pass||pass.length<4){toast('Password 4+');return;}let key=login.includes('@')?login.toLowerCase():login.replace(/[^0-9+]/g,'');let users=JSON.parse(localStorage.getItem('dornny_users')||'{}');if(users[key]){if(users[key].password!==pass){toast('Wrong password');return;}user={shop:users[key].shop,email:users[key].email,phone:users[key].phone,loginId:key};}else{if(!conf){toast('Enter Confirm');return;}if(pass!==conf){toast('Not same');return;}let defaultShop=login.includes('@')?key.split('@')[0]+' shop':'Shop '+key.slice(-4);users[key]={shop:defaultShop,email:key,phone:login.includes('@')?'':key,password:pass,loginId:key};localStorage.setItem('dornny_users',JSON.stringify(users));user={shop:defaultShop,email:key,phone:login.includes('@')?'':key,loginId:key};}localStorage.setItem('dornny_user',JSON.stringify(user));document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();render();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();loadLives();loadStatuses();}
 function renderCats(){document.getElementById('catList').innerHTML=categories.map(c=>`<button onclick="setCat('${c}')" class="px-4 py-2 rounded-full text-[11px] border whitespace-nowrap font-bold ${currentCat===c?'cat-active':'bg-[#f2f2f2]'}">${c}</button>`).join('');document.getElementById('upCat').innerHTML=categories.filter(c=>c!=='All').map(c=>`<option value="${c}">${c}</option>`).join('');}
 function setCat(c){currentCat=c;renderCats();render();}
 function getVerificationGPS(){navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude.toFixed(6),lng=p.coords.longitude.toFixed(6);document.getElementById('verGPS').value=`GA-${lat}-${lng}`;document.getElementById('verLocation').value=document.getElementById('verLocation').value+' - GA-'+lat;});}
-function updateVerificationUI(){if(!user) return;let v=getSellerVerification(user.shop);let verified=isSellerVerified(user.shop);document.getElementById('meVerificationStatus').innerText=verified?`✓ VERIFIED - 50 GHS Paid`:'✗ NOT VERIFIED';document.getElementById('meVerificationStatus').className=verified?'text-green-600 font-bold':'text-red-600 font-bold';document.getElementById('myGoodsVerifyText').innerText=verified?'✓ Active - 50 GHS/month':'✗ Pay 50 GHS to sell';if(verified&&v){let days=Math.ceil((v.expiry-Date.now())/(24*60*60*1000));document.getElementById('meExpiry').innerText=`Expires in ${days} days`;document.getElementById('payStatus').innerText=`Paid - ${days} days left`;document.getElementById('payBtn').classList.add('hidden');document.getElementById('submitVerBtn').classList.remove('hidden');}}
+function updateVerificationUI(){if(!user) return;let v=getSellerVerification(user.shop);let verified=isSellerVerified(user.shop);document.getElementById('meVerificationStatus').innerText=verified?`✓ VERIFIED - 50 GHS Paid`:'✗ NOT VERIFIED';document.getElementById('meVerificationStatus').className=verified?'text-green-600 font-bold':'text-red-600 font-bold';document.getElementById('myGoodsVerifyText').innerText=verified?'✓ Active - 50 GHS/month':'✗ Pay 50 GHS to sell';if(verified&&v){let days=Math.ceil((v.expiry-Date.now())/(24*60*60*1000));document.getElementById('meExpiry').innerText=`Expires in ${days} days`;document.getElementById('payStatus').innerText=`Paid - ${days} days left`;document.getElementById('payBtn').classList.add('hidden');document.getElementById('submitVerBtn').classList.remove('hidden');} renderMyStatuses();}
 function getCoinBalance(){if(!user) return 0;let coins=JSON.parse(localStorage.getItem('dornny_coins_'+user.shop)||'[]');return coins.reduce((s,c)=>s+c.amount,0);}
 function updateCoinUI(){if(!user) return;let b=getCoinBalance();document.getElementById('coinBalance').innerText=b.toFixed(2);document.getElementById('coinBalanceHome').innerText=b.toFixed(2);document.getElementById('coinStatus').innerText=isSellerVerified(user.shop)?'Active seller':'Pay 50 GHS to earn';}
 function loadProductsFromCloud(){if(!db){render();return;}db.collection('dornny_products').orderBy('createdAt','desc').onSnapshot((snap)=>{let data=[];snap.forEach(doc=>data.push(doc.data()));if(data.length>0){products=data;}render();},()=>{render();});}
@@ -94,7 +120,7 @@ function openCategoryPage(){renderCategoryGrid();document.getElementById('catego
 function closeCategory(){document.getElementById('categoryPage').style.display='none';}
 function renderCategoryGrid(){document.getElementById('categoryGrid').innerHTML=categories.filter(c=>c!=="All").map(c=>{let count=products.filter(p=>p.cat===c).length;let img=products.find(p=>p.cat===c)?.imgs[0]||"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300";return `<div onclick="selectCategoryFromPage('${c}')" class="bg-white rounded-xl overflow-hidden border cursor-pointer"><img src="${img}" class="w-full h-[100px] object-cover"><div class="p-2"><p class="font-bold text-[12px]">${c}</p><p class="text-[10px] text-gray-500">${count} items</p></div></div>`;}).join('');}
 function selectCategoryFromPage(cat){currentCat=cat;renderCats();render();closeCategory();}
-function closeAllPages(){document.getElementById('mePage').style.display='none';document.getElementById('categoryPage').style.display='none';document.getElementById('cartDrawer').style.display='none';document.getElementById('detail').style.display='none';document.getElementById('sellScreen').style.display='none';document.getElementById('sellerStorePage').style.display='none';document.getElementById('sellerVerificationScreen').style.display='none';document.getElementById('kofiAIPage').style.display='none';document.getElementById('adminPage').style.display='none';document.getElementById('coinHistoryPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';}
+function closeAllPages(){document.getElementById('mePage').style.display='none';document.getElementById('categoryPage').style.display='none';document.getElementById('cartDrawer').style.display='none';document.getElementById('detail').style.display='none';document.getElementById('sellScreen').style.display='none';document.getElementById('sellerStorePage').style.display='none';document.getElementById('sellerVerificationScreen').style.display='none';document.getElementById('kofiAIPage').style.display='none';document.getElementById('adminPage').style.display='none';document.getElementById('coinHistoryPage').style.display='none';document.getElementById('liveRoomPage').style.display='none';document.getElementById('statusViewerPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';}
 function openSellerStore(sellerName){currentStoreSeller=sellerName;let sellerProducts=products.filter(p=>p.seller===sellerName);let ver=isSellerVerified(sellerName);document.getElementById('storeShopName').innerText=sellerName+(ver?' ✓':'');document.getElementById('storeProfileImg').src=getShopProfile(sellerName);document.getElementById('storeShopStats').innerText=sellerProducts.length+" products";document.getElementById('storeVerifiedInfo').innerText=ver?`✓ Active Seller - 50 GHS/month`:'✗ Not Active';document.getElementById('sellerStoreGrid').innerHTML=sellerProducts.map(p=>`<div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border"><img src="${p.imgs[0]}" class="w-full h-[160px] object-cover"><div class="p-2"><p class="text-[11px] font-bold truncate">${p.name}</p><p class="font-black text-[13px] text-[#ff3e3e]">GH₵${p.price}</p></div></div>`).join('');document.getElementById('sellerStorePage').style.display='block';}
 function closeSellerStore(){document.getElementById('sellerStorePage').style.display='none';}
 function openDetail(id){currentP=products.find(p=>p.id===id); if(!currentP) return;let prof=getShopProfile(currentP.seller);let ver=isSellerVerified(currentP.seller);let whatsapp=getSellerWhatsApp(currentP.seller);document.getElementById('dPrice').innerText=`GH₵${currentP.price}`;document.getElementById('dTitleFull').innerText=currentP.name;document.getElementById('dSold').innerHTML=`<div onclick="openSellerStore('${currentP.seller}')" class="flex items-center gap-3 bg-white border-2 ${ver?'border-green-600':'border-red-600'} rounded-xl p-3 cursor-pointer"><img src="${prof}" class="w-14 h-14 rounded-full object-cover"><div class="flex-1"><p class="font-black text-[13px]">${currentP.seller} ${ver?'✓':''}</p><p class="text-[10px]">WhatsApp: ${whatsapp}</p></div></div>`;document.getElementById('detailSellerWhatsApp').innerText=`WhatsApp: ${whatsapp||'Not available'}`;document.getElementById('detailImgs').innerHTML=currentP.imgs.map(im=>`<div class="swiper-slide"><img src="${im}" class="w-full h-full object-cover"></div>`).join('');document.getElementById('detail').style.display='block';setTimeout(()=>{if(detailSwiper)detailSwiper.destroy();detailSwiper=new Swiper('#detailSwiper',{loop:true,pagination:{el:'.swiper-pagination'}});},100);}
@@ -120,66 +146,257 @@ function toggleFollowCurrentSeller(){if(!currentP)return;toggleFollowSeller(curr
 function toggleFollowCurrentStore(){if(!currentStoreSeller)return;toggleFollowSeller(currentStoreSeller);}
 function toggleFollowSeller(seller){let isF=followedSellers.includes(seller);if(isF){followedSellers=followedSellers.filter(s=>s!==seller);}else{followedSellers.push(seller);}localStorage.setItem('dornny_followed',JSON.stringify(followedSellers));toast(isF?'Unfollowed':'Following');}
 
-// SMART KOFI - FIXED BUG child contains hi
+// ====== LIVE + CLOUD STATUS ======
+let currentLiveId=null, liveStream=null, facingMode='user', liveUnsub=null, commentUnsub=null;
+let mediaRecorder=null, recordedChunks=[], currentStatusSeller=null;
+
+function sellerGoLive(){
+  if(!user){toast('Login first');return;}
+  if(!isSellerVerified(user.shop)){toast('Pay 50 GHS to go live');openVerificationFromMe();return;}
+  let myProducts = products.filter(p=>p.seller===user.shop);
+  if(myProducts.length===0){toast('Upload product first to go live');openSell();return;}
+  let title = prompt('Live title: What are you selling today?');
+  if(!title) return;
+  let prod = myProducts[0];
+  startSellerLive(title, prod);
+}
+async function startSellerLive(title, product){
+  try{
+    recordedChunks=[];
+    liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:facingMode}, audio:true});
+    mediaRecorder = new MediaRecorder(liveStream, {mimeType:'video/webm;codecs=vp9'});
+    mediaRecorder.ondataavailable = e=>{ if(e.data.size>0) recordedChunks.push(e.data); };
+    mediaRecorder.start(1000);
+    document.getElementById('liveRoomPage').style.display='flex';
+    document.getElementById('bottomNav').style.display='none';
+    document.getElementById('kofiFloatingBtn').style.display='none';
+    let video = document.getElementById('liveVideo');
+    video.srcObject = liveStream;
+    document.getElementById('liveSellerName').innerText=user.shop;
+    document.getElementById('liveSellerImg').src=getShopProfile(user.shop);
+    document.getElementById('liveProductTag').classList.remove('hidden');
+    document.getElementById('liveProductImg').src=product.imgs[0];
+    document.getElementById('liveProductName').innerText=product.name;
+    document.getElementById('liveProductPrice').innerText='GH₵'+product.price;
+    document.getElementById('sellerLiveControls').classList.remove('hidden');
+    document.getElementById('liveFollowBtn').classList.add('hidden');
+    document.getElementById('recIndicator').classList.remove('hidden');
+    let liveId = Date.now().toString();
+    currentLiveId=liveId;
+    await db.collection('dornny_lives').doc(liveId).set({id:liveId,seller:user.shop,shopName:user.shop,title:title,product:product,viewers:1,likes:0,gifts:0,active:true,startedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    loadLives();
+    listenLiveComments(liveId);
+    toast('🔴 LIVE - Recording for Cloud Status');
+  }catch(e){toast('Camera error: '+e.message);}
+}
+async function saveLiveToCloudStatus(){
+  if(recordedChunks.length===0){ toast('No video recorded'); return; }
+  let blob = new Blob(recordedChunks, {type:'video/webm'});
+  let statusId = Date.now().toString();
+  let filePath = `dornny_statuses/${user.shop}/${statusId}.webm`;
+  let storageRef = storage.ref(filePath);
+  let uploadTask = storageRef.put(blob);
+  document.getElementById('uploadProgress').classList.remove('hidden');
+  uploadTask.on('state_changed', (snapshot)=>{
+    let percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes)*100);
+    document.getElementById('uploadPercent').innerText=percent+'%';
+  }, (error)=>{
+    document.getElementById('uploadProgress').classList.add('hidden');
+    toast('Upload failed: '+error.message);
+  }, async ()=>{
+    let downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+    let statusData = {
+      id: statusId,
+      seller: user.shop,
+      shopName: user.shop,
+      videoUrl: downloadURL,
+      storagePath: filePath,
+      product: products.filter(p=>p.seller===user.shop)[0] || null,
+      createdAt: Date.now(),
+      expiry: Date.now() + 24*60*60*1000,
+      views:0,
+      likes:0
+    };
+    await db.collection('dornny_statuses').doc(statusId).set(statusData);
+    // also save locally for fast load
+    let localAll = JSON.parse(localStorage.getItem('dornny_statuses')||'[]');
+    localAll.unshift(statusData);
+    localStorage.setItem('dornny_statuses', JSON.stringify(localAll.slice(0,20)));
+    document.getElementById('uploadProgress').classList.add('hidden');
+    loadStatuses();
+    renderMyStatuses();
+    toast('✅ Cloud Status saved - All phones can see for 24h!');
+  });
+}
+function loadLives(){
+  if(!db) return;
+  db.collection('dornny_lives').where('active','==',true).onSnapshot(snap=>{
+    let lives=[]; snap.forEach(d=>lives.push(d.data()));
+    let scroll=document.getElementById('liveScroll');
+    if(lives.length===0){scroll.innerHTML=`<p class="text-[11px] text-gray-500 py-2">No live now - Be first to GO LIVE! 🔴</p>`;return;}
+    scroll.innerHTML=lives.map(l=>`
+      <div onclick="joinLive('${l.id}')" class="flex flex-col items-center cursor-pointer min-w-[60px]">
+        <div class="relative"><img src="${getShopProfile(l.seller)}" class="w-14 h-14 rounded-full object-cover live-ring"><div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[7px] px-1.5 py-0.5 rounded-full font-black">LIVE</div></div>
+        <p class="text-[9px] font-bold mt-1 truncate w-[60px] text-center">${l.shopName}</p>
+        <p class="text-[8px] text-gray-500">👁️ ${l.viewers||0}</p>
+      </div>
+    `).join('');
+  });
+}
+function loadStatuses(){
+  if(!db){ renderStatusScroll(JSON.parse(localStorage.getItem('dornny_statuses')||'[]').filter(s=>s.expiry>Date.now())); return; }
+  db.collection('dornny_statuses').where('expiry','>',Date.now()).orderBy('expiry','desc').onSnapshot(snap=>{
+    let all=[]; snap.forEach(d=>all.push(d.data()));
+    // auto delete expired on server
+    renderStatusScroll(all);
+    renderMyStatuses();
+  }, (err)=>{
+    // fallback to local
+    let local = JSON.parse(localStorage.getItem('dornny_statuses')||'[]').filter(s=>s.expiry>Date.now());
+    renderStatusScroll(local);
+  });
+}
+function renderStatusScroll(statusList){
+  let scroll=document.getElementById('statusScroll');
+  if(statusList.length===0){scroll.innerHTML=`<p class="text-[10px] text-gray-400 py-2">No status yet - Go LIVE to create cloud status</p>`;return;}
+  let bySeller={}; statusList.forEach(s=>{ if(!bySeller[s.seller]) bySeller[s.seller]=[]; bySeller[s.seller].push(s); });
+  scroll.innerHTML=Object.keys(bySeller).map(seller=>{
+    let latest=bySeller[seller][0];
+    let count=bySeller[seller].length;
+    return `<div onclick="openStatusViewerBySeller('${seller}')" class="flex flex-col items-center cursor-pointer min-w-[60px]">
+      <div class="relative"><img src="${getShopProfile(seller)}" class="w-14 h-14 rounded-full object-cover status-ring"><div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[7px] px-1.5 py-0.5 rounded-full font-black">${count} STATUS</div></div>
+      <p class="text-[9px] font-bold mt-1 truncate w-[60px] text-center">${seller}</p>
+    </div>`;
+  }).join('');
+}
+function renderMyStatuses(){
+  if(!user) return;
+  if(!db){ let all=JSON.parse(localStorage.getItem('dornny_statuses')||'[]'); let mine=all.filter(s=>s.seller===user.shop && s.expiry>Date.now()); let list=document.getElementById('myStatusList'); if(mine.length===0){list.innerHTML=`<p class="text-[11px] text-gray-500">No cloud status yet. Go LIVE to create.</p>`;return;} list.innerHTML=mine.map(s=>`<div class="flex gap-3 items-center bg-gray-50 p-2 rounded-xl border"><video src="${s.videoUrl||s.videoData}" class="w-16 h-16 rounded object-cover"></video><div class="flex-1"><p class="font-bold text-[11px]">Live: ${new Date(s.createdAt).toLocaleString()}</p><p class="text-[9px] text-gray-500">Expires in ${Math.ceil((s.expiry-Date.now())/(1000*60*60))}h • 👁️ ${s.views||0}</p></div><button onclick="openStatusViewer('${s.id}')" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px]">View</button><button onclick="deleteStatus('${s.id}')" class="bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Delete</button></div>`).join(''); return; }
+  db.collection('dornny_statuses').where('seller','==',user.shop).where('expiry','>',Date.now()).onSnapshot(snap=>{
+    let mine=[]; snap.forEach(d=>mine.push(d.data()));
+    let list=document.getElementById('myStatusList');
+    if(mine.length===0){list.innerHTML=`<p class="text-[11px] text-gray-500">No cloud status yet. Go LIVE to create one.</p>`;return;}
+    list.innerHTML=mine.map(s=>`
+      <div class="flex gap-3 items-center bg-gray-50 p-2 rounded-xl border">
+        <video src="${s.videoUrl||s.videoData}" class="w-16 h-16 rounded object-cover"></video>
+        <div class="flex-1"><p class="font-bold text-[11px]">Live: ${new Date(s.createdAt).toLocaleString()}</p><p class="text-[9px] text-gray-500">Expires in ${Math.ceil((s.expiry-Date.now())/(1000*60*60))}h • 👁️ ${s.views||0}</p><p class="text-[8px] text-green-600">☁️ Cloud - All phones see</p></div>
+        <button onclick="openStatusViewer('${s.id}')" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px]">View</button>
+        <button onclick="deleteStatus('${s.id}')" class="bg-red-100 text-red-600 px-2 py-1 rounded-full text-[10px]">Delete</button>
+      </div>
+    `).join('');
+  });
+}
+async function deleteStatus(id){
+  try{
+    let doc = await db.collection('dornny_statuses').doc(id).get();
+    if(doc.exists){
+      let data=doc.data();
+      if(data.storagePath){ try{ await storage.ref(data.storagePath).delete(); }catch(e){} }
+      await db.collection('dornny_statuses').doc(id).delete();
+    }
+    let all=JSON.parse(localStorage.getItem('dornny_statuses')||'[]');
+    all=all.filter(s=>s.id!==id);
+    localStorage.setItem('dornny_statuses', JSON.stringify(all));
+    toast('Status deleted from cloud');
+  }catch(e){ toast('Delete failed'); }
+}
+function openStatusViewerBySeller(seller){
+  if(!db) return;
+  db.collection('dornny_statuses').where('seller','==',seller).where('expiry','>',Date.now()).limit(1).get().then(snap=>{
+    if(!snap.empty){ showStatusVideo(snap.docs[0].data()); }
+  });
+}
+function openStatusViewer(statusId){
+  if(!db) return;
+  db.collection('dornny_statuses').doc(statusId).get().then(doc=>{
+    if(doc.exists){ showStatusVideo(doc.data()); }
+  });
+}
+function showStatusVideo(status){
+  currentStatusSeller=status.seller;
+  document.getElementById('statusViewerPage').style.display='flex';
+  document.getElementById('bottomNav').style.display='none';
+  document.getElementById('kofiFloatingBtn').style.display='none';
+  document.getElementById('statusSellerName').innerText=status.shopName;
+  document.getElementById('statusSellerImg').src=getShopProfile(status.seller);
+  document.getElementById('statusTime').innerText=new Date(status.createdAt).toLocaleString() + ' • Expires in '+Math.ceil((status.expiry-Date.now())/(1000*60*60))+'h • ☁️ Cloud';
+  let video=document.getElementById('statusVideo');
+  video.src=status.videoUrl || status.videoData;
+  video.play().catch(()=>{});
+  db.collection('dornny_statuses').doc(status.id).update({views: firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
+  document.getElementById('statusFollowBtn').innerText=followedSellers.includes(status.seller)?'Following':' + Follow';
+}
+function closeStatusViewer(){document.getElementById('statusViewerPage').style.display='none';document.getElementById('bottomNav').style.display='flex';document.getElementById('kofiFloatingBtn').style.display='flex';document.getElementById('statusVideo').pause();}
+function openWhatsAppSellerFromStatus(){ if(currentStatusSeller) openWhatsAppSeller(currentStatusSeller); }
+function followStatusSeller(){ if(currentStatusSeller){ toggleFollowSeller(currentStatusSeller); document.getElementById('statusFollowBtn').innerText=followedSellers.includes(currentStatusSeller)?'Following':' + Follow'; } }
+async function joinLive(liveId){
+  currentLiveId=liveId;
+  let doc = await db.collection('dornny_lives').doc(liveId).get();
+  if(!doc.exists){toast('Live ended');return;}
+  let live=doc.data();
+  document.getElementById('liveRoomPage').style.display='flex';
+  document.getElementById('bottomNav').style.display='none';
+  document.getElementById('kofiFloatingBtn').style.display='none';
+  document.getElementById('liveSellerName').innerText=live.shopName;
+  document.getElementById('liveSellerImg').src=getShopProfile(live.seller);
+  document.getElementById('liveViewers').innerText=`👁️ ${(live.viewers||0)+1} watching`;
+  document.getElementById('liveLikes').innerText=`❤️ ${live.likes||0}`;
+  document.getElementById('liveProductTag').classList.remove('hidden');
+  document.getElementById('liveProductImg').src=live.product.imgs[0];
+  document.getElementById('liveProductName').innerText=live.product.name;
+  document.getElementById('liveProductPrice').innerText='GH₵'+live.product.price;
+  document.getElementById('sellerLiveControls').classList.add('hidden');
+  document.getElementById('recIndicator').classList.add('hidden');
+  document.getElementById('liveFollowBtn').classList.remove('hidden');
+  document.getElementById('liveFollowBtn').innerText=followedSellers.includes(live.seller)?'Following':' + Follow';
+  document.getElementById('liveVideo').classList.add('hidden');
+  document.getElementById('livePlaceholder').classList.remove('hidden');
+  document.getElementById('livePlaceholder').src=live.product.imgs[0];
+  db.collection('dornny_lives').doc(liveId).update({viewers:firebase.firestore.FieldValue.increment(1)});
+  listenLiveComments(liveId);
+  liveUnsub = db.collection('dornny_lives').doc(liveId).onSnapshot(d=>{ let l=d.data(); if(!l||!l.active){leaveLive();return;} document.getElementById('liveViewers').innerText=`👁️ ${l.viewers||0} watching`; document.getElementById('liveLikes').innerText=`❤️ ${l.likes||0}`; });
+}
+function listenLiveComments(liveId){
+  if(commentUnsub) commentUnsub();
+  commentUnsub = db.collection('dornny_lives').doc(liveId).collection('comments').orderBy('createdAt','asc').onSnapshot(snap=>{
+    let box=document.getElementById('liveComments'); box.innerHTML='';
+    snap.forEach(d=>{ let c=d.data(); box.innerHTML+=`<div class="bg-black/50 backdrop-blur text-white px-2.5 py-1 rounded-full text-[11px] max-w-[90%]"><span class="font-black text-yellow-300">${c.user}: </span>${c.text} ${c.gift? ' '+c.gift:''}</div>`; });
+    box.scrollTop=box.scrollHeight;
+  });
+}
+function sendLiveComment(){ let input=document.getElementById('liveCommentInput'); let text=input.value.trim(); if(!text||!currentLiveId) return; db.collection('dornny_lives').doc(currentLiveId).collection('comments').add({user:user?user.shop:'Buyer',text:text,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); input.value=''; }
+function likeLive(){ if(!currentLiveId) return; db.collection('dornny_lives').doc(currentLiveId).update({likes:firebase.firestore.FieldValue.increment(1)}); let container=document.getElementById('heartContainer'); let heart=document.createElement('div'); heart.className='heart-anim'; heart.innerText=['❤️','💖','💕','😍'][Math.floor(Math.random()*4)]; heart.style.right=(20+Math.random()*60)+'px'; container.appendChild(heart); setTimeout(()=>heart.remove(),1500); }
+function followLiveSeller(){ if(!currentLiveId) return; db.collection('dornny_lives').doc(currentLiveId).get().then(d=>{ let seller=d.data().seller; toggleFollowSeller(seller); document.getElementById('liveFollowBtn').innerText=followedSellers.includes(seller)?'Following':' + Follow'; }); }
+function openGiftPanel(){document.getElementById('giftPanel').classList.remove('hidden');}
+function closeGiftPanel(){document.getElementById('giftPanel').classList.add('hidden');}
+function sendGift(amount,emoji){ if(!currentLiveId) return; if(!user){toast('Login to send gift');return;} db.collection('dornny_lives').doc(currentLiveId).update({gifts:firebase.firestore.FieldValue.increment(amount)}); db.collection('dornny_lives').doc(currentLiveId).collection('comments').add({user:user.shop,text:`Sent gift ${emoji} worth GH₵${amount}!`,gift:emoji,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); document.getElementById('giftAnim').classList.remove('hidden'); document.getElementById('giftAnim').innerHTML=`<div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-4 rounded-2xl font-black text-[20px] animate-bounce">${emoji} GH₵${amount} GIFT! 🎉</div>`; setTimeout(()=>{document.getElementById('giftAnim').classList.add('hidden');},2000); closeGiftPanel(); toast(`🎁 You sent ${emoji} GH₵${amount} to seller!`); }
+function addLiveProductToCart(){ if(!currentLiveId) return; db.collection('dornny_lives').doc(currentLiveId).get().then(d=>{ let prod=d.data().product; cart.push({...prod,qty:1}); render(); toast('Added to cart from LIVE!'); }); }
+async function switchCamera(){ facingMode = facingMode==='user'?'environment':'user'; if(liveStream){liveStream.getTracks().forEach(t=>t.stop());} liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:facingMode}, audio:true}); document.getElementById('liveVideo').srcObject=liveStream; }
+async function stopLive(){ 
+  if(mediaRecorder && mediaRecorder.state!=='inactive'){ 
+    mediaRecorder.onstop = ()=>{ saveLiveToCloudStatus(); };
+    mediaRecorder.stop(); 
+  } else {
+    saveLiveToCloudStatus();
+  }
+  if(currentLiveId && user && db){ await db.collection('dornny_lives').doc(currentLiveId).update({active:false}); } 
+  leaveLive(); 
+  toast('Live ended - Uploading to Cloud Status...');
+}
+function leaveLive(){ document.getElementById('liveRoomPage').style.display='none'; document.getElementById('bottomNav').style.display='flex'; document.getElementById('kofiFloatingBtn').style.display='flex'; document.getElementById('liveVideo').classList.remove('hidden'); document.getElementById('livePlaceholder').classList.add('hidden'); document.getElementById('giftPanel').classList.add('hidden'); document.getElementById('liveComments').innerHTML=''; document.getElementById('recIndicator').classList.add('hidden'); if(liveStream){liveStream.getTracks().forEach(t=>t.stop()); liveStream=null;} if(liveUnsub){liveUnsub(); liveUnsub=null;} if(commentUnsub){commentUnsub(); commentUnsub=null;} if(currentLiveId && db){ db.collection('dornny_lives').doc(currentLiveId).update({viewers:firebase.firestore.FieldValue.increment(-1)}).catch(()=>{}); } currentLiveId=null; }
+
+// KOFI AI
 let kofiLang='en'; let lastKofiReply=""; let recognition=null; let isListening=false;
 function setKofiLang(lang){kofiLang=lang;let btns=document.querySelectorAll('#kofiAIPage [id^="lang-"]');btns.forEach(b=>b.className='bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold');document.getElementById('lang-'+lang).className='bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold';}
 function addKofiMessage(text,isBot){let box=document.getElementById('kofiMessages');let cls=isBot?'justify-start':'justify-end';let bubble=isBot?'bg-[#222] text-white rounded-[18px] rounded-bl-[4px]':'bg-[#f68b1e] text-black rounded-[18px] rounded-br-[4px] font-bold';box.innerHTML+=`<div class="flex ${cls}"><div class="${bubble} px-4 py-3 text-[13px] max-w-[85%] leading-[18px]">${text}<div class="mt-1"><button onclick="speakText(this.closest('div').innerText)" class="text-[9px] opacity-60">🔊 Play</button></div></div></div>`;box.scrollTop=box.scrollHeight;}
 function speakText(text){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();let clean=text.replace(/🔊 Play|🤖 Kofi:/g,'').trim().substring(0,400);let u=new SpeechSynthesisUtterance(clean);u.lang=kofiLang==='fr'?'fr-FR':'en-GH';u.rate=0.95;lastKofiReply=clean;speechSynthesis.speak(u);}
 function speakLast(){if(lastKofiReply)speakText(lastKofiReply);}
 function toggleVoice(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){toast('Voice not supported');return;}if(isListening){recognition.stop();return;}let SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang='en-GH';recognition.start();isListening=true;document.getElementById('micBtn').innerText='🔴';toast('Listening...');recognition.onresult=(e)=>{document.getElementById('kofiInput').value=e.results[0][0].transcript;sendKofiMessage();};recognition.onend=()=>{isListening=false;document.getElementById('micBtn').innerText='🎤';};}
-function getSmartKofiAnswer(q, lang){
-  let text = q.toLowerCase();
-  // Use word boundaries to avoid child -> hi bug
-  let hasWord = (w) => new RegExp(`\\b${w}\\b`,'i').test(text);
-  
-  if(text.includes('school') || text.includes('child') || text.includes('education')){
-    if(lang==='tw') return "For your child school: Look for school with good teachers, safe environment, small class size, close to home. In Ghana, check Ghana Education Service ranking, ask other parents, visit school. What area are you in? Accra? Kumasi? I can suggest what to check.";
-    return "Great question about school for your child. Here is how to find better school:\n\n1. Location - close to home so child not tired\n2. Teachers - qualified, caring\n3. Class size - less than 30 is good\n4. Safety - fence, security\n5. Results - BECE/WASSCE performance\n6. Fees - you can afford\n\nIn Ghana, you can check: British curriculum, Montessori, or public schools with good record. Tell me your area (e.g. Madina, Kasoa) and your budget, I will help you more specifically. What age is your child?";
-  }
-  if(hasWord('hi') || hasWord('hello') || text==='hi' || text.includes('akwaaba')){
-    return "Hello! I am Kofi 😊 How are you? I am ready to help you properly now. Ask me anything about school, business, or Dornny Market.";
-  }
-  if(text.includes('dornny') || text.includes('sell') || text.includes('seller')){
-    return "About Dornny Market: Pay 50 GHS per month to sell. Go to Me > Become Seller, fill Name, Age, Gender, Location, MoMo. After pay, upload products - they show on all phones. Customers chat you on WhatsApp. Do you want to sell?";
-  }
-  if(text.includes('business') || text.includes('money')){
-    return "For business ideas in Ghana: You can sell clothes, food, phones on Dornny Market. Start with what people need daily. Keep small profit, be honest, deliver fast. What kind of business are you thinking?";
-  }
-  if(text.includes('love') || text.includes('relationship')){
-    return "Love advice: Talk openly, respect each other, listen. If you have issue, tell me details and I will advise you kindly.";
-  }
-  if(text.includes('health')){
-    return "Health: If child is sick, go to clinic. For school child, ensure good food, sleep, clean water. Tell me symptom and I can give general info.";
-  }
-  return `You asked: "${q}"\n\nI understand now. Here is my answer: ${q} is important. For your child school question, I gave detailed steps above. If you meant something else, tell me more - I will not repeat same answer, I will give you a specific answer based on what you wrote.`;
-}
-function sendKofiMessage(){
- let inp=document.getElementById('kofiInput'); let txt=inp.value.trim(); if(!txt) return;
- addKofiMessage(txt,false);
- inp.value=''; let box=document.getElementById('kofiMessages'); let typingId='typing-'+Date.now(); box.innerHTML+=`<div id="${typingId}" class="flex justify-start"><div class="bg-gray-200 text-gray-500 px-4 py-3 rounded-2xl text-[11px]">Kofi thinking...</div></div>`; box.scrollTop=box.scrollHeight;
- setTimeout(()=>{document.getElementById(typingId)?.remove(); let reply=getSmartKofiAnswer(txt,kofiLang); addKofiMessage(`🤖 Kofi: ${reply}`, true); speakText(reply);},800);
-}
-function openKofiAI(){
-  document.getElementById('mePage').style.display='none';
-  document.getElementById('categoryPage').style.display='none';
-  document.getElementById('cartDrawer').style.display='none';
-  document.getElementById('detail').style.display='none';
-  document.getElementById('sellScreen').style.display='none';
-  document.getElementById('sellerStorePage').style.display='none';
-  document.getElementById('sellerVerificationScreen').style.display='none';
-  document.getElementById('adminPage').style.display='none';
-  document.getElementById('coinHistoryPage').style.display='none';
-  document.getElementById('bottomNav').style.display='none';
-  document.getElementById('kofiFloatingBtn').style.display='none';
-  document.getElementById('kofiAIPage').style.display='flex';
-}
-function closeKofiAI(){
-  document.getElementById('kofiAIPage').style.display='none';
-  document.getElementById('bottomNav').style.display='flex';
-  document.getElementById('kofiFloatingBtn').style.display='flex';
-  if(window.speechSynthesis) speechSynthesis.cancel();
-}
-(function(){let saved=localStorage.getItem('dornny_user');if(saved){try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();}catch(e){}}else{renderCats();loadProductsFromCloud();}})();
+function getSmartKofiAnswer(q, lang){ let text = q.toLowerCase(); let hasWord = (w) => new RegExp(`\\b${w}\\b`,'i').test(text); if(text.includes('school') || text.includes('child')){ return "Great question about school for your child. Check location, teachers, class size, safety, results. Tell me your area and budget."; } if(hasWord('hi') || hasWord('hello')){ return "Hello! I am Kofi 😊 How are you? Ask me anything."; } if(text.includes('dornny') || text.includes('live') || text.includes('status')){ return "Dornny Market LIVE: Pay 50 GHS to sell and GO LIVE. Live is recorded and saved to Cloud Status for 24h. Buyers can watch status on all phones."; } return `You said: "${q}". I understand.`; }
+function sendKofiMessage(){ let inp=document.getElementById('kofiInput'); let txt=inp.value.trim(); if(!txt) return; addKofiMessage(txt,false); inp.value=''; let box=document.getElementById('kofiMessages'); let typingId='typing-'+Date.now(); box.innerHTML+=`<div id="${typingId}" class="flex justify-start"><div class="bg-gray-200 text-gray-500 px-4 py-3 rounded-2xl text-[11px]">Kofi thinking...</div></div>`; box.scrollTop=box.scrollHeight; setTimeout(()=>{document.getElementById(typingId)?.remove(); let reply=getSmartKofiAnswer(txt,kofiLang); addKofiMessage(`🤖 Kofi: ${reply}`, true); speakText(reply);},800); }
+function openKofiAI(){ document.getElementById('mePage').style.display='none'; document.getElementById('categoryPage').style.display='none'; document.getElementById('cartDrawer').style.display='none'; document.getElementById('detail').style.display='none'; document.getElementById('sellScreen').style.display='none'; document.getElementById('sellerStorePage').style.display='none'; document.getElementById('sellerVerificationScreen').style.display='none'; document.getElementById('adminPage').style.display='none'; document.getElementById('coinHistoryPage').style.display='none'; document.getElementById('liveRoomPage').style.display='none'; document.getElementById('statusViewerPage').style.display='none'; document.getElementById('bottomNav').style.display='none'; document.getElementById('kofiFloatingBtn').style.display='none'; document.getElementById('kofiAIPage').style.display='flex'; }
+function closeKofiAI(){ document.getElementById('kofiAIPage').style.display='none'; document.getElementById('bottomNav').style.display='flex'; document.getElementById('kofiFloatingBtn').style.display='flex'; if(window.speechSynthesis) speechSynthesis.cancel(); }
+(function(){let saved=localStorage.getItem('dornny_user');if(saved){try{user=JSON.parse(saved);document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');renderCats();updateVerificationUI();updateAdminButton();updateCoinUI();loadProductsFromCloud();loadLives();loadStatuses();}catch(e){}}else{renderCats();loadProductsFromCloud();loadLives();loadStatuses();}})();
 </script>
 </body>
 </html>
