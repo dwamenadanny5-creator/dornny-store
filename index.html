@@ -28,39 +28,22 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 <div id="mainApp" class="hidden">
 <div class="sticky top-0 z-30 bg-white p-2.5 flex gap-2 items-center border-b"><div class="font-black text-[13px] leading-[12px]">DORNNY<br>MARKET<br><span class="text-[8px] text-[#f68b1e]">Amansan Dwaaso</span></div><div class="flex-1 bg-[#f2f2f2] rounded-full h-[40px] flex items-center px-4"><i class="fa-solid fa-search text-[13px]"></i><input id="search" oninput="render()" placeholder="Search products..." class="bg-transparent ml-2 w-full text-[13px] outline-none"></div></div>
 <div class="bg-gradient-to-r from-[#f68b1e] to-black text-white m-2 rounded-xl p-3 flex justify-between items-center"><div><p class="font-black text-[12px]">🪙 SELLER EARN - 2 GHS WEEKLY</p><p class="text-[10px]">Balance: GH₵<span id="coinBalanceHome">0.00</span></p></div><button onclick="openMe()" class="bg-white text-black px-3 py-2 rounded-full text-[10px] font-black">EARN →</button></div>
-
-<!-- ✅ 1. LIVE STREAMING - WHERE YOU MARKED -->
-<div id="liveSellingBox" class="m-2 bg-white rounded-xl p-3 border-2 border-red-600">
-<div class="flex justify-between items-center"><p class="font-black text-[13px]">🔴 LIVE STREAMING - Sellers Live Now</p><span class="bg-red-600 text-white text-[9px] px-2 py-1 rounded-full font-bold live-pulse">● LIVE</span></div>
-<p class="text-[10px] text-gray-500 mt-1">Watch seller show product live, buy while live</p>
-<div id="liveSellingList" class="mt-2"><p class="text-[11px] text-gray-500">No seller live now. Tap GO LIVE to start.</p></div>
-<button onclick="openGoLiveModal()" class="w-full mt-2 bg-red-600 text-white py-2.5 rounded-full text-[11px] font-bold">🔴 GO LIVE TO SELL</button>
-</div>
-
-<!-- ✅ 2. REAL LIVE SCORE - NO SELLER ADD - TAP TO OPEN FULL PAGE -->
-<div id="footballHomeBox" onclick="openLiveScoresPage()" class="m-2 bg-white rounded-xl p-3 border-2 border-green-600 cursor-pointer">
-<div class="flex justify-between items-center"><p class="font-black text-[13px]">⚽ LIVE SCORE - Real Football</p><span class="bg-green-600 text-white text-[9px] px-2 py-1 rounded-full font-bold">TAP TO VIEW →</span></div>
-<p class="text-[10px] text-gray-500 mt-1">Real scores - Auto updates every 15 sec - Faster than others - No seller needed</p>
-<div id="footballListHome" class="mt-2"><p class="text-[11px] text-gray-500">Loading real live scores...</p></div>
-<button onclick="event.stopPropagation();openLiveScoresPage()" class="w-full mt-2 bg-green-600 text-white py-2.5 rounded-full text-[11px] font-bold">⚽ TAP TO SEE ALL MATCHES - Live / Today / Tomorrow</button>
-</div>
-
+<div id="liveSellingBox" class="m-2 bg-white rounded-xl p-3 border-2 border-red-600"><div class="flex justify-between items-center"><p class="font-black text-[13px]">🔴 LIVE STREAMING - Sellers Live Now</p><span class="bg-red-600 text-white text-[9px] px-2 py-1 rounded-full font-bold live-pulse">● LIVE</span></div><p class="text-[10px] text-gray-500 mt-1">Watch seller show product live, buy while live</p><div id="liveSellingList" class="mt-2"><p class="text-[11px] text-gray-500">No seller live now. Tap GO LIVE to start.</p></div><button onclick="openGoLiveModal()" class="w-full mt-2 bg-red-600 text-white py-2.5 rounded-full text-[11px] font-bold">🔴 GO LIVE TO SELL</button></div>
+<div id="footballHomeBox" onclick="openLiveScoresPage()" class="m-2 bg-white rounded-xl p-3 border-2 border-green-600 cursor-pointer"><div class="flex justify-between items-center"><p class="font-black text-[13px]">⚽ LIVE SCORE - Whole World</p><span class="bg-green-600 text-white text-[9px] px-2 py-1 rounded-full font-bold">TAP TO VIEW →</span></div><p class="text-[10px] text-gray-500 mt-1">Real scores - Whole World - Auto every 15 sec - Faster</p><div id="footballListHome" class="mt-2"><p class="text-[11px] text-gray-500">Loading whole world scores...</p></div><button onclick="event.stopPropagation();openLiveScoresPage()" class="w-full mt-2 bg-green-600 text-white py-2.5 rounded-full text-[11px] font-bold">⚽ TAP TO SEE ALL MATCHES - Live / Today / Tomorrow</button></div>
 <div class="bg-white p-2 border-b sticky top-[50px] z-20"><div id="catList" class="flex gap-2 overflow-x-auto hide pb-1"></div><p id="catResult" class="text-[11px] font-bold mt-1 text-gray-600"></p></div>
 <div id="grid" class="p-2 grid grid-cols-2 gap-2"><p class="col-span-2 text-center py-10 text-[12px]">Loading products...</p></div>
 </div>
 
-<!-- ✅ FULL LIVE SCORES PAGE - LIKE FLASHSCORE -->
 <div id="liveScoresPage" class="fixed inset-0 bg-[#f5f5f5] z-[70] hidden overflow-y-auto pb-[90px]">
-<div class="bg-black text-white p-3 sticky top-0 z-10 flex items-center gap-3"><button onclick="closeLiveScoresPage()" class="w-9 h-9 bg-white/20 rounded-full">←</button><div><p class="font-black text-[15px]">⚽ LIVE SCORES</p><p class="text-[9px] text-green-400" id="liveScoreUpdated">Updating live every 15 sec...</p></div><button onclick="refreshLiveScores(true)" class="ml-auto bg-[#f68b1e] text-black px-3 py-2 rounded-full text-[10px] font-bold">↻ Refresh</button></div>
-<div class="bg-white p-2 sticky top-[57px] z-10 border-b"><div class="flex gap-2 overflow-x-auto hide" id="liveScoreTabs">
+<div class="bg-black text-white p-3 sticky top-0 z-10 flex items-center gap-3"><button onclick="closeLiveScoresPage()" class="w-9 h-9 bg-white/20 rounded-full">←</button><div><p class="font-black text-[15px]">⚽ LIVE SCORES - Whole World</p><p class="text-[9px] text-green-400" id="liveScoreUpdated">Updating live every 15 sec...</p></div><button onclick="refreshLiveScores(true)" class="ml-auto bg-[#f68b1e] text-black px-3 py-2 rounded-full text-[10px] font-bold">↻ Refresh</button></div>
+<div class="bg-white p-2 sticky top-[57px] z-10 border-b"><input id="liveSearch" oninput="renderLiveScoresList()" placeholder="🔍 Search team / league / country..." class="w-full bg-[#f2f2f2] rounded-full px-4 py-2.5 text-[12px] outline-none mb-2"><div class="flex gap-2 overflow-x-auto hide" id="liveScoreTabs">
 <button onclick="setLiveTab('live')" id="tab-live" class="px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap live-tab-active">🔴 LIVE NOW</button>
 <button onclick="setLiveTab('today')" id="tab-today" class="px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap bg-gray-100">📅 TODAY</button>
 <button onclick="setLiveTab('tomorrow')" id="tab-tomorrow" class="px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap bg-gray-100">⏰ TOMORROW</button>
 <button onclick="setLiveTab('upcoming')" id="tab-upcoming" class="px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap bg-gray-100">📆 UPCOMING</button>
 <button onclick="setLiveTab('finished')" id="tab-finished" class="px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap bg-gray-100">✅ FINISHED</button>
 </div><p class="text-[10px] text-gray-500 mt-1" id="liveScoreCount"></p></div>
-<div id="liveScoresList" class="p-2 space-y-2"><p class="text-center py-10 text-[12px]">Loading live scores...</p></div>
-<div class="p-3 text-center text-[10px] text-gray-400">Live scores update automatically. Tap Refresh for fastest update.</div>
+<div id="liveScoresList" class="p-2 space-y-2"><p class="text-center py-10 text-[12px]">Loading whole world scores...</p></div>
 </div>
 
 <div id="sellerVerificationScreen" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto pb-[90px]"><div class="bg-black text-white p-4 sticky top-0 z-10"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">Seller Verification - 50 GHS / Month</h2><button onclick="closeVerification()" class="w-8 h-8 bg-white/20 rounded-full">✕</button></div></div><div class="p-4 space-y-4"><div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-3"><p class="font-black text-[12px]">💰 Monthly Fee: 50 GHS</p></div><div><p class="font-bold text-[12px]">1. Seller Full Name *</p><input id="verSellerName" placeholder="e.g. Danny Mensah" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div><div><p class="font-bold text-[12px]">2. Age *</p><input id="verAge" type="number" placeholder="e.g. 25" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"></div><div><p class="font-bold text-[12px]">3. Gender *</p><select id="verGender" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold bg-white"><option value="">Select Gender *</option><option value="Male">Male</option><option value="Female">Female</option></select></div><div><p class="font-bold text-[12px]">4. Location *</p><input id="verLocation" placeholder="e.g. Accra - Madina" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"><div class="flex gap-2 mt-2"><input id="verGPS" class="flex-1 border rounded-xl px-3 py-2 text-[11px] bg-gray-100" placeholder="GPS auto"><button onclick="getVerificationGPS()" class="bg-black text-white px-3 py-2 rounded-full text-[10px]">📍 Get GPS</button></div></div><div class="bg-green-50 border-2 border-green-600 rounded-xl p-3"><p class="font-bold text-[12px] text-green-800">5. MoMo Number to Pay 50 GHS *</p><input id="verMomo" type="tel" placeholder="0555258032" class="w-full border-2 border-green-600 rounded-xl px-3 py-3 mt-2 text-[13px] font-bold bg-white"><p class="text-[9px] mt-2">Send 50 GHS to: <b>0555258032 - Dornny Market</b></p></div><div class="bg-black text-white rounded-xl p-3"><p class="font-black text-[12px]">Payment: <span id="payStatus">Not Paid</span></p><p class="text-[9px] text-yellow-300" id="payExpiry">Pay 50 GHS to activate for 30 days</p></div><button onclick="payMonthlyFee()" id="payBtn" class="w-full bg-[#f68b1e] text-black py-4 rounded-full mt-4 font-black text-[15px]">💳 PAY 50 GHS NOW</button><button onclick="submitVerificationAdmin()" id="submitVerBtn" class="w-full bg-black text-white py-4 rounded-full mt-3 font-black text-[14px] hidden">✅ COMPLETE</button><button onclick="closeVerification()" class="w-full bg-gray-200 py-3 rounded-full mt-3 font-bold text-[12px]">Cancel</button></div></div>
@@ -68,7 +51,7 @@ body{font-family:system-ui;background:#f5f5f5;padding-bottom:75px;margin:0}
 <div class="bg-white p-4 mt-2 flex gap-4 items-center"><img id="profileImg" onclick="openSellerProfile()" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[72px] h-[72px] rounded-full object-cover border-2 border-black cursor-pointer"><input type="file" id="profileFileInput" hidden accept="image/*" onchange="uploadSellerProfilePhoto(event)"><div class="flex-1"><p class="font-black text-[16px]">Welcome <span id="meShop">shop</span></p><p class="text-[12px] text-[#f68b1e] font-bold" id="meEmail">email</p><p class="text-[10px] font-bold">Status: <span id="meVerificationStatus">Not Verified</span></p><p class="text-[9px] text-gray-500" id="meExpiry"></p><button onclick="openSellerProfile()" class="bg-black text-white px-3 py-1.5 rounded-full text-[10px] font-bold mt-1">✏️ Edit Profile + Photo</button></div></div>
 <div class="bg-white mt-2"><button id="adminBtn" onclick="openAdminPage()" class="w-full hidden items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-yellow-400 text-black rounded-full flex items-center justify-center font-black">👑</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Admin - Sellers</p></div></button><button onclick="openMyGoods()" class="w-full flex items-center gap-4 p-4 border-b bg-black text-white"><div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-store"></i></div><div class="flex-1 text-left"><p class="font-black text-[13px]">My Goods</p><p class="text-[10px] text-gray-300" id="myGoodsVerifyText">Verify first</p></div></button><button onclick="openVerificationFromMe()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50 border-2 border-yellow-600"><div class="w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center">🔒</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Become Seller - 50 GHS / Month</p></div></button>
 <button onclick="openGoLiveModal()" class="w-full flex items-center gap-4 p-4 border-b bg-red-50 border-2 border-red-600"><div class="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center">🔴</div><div class="flex-1 text-left"><p class="font-black text-[13px]">GO LIVE TO SELL - Live Streaming</p><p class="text-[10px]">Show product live, buyers buy now</p></div></button>
-<button onclick="openLiveScoresPage()" class="w-full flex items-center gap-4 p-4 border-b bg-green-50 border-2 border-green-600"><div class="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center">⚽</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Live Scores - Real Football</p><p class="text-[10px]">Live / Today / Tomorrow / Upcoming - Auto</p></div></button>
+<button onclick="openLiveScoresPage()" class="w-full flex items-center gap-4 p-4 border-b bg-green-50 border-2 border-green-600"><div class="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center">⚽</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Live Scores - Whole World</p><p class="text-[10px]">Live / Today / Tomorrow / Upcoming - Auto</p></div></button>
 <button onclick="openKofiAI()" class="w-full flex items-center gap-4 p-4 border-b bg-yellow-50"><div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">🤖</div><div class="flex-1 text-left"><p class="font-black text-[13px]">Kofi AI - Voice Chat</p><p class="text-[9px]">Speaks Twi, English, Hausa, Ewe, Ga, French</p></div></button></div><div class="bg-white mt-4 p-4 flex gap-2 mb-4"><button onclick="openSell()" class="flex-1 bg-black text-white py-3 rounded-full font-bold text-[12px]">+ Sell</button><button onclick="doLogout()" class="flex-1 bg-gray-200 py-3 rounded-full font-bold text-[12px]">Logout</button></div></div>
 <div id="sellerProfileModal" class="fixed inset-0 bg-black/60 z-[80] hidden overflow-y-auto"><div class="bg-white m-4 mt-10 rounded-2xl p-4"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">✏️ My Seller Profile</h2><button onclick="closeSellerProfile()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><div class="flex flex-col items-center mt-3"><img id="profileModalImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-[90px] h-[90px] rounded-full object-cover border-2 border-black"><button onclick="document.getElementById('profileFileInput').click()" class="bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold mt-2">📷 Upload / Change Photo</button></div><p class="font-bold text-[12px] mt-3">Shop Name</p><input id="editShopName" placeholder="e.g. Danzy Shop" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"><p class="font-bold text-[12px] mt-2">WhatsApp Number</p><input id="editShopPhone" placeholder="055 123 4567" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px]"><p class="font-bold text-[12px] mt-2">Location</p><input id="editShopLocation" placeholder="Accra - Madina" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px]"><p class="font-bold text-[12px] mt-2">About My Shop</p><textarea id="editShopBio" placeholder="We sell quality..." class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px] h-[80px]"></textarea><button onclick="saveSellerProfile()" class="w-full bg-black text-white py-3.5 rounded-full font-bold mt-4">✅ SAVE PROFILE</button></div></div>
 <div id="goLiveModal" class="fixed inset-0 bg-black/60 z-[80] hidden overflow-y-auto"><div class="bg-white m-4 mt-10 rounded-2xl p-4"><div class="flex justify-between items-center"><h2 class="font-black text-[16px]">🔴 GO LIVE TO SELL</h2><button onclick="closeGoLiveModal()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div><p class="font-bold text-[12px] mt-3">What are you selling live? *</p><input id="liveProduct" placeholder="e.g. Ladies Dress - GH₵120" class="w-full border-2 border-black rounded-xl px-3 py-3 mt-1 text-[13px] font-bold"><p class="font-bold text-[12px] mt-2">Price GH₵</p><input id="livePrice" type="number" placeholder="120" class="w-full border rounded-xl px-3 py-3 mt-1 text-[13px]"><p class="font-bold text-[12px] mt-2">Live Stream Link (YouTube / Facebook / TikTok Live)</p><input id="liveLink" placeholder="Paste your Live link" class="w-full border-2 border-red-600 rounded-xl px-3 py-3 mt-1 text-[13px]"><button onclick="startLiveSelling()" class="w-full bg-red-600 text-white py-3.5 rounded-full font-bold mt-4">🔴 START LIVE NOW</button></div></div>
@@ -131,72 +114,96 @@ function uploadSellerProfilePhoto(e){ let file=e.target.files[0]; if(!file) retu
 function saveSellerProfile(){ if(!user) return; let data={shopName:document.getElementById('editShopName').value.trim()||user.shop, phone:document.getElementById('editShopPhone').value.trim(), location:document.getElementById('editShopLocation').value.trim(), bio:document.getElementById('editShopBio').value.trim()}; localStorage.setItem('dornny_seller_profile_'+user.shop, JSON.stringify(data)); if(data.shopName){ user.shop=data.shopName; localStorage.setItem('dornny_user', JSON.stringify(user)); document.getElementById('meShop').innerText=data.shopName; } if(db) db.collection('dornny_shop_profiles').doc(user.shop).set(data,{merge:true}); closeSellerProfile(); toast('✅ Seller Profile Saved!'); render(); }
 function loadSellerProfile(){ if(!user) return; let photo=getShopProfile(user.shop); document.getElementById('profileImg').src=photo; if(db) db.collection('dornny_shop_profiles').doc(user.shop).get().then(doc=>{ if(doc.exists && doc.data().photo){ localStorage.setItem('dornny_shop_profile_'+user.shop, doc.data().photo); document.getElementById('profileImg').src=doc.data().photo; } }); }
 
-// ✅ REAL LIVE SCORES - NO SELLER - AUTO FROM ESPN + TheSportsDB - FASTEST
+// ✅ WHOLE WORLD LIVE SCORES - FIXED - 3 SOURCES + NEVER EMPTY
 let liveTab='live'; let liveCache={live:[],today:[],tomorrow:[],upcoming:[],finished:[]}; let liveInterval=null;
 function openLiveScoresPage(){ document.getElementById('liveScoresPage').style.display='block'; document.getElementById('bottomNav').style.display='none'; refreshLiveScores(); startLiveAutoRefresh(); }
 function closeLiveScoresPage(){ document.getElementById('liveScoresPage').style.display='none'; document.getElementById('bottomNav').style.display='flex'; }
 function setLiveTab(tab){ liveTab=tab; ['live','today','tomorrow','upcoming','finished'].forEach(t=>{ let el=document.getElementById('tab-'+t); if(el) el.className = t===tab ? 'px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap live-tab-active' : 'px-4 py-2 rounded-full text-[11px] font-bold border whitespace-nowrap bg-gray-100'; }); renderLiveScoresList(); }
 function startLiveAutoRefresh(){ if(liveInterval) clearInterval(liveInterval); liveInterval=setInterval(()=>{ refreshLiveScores(false); }, 15000); }
-function fmtDate(d){ return d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0'); }
-async function fetchESPN(dateStr){
-  let leagues=['eng.1','esp.1','ita.1','ger.1','fra.1','ned.1','por.1','sco.1','tur.1','gha.1'];
+function fmtDateESPN(d){ return d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0'); }
+function fmtDateTSDB(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function normMatch(m){ return {id:m.id, league:m.league, home:m.home, away:m.away, homeScore:m.homeScore, awayScore:m.awayScore, status:m.status, detail:m.detail, date:m.date, venue:m.venue||'', isLive:m.isLive, isFinished:m.isFinished, isUpcoming:m.isUpcoming}; }
+async function fetchESPNAll(dateStr){
+  // WHOLE WORLD: ESPN "all" + top leagues in parallel
+  let urls=[
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/gha.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/nga.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/rsa.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/mex.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/tur.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/ned.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/por.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/sco.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/arg.1/scoreboard?dates=${dateStr}`,
+    `https://site.api.espn.com/apis/site/v2/sports/soccer/chi.1/scoreboard?dates=${dateStr}`
+  ];
   let all=[];
-  for(let lg of leagues){
-    try{
-      let url=`https://site.api.espn.com/apis/site/v2/sports/soccer/${lg}/scoreboard?dates=${dateStr}`;
-      let res=await fetch(url); let j=await res.json();
-      (j.events||[]).forEach(ev=>{
-        let comp=ev.competitions[0]; let home=comp.competitors.find(c=>c.homeAway==='home'); let away=comp.competitors.find(c=>c.homeAway==='away');
-        let status=ev.status.type; let state=status.state; let detail=status.displayClock||status.shortDetail||'';
-        let homeScore=home?.score||'0', awayScore=away?.score||'0';
-        all.push({id:ev.id, league: j.leagues?.[0]?.name||lg, home:home?.team?.displayName||'Home', away:away?.team?.displayName||'Away', homeScore, awayScore, status: state, detail: detail, date: ev.date, venue: comp.venue?.fullName||'', isLive: state==='in', isFinished: state==='post', isUpcoming: state==='pre'});
-      });
-    }catch(e){}
-  }
+  let results=await Promise.allSettled(urls.map(u=>fetch(u).then(r=>r.json())));
+  results.forEach(r=>{ if(r.status!=='fulfilled') return; let j=r.value; (j.events||[]).forEach(ev=>{ try{ let comp=ev.competitions[0]; let home=comp.competitors.find(c=>c.homeAway==='home'); let away=comp.competitors.find(c=>c.homeAway==='away'); let st=ev.status.type; all.push(normMatch({id:ev.id, league: ev.league?.name || j.leagues?.[0]?.name || 'Football', home:home?.team?.displayName||'Home', away:away?.team?.displayName||'Away', homeScore:home?.score ?? '0', awayScore:away?.score ?? '0', status:st.state, detail: st.displayClock || st.shortDetail || '', date:ev.date, venue:comp.venue?.fullName||'', isLive: st.state==='in', isFinished: st.state==='post', isUpcoming: st.state==='pre'})); }catch(e){} }); });
   return all;
 }
-async function fetchTheSportsDB(){
+async function fetchTSDBDay(dateStr){
   try{
-    let res=await fetch('https://www.thesportsdb.com/api/v1/json/3/livescore.php?s=Soccer');
+    let res=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${dateStr}&s=Soccer`);
     let j=await res.json(); let evs=j.events||[];
-    return evs.map(e=>({id:'tsdb-'+e.idEvent, league:e.strLeague||'Football', home:e.strHomeTeam, away:e.strAwayTeam, homeScore:e.intHomeScore||'0', awayScore:e.intAwayScore||'0', status:'in', detail:e.strStatus||e.strProgress||"LIVE", date:e.dateEvent+' '+e.strTime, venue:'', isLive:true, isFinished:false, isUpcoming:false}));
+    return evs.map(e=>{
+      let status=(e.strStatus||'').toLowerCase();
+      let isFinished = status.includes('ft') || status.includes('full') || status.includes('finished');
+      let isLive = !isFinished && (status.includes('live') || e.strProgress || status.includes('half') || status.includes("'"));
+      return normMatch({id:'tsdb-'+e.idEvent, league: (e.strLeague||'Football')+' • '+(e.strCountry||''), home:e.strHomeTeam, away:e.strAwayTeam, homeScore:e.intHomeScore ?? '0', awayScore:e.intAwayScore ?? '0', status: isLive?'in': isFinished?'post':'pre', detail: e.strStatus || (e.strTime||''), date: (e.dateEvent||dateStr)+'T'+(e.strTime||'15:00:00'), venue:e.strVenue||'', isLive, isFinished, isUpcoming: !isLive && !isFinished});
+    });
   }catch(e){ return []; }
 }
+async function fetchTSDBLive(){
+  try{ let res=await fetch('https://www.thesportsdb.com/api/v1/json/3/livescore.php?s=Soccer'); let j=await res.json(); return (j.events||[]).map(e=>normMatch({id:'live-'+e.idEvent, league:(e.strLeague||'Football')+' • '+(e.strCountry||''), home:e.strHomeTeam, away:e.strAwayTeam, homeScore:e.intHomeScore ?? '0', awayScore:e.intAwayScore ?? '0', status:'in', detail:e.strStatus||e.strProgress||"LIVE", date:e.dateEvent+'T'+(e.strTime||''), venue:'', isLive:true, isFinished:false, isUpcoming:false})); }catch(e){ return []; }
+}
+function dedupe(arr){ let seen={}; return arr.filter(m=>{ let k=(m.home+'-'+m.away+'-'+m.league).toLowerCase(); if(seen[k]) return false; seen[k]=1; return true; }); }
 async function refreshLiveScores(showToast){
-  let homeBox=document.getElementById('footballListHome'); let listBox=document.getElementById('liveScoresList');
-  if(showToast) toast('Updating live scores...');
+  let homeBox=document.getElementById('footballListHome');
+  if(showToast) toast('Updating whole world scores...');
   try{
-    let today=new Date(); let tomorrow=new Date(Date.now()+86400000); let dayAfter=new Date(Date.now()+2*86400000);
-    let [espnToday, espnTom, espnAfter, tsdbLive] = await Promise.all([fetchESPN(fmtDate(today)), fetchESPN(fmtDate(tomorrow)), fetchESPN(fmtDate(dayAfter)), fetchTheSportsDB()]);
-    let combinedLive=[...tsdbLive, ...espnToday.filter(m=>m.isLive)];
-    // dedupe by home+away
-    let seen={}; combinedLive=combinedLive.filter(m=>{ let k=m.home+'-'+m.away; if(seen[k]) return false; seen[k]=1; return true; });
-    liveCache.live=combinedLive;
-    liveCache.today=espnToday;
-    liveCache.tomorrow=espnTom;
-    liveCache.upcoming=[...espnTom, ...espnAfter];
-    liveCache.finished=espnToday.filter(m=>m.isFinished);
-    // Home preview - top 3 live or today
+    let today=new Date(); let tomorrow=new Date(Date.now()+86400000); let d2=new Date(Date.now()+2*86400000); let d3=new Date(Date.now()+3*86400000); let yest=new Date(Date.now()-86400000);
+    let [espnToday, espnTom, espnD2, espnD3, espnYest, tsdbToday, tsdbTom, tsdbD2, tsdbLive] = await Promise.all([fetchESPNAll(fmtDateESPN(today)), fetchESPNAll(fmtDateESPN(tomorrow)), fetchESPNAll(fmtDateESPN(d2)), fetchESPNAll(fmtDateESPN(d3)), fetchESPNAll(fmtDateESPN(yest)), fetchTSDBDay(fmtDateTSDB(today)), fetchTSDBDay(fmtDateTSDB(tomorrow)), fetchTSDBDay(fmtDateTSDB(d2)), fetchTSDBLive()]);
+    let todayAll=dedupe([...espnToday, ...tsdbToday]);
+    let tomorrowAll=dedupe([...espnTom, ...tsdbTom]);
+    let upcomingAll=dedupe([...tomorrowAll, ...espnD2, ...tsdbD2, ...espnD3]);
+    let liveAll=dedupe([...tsdbLive, ...todayAll.filter(m=>m.isLive)]);
+    let finishedAll=dedupe([...todayAll.filter(m=>m.isFinished), ...espnYest.filter(m=>m.isFinished)]);
+    // If LIVE is empty at 4am, show TODAY as fallback so user never sees 0 - but keep LIVE tab honest
+    liveCache.live=liveAll; liveCache.today=todayAll; liveCache.tomorrow=tomorrowAll; liveCache.upcoming=upcomingAll; liveCache.finished=finishedAll;
     if(homeBox){
-      let preview = liveCache.live.length>0 ? liveCache.live.slice(0,3) : liveCache.today.slice(0,3);
-      if(preview.length===0) homeBox.innerHTML='<p class="text-[11px] text-gray-500">No live match now. Tap to see Today / Tomorrow fixtures.</p>';
+      let preview = liveAll.length>0 ? liveAll.slice(0,3) : todayAll.slice(0,3);
+      if(preview.length===0) homeBox.innerHTML='<p class="text-[11px] text-gray-500">No matches found - Tap Refresh - Check internet</p>';
       else homeBox.innerHTML=preview.map(m=>`<div class="bg-white border rounded-xl p-2 mt-2 flex justify-between items-center"><div><p class="text-[9px] text-gray-500">${m.league} • ${m.isLive?'🔴 LIVE '+m.detail : m.detail}</p><p class="font-bold text-[12px]">${m.home} <span class="text-green-600 font-black">${m.homeScore} - ${m.awayScore}</span> ${m.away}</p></div><span class="${m.isLive?'bg-red-600':'bg-gray-200 text-black'} text-white text-[9px] px-2 py-1 rounded-full font-bold">${m.isLive?'LIVE':m.detail}</span></div>`).join('');
     }
-    document.getElementById('liveScoreUpdated').innerText='Updated: '+new Date().toLocaleTimeString()+' • Auto every 15 sec • Faster';
+    let upd=document.getElementById('liveScoreUpdated'); if(upd) upd.innerText='Updated: '+new Date().toLocaleTimeString()+' • Whole World • Auto every 15 sec • Live: '+liveAll.length+' • Today: '+todayAll.length+' • Tomorrow: '+tomorrowAll.length;
     renderLiveScoresList();
-  }catch(e){
-    if(homeBox) homeBox.innerHTML='<p class="text-[11px]">Tap to view live scores - Check internet</p>';
-  }
+  }catch(e){ if(homeBox) homeBox.innerHTML='<p class="text-[11px]">Tap to view live scores - Check internet</p>'; }
 }
 function renderLiveScoresList(){
   let box=document.getElementById('liveScoresList'); if(!box) return;
-  let arr=liveCache[liveTab]||[];
-  document.getElementById('liveScoreCount').innerText = arr.length+' matches • '+liveTab.toUpperCase();
-  if(arr.length===0){ box.innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p class="font-bold text-[13px]">No ${liveTab} matches now</p><p class="text-[11px] text-gray-500 mt-1">Try TODAY or TOMORROW tab - Fixtures are there</p><button onclick="refreshLiveScores(true)" class="bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold mt-3">↻ Refresh</button></div>`; return; }
-  box.innerHTML=arr.map(m=>`<div class="bg-white rounded-xl p-3 border"><div class="flex justify-between items-center"><p class="text-[10px] text-gray-500 font-bold">${m.league} ${m.venue? ' • '+m.venue:''}</p><span class="${m.isLive?'bg-red-600 text-white live-pulse': m.isFinished?'bg-gray-800 text-white':'bg-green-100 text-green-700'} text-[9px] px-2 py-1 rounded-full font-bold">${m.isLive?'● LIVE '+m.detail : m.isFinished?'FT - Finished' : m.detail||'Upcoming'}</span></div><div class="flex justify-between items-center mt-2"><div><p class="font-bold text-[13px]">${m.home}</p><p class="font-bold text-[13px] mt-1">${m.away}</p></div><div class="text-right"><p class="font-black text-[18px]">${m.homeScore} - ${m.awayScore}</p><p class="text-[9px] text-gray-500">${new Date(m.date).toLocaleString()}</p></div></div><p class="text-[10px] text-gray-400 mt-1">${m.isUpcoming?'Not Started Yet - Kickoff: '+new Date(m.date).toLocaleString() : m.isLive?'Playing Now - Updates every 15 sec' : 'Full Time'}</p></div>`).join('');
+  let arr=[...(liveCache[liveTab]||[])];
+  let q=(document.getElementById('liveSearch')?.value||'').toLowerCase().trim();
+  if(q) arr=arr.filter(m=>(m.home+' '+m.away+' '+m.league).toLowerCase().includes(q));
+  let cnt=document.getElementById('liveScoreCount'); if(cnt) cnt.innerText = arr.length+' matches • '+liveTab.toUpperCase()+' • Whole World';
+  if(arr.length===0){
+    if(liveTab==='live'){ box.innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p class="font-bold text-[14px]">No LIVE match right now</p><p class="text-[11px] text-gray-500 mt-1">At 4am most leagues are sleeping. But TODAY has ${liveCache.today.length} matches and TOMORROW has ${liveCache.tomorrow.length} matches.</p><div class="flex gap-2 justify-center mt-3"><button onclick="setLiveTab('today')" class="bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold">See TODAY → ${liveCache.today.length}</button><button onclick="setLiveTab('tomorrow')" class="bg-green-600 text-white px-4 py-2 rounded-full text-[11px] font-bold">See TOMORROW → ${liveCache.tomorrow.length}</button></div></div>`; return; }
+    box.innerHTML=`<div class="bg-white rounded-xl p-6 text-center"><p class="font-bold text-[13px]">No ${liveTab} matches found</p><p class="text-[11px] text-gray-500 mt-1">Try TODAY or TOMORROW - Whole World fixtures are there</p><button onclick="refreshLiveScores(true)" class="bg-black text-white px-4 py-2 rounded-full text-[11px] font-bold mt-3">↻ Refresh</button></div>`; return;
+  }
+  // Group by league
+  let groups={}; arr.forEach(m=>{ if(!groups[m.league]) groups[m.league]=[]; groups[m.league].push(m); });
+  box.innerHTML=Object.keys(groups).map(lg=>`<div><p class="font-black text-[11px] bg-black text-white px-3 py-2 rounded-lg mt-2">${lg} • ${groups[lg].length} matches</p>`+groups[lg].map(m=>`<div class="bg-white rounded-xl p-3 border mt-1"><div class="flex justify-between items-center"><p class="text-[10px] text-gray-500 font-bold">${m.league}</p><span class="${m.isLive?'bg-red-600 text-white live-pulse': m.isFinished?'bg-gray-800 text-white':'bg-green-100 text-green-700'} text-[9px] px-2 py-1 rounded-full font-bold">${m.isLive?'● LIVE '+m.detail : m.isFinished?'FT - Finished' : m.detail||'Upcoming'}</span></div><div class="flex justify-between items-center mt-2"><div><p class="font-bold text-[13px]">${m.home}</p><p class="font-bold text-[13px] mt-1">${m.away}</p></div><div class="text-right"><p class="font-black text-[18px]">${m.homeScore} - ${m.awayScore}</p><p class="text-[9px] text-gray-500">${new Date(m.date).toLocaleString()}</p></div></div><p class="text-[10px] text-gray-400 mt-1">${m.isUpcoming?'Not Started Yet - Kickoff: '+new Date(m.date).toLocaleString() : m.isLive?'Playing Now - Updates every 15 sec' : 'Full Time'}</p></div>`).join('')+`</div>`).join('');
 }
-
-// GO LIVE TO SELL
 function openGoLiveModal(){ if(!user){toast('Login first');return;} document.getElementById('goLiveModal').style.display='block'; }
 function closeGoLiveModal(){ document.getElementById('goLiveModal').style.display='none'; }
 function startLiveSelling(){ let prod=document.getElementById('liveProduct').value.trim(), price=document.getElementById('livePrice').value.trim(), link=document.getElementById('liveLink').value.trim(); if(!prod){toast('What are you selling live?');return;} let live={id:Date.now(), product:prod, price:price||'0', streamUrl:link||'', seller:user?user.shop:'Danzy', viewers: Math.floor(Math.random()*40)+12, isLive:true, createdAt:Date.now()}; if(db) db.collection('dornny_live_selling').doc(String(live.id)).set({...live, createdAt: firebase.firestore.FieldValue.serverTimestamp()}); let local=JSON.parse(localStorage.getItem('dornny_live_selling')||'[]'); local.unshift(live); localStorage.setItem('dornny_live_selling', JSON.stringify(local)); closeGoLiveModal(); toast('🔴 You are LIVE! Buyers can join now'); renderLiveSelling(); }
